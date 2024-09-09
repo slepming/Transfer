@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "Transfer.sln",
+    "projects": [
+      "Transfer.Game\\Transfer.Game.csproj",
+      "Transfer.Resources\\Transfer.Resources.csproj",
+      "Transfer.iOS\\Transfer.iOS.csproj"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+﻿{
+  "solution": {
+    "path": "Transfer.sln",
+    "projects": [
+      "Transfer.Desktop\\Transfer.Desktop.csproj",
+      "Transfer.Game\\Transfer.Game.csproj",
+      "Transfer.Game.Tests\\Transfer.Game.Tests.csproj",
+      "Transfer.Resources\\Transfer.Resources.csproj"
+    ]
+  }
+}

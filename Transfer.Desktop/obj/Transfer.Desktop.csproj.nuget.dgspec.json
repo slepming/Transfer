@@ -1,0 +1,213 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/Transfer.Desktop.csproj": {}
+  },
+  "projects": {
+    "/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/Transfer.Desktop.csproj": {
+      "version": "0.0.0",
+      "restore": {
+        "projectUniqueName": "/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/Transfer.Desktop.csproj",
+        "projectName": "Transfer",
+        "projectPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/Transfer.Desktop.csproj",
+        "packagesPath": "/home/slepming/.nuget/packages/",
+        "outputPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/slepming/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/slepming/Programming/csharp/Transfer/Transfer.Game/Transfer.Game.csproj": {
+                "projectPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Game/Transfer.Game.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FFmpeg.NET": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.7, 8.0.7]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.107/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/slepming/Programming/csharp/Transfer/Transfer.Game/Transfer.Game.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/slepming/Programming/csharp/Transfer/Transfer.Game/Transfer.Game.csproj",
+        "projectName": "Transfer.Game",
+        "projectPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Game/Transfer.Game.csproj",
+        "packagesPath": "/home/slepming/.nuget/packages/",
+        "outputPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Game/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/slepming/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/slepming/Programming/csharp/Transfer/Transfer.Resources/Transfer.Resources.csproj": {
+                "projectPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Resources/Transfer.Resources.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FFMpegCore": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "ppy.osu.Framework": {
+              "target": "Package",
+              "version": "[2024.904.0, )"
+            },
+            "xFFmpeg.NET": {
+              "target": "Package",
+              "version": "[7.2.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.7, 8.0.7]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.107/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/slepming/Programming/csharp/Transfer/Transfer.Resources/Transfer.Resources.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/slepming/Programming/csharp/Transfer/Transfer.Resources/Transfer.Resources.csproj",
+        "projectName": "Transfer.Resources",
+        "projectPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Resources/Transfer.Resources.csproj",
+        "packagesPath": "/home/slepming/.nuget/packages/",
+        "outputPath": "/home/slepming/Programming/csharp/Transfer/Transfer.Resources/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/slepming/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.7, 8.0.7]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.107/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

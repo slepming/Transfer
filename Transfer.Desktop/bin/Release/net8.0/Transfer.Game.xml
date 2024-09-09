@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Transfer.Game</name>
+    </assembly>
+    <members>
+        <member name="M:Transfer.Game.Audio.ExtractAudio.ExtractAudioFromVideoAsync(System.String)">
+            <summary>
+            Extract audio(in mp3) from video
+            </summary>
+            <param name="videoPath">Path to video file</param>
+            <returns>Path to audio file</returns>
+        </member>
+        <member name="M:Transfer.Game.Audio.ExtractAudio.ExtractAudioFromVideoAsyncToStream(System.String)">
+            <summary>
+            Extract audio(in mp3) from video
+            </summary>
+            <param name="videoPath">Path to video file</param>
+            <returns><see cref="T:System.IO.Stream">Stream</see></returns>
+        </member>
+        <member name="M:Transfer.Game.IO.TempStore`1.GetAsync(System.String,osu.Framework.Platform.Storage,System.Threading.CancellationToken)">
+            <summary>
+            Get Audio from Storage
+            </summary>
+            <param name="pathToVideo">Path to Video</param>
+            <param name="storage"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="T:Transfer.Game.IO.WrappedStorage">
+            Take from https://github.com/ppy/osu/blob/master/osu.Game/IO/WrappedStorage.cs
+        </member>
+        <member name="P:Transfer.Game.Request.ListenRequest.Port">
+            <summary>
+            Port for <see cref="P:Transfer.Game.Request.ListenRequest.LocalAddress">LocalAddress</see> (default 131313)
+            </summary>
+        </member>
+        <member name="P:Transfer.Game.Request.ListenRequest.LocalAddress">
+            <summary>
+            Local address for <see cref="F:Transfer.Game.Request.ListenRequest.server">server</see> (default 127.0.0.1)
+            </summary>
+        </member>
+        <member name="F:Transfer.Game.UserInterface.DirectoryHandler.SpacingDirectoryText.pathToFile">
+            <summary>
+            File path which you will use(path to file)
+            </summary>
+        </member>
+        <member name="F:Transfer.Game.UserInterface.DirectoryHandler.SpacingDirectoryText.currentPath">
+            <summary>
+            Current path whitch you use
+            </summary>
+        </member>
+        <member name="P:KIO.Game.UserInterface.ClassicButton.FlashColour">
+            <summary>
+            The colour the background will flash with when this button is clicked.
+            </summary>
+        </member>
+        <member name="P:KIO.Game.UserInterface.ClassicButton.HoverColour">
+            <summary>
+            The additive colour that is applied to the background when hovered.
+            </summary>
+        </member>
+        <member name="P:KIO.Game.UserInterface.ClassicButton.DisabledColour">
+            <summary>
+            The additive colour that is applied to this button when disabled.
+            </summary>
+        </member>
+        <member name="P:KIO.Game.UserInterface.ClassicButton.HoverFadeDuration">
+            <summary>
+            The duration of the transition when hovering.
+            </summary>
+        </member>
+        <member name="P:KIO.Game.UserInterface.ClassicButton.FlashDuration">
+            <summary>
+            The duration of the flash when this button is clicked.
+            </summary>
+        </member>
+        <member name="P:KIO.Game.UserInterface.ClassicButton.DisabledFadeDuration">
+            <summary>
+            The duration of the transition when toggling the Enabled state.
+            </summary>
+        </member>
+    </members>
+</doc>

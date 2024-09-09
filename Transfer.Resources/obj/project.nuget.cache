@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "pzDyhlZUzRaFWrMfnne4JIa+MI6hpUiqwbMsYYvOkj4pZopIq98RYnt4ECVGT8S8zXWHRPpUc8S1LHHj1laI/g==",
+  "success": true,
+  "projectFilePath": "/home/slepming/Programming/csharp/Transfer/Transfer.Resources/Transfer.Resources.csproj",
+  "expectedPackageFiles": [
+    "/home/slepming/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.7/microsoft.aspnetcore.app.ref.8.0.7.nupkg.sha512"
+  ],
+  "logs": []
+}
