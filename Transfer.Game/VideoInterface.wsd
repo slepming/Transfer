@@ -5,7 +5,7 @@
 skinparam sequenceMessageAlign right
 skinparam responseMessageBelowArrow true
 skinparam Handwritten false
-skinparam backgroundColor #434B4D
+skinparam backgroundColor black
 skinparam lifelineStrategy solid
 
 skinparam sequence{

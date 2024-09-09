@@ -44,7 +44,7 @@ namespace Transfer.Game.Extensions
                 if(ret < 0)
                 {
                     Logger.Error(new Exception(), "Cannot find stream information");
-                    return null;
+                    return new Dictionary<string,string>{ {"null", "null"} };
                 }
                 AVDictionaryEntry* tag = null;
 
