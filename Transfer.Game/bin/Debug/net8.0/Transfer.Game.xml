@@ -29,6 +29,18 @@
             <param name="cancellationToken"></param>
             <returns><see cref="T:System.IO.Stream">Stream</see></returns>
         </member>
+        <member name="T:Transfer.Game.Extensions.FFmpegMetadata">
+            <summary>
+            Get metadata from path
+            </summary>
+        </member>
+        <member name="M:Transfer.Game.Extensions.FFmpegMetadata.GetData(System.String)">
+            <summary>
+            Get data from Metadata
+            </summary>
+            <param name="pathToFile">Path to file</param>
+            <returns>Dictionary with Type:Key, Value:Value</returns>
+        </member>
         <member name="M:Transfer.Game.IO.ITempStore`1.GetTrackAsync(System.String,osu.Framework.Platform.Storage,Transfer.Game.Audio.Extensions.AudioExtension)">
             <summary>
             Getting a track from video
@@ -49,6 +61,15 @@
             <returns></returns>
             <exception cref="T:System.ArgumentNullException"></exception>
             <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Transfer.Game.IO.TempStore`1.GetTrackAsync(System.String,osu.Framework.Platform.Storage,Transfer.Game.Audio.Extensions.AudioExtension)">
+            <summary>
+            Extract audio from video and convertion in <see cref="T:osu.Framework.Audio.Track.Track"></see>
+            </summary>
+            <param name="pathToVideo">Path to video</param>
+            <param name="storage">Storage for temp files</param>
+            <param name="audioExtension">Type audio extensions(using with <see cref="T:Transfer.Game.Audio.Extensions.AudioExtensionHelper"></see>)</param>
+            <returns>Track</returns>
         </member>
         <member name="T:Transfer.Game.IO.WrappedStorage">
             Take from https://github.com/ppy/osu/blob/master/osu.Game/IO/WrappedStorage.cs

@@ -87,7 +87,7 @@ namespace Transfer.Game.IO
             if(!File.Exists(pathToFile)) Logger.Error(new Exception(), $"{pathToFile} does not exists - {audioName} canceled");
             try
             {
-                using(FileStream file = new FileStream(pathToFile,FileMode.Open))
+                using(Stream file = new FileStream(pathToFile,FileMode.Open))
                 {
                     using(var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
                     await file.CopyToAsync(audioFile);

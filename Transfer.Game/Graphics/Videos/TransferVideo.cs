@@ -12,7 +12,6 @@ using osu.Framework.Graphics.Video;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osuTK;
-using Transfer.Game.Input;
 using Transfer.Game.UserInterface;
 using Transfer.Game.UserInterface.Containers;
 

@@ -12,29 +12,35 @@ namespace Transfer.Game.UserInterface
 {
     public partial class LoadingCircle : CompositeDrawable
     {
-        Circle circle;
+        private Circle circle;
         public LoadingCircle()
         {
 
-
-        }
-
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-            AddInternal(circle = new Circle
+            circle = new Circle
             {
                 Size = new Vector2(25,25),
-                Colour = Colour4.AliceBlue,
+                Colour = Colour4.Transparent,
                 Anchor = Anchor.Centre,
-                Origin = Anchor.TopLeft,
-            });
+                Origin = Anchor.Centre,
+                Masking = true,
+                BorderColour = Colour4.BlanchedAlmond,
+
+            };
+            InternalChild = circle;
         }
+
+
 
         protected override void LoadComplete()
         {
-
+            circle.Loop(b => b.RotateTo(0).RotateTo(360,1000));
             base.LoadComplete();
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
         }
     }
 }
