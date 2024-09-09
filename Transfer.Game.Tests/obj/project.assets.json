@@ -849,7 +849,7 @@
           }
         }
       },
-      "ppy.osu.Framework/2024.904.0": {
+      "ppy.osu.Framework/2024.907.1": {
         "type": "package",
         "dependencies": {
           "FFmpeg.AutoGen": "4.3.0.1",
@@ -873,7 +873,7 @@
           "ppy.SDL2-CS": "1.0.741-alpha",
           "ppy.SDL3-CS": "2024.807.1",
           "ppy.Veldrid": "4.9.62-gca0239da6b",
-          "ppy.Veldrid.SPIRV": "1.0.15-g0c0fcee30c",
+          "ppy.Veldrid.SPIRV": "1.0.15-gfbb03d21c2",
           "ppy.osu.Framework.NativeLibs": "2024.809.1-nativelibs",
           "ppy.osu.Framework.SourceGeneration": "2023.720.0",
           "ppy.osuTK.NS20": "1.0.211"
@@ -1279,7 +1279,7 @@
           }
         }
       },
-      "ppy.Veldrid.SPIRV/1.0.15-g0c0fcee30c": {
+      "ppy.Veldrid.SPIRV/1.0.15-gfbb03d21c2": {
         "type": "package",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
@@ -2217,7 +2217,7 @@
         "dependencies": {
           "FFMpegCore": "5.1.0",
           "Transfer.Resources": "1.0.0",
-          "ppy.osu.Framework": "2024.904.0",
+          "ppy.osu.Framework": "2024.907.1",
           "xFFmpeg.NET": "7.2.0"
         },
         "compile": {
@@ -3629,17 +3629,17 @@
         "ppy.managedbass.wasapi.nuspec"
       ]
     },
-    "ppy.osu.Framework/2024.904.0": {
-      "sha512": "YMRAF7fTCibZoZFkIYM1ruCmUMEr34yYwSljbdHd48Nf+yQ2PHz8OQ4HLOHr9sJrEDHmr80mwyyEoSfauBp8Lg==",
+    "ppy.osu.Framework/2024.907.1": {
+      "sha512": "CCSak4zHLrcn1tT/hXxpPohYHd+UFMBia9rUvtSootOfmadin9uDMWDVBLBb/sD2UCJS/RyRZbT+8eTCZVZ2KQ==",
       "type": "package",
-      "path": "ppy.osu.framework/2024.904.0",
+      "path": "ppy.osu.framework/2024.907.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "icon.png",
         "lib/net8.0/osu.Framework.dll",
         "lib/net8.0/osu.Framework.xml",
-        "ppy.osu.framework.2024.904.0.nupkg.sha512",
+        "ppy.osu.framework.2024.907.1.nupkg.sha512",
         "ppy.osu.framework.nuspec"
       ]
     },
@@ -3819,10 +3819,10 @@
         "ppy.veldrid.openglbindings.nuspec"
       ]
     },
-    "ppy.Veldrid.SPIRV/1.0.15-g0c0fcee30c": {
-      "sha512": "xrfb3cv3K5v3ZfPOa3CwJZZDjUI07Bgd4+N7PjsxFB7KvuTVBeoigRUdWOIfbWqKZlmRYca1VCOlBhE+30r4WQ==",
+    "ppy.Veldrid.SPIRV/1.0.15-gfbb03d21c2": {
+      "sha512": "CLEyvMC5ZQ3ppO4j4vdL4uvpa4hP5e+IyLL1CquNMTEFWXUgu0z+jYalkUF/dtKPm45gqXic97oITfzOPRsmTw==",
       "type": "package",
-      "path": "ppy.veldrid.spirv/1.0.15-g0c0fcee30c",
+      "path": "ppy.veldrid.spirv/1.0.15-gfbb03d21c2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3833,7 +3833,7 @@
         "build/net40/Veldrid.SPIRV.targets",
         "lib/net6.0/ppy.Veldrid.SPIRV.dll",
         "lib/net6.0/ppy.Veldrid.SPIRV.xml",
-        "ppy.veldrid.spirv.1.0.15-g0c0fcee30c.nupkg.sha512",
+        "ppy.veldrid.spirv.1.0.15-gfbb03d21c2.nupkg.sha512",
         "ppy.veldrid.spirv.nuspec",
         "runtimes/ios/native/veldrid-spirv.xcframework/Info.plist",
         "runtimes/ios/native/veldrid-spirv.xcframework/ios-arm64/veldrid-spirv.framework/Info.plist",

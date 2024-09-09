@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "pkV7qaSRgsH7QT3s0bFlhw7FCJ1X3nFlT/VmcbC/10PoDOARYwidKh8thcsFVQr0jD2/sEHaFG4xlS1AI4sZzw==",
+  "dgSpecHash": "prJ3d6quEsnZJT9nAlnUUBtNW77ERwz0vNmh0W984px7MQ3RKWhOH6brJJ8mF1icWTDA64OTbniA/Uau4fnaag==",
   "success": true,
   "projectFilePath": "/home/slepming/Programming/csharp/Transfer/Transfer.Game.Tests/Transfer.Game.Tests.csproj",
   "expectedPackageFiles": [
@@ -47,7 +47,7 @@
     "/home/slepming/.nuget/packages/ppy.managedbass.fx/2022.1216.0/ppy.managedbass.fx.2022.1216.0.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.managedbass.mix/2022.1216.0/ppy.managedbass.mix.2022.1216.0.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.managedbass.wasapi/2022.1216.0/ppy.managedbass.wasapi.2022.1216.0.nupkg.sha512",
-    "/home/slepming/.nuget/packages/ppy.osu.framework/2024.904.0/ppy.osu.framework.2024.904.0.nupkg.sha512",
+    "/home/slepming/.nuget/packages/ppy.osu.framework/2024.907.1/ppy.osu.framework.2024.907.1.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.osu.framework.nativelibs/2024.809.1-nativelibs/ppy.osu.framework.nativelibs.2024.809.1-nativelibs.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.osu.framework.sourcegeneration/2023.720.0/ppy.osu.framework.sourcegeneration.2023.720.0.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.osutk.ns20/1.0.211/ppy.osutk.ns20.1.0.211.nupkg.sha512",
@@ -56,7 +56,7 @@
     "/home/slepming/.nuget/packages/ppy.veldrid/4.9.62-gca0239da6b/ppy.veldrid.4.9.62-gca0239da6b.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.veldrid.metalbindings/4.9.62-gca0239da6b/ppy.veldrid.metalbindings.4.9.62-gca0239da6b.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.veldrid.openglbindings/4.9.62-gca0239da6b/ppy.veldrid.openglbindings.4.9.62-gca0239da6b.nupkg.sha512",
-    "/home/slepming/.nuget/packages/ppy.veldrid.spirv/1.0.15-g0c0fcee30c/ppy.veldrid.spirv.1.0.15-g0c0fcee30c.nupkg.sha512",
+    "/home/slepming/.nuget/packages/ppy.veldrid.spirv/1.0.15-gfbb03d21c2/ppy.veldrid.spirv.1.0.15-gfbb03d21c2.nupkg.sha512",
     "/home/slepming/.nuget/packages/ppy.vk/1.0.26/ppy.vk.1.0.26.nupkg.sha512",
     "/home/slepming/.nuget/packages/runtime.native.system/4.0.0/runtime.native.system.4.0.0.nupkg.sha512",
     "/home/slepming/.nuget/packages/sharpfnt/2.0.0/sharpfnt.2.0.0.nupkg.sha512",

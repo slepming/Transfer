@@ -48,7 +48,7 @@
             },
             "ppy.osu.Framework": {
               "target": "Package",
-              "version": "[2024.904.0, )"
+              "version": "[2024.907.1, )"
             },
             "xFFmpeg.NET": {
               "target": "Package",

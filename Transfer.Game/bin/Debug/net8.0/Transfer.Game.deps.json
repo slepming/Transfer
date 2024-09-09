@@ -10,7 +10,7 @@
         "dependencies": {
           "FFMpegCore": "5.1.0",
           "Transfer.Resources": "1.0.0",
-          "ppy.osu.Framework": "2024.904.0",
+          "ppy.osu.Framework": "2024.907.1",
           "xFFmpeg.NET": "7.2.0"
         },
         "runtime": {
@@ -392,7 +392,7 @@
           }
         }
       },
-      "ppy.osu.Framework/2024.904.0": {
+      "ppy.osu.Framework/2024.907.1": {
         "dependencies": {
           "FFmpeg.AutoGen": "4.3.0.1",
           "JetBrains.Annotations": "2023.3.0",
@@ -415,15 +415,15 @@
           "ppy.SDL2-CS": "1.0.741-alpha",
           "ppy.SDL3-CS": "2024.807.1",
           "ppy.Veldrid": "4.9.62-gca0239da6b",
-          "ppy.Veldrid.SPIRV": "1.0.15-g0c0fcee30c",
+          "ppy.Veldrid.SPIRV": "1.0.15-gfbb03d21c2",
           "ppy.osu.Framework.NativeLibs": "2024.809.1-nativelibs",
           "ppy.osu.Framework.SourceGeneration": "2023.720.0",
           "ppy.osuTK.NS20": "1.0.211"
         },
         "runtime": {
           "lib/net8.0/osu.Framework.dll": {
-            "assemblyVersion": "2024.904.0.0",
-            "fileVersion": "2024.904.0.0"
+            "assemblyVersion": "2024.907.1.0",
+            "fileVersion": "2024.907.1.0"
           }
         }
       },
@@ -845,7 +845,7 @@
           }
         }
       },
-      "ppy.Veldrid.SPIRV/1.0.15-g0c0fcee30c": {
+      "ppy.Veldrid.SPIRV/1.0.15-gfbb03d21c2": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
           "ppy.Veldrid": "4.9.62-gca0239da6b"
@@ -853,7 +853,7 @@
         "runtime": {
           "lib/net6.0/ppy.Veldrid.SPIRV.dll": {
             "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.15.35"
+            "fileVersion": "1.0.15.37"
           }
         },
         "runtimeTargets": {
@@ -1636,12 +1636,12 @@
       "path": "ppy.managedbass.wasapi/2022.1216.0",
       "hashPath": "ppy.managedbass.wasapi.2022.1216.0.nupkg.sha512"
     },
-    "ppy.osu.Framework/2024.904.0": {
+    "ppy.osu.Framework/2024.907.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-YMRAF7fTCibZoZFkIYM1ruCmUMEr34yYwSljbdHd48Nf+yQ2PHz8OQ4HLOHr9sJrEDHmr80mwyyEoSfauBp8Lg==",
-      "path": "ppy.osu.framework/2024.904.0",
-      "hashPath": "ppy.osu.framework.2024.904.0.nupkg.sha512"
+      "sha512": "sha512-CCSak4zHLrcn1tT/hXxpPohYHd+UFMBia9rUvtSootOfmadin9uDMWDVBLBb/sD2UCJS/RyRZbT+8eTCZVZ2KQ==",
+      "path": "ppy.osu.framework/2024.907.1",
+      "hashPath": "ppy.osu.framework.2024.907.1.nupkg.sha512"
     },
     "ppy.osu.Framework.NativeLibs/2024.809.1-nativelibs": {
       "type": "package",
@@ -1699,12 +1699,12 @@
       "path": "ppy.veldrid.openglbindings/4.9.62-gca0239da6b",
       "hashPath": "ppy.veldrid.openglbindings.4.9.62-gca0239da6b.nupkg.sha512"
     },
-    "ppy.Veldrid.SPIRV/1.0.15-g0c0fcee30c": {
+    "ppy.Veldrid.SPIRV/1.0.15-gfbb03d21c2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xrfb3cv3K5v3ZfPOa3CwJZZDjUI07Bgd4+N7PjsxFB7KvuTVBeoigRUdWOIfbWqKZlmRYca1VCOlBhE+30r4WQ==",
-      "path": "ppy.veldrid.spirv/1.0.15-g0c0fcee30c",
-      "hashPath": "ppy.veldrid.spirv.1.0.15-g0c0fcee30c.nupkg.sha512"
+      "sha512": "sha512-CLEyvMC5ZQ3ppO4j4vdL4uvpa4hP5e+IyLL1CquNMTEFWXUgu0z+jYalkUF/dtKPm45gqXic97oITfzOPRsmTw==",
+      "path": "ppy.veldrid.spirv/1.0.15-gfbb03d21c2",
+      "hashPath": "ppy.veldrid.spirv.1.0.15-gfbb03d21c2.nupkg.sha512"
     },
     "ppy.Vk/1.0.26": {
       "type": "package",
