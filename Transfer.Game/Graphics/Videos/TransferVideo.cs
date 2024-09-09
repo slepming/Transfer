@@ -18,9 +18,8 @@ using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.Videos
 {
-    public partial class TransferVideo : Video, IDisposable
+    public partial class TransferVideo : Video
     {
-        private bool doubleSize = false;
 
 
 
@@ -35,19 +34,12 @@ namespace Transfer.Game.Graphics.Videos
 
         }
 
-        protected override async void LoadComplete()
+
+        protected override void Dispose(bool isDisposing)
         {
-            base.LoadAsyncComplete();
-
-
+            base.Dispose(isDisposing);
         }
 
-        protected override bool OnDoubleClick(DoubleClickEvent e)
-        {
-            this.ScaleTo(doubleSize ? 1 : 1.2f, 1000, Easing.InOutQuad);
-            doubleSize = doubleSize ? false : true;
-            return base.OnDoubleClick(e);
-        }
 
 
     }

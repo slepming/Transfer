@@ -15,7 +15,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
 {
     public partial class DirectoryContainer : FocusedOverlayContainer
     {
-        
+
         public DirectoryContainer()
         {
             Logger.Log("Create Directory Container");
@@ -25,7 +25,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
         [BackgroundDependencyLoader]
         private void load()
         {
-            
+
         }
 
         protected override bool OnHover(HoverEvent e)
@@ -41,7 +41,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
 
         protected override void PopIn()
         {
-            this.ScaleTo(1,2000, Easing.InOutElastic);
+            this.ScaleTo(0.5f,2000, Easing.InOutElastic);
         }
 
         protected override void PopOut()

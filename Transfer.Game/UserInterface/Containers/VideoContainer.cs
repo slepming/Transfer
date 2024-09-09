@@ -19,7 +19,7 @@ namespace Transfer.Game.UserInterface.Containers
     {
         private TransferVideo video;
         private VolumeContainer volumeContainer;
-        private DrawSizePreservingFillContainer mediaOptionsContainer;
+        private OverlayContainer mediaOptionsContainer;
 
 
         public SpriteText VolumeText;
@@ -47,18 +47,18 @@ namespace Transfer.Game.UserInterface.Containers
             InternalChildren = new Drawable[]
             {
 
+                new TransferVideo(filename)
+                {
+                    FillMode = FillMode.Fit,
+                    RelativeSizeAxes = Axes.Both
+                },
 
-                mediaOptionsContainer = new DrawSizePreservingFillContainer
+                mediaOptionsContainer = new TransferOverlayContainer
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Children = new Drawable[]
                     {
-                        new TransferVideo(filename)
-                        {
-                            FillMode = FillMode.Fit,
-                            RelativeSizeAxes = Axes.Both
-                        },
                         volumeContainer = new VolumeContainer
                         {
                             RelativeSizeAxes = Axes.Both
