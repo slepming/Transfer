@@ -46,11 +46,7 @@ namespace Transfer.Game.UserInterface.Containers
 
             InternalChildren = new Drawable[]
             {
-                new TransferVideo(filename)
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    FillMode = FillMode.Fit,
-                },
+
 
                 mediaOptionsContainer = new DrawSizePreservingFillContainer
                 {
@@ -58,6 +54,11 @@ namespace Transfer.Game.UserInterface.Containers
                     Origin = Anchor.Centre,
                     Children = new Drawable[]
                     {
+                        new TransferVideo(filename)
+                        {
+                            FillMode = FillMode.Fit,
+                            RelativeSizeAxes = Axes.Both
+                        },
                         volumeContainer = new VolumeContainer
                         {
                             RelativeSizeAxes = Axes.Both

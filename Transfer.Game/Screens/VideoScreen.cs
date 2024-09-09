@@ -140,10 +140,6 @@ namespace Transfer.Game.Screens
                 video = new VideoContainer(videoPath)
                 {
                     Audio = audio,
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Scale = new Vector2(1),
-                    FillMode = FillMode.Fit,
                     RelativeSizeAxes = Axes.Both,
                 },
 
