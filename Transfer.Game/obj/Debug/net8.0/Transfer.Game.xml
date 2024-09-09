@@ -53,16 +53,6 @@
         <member name="T:Transfer.Game.IO.WrappedStorage">
             Take from https://github.com/ppy/osu/blob/master/osu.Game/IO/WrappedStorage.cs
         </member>
-        <member name="P:Transfer.Game.Request.ListenRequest.Port">
-            <summary>
-            Port for <see cref="P:Transfer.Game.Request.ListenRequest.LocalAddress">LocalAddress</see> (default 131313)
-            </summary>
-        </member>
-        <member name="P:Transfer.Game.Request.ListenRequest.LocalAddress">
-            <summary>
-            Local address for <see cref="F:Transfer.Game.Request.ListenRequest.server">server</see> (default 127.0.0.1)
-            </summary>
-        </member>
         <member name="F:Transfer.Game.UserInterface.DirectoryHandler.SpacingDirectoryText.pathToFile">
             <summary>
             File path which you will use(path to file)

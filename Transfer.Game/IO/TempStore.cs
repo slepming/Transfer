@@ -71,7 +71,7 @@ namespace Transfer.Game.IO
         {
             if(pathToVideo == null) Logger.Error(new ArgumentNullException(nameof(pathToVideo)), "Path to video can not be null");
             var audioName = $"{Path.GetFileNameWithoutExtension(pathToVideo)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
-            if(storage.GetFiles(storage.GetFullPath(@"Temp/")).Contains(audioName))
+            if(storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
             {
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 return AudioManager.GetTrackStore(resourceStore).Get(audioName) as  T;
