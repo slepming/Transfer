@@ -40,7 +40,7 @@ using Vulkan.Xlib;
 
 namespace Transfer.Game.Screens
 {
-    public partial class VideoScreen : TransferScreen, IDisposable
+    public partial class VideoScreen : TransferScreen
     {
 
         // GameWindow window;
@@ -195,9 +195,8 @@ namespace Transfer.Game.Screens
 
         private int[] spinningBoxPosition = new int[2] { 0,0}; // -200, 20
 
-        public new void Dispose()
+        protected override void Dispose(bool isDisposing)
         {
-            base.Dispose();
             audio?.Dispose();
             video?.Dispose();
 
@@ -209,6 +208,7 @@ namespace Transfer.Game.Screens
             // {
             //     disposableClock.Dispose();
             // }
+            base.Dispose(isDisposing);
         }
 
 

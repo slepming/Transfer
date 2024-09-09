@@ -8,8 +8,17 @@ using osu.Framework.Logging;
 
 namespace Transfer.Game.Extensions
 {
+
+    /// <summary>
+    /// Get metadata from path
+    /// </summary>
     public unsafe class FFmpegMetadata
     {
+        /// <summary>
+        /// Get data from Metadata
+        /// </summary>
+        /// <param name="pathToFile">Path to file</param>
+        /// <returns>Dictionary with Type:Key, Value:Value</returns>
         public static Dictionary<string,string> GetData(string pathToFile)
         {
 #if DEBUG

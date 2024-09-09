@@ -66,7 +66,13 @@ namespace Transfer.Game.IO
 
         }
 
-
+        /// <summary>
+        /// Extract audio from video and convertion in <see cref="Track"></see>
+        /// </summary>
+        /// <param name="pathToVideo">Path to video</param>
+        /// <param name="storage">Storage for temp files</param>
+        /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
+        /// <returns>Track</returns>
         public virtual async Task<T> GetTrackAsync(string pathToVideo, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
         {
             if(pathToVideo == null) Logger.Error(new ArgumentNullException(nameof(pathToVideo)), "Path to video can not be null");
