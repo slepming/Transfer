@@ -28,28 +28,27 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
             Origin = Anchor.Centre;
 
             RelativeSizeAxes = Axes.Both;
+            Colour = Colour4.White;
+
             InternalChildren = new Drawable[]
             {
 
                 directoryContainer = new DirectoryContainer
                 {
+
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
                     RelativeSizeAxes = Axes.Both,
                     Size = new Vector2(1f/2f, 2f/3f),
                     Children = new Drawable[]
                     {
-                        new TooltipContainer
+                        SpacingText = new SpacingText
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Child = SpacingText = new SpacingText
-                            {
-                                Text = "Select a file",
-                                Anchor = Anchor.TopCentre,
-                                Origin = Anchor.Centre,
-                                Position = new Vector2(0,20),
-                                Font = new FontUsage("FiraCodeNerdFont-Light",size: 40),
-                            },
+                            Text = "Select a file",
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.Centre,
+                            Position = new Vector2(0,20),
+                            Font = new FontUsage("FiraCodeNerdFont-Light",size: 40),
                         },
 
                         new BasicScrollContainer
@@ -58,7 +57,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
                             Origin = Anchor.Centre,
                             RelativeSizeAxes = Axes.Both,
                             Size = new Vector2(1, 0.7f),
-                            Colour = Colour4.White,
+
 
                             Child = flowContainer = new DirectoryFillFlowContainer
                             {

@@ -105,19 +105,15 @@ namespace Transfer.Game.Screens
         private void videoStartContainer()
         {
 
-                InternalChildren = new Drawable[]
+            AddInternal(choiceDirectory = new ChoiceDirectory
                 {
-                    choiceDirectory = new ChoiceDirectory
-                    {
-                        FoundVideo = onFoundVideo,
-                    }
-
-                };
+                    FoundVideo = onFoundVideo,
+                });
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-            if(e.Key == Key.LControl && e.Key == Key.R)
+            if(e.Key == Key.LControl && e.Key == Key.R || e.Key == Key.R && e.Key == Key.LControl)
             {
                 videoStartContainer();
             }
