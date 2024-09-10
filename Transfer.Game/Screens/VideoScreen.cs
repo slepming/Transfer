@@ -60,6 +60,8 @@ namespace Transfer.Game.Screens
 
         private SliderBar<double> videoPlaybackSlider;
 
+        private ChoiceDirectory choiceDirectory;
+
         private SpriteText editVolumeText;
 
         private DrawSizePreservingFillContainer mediaOptionsContainer;
@@ -100,18 +102,26 @@ namespace Transfer.Game.Screens
             tempStore = new TempStore<Track>(){ AudioManager = audioManager };
         }
 
-        private void videoNullExceptionHandler()
+        private void videoStartContainer()
         {
-            ChoiceDirectory choiceDirectory;
+
                 InternalChildren = new Drawable[]
                 {
                     choiceDirectory = new ChoiceDirectory
                     {
-
+                        FoundVideo = onFoundVideo,
                     }
 
                 };
-            choiceDirectory.FoundVideo += onFoundVideo;
+        }
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            if(e.Key == Key.LControl && e.Key == Key.R)
+            {
+                videoStartContainer();
+            }
+            return base.OnKeyDown(e);
         }
 
 
@@ -123,7 +133,7 @@ namespace Transfer.Game.Screens
             {
                 string nullable = audio == null ? "Audio null" : "Video null";
                 Logger.Log("VideoPath or audio is null: " + nullable);
-                videoNullExceptionHandler();
+                videoStartContainer();
                 return;
             }
 

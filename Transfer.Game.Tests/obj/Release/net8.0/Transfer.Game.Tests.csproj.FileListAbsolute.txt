@@ -243,3 +243,5 @@
 /home/slepming/Programming/csharp/Transfer/Transfer.Game.Tests/obj/Release/net8.0/Transfer.Game.Tests.genruntimeconfig.cache
 /home/slepming/Programming/csharp/Transfer/Transfer.Game.Tests/obj/Release/net8.0/ref/Transfer.Game.Tests.dll
 /home/slepming/Programming/csharp/Transfer/Transfer.Game.Tests/bin/Release/net8.0/FFmpeg.NET.dll
+/home/slepming/Programming/csharp/Transfer/Transfer.Game.Tests/bin/Release/net8.0/FFMpegCore.dll
+/home/slepming/Programming/csharp/Transfer/Transfer.Game.Tests/bin/Release/net8.0/Instances.dll

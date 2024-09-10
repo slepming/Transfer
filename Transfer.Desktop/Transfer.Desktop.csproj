@@ -12,9 +12,15 @@
     <ProjectReference Include="..\Transfer.Game\Transfer.Game.csproj" />
   </ItemGroup>
   <ItemGroup Label="Resources">
-    <EmbeddedResource Include="game.ico" />
+    <EmbeddedResource Include="game.ico"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FFmpeg.NET" Version="1.1.0" />
   </ItemGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm'">
+  </PropertyGroup>
+
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
+  </ItemGroup>
+
 </Project>

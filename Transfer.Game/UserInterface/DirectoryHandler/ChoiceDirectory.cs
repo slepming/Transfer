@@ -7,9 +7,11 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using Transfer.Game.Graphics.Cursor;
 
 namespace Transfer.Game.UserInterface.DirectoryHandler
 {
@@ -37,13 +39,17 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
                     Size = new Vector2(1f/2f, 2f/3f),
                     Children = new Drawable[]
                     {
-                        SpacingText = new SpacingText
+                        new TooltipContainer
                         {
-                            Text = "Choose file",
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.Centre,
-                            Position = new Vector2(0,20),
-                            Font = new FontUsage("FiraCodeNerdFont-Light",size: 40),
+                            RelativeSizeAxes = Axes.Both,
+                            Child = SpacingText = new SpacingText
+                            {
+                                Text = "Select a file",
+                                Anchor = Anchor.TopCentre,
+                                Origin = Anchor.Centre,
+                                Position = new Vector2(0,20),
+                                Font = new FontUsage("FiraCodeNerdFont-Light",size: 40),
+                            },
                         },
 
                         new BasicScrollContainer

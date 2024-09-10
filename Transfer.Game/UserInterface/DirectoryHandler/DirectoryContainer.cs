@@ -31,11 +31,13 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
         protected override bool OnHover(HoverEvent e)
         {
             this.ScaleTo(1f,600,Easing.InOutQuad);
+            this.FadeTo(1f, 600, Easing.InOutQuad);
             return base.OnHover(e);
         }
         protected override void OnHoverLost(HoverLostEvent e)
         {
             this.ScaleTo(0.5f, 400, Easing.InOutQuad);
+            this.FadeTo(0.1f, 400, Easing.InOutQuad);
             base.OnHoverLost(e);
         }
 

@@ -163,3 +163,5 @@
 /home/slepming/Programming/csharp/Transfer/Transfer.Desktop/obj/Release/net8.0/Transfer.Desktop.genruntimeconfig.cache
 /home/slepming/Programming/csharp/Transfer/Transfer.Desktop/obj/Release/net8.0/ref/Transfer.dll
 /home/slepming/Programming/csharp/Transfer/Transfer.Desktop/bin/Release/net8.0/FFmpeg.Net.dll
+/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/bin/Release/net8.0/FFMpegCore.dll
+/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/bin/Release/net8.0/Instances.dll

@@ -24,11 +24,31 @@
           }
         }
       },
+      "FFMpegCore/5.1.0": {
+        "dependencies": {
+          "Instances": "3.0.0",
+          "System.Text.Json": "7.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FFMpegCore.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      },
       "HidSharpCore/1.2.1.1": {
         "runtime": {
           "lib/net5.0/HidSharpCore.dll": {
             "assemblyVersion": "2.1.0.0",
             "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "Instances/3.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/Instances.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -40,7 +60,7 @@
           }
         }
       },
-      "managed-midi/1.10.0": {
+      "managed-midi/1.10.1": {
         "runtime": {
           "lib/netcoreapp2.1/Commons.Music.Midi.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -633,7 +653,7 @@
           }
         }
       },
-      "ppy.osu.Framework/2024.809.2": {
+      "ppy.osu.Framework/2024.907.1": {
         "dependencies": {
           "FFmpeg.AutoGen": "4.3.0.1",
           "JetBrains.Annotations": "2023.3.0",
@@ -648,23 +668,23 @@
           "SixLabors.ImageSharp": "3.1.5",
           "StbiSharp": "1.1.0",
           "System.Numerics.Tensors": "8.0.0",
-          "managed-midi": "1.10.0",
+          "managed-midi": "1.10.1",
           "ppy.ManagedBass": "2022.1216.0",
           "ppy.ManagedBass.Fx": "2022.1216.0",
           "ppy.ManagedBass.Mix": "2022.1216.0",
           "ppy.ManagedBass.Wasapi": "2022.1216.0",
           "ppy.SDL2-CS": "1.0.741-alpha",
           "ppy.SDL3-CS": "2024.807.1",
-          "ppy.Veldrid": "4.9.58-gfe61932a71",
-          "ppy.Veldrid.SPIRV": "1.0.15-g0c0fcee30c",
+          "ppy.Veldrid": "4.9.62-gca0239da6b",
+          "ppy.Veldrid.SPIRV": "1.0.15-gfbb03d21c2",
           "ppy.osu.Framework.NativeLibs": "2024.809.1-nativelibs",
           "ppy.osu.Framework.SourceGeneration": "2023.720.0",
           "ppy.osuTK.NS20": "1.0.211"
         },
         "runtime": {
           "lib/net8.0/osu.Framework.dll": {
-            "assemblyVersion": "2024.809.2.0",
-            "fileVersion": "2024.809.2.0"
+            "assemblyVersion": "2024.907.1.0",
+            "fileVersion": "2024.907.1.0"
           }
         }
       },
@@ -1054,47 +1074,47 @@
           }
         }
       },
-      "ppy.Veldrid/4.9.58-gfe61932a71": {
+      "ppy.Veldrid/4.9.62-gca0239da6b": {
         "dependencies": {
           "NativeLibraryLoader": "1.0.13",
           "Vortice.D3DCompiler": "2.4.2",
           "Vortice.Direct3D11": "2.4.2",
-          "ppy.Veldrid.MetalBindings": "4.9.58-gfe61932a71",
-          "ppy.Veldrid.OpenGLBindings": "4.9.58-gfe61932a71",
+          "ppy.Veldrid.MetalBindings": "4.9.62-gca0239da6b",
+          "ppy.Veldrid.OpenGLBindings": "4.9.62-gca0239da6b",
           "ppy.Vk": "1.0.26"
         },
         "runtime": {
           "lib/net8.0/ppy.Veldrid.dll": {
             "assemblyVersion": "4.9.0.0",
-            "fileVersion": "4.9.58.25086"
+            "fileVersion": "4.9.62.714"
           }
         }
       },
-      "ppy.Veldrid.MetalBindings/4.9.58-gfe61932a71": {
+      "ppy.Veldrid.MetalBindings/4.9.62-gca0239da6b": {
         "runtime": {
           "lib/net8.0/ppy.Veldrid.MetalBindings.dll": {
             "assemblyVersion": "4.9.0.0",
-            "fileVersion": "4.9.58.25086"
+            "fileVersion": "4.9.62.714"
           }
         }
       },
-      "ppy.Veldrid.OpenGLBindings/4.9.58-gfe61932a71": {
+      "ppy.Veldrid.OpenGLBindings/4.9.62-gca0239da6b": {
         "runtime": {
           "lib/net8.0/ppy.Veldrid.OpenGLBindings.dll": {
             "assemblyVersion": "4.9.0.0",
-            "fileVersion": "4.9.58.25086"
+            "fileVersion": "4.9.62.714"
           }
         }
       },
-      "ppy.Veldrid.SPIRV/1.0.15-g0c0fcee30c": {
+      "ppy.Veldrid.SPIRV/1.0.15-gfbb03d21c2": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
-          "ppy.Veldrid": "4.9.58-gfe61932a71"
+          "ppy.Veldrid": "4.9.62-gca0239da6b"
         },
         "runtime": {
           "lib/net6.0/ppy.Veldrid.SPIRV.dll": {
             "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.15.35"
+            "fileVersion": "1.0.15.37"
           }
         },
         "runtimeTargets": {
@@ -1508,6 +1528,12 @@
           "System.Runtime": "4.1.0"
         }
       },
+      "System.Text.Encodings.Web/7.0.0": {},
+      "System.Text.Json/7.0.2": {
+        "dependencies": {
+          "System.Text.Encodings.Web": "7.0.0"
+        }
+      },
       "System.Threading/4.0.11": {
         "dependencies": {
           "System.Runtime": "4.1.0",
@@ -1594,8 +1620,9 @@
       },
       "Transfer.Game/1.0.0": {
         "dependencies": {
+          "FFMpegCore": "5.1.0",
           "Transfer.Resources": "1.0.0",
-          "ppy.osu.Framework": "2024.809.2",
+          "ppy.osu.Framework": "2024.907.1",
           "xFFmpeg.NET": "7.2.0"
         },
         "runtime": {
@@ -1622,12 +1649,26 @@
       "path": "ffmpeg.autogen/4.3.0.1",
       "hashPath": "ffmpeg.autogen.4.3.0.1.nupkg.sha512"
     },
+    "FFMpegCore/5.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cCzfCElrq9IziByiho3oeK/T2hDfM0jjMQmo22cLoAt7bptNNhEiRhF9X0lKwLBoK9vjZKn06+gaUfbfmS9m3Q==",
+      "path": "ffmpegcore/5.1.0",
+      "hashPath": "ffmpegcore.5.1.0.nupkg.sha512"
+    },
     "HidSharpCore/1.2.1.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-NJOXoNiMby/DQn1mttFWp88LXLITs6swXpLtFUFTMTJJEFgCDs0UbcpxH8Oc1N1N/pgduaiG2TC9OYOCEEgv/A==",
       "path": "hidsharpcore/1.2.1.1",
       "hashPath": "hidsharpcore.1.2.1.1.nupkg.sha512"
+    },
+    "Instances/3.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wlZ0V+S7X7kMKbjC7EZJf5A1FNlldQrS0tKMNXP1Ued/6XCo6t5kpFDS3X72cd+SGaX+q+FOlWO7r18GlxcKAQ==",
+      "path": "instances/3.0.0",
+      "hashPath": "instances.3.0.0.nupkg.sha512"
     },
     "JetBrains.Annotations/2023.3.0": {
       "type": "package",
@@ -1636,12 +1677,12 @@
       "path": "jetbrains.annotations/2023.3.0",
       "hashPath": "jetbrains.annotations.2023.3.0.nupkg.sha512"
     },
-    "managed-midi/1.10.0": {
+    "managed-midi/1.10.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-4cSJEIBDwl7F6cUs3wqnshuAaURgQCpDUaQIT8DVsyScP9m9Q1DRnak57kSJ4askjlfmSBlyib279eF/0diCAA==",
-      "path": "managed-midi/1.10.0",
-      "hashPath": "managed-midi.1.10.0.nupkg.sha512"
+      "sha512": "sha512-5k3IOpByUZku1kDDFLhD25NwogNeXipH7bPE2b+WIRwpJdntRuIv4NchZoI5AMZxTzzSZW6If/l9+zhLxzORgA==",
+      "path": "managed-midi/1.10.1",
+      "hashPath": "managed-midi.1.10.1.nupkg.sha512"
     },
     "Markdig/0.23.0": {
       "type": "package",
@@ -1902,12 +1943,12 @@
       "path": "ppy.managedbass.wasapi/2022.1216.0",
       "hashPath": "ppy.managedbass.wasapi.2022.1216.0.nupkg.sha512"
     },
-    "ppy.osu.Framework/2024.809.2": {
+    "ppy.osu.Framework/2024.907.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-O0kBdIjZPzGdpVI9mJz5oAo+DjRkqdBcMHNFsDEQT1ZZyZeEpMCkna80FqBuobj9JwZTdckAsUWLAM8VUJqjXA==",
-      "path": "ppy.osu.framework/2024.809.2",
-      "hashPath": "ppy.osu.framework.2024.809.2.nupkg.sha512"
+      "sha512": "sha512-CCSak4zHLrcn1tT/hXxpPohYHd+UFMBia9rUvtSootOfmadin9uDMWDVBLBb/sD2UCJS/RyRZbT+8eTCZVZ2KQ==",
+      "path": "ppy.osu.framework/2024.907.1",
+      "hashPath": "ppy.osu.framework.2024.907.1.nupkg.sha512"
     },
     "ppy.osu.Framework.NativeLibs/2024.809.1-nativelibs": {
       "type": "package",
@@ -1944,33 +1985,33 @@
       "path": "ppy.sdl3-cs/2024.807.1",
       "hashPath": "ppy.sdl3-cs.2024.807.1.nupkg.sha512"
     },
-    "ppy.Veldrid/4.9.58-gfe61932a71": {
+    "ppy.Veldrid/4.9.62-gca0239da6b": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-w5CM02qMZcDxvFk8MVb8SvgOyThbIOuDujaYHX4GRCkxQS/N45uRhH/+ZCjZUfAZlffHjqzwfc6zB2gL+cF8DQ==",
-      "path": "ppy.veldrid/4.9.58-gfe61932a71",
-      "hashPath": "ppy.veldrid.4.9.58-gfe61932a71.nupkg.sha512"
+      "sha512": "sha512-hJlEcOUg1te/qzKrqyx1w73h+8/3Iwx+Wh7jfmW+eShnPCxafgoYaYgo2mavZzP2sBORumzojUVn++bwurs7Gw==",
+      "path": "ppy.veldrid/4.9.62-gca0239da6b",
+      "hashPath": "ppy.veldrid.4.9.62-gca0239da6b.nupkg.sha512"
     },
-    "ppy.Veldrid.MetalBindings/4.9.58-gfe61932a71": {
+    "ppy.Veldrid.MetalBindings/4.9.62-gca0239da6b": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZhvOqLIZlifS+8ALstU5dF388DXk3SWS4f1lmnXLbnE2KTFrQ8+3xbqI79CpkjJ1RQlyiaLGWkD9fIw096amMA==",
-      "path": "ppy.veldrid.metalbindings/4.9.58-gfe61932a71",
-      "hashPath": "ppy.veldrid.metalbindings.4.9.58-gfe61932a71.nupkg.sha512"
+      "sha512": "sha512-YLAUg0hxZyyjAeicxX+Z/3cw/3i202TeMcVPiUZIeA35S3APDSlLpDcDfBrL7orl0L+VW7kRc3yE26nOQCVwGA==",
+      "path": "ppy.veldrid.metalbindings/4.9.62-gca0239da6b",
+      "hashPath": "ppy.veldrid.metalbindings.4.9.62-gca0239da6b.nupkg.sha512"
     },
-    "ppy.Veldrid.OpenGLBindings/4.9.58-gfe61932a71": {
+    "ppy.Veldrid.OpenGLBindings/4.9.62-gca0239da6b": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-tyrr2BI0/OR3o+uWfMTg5n7CNK7qZAjH5BpH3aFoIKqIp/g4wdtqeMzzv/KCovDoH94x33Y9EUBlZ11ZNg4zYA==",
-      "path": "ppy.veldrid.openglbindings/4.9.58-gfe61932a71",
-      "hashPath": "ppy.veldrid.openglbindings.4.9.58-gfe61932a71.nupkg.sha512"
+      "sha512": "sha512-HUBGBVbxiGzytxZ0280uiFIc/yxkpcQgjSKMMFRRu2K7KN4DzPtEtC+AsIoCp6zIsofzdgQKJn7cSYSH6NUPBw==",
+      "path": "ppy.veldrid.openglbindings/4.9.62-gca0239da6b",
+      "hashPath": "ppy.veldrid.openglbindings.4.9.62-gca0239da6b.nupkg.sha512"
     },
-    "ppy.Veldrid.SPIRV/1.0.15-g0c0fcee30c": {
+    "ppy.Veldrid.SPIRV/1.0.15-gfbb03d21c2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xrfb3cv3K5v3ZfPOa3CwJZZDjUI07Bgd4+N7PjsxFB7KvuTVBeoigRUdWOIfbWqKZlmRYca1VCOlBhE+30r4WQ==",
-      "path": "ppy.veldrid.spirv/1.0.15-g0c0fcee30c",
-      "hashPath": "ppy.veldrid.spirv.1.0.15-g0c0fcee30c.nupkg.sha512"
+      "sha512": "sha512-CLEyvMC5ZQ3ppO4j4vdL4uvpa4hP5e+IyLL1CquNMTEFWXUgu0z+jYalkUF/dtKPm45gqXic97oITfzOPRsmTw==",
+      "path": "ppy.veldrid.spirv/1.0.15-gfbb03d21c2",
+      "hashPath": "ppy.veldrid.spirv.1.0.15-gfbb03d21c2.nupkg.sha512"
     },
     "ppy.Vk/1.0.26": {
       "type": "package",
@@ -2272,6 +2313,20 @@
       "sha512": "sha512-U3gGeMlDZXxCEiY4DwVLSacg+DFWCvoiX+JThA/rvw37Sqrku7sEFeVBBBMBnfB6FeZHsyDx85HlKL19x0HtZA==",
       "path": "system.text.encoding/4.0.11",
       "hashPath": "system.text.encoding.4.0.11.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OP6umVGxc0Z0MvZQBVigj4/U31Pw72ITihDWP9WiWDm+q5aoe0GaJivsfYGq53o6dxH7DcXWiCTl7+0o2CGdmg==",
+      "path": "system.text.encodings.web/7.0.0",
+      "hashPath": "system.text.encodings.web.7.0.0.nupkg.sha512"
+    },
+    "System.Text.Json/7.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/LZf/JrGyilojqwpaywb+sSz8Tew7ij4K/Sk+UW8AKfAK7KRhR6mKpKtTm06cYA7bCpGTWfYksIW+mVsdxPegQ==",
+      "path": "system.text.json/7.0.2",
+      "hashPath": "system.text.json.7.0.2.nupkg.sha512"
     },
     "System.Threading/4.0.11": {
       "type": "package",
