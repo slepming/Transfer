@@ -105,10 +105,18 @@ namespace Transfer.Game.Screens
         private void videoStartContainer()
         {
 
-            AddInternal(choiceDirectory = new ChoiceDirectory
+                InternalChildren = new Drawable[]
                 {
-                    FoundVideo = onFoundVideo,
-                });
+                    new TooltipContainer
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Child = choiceDirectory = new ChoiceDirectory
+                        {
+                            FoundVideo = onFoundVideo,
+                        }
+                    }
+
+                };
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
