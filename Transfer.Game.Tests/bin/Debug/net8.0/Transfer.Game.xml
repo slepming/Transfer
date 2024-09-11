@@ -84,35 +84,5 @@
             Current path whitch you use
             </summary>
         </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.FlashColour">
-            <summary>
-            The colour the background will flash with when this button is clicked.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.HoverColour">
-            <summary>
-            The additive colour that is applied to the background when hovered.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.DisabledColour">
-            <summary>
-            The additive colour that is applied to this button when disabled.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.HoverFadeDuration">
-            <summary>
-            The duration of the transition when hovering.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.FlashDuration">
-            <summary>
-            The duration of the flash when this button is clicked.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.DisabledFadeDuration">
-            <summary>
-            The duration of the transition when toggling the Enabled state.
-            </summary>
-        </member>
     </members>
 </doc>
