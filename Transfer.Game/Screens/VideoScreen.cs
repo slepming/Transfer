@@ -185,30 +185,11 @@ namespace Transfer.Game.Screens
             return base.OnMouseMove(e);
         }
 
-        protected override void Update()
-        {
-
-            base.Update();
-
-
-        }
-
         protected override void OnExit()
         {
 
-            video.Dispose();
-            mediaOptionsContainer.Dispose();
-            audio.Dispose();
+            Dispose();
             base.OnExit();
-        }
-
-        public override void OnEntering(ScreenTransitionEvent e)
-        {
-            this.FadeInFromZero(500, Easing.OutQuint);
-        }
-        public override void OnSuspending(ScreenTransitionEvent e)
-        {
-            this.FadeIn(500, Easing.OutQuint);
         }
         public override bool OnExiting(ScreenExitEvent e)
         {
@@ -216,7 +197,6 @@ namespace Transfer.Game.Screens
             return base.OnExiting(e);
         }
 
-        private int[] spinningBoxPosition = new int[2] { 0,0}; // -200, 20
 
         protected override void Dispose(bool isDisposing)
         {
