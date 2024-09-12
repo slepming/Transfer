@@ -11,9 +11,10 @@ namespace Transfer.Game.Screens
 {
     public abstract partial class TransferScreen : Screen, ITransferScreen, IHasDescription
     {
-        public virtual string Title => GetType().Name; 
-        public virtual bool HideOverlaysOnEnter => false;
+        public virtual string Title => GetType().Name;
+        public virtual bool HideOverlaysOnEnter => true;
         public string Description => Title;
+
 
         public TransferScreen(){
             Logger.Log($"Initialization {Description}");
@@ -32,6 +33,8 @@ namespace Transfer.Game.Screens
             this.FadeIn(1000,Easing.InOutQuad).ScaleTo(0.1f,2000,Easing.InOutQuad);
             return base.OnExiting(e);
         }
+
+
 
     }
 }

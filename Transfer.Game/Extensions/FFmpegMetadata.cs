@@ -33,39 +33,46 @@ namespace Transfer.Game.Extensions
         private static Dictionary<string,string> metaData(string pathToFile)
         {
             AVFormatContext* fmt_ctx = null;
-            do
+            try
             {
-                Logger.Log("FFmpeg avformat open input check!", LoggingTarget.Runtime, LogLevel.Important);
-                int ret = ffmpeg.avformat_open_input(&fmt_ctx,pathToFile, null,null);
-
-                if(ret != 0) break;
-                Logger.Log("FFmpeg avformat find stream info check!", LoggingTarget.Runtime, LogLevel.Important);
-                ret = ffmpeg.avformat_find_stream_info(fmt_ctx,null);
-                if(ret < 0)
+                do
                 {
-                    Logger.Error(new Exception(), "Cannot find stream information");
-                    return new Dictionary<string,string>{ {"null", "null"} };
-                }
-                AVDictionaryEntry* tag = null;
+                    Logger.Log("FFmpeg avformat open input check!", LoggingTarget.Runtime, LogLevel.Important);
+                    int ret = ffmpeg.avformat_open_input(&fmt_ctx,pathToFile, null,null);
 
-                Dictionary<string,string> pairs = new Dictionary<string, string>();
-                while((tag = ffmpeg.av_dict_get(fmt_ctx -> metadata, "", tag, ffmpeg.AV_DICT_IGNORE_SUFFIX)) != null)
+                    if(ret != 0) break;
+                    Logger.Log("FFmpeg avformat find stream info check!", LoggingTarget.Runtime, LogLevel.Important);
+                    ret = ffmpeg.avformat_find_stream_info(fmt_ctx,null);
+                    if(ret < 0)
+                    {
+                        Logger.Error(new Exception(), "Cannot find stream information");
+                        return new Dictionary<string,string>{ {"null", "null"} };
+                    }
+                    AVDictionaryEntry* tag = null;
+
+                    Dictionary<string,string> pairs = new Dictionary<string, string>();
+                    while((tag = ffmpeg.av_dict_get(fmt_ctx -> metadata, "", tag, ffmpeg.AV_DICT_IGNORE_SUFFIX)) != null)
+                    {
+                        string key = Marshal.PtrToStringAnsi(new IntPtr(tag->key));
+                        string value = Marshal.PtrToStringAnsi(new IntPtr(tag->value));
+
+
+                        pairs.Add(key,value);
+                    }
+                    Logger.Log("Data collection is complete", LoggingTarget.Runtime, LogLevel.Important);
+                    return pairs;
+                } while(false);
+                if(fmt_ctx != null)
                 {
-                    string key = Marshal.PtrToStringAnsi(new IntPtr(tag->key));
-                    string value = Marshal.PtrToStringAnsi(new IntPtr(tag->value));
-
-
-                    pairs.Add(key,value);
+                    ffmpeg.avformat_close_input(&fmt_ctx);
                 }
-                Logger.Log("Data collection is complete", LoggingTarget.Runtime, LogLevel.Important);
-                return pairs;
-            } while(false);
-            if(fmt_ctx != null)
+                Logger.Log("Dictionary is null", LoggingTarget.Runtime, LogLevel.Important);
+                return new Dictionary<string,string>{ {"null", "null"} };
+            } catch(Exception ex)
             {
-                ffmpeg.avformat_close_input(&fmt_ctx);
+                Logger.Error(ex, "FFmpeg Metadata error");
+                throw;
             }
-            Logger.Log("Dictionary is null", LoggingTarget.Runtime, LogLevel.Important);
-            return new Dictionary<string,string>{ {"null", "null"} };
         }
 
     }

@@ -49,8 +49,12 @@ namespace Transfer.Game
         {
             Host.Window.Title = HostName;
 
+
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
+
             var fontStore = new FontStore(renderer, null, 100f);
+
+
             Fonts.AddStore(fontStore);
 
             Resources.Get("Fonts/");
@@ -60,7 +64,9 @@ namespace Transfer.Game
             InitialiseConfig(config);
 
 
+
         }
+
 
         protected virtual void InitialiseFonts()
         {

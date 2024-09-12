@@ -1,12 +1,16 @@
-﻿using osu.Framework.Allocation;
+﻿using System;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Logging;
 using osu.Framework.Screens;
+using Transfer.Game.Screens;
 
 namespace Transfer.Game
 {
     public partial class TransferGame : TransferGameBase
     {
         private ScreenStack screenStack;
+        private TransferScreen transferScreen;
 
         [BackgroundDependencyLoader]
         private void load()
@@ -21,7 +25,14 @@ namespace Transfer.Game
             base.LoadComplete();
 
 
-            screenStack.Push(new MainScreen());
+            Host.Window.DragDrop += _ => WhatIs();
+            screenStack.Push(transferScreen = new MainScreen());
+        }
+
+        private string WhatIs()
+        {
+            Logger.Log(String.Format("DRAG DROP DRAG DROP {0}"));
+            return String.Format("DRAG DROP DRAG DROP");
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using KIO.Game.UserInterface.Buttons;
 using osu.Framework.Allocation;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
@@ -27,12 +26,12 @@ namespace Transfer.Game.UserInterface
         public TransferSpacingButton()
         {
             AddRange(new Drawable[]{
-                new KIOBaseBackground(),
-                
+
+
             });
             Masking = true;
             Action = () => ButtonAction?.Invoke();
-            
+
         }
 
 
@@ -56,7 +55,7 @@ namespace Transfer.Game.UserInterface
 
         protected override bool OnClick(ClickEvent e)
         {
-            
+
             return base.OnClick(e);
         }
 
@@ -64,7 +63,7 @@ namespace Transfer.Game.UserInterface
         {
             this.FadeColour(new Colour4(255,255,255, 0.1f), 200, Easing.InOutQuad);
             return base.OnHover(e);
-            
+
         }
         protected override void OnHoverLost(HoverLostEvent e)
         {
