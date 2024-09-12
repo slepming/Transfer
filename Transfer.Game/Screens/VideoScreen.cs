@@ -50,6 +50,8 @@ namespace Transfer.Game.Screens
         // private readonly double delay = 1000;
         // private double lastMoveTime;
 
+        private Loading loadingComponent;
+
 
         private Track audio;
 
@@ -165,6 +167,10 @@ namespace Transfer.Game.Screens
         private async void onFoundVideo(ValueChangedEvent<string> e)
         {
 
+            InternalChild = loadingComponent = new Loading
+            {
+                RelativeSizeAxes = Axes.Both
+            };
             this.Push(new VideoScreen{ audio = await tempStore.GetTrackAsync(e.NewValue, audioStorage), VideoPath = e.NewValue });
         }
 
@@ -216,7 +222,7 @@ namespace Transfer.Game.Screens
         {
             audio?.Dispose();
             video?.Dispose();
-
+            loadingComponent?.Dispose();
 
             editVolumeText?.Dispose();
             mediaOptionsContainer?.Dispose();
