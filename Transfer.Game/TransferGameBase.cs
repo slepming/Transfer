@@ -16,6 +16,7 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK;
+using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Screens;
 using Transfer.Resources;
 
@@ -63,7 +64,7 @@ namespace Transfer.Game
 
             InitialiseConfig(config);
 
-
+            base.Content.Add(new TransferCursorContainer());
 
         }
 
