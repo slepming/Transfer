@@ -14,9 +14,6 @@
   <ItemGroup Label="Resources">
     <EmbeddedResource Include="game.ico"/>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FFmpeg.NET" Version="1.1.0" />
-  </ItemGroup>
   <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm'">
   </PropertyGroup>
 

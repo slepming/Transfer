@@ -11,7 +11,7 @@ using osuTK.Graphics;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VolumeContainer : OverlayContainer, IDisposable
+    public partial class VolumeContainer : FocusedOverlayContainer, IDisposable
     {
 
         private TransferBasicSliderBar<double> volumeSlider;

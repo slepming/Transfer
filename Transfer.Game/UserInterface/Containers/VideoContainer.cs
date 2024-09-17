@@ -19,7 +19,7 @@ namespace Transfer.Game.UserInterface.Containers
     {
         private TransferVideo video;
         private VolumeContainer volumeContainer;
-        private OverlayContainer mediaOptionsContainer;
+        private Container mediaOptionsContainer;
 
 
         public SpriteText VolumeText;
@@ -46,37 +46,45 @@ namespace Transfer.Game.UserInterface.Containers
 
             InternalChildren = new Drawable[]
             {
-
-                new TransferVideo(filename)
+                new Container
                 {
-                    FillMode = FillMode.Fit,
-                    RelativeSizeAxes = Axes.Both
-                },
-
-                mediaOptionsContainer = new TransferOverlayContainer
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
+                    RelativeSizeAxes = Axes.Both,
                     Children = new Drawable[]
                     {
-                        volumeContainer = new VolumeContainer
+                        video = new TransferVideo(filename)
                         {
-                            RelativeSizeAxes = Axes.Both
+                            FillMode = FillMode.Fit,
+                            RelativeSizeAxes = Axes.Both,
                         },
-                        VolumeText = new SpriteText()
-                        {
-                            Anchor = Anchor.BottomCentre,
-                            Origin = Anchor.Centre,
-                            Position = new Vector2(45, -40)
-                        },
-                        mutedText = new SpriteText
-                        {
-                            Anchor = Anchor.BottomCentre,
-                            Origin = Anchor.CentreLeft,
-                            Position = new Vector2(-90, -40),
-                            Text = ""
-                        },
-                    },
+
+                        // mediaOptionsContainer = new Container
+                        // {
+                        //     Anchor = Anchor.BottomCentre,
+                        //     Origin = Anchor.Centre,
+                        //     Children = new Drawable[]
+                        //     {
+                        //         volumeContainer = new VolumeContainer
+                        //         {
+                        //             RelativeSizeAxes = Axes.Both
+                        //         },
+                        //         VolumeText = new SpriteText
+                        //         {
+                        //             Anchor = Anchor.BottomCentre,
+                        //             Origin = Anchor.Centre,
+                        //             Position = new Vector2(45, -40),
+                        //             Font = new FontUsage("FiraCodeNerdFont-Light",size: 20),
+                        //         },
+                        //         mutedText = new SpriteText
+                        //         {
+                        //             Anchor = Anchor.BottomCentre,
+                        //             Origin = Anchor.CentreLeft,
+                        //             Position = new Vector2(-90, -40),
+                        //             Text = "",
+                        //             Font = new FontUsage("FiraCodeNerdFont-Light",size: 20),
+                        //         },
+                        //     },
+                        // },
+                    }
                 }
             };
         }
@@ -119,6 +127,8 @@ namespace Transfer.Game.UserInterface.Containers
                     isMuted = !isMuted;
                     break;
                 }
+                case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break; // edit: нужно чтобы выходила надпись о Volume Value и пропадала
+                case osuTK.Input.Key.Left: Audio.Volume.Value -= 5; break;
             }
             return base.OnKeyDown(e);
         }

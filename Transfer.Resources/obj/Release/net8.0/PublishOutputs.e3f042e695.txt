@@ -1,0 +1,4 @@
+/home/slepming/Programming/csharp/Transfer/Transfer.Resources/bin/Release/net8.0/publish/Transfer.Resources.dll
+/home/slepming/Programming/csharp/Transfer/Transfer.Resources/bin/Release/net8.0/publish/Transfer.Resources.deps.json
+/home/slepming/Programming/csharp/Transfer/Transfer.Resources/bin/Release/net8.0/publish/Transfer.Resources.pdb
+/home/slepming/Programming/csharp/Transfer/Transfer.Resources/bin/Release/net8.0/publish/Transfer.Resources.xml

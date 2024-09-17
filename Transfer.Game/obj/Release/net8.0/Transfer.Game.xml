@@ -71,9 +71,6 @@
             <param name="audioExtension">Type audio extensions(using with <see cref="T:Transfer.Game.Audio.Extensions.AudioExtensionHelper"></see>)</param>
             <returns>Track</returns>
         </member>
-        <member name="T:Transfer.Game.IO.WrappedStorage">
-            Take from https://github.com/ppy/osu/blob/master/osu.Game/IO/WrappedStorage.cs
-        </member>
         <member name="F:Transfer.Game.UserInterface.DirectoryHandler.SpacingDirectoryText.pathToFile">
             <summary>
             File path which you will use(path to file)
@@ -82,36 +79,6 @@
         <member name="F:Transfer.Game.UserInterface.DirectoryHandler.SpacingDirectoryText.currentPath">
             <summary>
             Current path whitch you use
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.FlashColour">
-            <summary>
-            The colour the background will flash with when this button is clicked.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.HoverColour">
-            <summary>
-            The additive colour that is applied to the background when hovered.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.DisabledColour">
-            <summary>
-            The additive colour that is applied to this button when disabled.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.HoverFadeDuration">
-            <summary>
-            The duration of the transition when hovering.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.FlashDuration">
-            <summary>
-            The duration of the flash when this button is clicked.
-            </summary>
-        </member>
-        <member name="P:KIO.Game.UserInterface.ClassicButton.DisabledFadeDuration">
-            <summary>
-            The duration of the transition when toggling the Enabled state.
             </summary>
         </member>
     </members>

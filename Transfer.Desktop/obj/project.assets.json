@@ -15,15 +15,6 @@
           }
         }
       },
-      "FFmpeg.Net/1.1.0": {
-        "type": "package",
-        "compile": {
-          "lib/net5.0/FFmpeg.Net.dll": {}
-        },
-        "runtime": {
-          "lib/net5.0/FFmpeg.Net.dll": {}
-        }
-      },
       "FFMpegCore/5.1.0": {
         "type": "package",
         "dependencies": {
@@ -1980,18 +1971,6 @@
         "lib/netstandard2.0/FFmpeg.AutoGen.xml",
         "lib/netstandard2.1/FFmpeg.AutoGen.dll",
         "lib/netstandard2.1/FFmpeg.AutoGen.xml"
-      ]
-    },
-    "FFmpeg.Net/1.1.0": {
-      "sha512": "ActX5hrTFFog6m0XHNSEk06yDVxmCA77kH8NJOY6fmDxjm/GhjGOdLmadM+J1PdgBrbMTrB+I5BhlqTOdosT+g==",
-      "type": "package",
-      "path": "ffmpeg.net/1.1.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "ffmpeg.net.1.1.0.nupkg.sha512",
-        "ffmpeg.net.nuspec",
-        "lib/net5.0/FFmpeg.Net.dll"
       ]
     },
     "FFMpegCore/5.1.0": {
@@ -5440,7 +5419,6 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "FFmpeg.NET >= 1.1.0",
       "Transfer.Game >= 1.0.0"
     ]
   },
@@ -5484,12 +5462,6 @@
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
-        "dependencies": {
-          "FFmpeg.NET": {
-            "target": "Package",
-            "version": "[1.1.0, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",

@@ -1,42 +1,20 @@
 #nullable disable
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using osu.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Animations;
-using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
-using osu.Framework.Graphics.Effects;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.UserInterface;
-using osu.Framework.Graphics.Video;
 using osu.Framework.Input.Events;
-using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
-using osu.Framework.Timing;
-using osuTK;
-using osuTK.Graphics;
 using osuTK.Input;
-using Transfer.Game.Audio;
-using Transfer.Game.Graphics;
-using Transfer.Game.Graphics.Videos;
 using Transfer.Game.IO;
-using Transfer.Game.Screens;
-using Transfer.Game.UserInterface;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.UserInterface.DirectoryHandler;
-using Vulkan.Xlib;
 
 namespace Transfer.Game.Screens
 {
@@ -46,28 +24,24 @@ namespace Transfer.Game.Screens
         // GameWindow window;
 
 
-        // private IClock clocks; // Fix bug. Applicatio does not close
+        // private IClock clocks; // ! It's pretty weird how it works. The app closes
         // private readonly double delay = 1000;
         // private double lastMoveTime;
 
-        private Loading loadingComponent;
 
 
         private Track audio;
 
         private VideoContainer video;
 
-        private Box box;
 
 
-        private SliderBar<double> videoPlaybackSlider;
 
         private ChoiceDirectory choiceDirectory;
 
         private SpriteText editVolumeText;
 
         private DrawSizePreservingFillContainer mediaOptionsContainer;
-        private ScreenStack screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
 
         private AudioManager audioManager;
         private Storage audioStorage;
@@ -75,7 +49,6 @@ namespace Transfer.Game.Screens
 
 
         private string videoPath { get; set;}
-        private string audioPath { get; set; }
 
         public string VideoPath
         {
@@ -167,10 +140,7 @@ namespace Transfer.Game.Screens
         private async void onFoundVideo(ValueChangedEvent<string> e)
         {
 
-            InternalChild = loadingComponent = new Loading
-            {
-                RelativeSizeAxes = Axes.Both
-            };
+
             this.Push(new VideoScreen{ audio = await tempStore.GetTrackAsync(e.NewValue, audioStorage), VideoPath = e.NewValue });
         }
 
@@ -184,16 +154,8 @@ namespace Transfer.Game.Screens
 
             return base.OnMouseMove(e);
         }
-
-        protected override void OnExit()
-        {
-
-            Dispose();
-            base.OnExit();
-        }
         public override bool OnExiting(ScreenExitEvent e)
         {
-            Dispose();
             return base.OnExiting(e);
         }
 
@@ -202,15 +164,11 @@ namespace Transfer.Game.Screens
         {
             audio?.Dispose();
             video?.Dispose();
-            loadingComponent?.Dispose();
+            LoadingComponent?.Dispose();
 
             editVolumeText?.Dispose();
             mediaOptionsContainer?.Dispose();
 
-            // if (clocks is IDisposable disposableClock)
-            // {
-            //     disposableClock.Dispose();
-            // }
             base.Dispose(isDisposing);
         }
 

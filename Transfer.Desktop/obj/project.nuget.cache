@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "nZFrxLRA3NPE9f8PNCcFAJ8GYIihQ46XrTLTtiY3qFV078uLd4h8pF/PS75jScu95PViYxF4z+gwvfEZJxZJ4Q==",
+  "dgSpecHash": "EeouqXIIsMdjJ9YtcvSWoeRjmFRM6ezuSfTqhdzh5JVrKJrHp9ocVDqoJbfDRDyCp7qEGRjM5wlNiQFtli2gGw==",
   "success": true,
   "projectFilePath": "/home/slepming/Programming/csharp/Transfer/Transfer.Desktop/Transfer.Desktop.csproj",
   "expectedPackageFiles": [
     "/home/slepming/.nuget/packages/ffmpeg.autogen/4.3.0.1/ffmpeg.autogen.4.3.0.1.nupkg.sha512",
-    "/home/slepming/.nuget/packages/ffmpeg.net/1.1.0/ffmpeg.net.1.1.0.nupkg.sha512",
     "/home/slepming/.nuget/packages/ffmpegcore/5.1.0/ffmpegcore.5.1.0.nupkg.sha512",
     "/home/slepming/.nuget/packages/hidsharpcore/1.2.1.1/hidsharpcore.1.2.1.1.nupkg.sha512",
     "/home/slepming/.nuget/packages/instances/3.0.0/instances.3.0.0.nupkg.sha512",
