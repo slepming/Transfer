@@ -55,35 +55,8 @@ namespace Transfer.Game.UserInterface.Containers
                         {
                             FillMode = FillMode.Fit,
                             RelativeSizeAxes = Axes.Both,
+                            Loop = true
                         },
-
-                        // mediaOptionsContainer = new Container
-                        // {
-                        //     Anchor = Anchor.BottomCentre,
-                        //     Origin = Anchor.Centre,
-                        //     Children = new Drawable[]
-                        //     {
-                        //         volumeContainer = new VolumeContainer
-                        //         {
-                        //             RelativeSizeAxes = Axes.Both
-                        //         },
-                        //         VolumeText = new SpriteText
-                        //         {
-                        //             Anchor = Anchor.BottomCentre,
-                        //             Origin = Anchor.Centre,
-                        //             Position = new Vector2(45, -40),
-                        //             Font = new FontUsage("FiraCodeNerdFont-Light",size: 20),
-                        //         },
-                        //         mutedText = new SpriteText
-                        //         {
-                        //             Anchor = Anchor.BottomCentre,
-                        //             Origin = Anchor.CentreLeft,
-                        //             Position = new Vector2(-90, -40),
-                        //             Text = "",
-                        //             Font = new FontUsage("FiraCodeNerdFont-Light",size: 20),
-                        //         },
-                        //     },
-                        // },
                     }
                 }
             };
@@ -91,10 +64,17 @@ namespace Transfer.Game.UserInterface.Containers
 
 
 
+
         protected override void LoadComplete()
         {
+            if(video.IsFaulted){
+                AddInternal(new ExceptionContainer{
+                    HeaderText = "Error",
+                    Text = "Decoder error",
+                    RelativeSizeAxes = Axes.Both,
+                });
+            }
             base.LoadComplete();
-            VolumeText.Text = $"Volume {Math.Round(Audio.Volume.Value * 100, 0)}";
         }
 
         protected override void LoadAsyncComplete()

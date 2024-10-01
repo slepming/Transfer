@@ -46,7 +46,7 @@ namespace Transfer.Game.Tests.Visual.UITest
                     },
                     new BasicButton
                     {
-                        Text = "Im gay",
+                        Text = "Click",
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Size = new Vector2(50,50),

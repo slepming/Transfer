@@ -7,6 +7,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Logging;
 using osu.Framework.Bindables;
 using Transfer.Game.UserInterface;
+using Transfer.Game.UserInterface.Containers;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Screens
 {
@@ -37,7 +39,13 @@ namespace Transfer.Game.Screens
             this.FadeIn(1000,Easing.InOutQuad).ScaleTo(0.1f,2000,Easing.InOutQuad);
             return base.OnExiting(e);
         }
-
+        protected void OnException(TransformException transformException)
+        {
+            AddInternal(new ExceptionContainer{
+                AutoSizeAxes = Axes.X,
+                Height = 50,
+            });
+        }
 
 
     }

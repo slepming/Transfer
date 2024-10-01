@@ -23,19 +23,7 @@ namespace Transfer.Game
         [BackgroundDependencyLoader]
         private void load(TextureStore textureStore)
         {
-            // Texture backgroundButtonIcon = textureStore.Get("settings");
-            // if(backgroundButtonIcon == null) Logger.Error(new Exception(),"Background Button texture icon is null");
-            // InternalChildren = new Drawable[]
-            // {
 
-            //     new Sprite
-            //     {
-            //         Texture = backgroundButtonIcon,
-            //         Size = new Vector2(30,30),
-            //         Anchor = Anchor.Centre,
-            //         Origin = Anchor.Centre
-            //     }
-            // };
 
         }
         protected override void LoadComplete()

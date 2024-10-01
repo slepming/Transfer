@@ -1,4 +1,5 @@
 #nullable disable
+using System;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -124,15 +125,24 @@ namespace Transfer.Game.Screens
             }
             Logger.Log("Check Track success");
 
-            InternalChildren = new Drawable[]
-            {
-                video = new VideoContainer(videoPath)
+            try{
+                InternalChildren = new Drawable[]
                 {
-                    Audio = audio,
-                    RelativeSizeAxes = Axes.Both,
-                },
+                    video = new VideoContainer(videoPath)
+                    {
+                        Audio = audio,
+                        RelativeSizeAxes = Axes.Both,
+                    },
 
-            };
+                };
+            } catch(Exception ex)
+            {
+                AddInternal(new ExceptionContainer{
+                    HeaderText = "Error",
+                    Text = ex.Message,
+                    RelativeSizeAxes = Axes.Both,
+                });
+            }
 
 
         }
