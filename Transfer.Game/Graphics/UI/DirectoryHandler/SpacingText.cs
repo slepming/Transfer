@@ -1,23 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Cursor;
-using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
-using osu.Framework.Localisation;
 using Vector2 = osuTK.Vector2;
 
 namespace Transfer.Game.UserInterface.DirectoryHandler
 {
-    public partial class SpacingText : SpriteText, IHasTooltip
+    public partial class SpacingText : SpriteText
     {
         public int SpacingEffect = 5;
         public int SpacingEffectLost = 0;
 
-        public LocalisableString TooltipText => "Only mp4";
 
         protected override void LoadComplete()
         {

@@ -1,20 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using osu.Framework.Audio.Track;
 using FFMpegCore;
 using FFMpegCore.Enums;
-using FFMpegCore.Arguments;
-using FFMpegCore.Pipes;
 using osu.Framework.Platform;
-using System.Threading;
 using FFMpegCore.Exceptions;
 using osu.Framework.Logging;
-using Transfer.Game.IO;
 using Transfer.Game.Audio.Extensions;
-using Transfer.Game.Graphics;
 
 
 namespace Transfer.Game.Audio

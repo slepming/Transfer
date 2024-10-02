@@ -2,22 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
-using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
-using osuTK;
 
 namespace Transfer.Game.UserInterface.DirectoryHandler
 {
     public partial class DirectoryFillFlowContainer : FillFlowContainer<SpacingDirectoryText>
     {
-        public string StartPath = "/";
-        private string currentPath = "/";
+        public string StartPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        private string currentPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
         public Action<ValueChangedEvent<string>> FoundVideo;
 

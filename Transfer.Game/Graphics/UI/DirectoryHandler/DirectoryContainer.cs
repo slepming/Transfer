@@ -30,25 +30,23 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
 
         protected override bool OnHover(HoverEvent e)
         {
-            this.ScaleTo(1f,600,Easing.InOutQuad);
-            this.FadeTo(1f, 600, Easing.InOutQuad);
+            this.ScaleTo(1f,600,Easing.InOutQuad).FadeTo(1f, 600, Easing.InOutQuad);
             return base.OnHover(e);
         }
         protected override void OnHoverLost(HoverLostEvent e)
         {
-            this.ScaleTo(0.5f, 400, Easing.InOutQuad);
-            this.FadeTo(0.1f, 400, Easing.InOutQuad);
+            this.ScaleTo(0.5f, 400, Easing.InOutQuad).FadeTo(0.1f, 400, Easing.InOutQuad);
             base.OnHoverLost(e);
         }
 
         protected override void PopIn()
         {
-            this.ScaleTo(0.5f,2000, Easing.InOutElastic);
+            this.ScaleTo(0.5f,2000, Easing.InOutElastic).FadeTo(0.5f, 1000, Easing.InOutQuart);
         }
 
         protected override void PopOut()
         {
-            this.ScaleTo(0.0f, 2000, Easing.InOutElastic);
+            this.ScaleTo(0.0f, 2000, Easing.InOutElastic).FadeTo(0);
         }
 
     }

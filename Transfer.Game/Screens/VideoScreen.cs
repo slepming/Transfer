@@ -166,6 +166,7 @@ namespace Transfer.Game.Screens
         }
         public override bool OnExiting(ScreenExitEvent e)
         {
+            Dispose();
             return base.OnExiting(e);
         }
 
