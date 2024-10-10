@@ -11,7 +11,7 @@ using osu.Framework.Input.Events;
 
 namespace Transfer.Game.UserInterface.DirectoryHandler
 {
-    public partial class DirectoryFillFlowContainer : FillFlowContainer<SpacingDirectoryText>
+    public partial class DirectoryFillFlowContainer : FillFlowContainer<Drawable>
     {
         public string StartPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         private string currentPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -22,7 +22,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
         private TransferDirectory directory = new TransferDirectory();
 
 
-        private List<SpacingDirectoryText> spacingDirectoryTexts = new List<SpacingDirectoryText>();
+        private List<Drawable> spacingDirectoryTexts = new List<Drawable>();
 
         public List<string> Extensions = new List<string>()
         {

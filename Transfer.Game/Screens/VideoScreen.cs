@@ -13,6 +13,7 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK.Input;
+using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.UserInterface.DirectoryHandler;
@@ -76,23 +77,17 @@ namespace Transfer.Game.Screens
             audioManager = am;
             audioStorage = new WrappedStorage(storage.GetStorageForDirectory(@"Temp/"));
             tempStore = new TempStore<Track>(){ AudioManager = audioManager };
+            AddInternal(choiceDirectory = new ChoiceDirectory
+            {
+                FoundVideo = onFoundVideo,
+            });
+            choiceDirectory.Hide();
         }
 
         private void videoStartContainer()
         {
 
-                InternalChildren = new Drawable[]
-                {
-                    new TooltipContainer
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Child = choiceDirectory = new ChoiceDirectory
-                        {
-                            FoundVideo = onFoundVideo,
-                        }
-                    }
-
-                };
+            choiceDirectory.Show();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -128,11 +123,14 @@ namespace Transfer.Game.Screens
             try{
                 InternalChildren = new Drawable[]
                 {
-                    video = new VideoContainer(videoPath)
-                    {
-                        Audio = audio,
+                    new FinalContextMenuContainer{
                         RelativeSizeAxes = Axes.Both,
-                    },
+                        Child = video = new VideoContainer(videoPath)
+                        {
+                            Audio = audio,
+                            RelativeSizeAxes = Axes.Both,
+                        },
+                    }
 
                 };
             } catch(Exception ex)

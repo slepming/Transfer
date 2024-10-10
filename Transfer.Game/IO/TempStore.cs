@@ -16,55 +16,8 @@ namespace Transfer.Game.IO
 {
     public class TempStore<T> : ITempStore<T> where T : Track
     {
-        [Obsolete]
-        private ExtractAudio extractAudio = new ExtractAudio();
         private AudioExtractorCore audioExtractorCore = new();
         public AudioManager AudioManager { get; set; }
-        public List<string> Extensions = new List<string>
-        {
-            ".mp4"
-        };
-
-        /// <summary>
-        /// Get Audio from Storage
-        /// </summary>
-        /// <param name="pathToVideo">Path to Video</param>
-        /// <param name="storage"></param>
-        /// <param name="audioExtension"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="Exception"></exception>
-        [Obsolete("The development of this method is abandoned, use GetTrackAsync() | To be deleted")]
-        public virtual async Task<T> GetAsync(string pathToVideo, Storage storage, AudioExtension audioExtension = AudioExtension.mp3,CancellationToken cancellationToken = default)
-        {
-            if(pathToVideo == null) Logger.Error(new ArgumentNullException(nameof(pathToVideo)), "PathToVideo cannot be null");
-            CancellationTokenSource cts = new CancellationTokenSource();
-
-            if(Extensions.Contains(Path.GetExtension(pathToVideo)))
-            {
-                try
-                {
-                    var audioName = $"{Guid.NewGuid()}.{audioExtension}";
-                    Logger.Log("New audio filename in Temp: " + audioName);
-                    using(var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.Create))
-                    using(Stream stream = await extractAudio.ExtractAudioFromVideoAsyncToStream(pathToVideo, cts.Token))
-                        await stream.CopyToAsync(audioFile);
-                    IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
-                    return AudioManager.GetTrackStore(resourceStore).Get(audioName) as T;
-                } catch(Exception ex)
-                {
-                    Logger.Error(ex, "TempStore Exception");
-                }
-            }
-            else
-            {
-                Logger.Log("Have not extension mp4");
-                return null;
-            }
-            return null;
-
-        }
 
         /// <summary>
         /// Extract audio from video and convertion in <see cref="Track"></see>

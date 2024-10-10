@@ -7,7 +7,9 @@ using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics.Video;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
@@ -17,10 +19,11 @@ using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.Videos
 {
-    public partial class TransferVideo : Video
+    public partial class TransferVideo : Video, IHasContextMenu
     {
-
-
+        public MenuItem[] ContextMenuItems => new MenuItem[]{
+            new MenuItem("Convert to")
+        };
 
         public TransferVideo(string filename, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
         {

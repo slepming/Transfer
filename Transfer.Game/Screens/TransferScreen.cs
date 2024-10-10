@@ -9,14 +9,19 @@ using osu.Framework.Bindables;
 using Transfer.Game.UserInterface;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.Extensions;
+using Transfer.Game.Graphics.UI;
 
 namespace Transfer.Game.Screens
 {
     public abstract partial class TransferScreen : Screen, ITransferScreen, IHasDescription
     {
         protected Loading LoadingComponent;
+        protected IconButton IconButton;
         public virtual string Title => GetType().Name;
         public string Description => Title;
+        protected bool IsShowOptionsButton = true;
+
+
 
 
         public TransferScreen(){
@@ -27,10 +32,17 @@ namespace Transfer.Game.Screens
 
         public override void OnEntering(ScreenTransitionEvent e)
         {
-
             base.OnEntering(e);
             this.FadeInFromZero(1000, Easing.InOutElastic);
 
+        }
+
+        protected override void LoadComplete()
+        {
+            if(IsShowOptionsButton){
+                // IconButton.Show();
+            }
+            base.LoadComplete();
         }
 
         public override bool OnExiting(ScreenExitEvent e)

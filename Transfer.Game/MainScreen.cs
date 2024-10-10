@@ -18,7 +18,7 @@ using Vector2 = osuTK.Vector2;
 
 namespace Transfer.Game
 {
-    public partial class MainScreen : TransferScreen
+    public partial class MainScreen : Screen
     {
         [BackgroundDependencyLoader]
         private void load(TextureStore textureStore)
@@ -28,13 +28,11 @@ namespace Transfer.Game
         }
         protected override void LoadComplete()
         {
-            Logger.Log("📺 MainScreen loading");
-            this.Push(new VideoScreen());
-            base.LoadAsyncComplete();
+
+            base.LoadComplete();
         }
         public override void OnEntering(ScreenTransitionEvent e)
         {
-            Logger.Log($"Entered in {Description}");
             base.OnEntering(e);
         }
     }

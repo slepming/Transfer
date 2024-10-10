@@ -10,7 +10,7 @@ namespace Transfer.Game
     public partial class TransferGame : TransferGameBase
     {
         private ScreenStack screenStack;
-        private TransferScreen transferScreen;
+        private Screen transferScreen;
 
         [BackgroundDependencyLoader]
         private void load()
@@ -23,16 +23,8 @@ namespace Transfer.Game
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
-
-            Host.Window.DragDrop += _ => WhatIs();
-            screenStack.Push(transferScreen = new MainScreen());
+            screenStack.Push(transferScreen = new VideoScreen());
         }
 
-        private string WhatIs()
-        {
-            Logger.Log(String.Format("DRAG DROP DRAG DROP {0}"));
-            return String.Format("DRAG DROP DRAG DROP");
-        }
     }
 }

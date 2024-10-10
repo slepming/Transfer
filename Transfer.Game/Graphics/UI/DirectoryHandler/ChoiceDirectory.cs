@@ -28,7 +28,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
             Origin = Anchor.Centre;
 
             RelativeSizeAxes = Axes.Both;
-            Colour = Colour4.White;
+
 
             InternalChildren = new Drawable[]
             {

@@ -88,9 +88,6 @@ namespace Transfer.Game
 
         protected override bool OnExiting()
         {
-            Storage storage = Host.Storage;
-            storage.DeleteDirectory(@"Temp/");
-            Logger.Log("Delete Temp files success");
             return base.OnExiting();
         }
 

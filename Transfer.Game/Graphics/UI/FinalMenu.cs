@@ -44,7 +44,7 @@ namespace Transfer.Game.Graphics.UI
             public FinalDrawableMenuItem(MenuItem item) : base(item)
             {
                 BackgroundColour = FrameworkColour.Blue;
-                CornerRadius = 10;
+                CornerRadius = 4;
                 Masking = true;
 
                 RelativeSizeAxes = Axes.Both;
