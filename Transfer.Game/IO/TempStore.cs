@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FFMpegCore.Exceptions;
+using OpenTabletDriver.Plugin.DependencyInjection;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.IO.Stores;
@@ -18,6 +19,7 @@ namespace Transfer.Game.IO
     public class TempStore<T> : ITempStore<T> where T : Track
     {
         private AudioExtractorCore audioExtractorCore = new();
+
         public AudioManager AudioManager { get; set; }
 
         /// <summary>

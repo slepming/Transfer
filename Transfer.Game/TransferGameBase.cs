@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework;
 using osu.Framework.Allocation;
+using osu.Framework.Audio;
+using osu.Framework.Audio.Track;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -19,6 +21,7 @@ using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.IO;
 using Transfer.Game.Screens;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Resources;
@@ -40,6 +43,7 @@ namespace Transfer.Game
 
         private FontStore fontStore;
         protected Storage Storage { get; set; }
+        private Storage audioTempStorage { get; set; }
 
         private DependencyContainer dependency;
         private int allowableExceptions;
@@ -58,13 +62,14 @@ namespace Transfer.Game
         private void load(FrameworkConfigManager config, IRenderer renderer)
         {
             Host.Window.Title = HOST_NAME;
-
+            audioTempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
 
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
             fontStore = new FontStore(renderer, null, 100f);
 
-            dependency.CacheAs(Storage);
+            dependency.CacheAs(audioTempStorage);
+
             Fonts.AddStore(fontStore);
 
             Resources.Get("Fonts/");

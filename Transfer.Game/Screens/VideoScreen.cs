@@ -45,9 +45,10 @@ namespace Transfer.Game.Screens
 
         private DrawSizePreservingFillContainer mediaOptionsContainer;
 
-        private AudioManager audioManager;
-        private Storage audioStorage;
-        private ITempStore<Track> tempStore;
+        [Resolved]
+        private Storage audioTempStorage { get; set; }
+
+        protected ITempStore<Track> TempStore { get; set; }
 
 
         private string videoPath { get; set;}
@@ -72,11 +73,9 @@ namespace Transfer.Game.Screens
 
 
         [BackgroundDependencyLoader]
-        private void load(AudioManager am, Storage storage)
+        private void load(AudioManager am)
         {
-            audioManager = am;
-            audioStorage = new WrappedStorage(storage.GetStorageForDirectory(@"Temp/"));
-            tempStore = new TempStore<Track>(){ AudioManager = audioManager };
+            TempStore = new TempStore<Track>(){ AudioManager = am };
             AddInternal(choiceDirectory = new ChoiceDirectory
             {
                 FoundVideo = onFoundVideo,
@@ -150,7 +149,7 @@ namespace Transfer.Game.Screens
 
             try
             {
-                this.Push(new VideoScreen{ audio = await tempStore.GetTrackAsync(e.NewValue, audioStorage), VideoPath = e.NewValue });
+                this.Push(new VideoScreen{ audio = await TempStore.GetTrackAsync(e.NewValue, audioTempStorage), VideoPath = e.NewValue });
             }
             catch(Exception ex){
                 ClearInternal();
