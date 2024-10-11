@@ -13,7 +13,9 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics.Video;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
+using osu.Framework.Screens;
 using osuTK;
+using Transfer.Game.Screens;
 using Transfer.Game.UserInterface;
 using Transfer.Game.UserInterface.Containers;
 
@@ -21,9 +23,14 @@ namespace Transfer.Game.Graphics.Videos
 {
     public partial class TransferVideo : Video, IHasContextMenu
     {
-        public MenuItem[] ContextMenuItems => new MenuItem[]{
-            new MenuItem("Convert to")
-        };
+        public string PathToVideo { get => PathToVideo; set {
+            if(value == pathToVideo) return;
+            pathToVideo = value;
+        }}
+        private string pathToVideo;
+        public MenuItem[] ContextMenuItems => [
+            new MenuItem("Convert to", () => new ScreenStack().Push(new ConvertScreen(PathToVideo)))
+        ];
 
         public TransferVideo(string filename, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
         {

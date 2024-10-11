@@ -1,16 +1,12 @@
-using System;
-using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
-using osu.Framework.Graphics.Effects;
-using osu.Framework.Extensions;
 using osuTK;
 using osu.Framework.Localisation;
-using FFmpeg.NET.Extensions;
+using System.Diagnostics;
 
 namespace Transfer.Game.UserInterface.Containers;
 
@@ -18,7 +14,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
 {
 
     private Container container;
-    private ClickableContainer exceptionButton;
+    private ClickableContainer exceptionButton, fullLogButton, contactDeveloperButton;
 
     protected override bool BlockScrollInput { get; }
     protected override bool StartHidden { get; }
@@ -95,14 +91,13 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                     ContentObject = new TextFlowContainer{
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Position = new Vector2(0,40),
+                        Position = new Vector2(0,45),
                         RelativeSizeAxes = Axes.Both,
                         Width = 1,
                         Height = 0.4f,
                         Colour = Colour4.White,
                         TextAnchor = Anchor.Centre,
                         Masking = true,
-
                     },
                     exceptionButton = new ExceptionButton
                     {
@@ -113,15 +108,98 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                         Height = 50,
                         Anchor = Anchor.BottomCentre,
                         Origin = Anchor.BottomCentre,
+                        Position = new Vector2(-125,0)
+                    },
+                    fullLogButton = new ExceptionButton{
+                        Text = "Full log",
+                        TextColour = Colour4.White,
+                        BackgroundColour = new Colour4(255,255,255,1),
+                        Width = 125,
+                        Height = 50,
+                        Anchor = Anchor.BottomCentre,
+                        Origin = Anchor.BottomCentre,
+                        Position = new Vector2(125, 0),
                     }
             ]
             }
         ];
-        exceptionButton.Action += buttonActionOnClick;
+        exceptionButton.Action += closeButtonActionWidth;
+        fullLogButton.Action += fullLogAction;
 
     }
 
-    private void buttonActionOnClick()
+    private void fullLogAction(){
+        ClearInternal();
+        this.TransformTo(nameof(Height), 1f, 500, Easing.InOutQuint);
+        Anchor = Anchor.Centre;
+        Origin = Anchor.Centre;
+        InternalChildren =
+        [
+
+            container = new Container{
+                RelativeSizeAxes = Axes.Both,
+                Children = [
+                    new Box{
+                        Colour = new Colour4(255,255,255,0.01f),
+                        RelativeSizeAxes = Axes.Both,
+
+                    },
+                    Header = new SpriteText{
+                        Anchor = Anchor.TopCentre,
+                        Origin = Anchor.TopCentre,
+                        Font = new FontUsage(family: "FiraCodeNerdFont",size: 50, fixedWidth: true),
+                        Text = HeaderText,
+                        Colour = Colour4.Red
+                    },
+                    ContentObject = new TextFlowContainer{
+                        Text = text,
+                        Anchor = Anchor.TopCentre,
+                        Origin = Anchor.TopCentre,
+                        Position = new Vector2(0,20),
+                        RelativeSizeAxes = Axes.Both,
+                        Width = 1,
+                        Height = 1,
+                        Colour = Colour4.White,
+                        TextAnchor = Anchor.Centre,
+                        Masking = true,
+                    },
+                    exceptionButton = new ExceptionButton
+                    {
+                        Text = "Close",
+                        TextColour = Colour4.White,
+                        BackgroundColour = new Colour4(255,255,255,1),
+                        Width = 125,
+                        Height = 50,
+                        Anchor = Anchor.BottomCentre,
+                        Origin = Anchor.BottomCentre,
+                        Position = new Vector2((int)Width/2 - 150,0)
+                    },
+                    contactDeveloperButton = new ExceptionButton{
+                        Text = "Contact developer",
+                        TextColour = Colour4.White,
+                        BackgroundColour = new Colour4(255,255,255,1),
+                        Width = 200,
+                        Height = 50,
+                        Anchor = Anchor.BottomCentre,
+                        Origin = Anchor.BottomCentre,
+                        Position = new Vector2((int)Width/2 + 150,0)
+                    }
+            ]
+            }
+        ];
+        contactDeveloperButton.Action += contactWithDeveloperAction;
+        exceptionButton.Action += closeButtonActionWH;
+    }
+
+    private void contactWithDeveloperAction()
+    {
+        Process.Start(new ProcessStartInfo(@"https://github.com/slepming") { UseShellExecute = true });
+        closeButtonActionWH();
+    }
+    private void closeButtonActionWH(){
+        this.TransformTo(nameof(Height), 0.2f, 200, Easing.InOutQuint).Then().TransformTo(nameof(Width), 0.1f, 400, Easing.InOutQuint).Expire();
+    }
+    private void closeButtonActionWidth()
     {
         this.TransformTo(nameof(Width), 0.1f, 400, Easing.InOutQuint).Expire();
     }

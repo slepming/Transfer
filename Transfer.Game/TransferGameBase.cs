@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using osu.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
@@ -18,6 +20,7 @@ using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Screens;
+using Transfer.Game.UserInterface.Containers;
 using Transfer.Resources;
 
 namespace Transfer.Game
@@ -25,15 +28,21 @@ namespace Transfer.Game
     public partial class TransferGameBase : osu.Framework.Game
     {
         #if DEBUG
-            public readonly string HostName = "Transfer(Developer Mode)";
+            public const string HOST_NAME = "Transfer(Development Mode)";
         #else
-            public readonly string HostName = "Transfer";
+            public const string HOST_NAME = "Transfer";
         #endif
+
         // Anything in this class is shared between the test browser and the game implementation.
         // It allows for caching global dependencies that should be accessible to tests, or changing
         // the screen scaling for all components including the test browser and framework overlays.
-
         protected override Container<Drawable> Content { get; }
+
+        private FontStore fontStore;
+        protected Storage Storage { get; set; }
+
+        private DependencyContainer dependency;
+        private int allowableExceptions;
 
         protected TransferGameBase()
         {
@@ -48,14 +57,14 @@ namespace Transfer.Game
         [BackgroundDependencyLoader]
         private void load(FrameworkConfigManager config, IRenderer renderer)
         {
-            Host.Window.Title = HostName;
+            Host.Window.Title = HOST_NAME;
 
 
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
-            var fontStore = new FontStore(renderer, null, 100f);
+            fontStore = new FontStore(renderer, null, 100f);
 
-
+            dependency.CacheAs(Storage);
             Fonts.AddStore(fontStore);
 
             Resources.Get("Fonts/");
@@ -68,7 +77,25 @@ namespace Transfer.Game
 
         }
 
+        public override void SetHost(GameHost host)
+        {
+            base.SetHost(host);
+            Storage = host.Storage;
+            host.ExceptionThrown += onExceptionThrown;
+        }
 
+        private bool onExceptionThrown(Exception exception)
+        {
+            if(Interlocked.Decrement(ref allowableExceptions) < 0)
+            {
+                Logger.Log("Too many unhandled exceptions, crashing out.");
+                return false;
+            }
+            Logger.Log($"Unhandled exception has been allowed with {allowableExceptions} more allowable exceptions.");
+            Task.Delay(1000).ContinueWith(_ => Interlocked.Increment(ref allowableExceptions));
+
+            return true;
+        }
         protected virtual void InitialiseFonts()
         {
             AddFont(Resources, @"Fonts/FiraCode/FiraCodeNerdFont");
@@ -86,9 +113,18 @@ namespace Transfer.Game
             config.Save();
         }
 
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
+            dependency = new DependencyContainer(base.CreateChildDependencies(parent));
+
         protected override bool OnExiting()
         {
             return base.OnExiting();
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+            fontStore.Dispose();
         }
 
 

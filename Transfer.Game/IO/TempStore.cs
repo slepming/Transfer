@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FFMpegCore.Exceptions;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.IO.Stores;
@@ -36,10 +37,10 @@ namespace Transfer.Game.IO
                 return AudioManager.GetTrackStore(resourceStore).Get(audioName) as  T;
             }
 
-            string pathToFile = await audioExtractorCore.Extract(pathToVideo, storage);
-            if(!File.Exists(pathToFile)) Logger.Error(new Exception(), $"{pathToFile} does not exists - {audioName} canceled");
             try
             {
+                string pathToFile = await audioExtractorCore.Extract(pathToVideo, storage);
+                if(!File.Exists(pathToFile)) Logger.Error(new Exception(), $"{pathToFile} does not exists - {audioName} canceled");
                 using(Stream file = new FileStream(pathToFile,FileMode.Open))
                 {
                     using(var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
@@ -48,6 +49,10 @@ namespace Transfer.Game.IO
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 File.Delete(pathToFile);
                 return AudioManager.GetTrackStore(resourceStore).Get(audioName) as T;
+            }
+            catch(FFMpegException ffmpegEx)
+            {
+                throw;
             }
             catch(Exception ex)
             {

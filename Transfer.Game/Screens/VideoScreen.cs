@@ -148,8 +148,19 @@ namespace Transfer.Game.Screens
         private async void onFoundVideo(ValueChangedEvent<string> e)
         {
 
+            try
+            {
+                this.Push(new VideoScreen{ audio = await tempStore.GetTrackAsync(e.NewValue, audioStorage), VideoPath = e.NewValue });
+            }
+            catch(Exception ex){
+                ClearInternal();
+                AddInternal(new ExceptionContainer{
+                    HeaderText = "FFmpeg Error",
+                    Text = ex.Message,
+                    RelativeSizeAxes = Axes.Both
+                });
+            }
 
-            this.Push(new VideoScreen{ audio = await tempStore.GetTrackAsync(e.NewValue, audioStorage), VideoPath = e.NewValue });
         }
 
 

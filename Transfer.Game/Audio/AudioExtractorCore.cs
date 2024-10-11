@@ -27,7 +27,11 @@ namespace Transfer.Game.Audio
             {
                 await FFMpegArguments
                 .FromFileInput(video)
-                .OutputToFile(outputPath, false, options => options.WithAudioCodec(AudioCodec.LibMp3Lame).WithAudioBitrate(128)).ProcessAsynchronously();
+                .OutputToFile(outputPath, false, options => options
+                    .WithAudioBitrate(128)
+                    .WithAudioCodec(AudioCodec.LibMp3Lame)
+                    .WithFastStart())
+                .ProcessAsynchronously();
 
 
                 return outputPath;
@@ -35,7 +39,7 @@ namespace Transfer.Game.Audio
             {
                 if(ffmpegEx.Message == "Output file already exists and overwrite is disabled")
                 {
-                    Logger.Log("File exists, return");
+                    Logger.Error(ffmpegEx,"File exists, return");
                     return outputPath;
                 }
                 throw;
