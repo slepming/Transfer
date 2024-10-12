@@ -59,7 +59,7 @@ namespace Transfer.Game.IO
             catch(Exception ex)
             {
                 Logger.Error(ex, $"{GetType().Name} error");
-                return null!;
+                throw;
             }
 
         }

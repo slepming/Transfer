@@ -1,5 +1,6 @@
 #nullable disable
 using System;
+using System.ComponentModel;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -106,7 +107,7 @@ namespace Transfer.Game.Screens
             if (string.IsNullOrEmpty(VideoPath) || audio == null)
             {
                 string nullable = audio == null ? "Audio null" : "Video null";
-                Logger.Log("VideoPath or audio is null: " + nullable);
+                Logger.Log(nullable);
                 videoStartContainer();
                 return;
             }
@@ -159,7 +160,6 @@ namespace Transfer.Game.Screens
                     RelativeSizeAxes = Axes.Both
                 });
             }
-
         }
 
 
