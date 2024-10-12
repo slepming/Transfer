@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using osu.Framework;
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
+using static System.Net.Mime.MediaTypeNames;
 using static osu.Framework.RuntimeInfo;
 
 namespace Transfer.Game.UserInterface.DirectoryHandler
@@ -32,13 +34,10 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
             ".mp4"
         };
 
+        private readonly char pathSplitChar = RuntimeInfo.IsUnix ? '/' : '\\';
 
         [CanBeNull] public FontUsage Font;
-        public DirectoryFillFlowContainer()
-        {
-
-        }
-
+        
         private string[] findFiles(string path)
         {
             if(path == directory.Path) return findFiles(StartPath);
@@ -58,58 +57,28 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
             {
                 if(Extensions.Contains(Path.GetExtension(file)))
                 {
-                    SpacingDirectoryText text;
-                    if(RuntimeInfo.IsUnix)
+                    var text = new SpacingDirectoryText(path, file)
                     {
-                        text = new SpacingDirectoryText(path, file)
-                        {
-                            Text = file.Split('/').Last(),
-                            Colour = Colour4.Red,
-                            Margin = new MarginPadding(15),
-                            Font = new FontUsage("FiraCodeNerdFont-Bold", size: 20f),
-                            FoundVideo = FoundVideo
-                        };
-                    }
-                    else
-                    {
-                        text = new SpacingDirectoryText(path, file)
-                        {
-                            Text = file.Split().Last(),
-                            Colour = Colour4.Red,
-                            Margin = new MarginPadding(15),
-                            Font = new FontUsage("FiraCodeNerdFont-Bold", size: 20f),
-                            FoundVideo = FoundVideo
-                        };
-                    }
-                    
+                        Text = file.Split(pathSplitChar).Last(),
+                        Colour = Colour4.Red,
+                        Margin = new MarginPadding(15),
+                        Font = new FontUsage("FiraCodeNerdFont-Bold", size: 20f),
+                        FoundVideo = FoundVideo
+                    };
+
                     spacingDirectoryTexts.Add(text);
                     text.PathChanged += onPathChange;
                 }
                 else
                 {
-                    SpacingDirectoryText text;
-                    if (RuntimeInfo.IsUnix)
+                    var text = new SpacingDirectoryText(path, file)
                     {
-                        text = new SpacingDirectoryText(path, file)
-                        {
-                            Text = file.Split('/').Last(),
-                            Colour = Colour4.White,
-                            Margin = new MarginPadding(15),
-                            Font = new FontUsage("FiraCodeNerdFont-Bold", size: 20f),
-                            FoundVideo = FoundVideo
-                        };
-                    }
-                    else
-                    {
-                        text = new SpacingDirectoryText(path, file)
-                        {
-                            Text = file.Split('\\').Last(),
-                            Colour = Colour4.White,
-                            Margin = new MarginPadding(15),
-                            Font = new FontUsage("FiraCodeNerdFont-Bold", size: 20f),
-                            FoundVideo = FoundVideo
-                        };
-                    }
+                        Text = file.Split(pathSplitChar).Last(),
+                        Colour = Colour4.White,
+                        Margin = new MarginPadding(15),
+                        Font = new FontUsage("FiraCodeNerdFont-Bold", size: 20f),
+                        FoundVideo = FoundVideo
+                    };
                     spacingDirectoryTexts.Add(text);
                     text.PathChanged += onPathChange;
                 }
