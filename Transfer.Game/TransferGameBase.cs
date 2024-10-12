@@ -45,7 +45,7 @@ namespace Transfer.Game
         protected Storage Storage { get; set; }
         private Storage audioTempStorage { get; set; }
 
-        private DependencyContainer dependency;
+        protected DependencyContainer Dependency { get; private set; }
         private int allowableExceptions;
 
         protected TransferGameBase()
@@ -68,7 +68,8 @@ namespace Transfer.Game
 
             fontStore = new FontStore(renderer, null, 100f);
 
-            dependency.CacheAs(audioTempStorage);
+            Dependency.CacheAs(audioTempStorage);
+            Logger.Storage = Storage;
 
             Fonts.AddStore(fontStore);
 
@@ -119,7 +120,7 @@ namespace Transfer.Game
         }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
-            dependency = new DependencyContainer(base.CreateChildDependencies(parent));
+            Dependency = new DependencyContainer(base.CreateChildDependencies(parent));
 
         protected override bool OnExiting()
         {
