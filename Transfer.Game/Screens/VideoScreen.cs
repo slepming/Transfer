@@ -1,6 +1,7 @@
 #nullable disable
 using System;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -72,6 +73,21 @@ namespace Transfer.Game.Screens
             // window = new();
         }
 
+        public VideoScreen(string arg)
+        {
+            VideoPath = arg;
+        }
+        public VideoScreen(Track audio, string[] args)
+        {
+            this.audio = audio;
+            VideoPath = args[0];
+        }
+        public VideoScreen(Track audio, string pathToVideo)
+        {
+            this.audio = audio;
+            VideoPath = pathToVideo;
+        }
+
 
         [BackgroundDependencyLoader]
         private void load(AudioManager am)
@@ -101,12 +117,12 @@ namespace Transfer.Game.Screens
 
 
 
-        protected override void LoadComplete()
+        protected override async void LoadComplete()
         {
             base.LoadComplete();
-            if (string.IsNullOrEmpty(VideoPath) || audio == null)
+            if (string.IsNullOrEmpty(VideoPath))
             {
-                string nullable = audio == null ? "Audio null" : "Video null";
+                string nullable = "Video null";
                 Logger.Log(nullable);
                 videoStartContainer();
                 return;
@@ -115,7 +131,7 @@ namespace Transfer.Game.Screens
 
             if (audio == null)
             {
-                Logger.Log("Audio is null");
+                this.Push(new VideoScreen(await TempStore.GetTrackAsync(videoPath, audioTempStorage), videoPath));
                 return;
             }
             Logger.Log("Check Track success");
@@ -150,7 +166,7 @@ namespace Transfer.Game.Screens
 
             try
             {
-                this.Push(new VideoScreen{ audio = await TempStore.GetTrackAsync(e.NewValue, audioTempStorage), VideoPath = e.NewValue });
+                this.Push(new VideoScreen(await TempStore.GetTrackAsync(e.NewValue, audioTempStorage), e.NewValue));
             }
             catch(Exception ex){
                 ClearInternal();
