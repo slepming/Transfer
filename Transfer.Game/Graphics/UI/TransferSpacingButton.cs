@@ -21,7 +21,7 @@ namespace Transfer.Game.UserInterface
         public string Text;
         public Action ButtonAction;
         public Action OnDoubleClickAction;
-        [NotNull]public FontUsage Font = new FontUsage(size: 30);
+        public FontUsage Font = new FontUsage(size: 30);
 
         public TransferSpacingButton()
         {

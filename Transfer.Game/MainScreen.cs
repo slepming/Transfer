@@ -28,7 +28,6 @@ namespace Transfer.Game
         }
         protected override void LoadComplete()
         {
-
             base.LoadComplete();
         }
         public override void OnEntering(ScreenTransitionEvent e)

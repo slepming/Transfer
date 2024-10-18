@@ -18,6 +18,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
 
         public DirectoryContainer()
         {
+            Show();
             Logger.Log("Create Directory Container");
             RelativeSizeAxes = Axes.Both;
         }

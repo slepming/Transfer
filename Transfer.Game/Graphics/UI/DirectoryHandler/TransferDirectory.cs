@@ -9,14 +9,6 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
 {
     public class TransferDirectory : IDirectory
     {
-        public TransferDirectory(string path)
-        {
-            Path = path;
-        }
-        public TransferDirectory()
-        {
-
-        }
         public string Path
         {
             get => path;
@@ -30,13 +22,22 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
 
         }
         private string path;
-        public int CountFiles { get => (Files.Length + Directories.Length); }
+        public int CountFiles => Files.Length + Directories.Length;
+
         public string[] Files => files;
 
         private string[] files => Directory.GetFiles(Path,"*.mp4");
 
         public string[] Directories => directories;
         private string[] directories => Directory.GetDirectories(Path);
+        public TransferDirectory(string path)
+        {
+            Path = path;
+        }
+        public TransferDirectory()
+        {
+
+        }
 
     }
 }
