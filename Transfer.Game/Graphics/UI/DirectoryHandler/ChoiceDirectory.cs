@@ -15,6 +15,10 @@ using Transfer.Game.Graphics.Cursor;
 
 namespace Transfer.Game.UserInterface.DirectoryHandler
 {
+    /// <summary>
+    /// Soon to be removed
+    /// </summary>
+    [Obsolete("Please don't use this class. Use ExplorerContainer")]
     public partial class ChoiceDirectory : Container
     {
         public SpacingText SpacingText;
