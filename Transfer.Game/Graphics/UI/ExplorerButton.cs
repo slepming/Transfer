@@ -74,7 +74,8 @@ public partial class ExplorerButton : ClickableContainer
     private void pathTransition()
     {
         if (path == null) return;
-        Transition?.Invoke(path, System.IO.Path.GetExtension(path) == null ? true : false);
+        Transition?.Invoke(path, false);
+
     }
 
     protected override void LoadComplete()

@@ -75,8 +75,14 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
 
     private void changeDirectoryExplorer(string path, bool isFile)
     {
-        if (!isFile) getContent(path);
-        else TransitionPath?.Invoke(path, true); 
+        try
+        {
+            getContent(path);
+        }
+        catch(DirectoryNotFoundException directoryNotFoundEx)
+        {
+            TransitionPath?.Invoke(path, true);
+        }
     }
 
     public void AddExtension(string extension){
