@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using osu.Framework;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using Transfer.Game.UserInterface.DirectoryHandler;
 
@@ -21,14 +22,17 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
     private List<ExplorerButton> explorerButtons = new List<ExplorerButton>();
 
     private readonly char pathSplitChar = RuntimeInfo.IsUnix ? '/' : '\\';
+
     private List<string> awaibleExtensions = new List<string>()
     {
         "mp4"
     };
 
+    public event TransitionEvent TransitionPath;
+
     protected override void LoadComplete()
     {
-
+        getContent(start_path);
         base.LoadComplete();
     }
     private string[] files(string path)
@@ -46,9 +50,30 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         {
             ExplorerButton explorerButton;
             if(awaibleExtensions.Contains(Path.GetExtension(file))){
-                // тут крч система должна быть, котоорая будет использовать пути файлов и показывать их.
+                explorerButton = new()
+                {
+                    Path = file,
+                    TextColour = Colour4.Gray
+                };
             }
+            else
+            {
+                explorerButton = new()
+                {
+                    Path = file
+                };
+            }
+            explorerButtons.Add(explorerButton);
+            explorerButton.Transition += changeDirectoryExplorer;
         }
+        Clear();
+        foreach (ExplorerButton button in explorerButtons) Add(button);
+    }
+
+    private void changeDirectoryExplorer(string path, bool isFile)
+    {
+        if (!isFile) getContent(path);
+        else TransitionPath?.Invoke(path, true); 
     }
 
     public void AddExtension(string extension){

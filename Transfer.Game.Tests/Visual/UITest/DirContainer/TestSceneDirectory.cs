@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using Transfer.Game.Graphics.UI.Containers;
+using osu.Framework.Logging;
 
 namespace Transfer.Game.Tests.Visual.UITest.DirContainer;
 
@@ -26,9 +27,12 @@ public partial class TestSceneDirectory : TransferTestScene
                     Height = 900,
                     Colour = Colour4.White
                 },
-                testDirectoryContainer = new ExplorerContainer{},
+                testDirectoryContainer = new ExplorerContainer{
+
+                },
             ]
         });
+        testDirectoryContainer.TransitionFile += delegate (string path, bool isFile) { Logger.Log(path); };
         testDirectoryContainer.Show();
     }
 }

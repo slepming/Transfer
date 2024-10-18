@@ -3,6 +3,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -11,6 +12,10 @@ public partial class ExplorerContainer : FocusedOverlayContainer
     protected override bool BlockScrollInput { get; }
     protected override bool StartHidden { get; }
     protected override bool BlockPositionalInput { get; }
+
+    private ExplorerFillFlowContainer explorerFillFlowContainer;
+
+    public event TransitionEvent TransitionFile;
 
     public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
     {
@@ -22,16 +27,36 @@ public partial class ExplorerContainer : FocusedOverlayContainer
         Origin = Anchor.Centre;
         Anchor = Anchor.Centre;
         Size = new Vector2(0.9f, 0.9f);
+    }
+
+    protected override void LoadComplete()
+    {
         InternalChildren = [
-            new SpriteText{
-                Text = "Javana",
-                Font = new FontUsage(size:20),
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Width = 200,
-                Height = 200
-            }
-        ];
+                new SpacingText{
+                    Text = "Choice file",
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Font = new FontUsage("Oswald",size: 40)
+                },
+                new ExplorerScrollContainer{
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    RelativeSizeAxes = Axes.Both,
+                    Position = new Vector2(0, 50),
+                    
+
+                    Child = explorerFillFlowContainer = new ExplorerFillFlowContainer{
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        AutoSizeAxes = Axes.Y,
+                        RelativeSizeAxes = Axes.X,
+                        Spacing = new Vector2(15,15),
+                    }
+                }
+
+            ];
+        explorerFillFlowContainer.TransitionPath += TransitionFile;
+        base.LoadComplete();
     }
     protected override void PopIn()
     {
