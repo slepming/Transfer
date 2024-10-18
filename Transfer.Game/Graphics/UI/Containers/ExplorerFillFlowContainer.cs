@@ -7,7 +7,10 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using osu.Framework;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Input.Events;
+using osuTK.Graphics;
 using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Graphics.UI.Containers;
@@ -53,7 +56,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
                 explorerButton = new()
                 {
                     Path = file,
-                    TextColour = Colour4.Gray
+                    TextColour = Colour4.Blue
                 };
             }
             else
@@ -79,5 +82,16 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
     public void AddExtension(string extension){
         awaibleExtensions.Add(extension);
     }
-
+    protected override bool OnKeyDown(KeyDownEvent e)
+    {
+        if (e.Key == osuTK.Input.Key.BackSpace)
+        {
+            if (current_path != start_path)
+            {
+                current_path = System.IO.Path.GetDirectoryName(current_path);
+                getContent(current_path);
+            }
+        }
+        return base.OnKeyDown(e);
+    }
 }

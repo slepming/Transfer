@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using osu.Framework;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
@@ -41,20 +42,20 @@ public partial class ExplorerButton : ClickableContainer
     public List<string> AllowedFileExtensions = new List<string>();
 
     private SpriteText spriteText;
+    private Box background;
     public Colour4 TextColour = Colour4.White;
 
     public event TransitionEvent Transition;
     public ExplorerButton()
     {
         Masking = true;
-        Width = 100;
+        Width = 200;
         Height = 50;
-        AutoSizeAxes = Axes.X;
         BorderColour = Colour4.Gray;
         BorderThickness = 2;
         CornerRadius = 5;
         InternalChildren = [
-            new Box{
+            background = new Box{
                 RelativeSizeAxes = Axes.Both,
                 Alpha = 0.3f,
                 Colour = Colour4.White,
@@ -84,14 +85,14 @@ public partial class ExplorerButton : ClickableContainer
 
     protected override bool OnHover(HoverEvent e)
     {
-        this.FadeColour(Colour4.Gray, 600, Easing.OutQuint);
-        this.TransformTo(nameof(BorderColour), Color4.Black, 700, Easing.InOutQuad); // crash
+        background.FadeColour(Colour4.Gray, 600, Easing.OutQuint);
+        this.TransformTo(nameof(BorderColour), ColourInfo.SingleColour(Color4.Black), 300, Easing.InOutQuad); 
         return base.OnHover(e);
     }
     protected override void OnHoverLost(HoverLostEvent e)
     {
-        this.FadeColour(Colour4.White, 400, Easing.InOutQuint);
-        this.TransformTo(nameof(BorderColour), Color4.Gray, 300, Easing.InOutQuad);
+        background.FadeColour(Colour4.White, 100, Easing.OutQuint);
+        this.TransformTo(nameof(BorderColour), ColourInfo.SingleColour(Color4.Gray), 150, Easing.InOutQuad);
         base.OnHoverLost(e);
     }
 }

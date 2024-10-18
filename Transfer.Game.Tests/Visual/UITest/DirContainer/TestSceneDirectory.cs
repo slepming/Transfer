@@ -6,6 +6,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using Transfer.Game.Graphics.UI.Containers;
 using osu.Framework.Logging;
+using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Tests.Visual.UITest.DirContainer;
 
@@ -17,7 +18,8 @@ public partial class TestSceneDirectory : TransferTestScene
     [BackgroundDependencyLoader]
     private void load(TextureStore textureStore)
     {
-        Add(new Container{
+        Add(new Container
+        {
             RelativeSizeAxes = Axes.Both,
             Children = [
                 new Sprite
