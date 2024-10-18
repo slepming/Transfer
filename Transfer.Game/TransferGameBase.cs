@@ -50,6 +50,8 @@ namespace Transfer.Game
 
         protected TransferGameBase()
         {
+
+
             // Ensure game and tests scale with window size and screen DPI.
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
@@ -65,7 +67,6 @@ namespace Transfer.Game
             audioTempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
 
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
-
             fontStore = new FontStore(renderer, null, 100f);
 
             Dependency.CacheAs(audioTempStorage);

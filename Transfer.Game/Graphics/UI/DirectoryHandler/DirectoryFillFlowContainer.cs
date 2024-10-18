@@ -4,15 +4,11 @@ using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using osu.Framework;
-using osu.Framework.Allocation;
 using osu.Framework.Bindables;
-using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
-using static System.Net.Mime.MediaTypeNames;
-using static osu.Framework.RuntimeInfo;
 
 namespace Transfer.Game.UserInterface.DirectoryHandler
 {
@@ -37,7 +33,7 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
         private readonly char pathSplitChar = RuntimeInfo.IsUnix ? '/' : '\\';
 
         [CanBeNull] public FontUsage Font;
-        
+
         private string[] findFiles(string path)
         {
             if(path == directory.Path) return findFiles(StartPath);

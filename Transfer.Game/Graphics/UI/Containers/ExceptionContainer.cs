@@ -11,6 +11,9 @@ using osu.Framework.Logging;
 
 namespace Transfer.Game.UserInterface.Containers;
 
+/// <summary>
+/// Container for handling exception and for notify user
+/// </summary>
 public partial class ExceptionContainer : FocusedOverlayContainer
 {
 

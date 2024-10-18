@@ -74,7 +74,6 @@ namespace Transfer.Game.UserInterface.DirectoryHandler
 
         protected override void LoadComplete()
         {
-            directoryContainer.Show();
             flowContainer.FoundVideo += FoundVideo;
             base.LoadComplete();
         }
