@@ -10,6 +10,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osuTK.Graphics;
 using Transfer.Game.UserInterface.DirectoryHandler;
 
@@ -28,7 +29,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
 
     private List<string> awaibleExtensions = new List<string>()
     {
-        "mp4"
+        ".mp4"
     };
 
     public event TransitionEvent TransitionPath;
@@ -77,7 +78,26 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
     {
         try
         {
-            getContent(path);
+            string fullPath = System.IO.Path.GetFullPath(path);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                if (awaibleExtensions.Contains(System.IO.Path.GetExtension(fullPath)))
+                {
+                    TransitionPath?.Invoke(fullPath, true);
+                    return;
+                }
+                else
+                {
+                    Logger.Log($"The file was found, but its extension is invalid: {fullPath}. Extension: {System.IO.Path.GetExtension(fullPath)}");
+                    return; 
+                }
+            }
+            if (System.IO.Directory.Exists(fullPath))
+            {
+                getContent(fullPath);
+                return;
+            }
         }
         catch(DirectoryNotFoundException directoryNotFoundEx)
         {

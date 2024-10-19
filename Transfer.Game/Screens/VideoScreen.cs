@@ -16,6 +16,7 @@ using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK.Input;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.UserInterface.DirectoryHandler;
@@ -41,7 +42,7 @@ namespace Transfer.Game.Screens
 
 
 
-        private ChoiceDirectory choiceDirectory;
+        private ExplorerContainer explorerContainer = new ExplorerContainer();
 
         private SpriteText editVolumeText;
 
@@ -93,17 +94,15 @@ namespace Transfer.Game.Screens
         private void load(AudioManager am)
         {
             TempStore = new TempStore<Track>(){ AudioManager = am };
-            AddInternal(choiceDirectory = new ChoiceDirectory
-            {
-                FoundVideo = onFoundVideo,
-            });
-            choiceDirectory.Hide();
+            explorerContainer.FoundVideo += onFoundVideo;
+            explorerContainer.Hide();
+            AddInternal(explorerContainer);
         }
 
         private void videoStartContainer()
         {
 
-            choiceDirectory.Show();
+            explorerContainer.Show();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -161,12 +160,12 @@ namespace Transfer.Game.Screens
 
         }
 
-        private async void onFoundVideo(ValueChangedEvent<string> e)
+        private async void onFoundVideo(string path, bool isFile)
         {
 
             try
             {
-                this.Push(new VideoScreen(await TempStore.GetTrackAsync(e.NewValue, audioTempStorage), e.NewValue));
+                this.Push(new VideoScreen(await TempStore.GetTrackAsync(path, audioTempStorage), path));
             }
             catch(Exception ex){
                 ClearInternal();

@@ -15,7 +15,7 @@ public partial class ExplorerContainer : FocusedOverlayContainer
 
     private ExplorerFillFlowContainer explorerFillFlowContainer;
 
-    public event TransitionEvent TransitionFile;
+    public event TransitionEvent FoundVideo;
 
     public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
     {
@@ -55,16 +55,16 @@ public partial class ExplorerContainer : FocusedOverlayContainer
                 }
 
             ];
-        explorerFillFlowContainer.TransitionPath += TransitionFile;
+        explorerFillFlowContainer.TransitionPath += FoundVideo;
         base.LoadComplete();
     }
     protected override void PopIn()
     {
-        this.FadeTo(1, 600, Easing.In);
+        this.FadeTo(1, 1000, Easing.InOutQuint);
     }
 
     protected override void PopOut()
     {
-        this.FadeTo(0.1f, 600, Easing.Out);
+        this.FadeTo(0.1f, 600, Easing.InOutQuint);
     }
 }
