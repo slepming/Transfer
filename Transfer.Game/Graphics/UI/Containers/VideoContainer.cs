@@ -55,7 +55,7 @@ namespace Transfer.Game.UserInterface.Containers
                         {
                             FillMode = FillMode.Fit,
                             RelativeSizeAxes = Axes.Both,
-                            Loop = true
+                            Loop = false
                         },
                     }
                 }
@@ -107,10 +107,15 @@ namespace Transfer.Game.UserInterface.Containers
                     isMuted = !isMuted;
                     break;
                 }
-                case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break; // edit: нужно чтобы выходила надпись о Volume Value и пропадала
+                case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;
                 case osuTK.Input.Key.Left: Audio.Volume.Value -= 5; break;
             }
             return base.OnKeyDown(e);
+        }
+        protected override bool OnScroll(ScrollEvent e)
+        {
+            Audio.Volume.Value += e.ScrollDelta.Y / 10;
+            return base.OnScroll(e);
         }
     }
 }

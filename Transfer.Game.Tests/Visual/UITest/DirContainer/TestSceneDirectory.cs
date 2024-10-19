@@ -34,7 +34,7 @@ public partial class TestSceneDirectory : TransferTestScene
                 },
             ]
         });
-        testDirectoryContainer.TransitionFile += delegate (string path, bool isFile) { Logger.Log(path); };
+        testDirectoryContainer.FoundVideo += delegate (string path, bool isFile) { Logger.Log(path); };
         testDirectoryContainer.Show();
     }
 }
