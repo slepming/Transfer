@@ -78,7 +78,11 @@ namespace Transfer.Game.Screens
         {
             VideoPath = arg;
         }
-        public VideoScreen(Track audio, string[] args)
+        public VideoScreen(params string[] args)
+        {
+            VideoPath = args[0];
+        }
+        public VideoScreen(Track audio, params string[] args)
         {
             this.audio = audio;
             VideoPath = args[0];

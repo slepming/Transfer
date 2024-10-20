@@ -20,26 +20,13 @@ namespace Transfer.Game.UserInterface
         
         public TransferBasicSliderBar()
         {
-            BackgroundColour = new Colour4(1,1,1,0.1f);
+            BackgroundColour = new Colour4(255,255,255,1f);
         }
 
-        protected override bool OnHover(HoverEvent e)
-        {
-            this.ScaleTo(new Vector2(1.1f, 1.1f), 200, Easing.Out);
-            this.FadeColour(new Colour4(1,1,1,1f), 300, Easing.OutQuint);
-            return base.OnHover(e);
-        }
-        protected override void OnHoverLost(HoverLostEvent e)
-        {
-            BackgroundColour = new Colour4(1,1,1,0.1f);
-            this.FadeColour(new Colour4(1,1,1,0.5f), 150, Easing.OutQuint);
-            this.ScaleTo(new Vector2(1,1), 100, Easing.In);
-            base.OnHoverLost(e);
-        }
+        
 
         protected override void OnUserChange(T value)
         {
-            Logger.Log("User change Slider bar");
             base.OnUserChange(value);
         }
 

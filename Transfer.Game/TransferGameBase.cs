@@ -30,6 +30,7 @@ namespace Transfer.Game
 {
     public partial class TransferGameBase : osu.Framework.Game
     {
+        public static readonly string[] VIDEO_EXTENSIONS = { ".mp4" };
         #if DEBUG
             public const string HOST_NAME = "Transfer(Development Mode)";
         #else

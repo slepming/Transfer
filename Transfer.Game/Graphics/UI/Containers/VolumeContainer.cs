@@ -6,6 +6,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
 
@@ -42,9 +43,9 @@ namespace Transfer.Game.UserInterface.Containers
             {
                 volumeSlider = new TransferBasicSliderBar<double>
                 {
-                    Anchor = Anchor.BottomCentre,
+                    Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Position = new Vector2(0, -40),
+                    Position = new Vector2(0, 0),
                     Size = new Vector2(200, 20),
                     TransferValueOnCommit = true,
                     KeyboardStep = 1,
@@ -60,10 +61,20 @@ namespace Transfer.Game.UserInterface.Containers
             volumeSlider?.Dispose();
             base.Dispose(isDisposing);
         }
+        protected override bool OnHover(HoverEvent e)
+        {
+            this.FadeColour(new Colour4(255, 255, 255, 1f), 300, Easing.OutQuint);
+            return base.OnHover(e);
+        }
+        protected override void OnHoverLost(HoverLostEvent e)
+        {
+            this.FadeColour(Colour4.Transparent, 5000, Easing.OutQuint);
+            base.OnHoverLost(e);
+        }
 
         protected override void PopIn()
         {
-
+            this.ScaleTo(new Vector2(1f, 1f), 200, Easing.Out);
         }
 
         protected override void PopOut()
