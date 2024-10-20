@@ -53,7 +53,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         foreach(string file in files(path ?? start_path))
         {
             ExplorerButton explorerButton;
-            if(awaibleExtensions.Contains(Path.GetExtension(file))){
+            if(awaibleExtensions.Contains(Path.GetExtension(file).ToLower())){
                 explorerButton = new()
                 {
                     Path = file,
@@ -90,7 +90,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
                 else
                 {
                     Logger.Log($"The file was found, but its extension is invalid: {fullPath}. Extension: {System.IO.Path.GetExtension(fullPath)}");
-                    return; 
+                    return;
                 }
             }
             if (System.IO.Directory.Exists(fullPath))

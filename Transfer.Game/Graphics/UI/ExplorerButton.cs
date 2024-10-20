@@ -87,7 +87,7 @@ public partial class ExplorerButton : ClickableContainer
     protected override bool OnHover(HoverEvent e)
     {
         background.FadeColour(Colour4.Gray, 600, Easing.OutQuint);
-        this.TransformTo(nameof(BorderColour), ColourInfo.SingleColour(Color4.Black), 300, Easing.InOutQuad); 
+        this.TransformTo(nameof(BorderColour), ColourInfo.SingleColour(Color4.Black), 300, Easing.InOutQuad);
         return base.OnHover(e);
     }
     protected override void OnHoverLost(HoverLostEvent e)

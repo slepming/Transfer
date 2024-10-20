@@ -43,7 +43,7 @@ public partial class ExplorerContainer : FocusedOverlayContainer
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.Both,
                     Position = new Vector2(0, 50),
-                    
+
 
                     Child = explorerFillFlowContainer = new ExplorerFillFlowContainer{
                         Anchor = Anchor.Centre,
