@@ -4,3 +4,5 @@ This project is in constant development we try to maintain it.
 This project was created in order to create a general modernized video editor where weak computers will be welcome. This project will not contain something impossible. We are working with FFmpeg, which gives us some possibilities over video editing and with audio processing, which is provided by the osu framework.
 ## Idea
 We are waiting for any ideas from users to improve our application. We try to consider all ideas and take out of them pros and cons, then we will decide whether it can be included in the main development branch. 
+## How it works
+When loaded using the framework, some data is cached, which is used further on in tasks. After that you are given a choice of file after which the video will be loaded, and further divided into audio and video components, the video component is discarded immediately using one of the FFMpeg libraries. To speed up future downloads, the videos are loaded into temporary memory where they will stay until you manually delete them. 
