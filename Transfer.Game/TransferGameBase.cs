@@ -43,8 +43,9 @@ namespace Transfer.Game
         protected override Container<Drawable> Content { get; }
 
         private FontStore fontStore;
-        protected Storage Storage { get; set; }
-        private Storage audioTempStorage { get; set; }
+        protected Storage Storage;
+        private Storage audioTempStorage;
+
 
         protected DependencyContainer Dependency { get; private set; }
         private int allowableExceptions;
@@ -68,6 +69,7 @@ namespace Transfer.Game
             audioTempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
 
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
+
             fontStore = new FontStore(renderer, null, 100f);
 
             Dependency.CacheAs(audioTempStorage);

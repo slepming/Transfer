@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osuTK;
+using osuTK.Graphics;
 using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Graphics.UI
@@ -30,12 +32,12 @@ namespace Transfer.Game.Graphics.UI
 
         protected override void AnimateClose()
         {
-            this.ScaleTo(0, 200, Easing.InOutQuad);
+            this.FadeColour(Colour4.Transparent, 200, Easing.InOutQuad);
             base.AnimateClose();
         }
         protected override void AnimateOpen()
         {
-            this.ScaleTo(1, 200, Easing.InOutQuad);
+            this.FadeColour(Colour4.White, 200, Easing.InOutQuad);
             base.AnimateOpen();
         }
 
@@ -43,27 +45,29 @@ namespace Transfer.Game.Graphics.UI
         {
             public FinalDrawableMenuItem(MenuItem item) : base(item)
             {
-                BackgroundColour = FrameworkColour.Blue;
-                CornerRadius = 4;
                 Masking = true;
-
-                RelativeSizeAxes = Axes.Both;
-                Colour = Colour4.White;
+                Content.Width = 125;
+                Content.Height = 25;
+                Content.Anchor = Anchor.Centre;
+                Content.Origin = Anchor.Centre;
+                Content.Colour = new Color4(255, 255, 255, 1f);
+                BackgroundColour = Colour4.Transparent;
             }
+
 
             protected override bool OnHover(HoverEvent e)
             {
-                this.FadeColour(Colour4.Aqua, 100, Easing.In);
+                this.TransformTo(nameof(Content.Colour), ColourInfo.SingleColour(new Color4(255, 255, 255, 1f)), 400, Easing.InOutQuad);
                 return false;
             }
             protected override void OnHoverLost(HoverLostEvent e)
             {
-                this.FadeColour(Colour4.White, 100, Easing.In);
+                this.TransformTo(nameof(Content.Colour), ColourInfo.SingleColour(new Color4(255, 255, 255, 0.5f)), 200, Easing.InOutQuad);
             }
 
             protected override Drawable CreateContent() => new SpriteText
             {
-                Font = new FontUsage("FiraCodeNerdFont"),
+                Font = new FontUsage("Oswald", size:30),
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
             };

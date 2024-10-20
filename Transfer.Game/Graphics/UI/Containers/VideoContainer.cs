@@ -7,15 +7,20 @@ using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
+using osu.Framework.Screens;
 using osuTK;
+using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.Videos;
+using Transfer.Game.Screens;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VideoContainer : Container
+    public partial class VideoContainer : Container, IHasContextMenu
     {
         private TransferVideo video;
         private VolumeContainer volumeContainer;
@@ -32,6 +37,11 @@ namespace Transfer.Game.UserInterface.Containers
         private string filename;
 
 
+        public MenuItem[] ContextMenuItems => new MenuItem[]
+        {
+            new MenuItem("Edit mode", () => new ScreenStack(new ConvertScreen())),
+        };
+
         public VideoContainer(string filename)
         {
             this.filename = filename;
@@ -46,19 +56,12 @@ namespace Transfer.Game.UserInterface.Containers
 
             InternalChildren = new Drawable[]
             {
-                new Container
+                video = new TransferVideo(filename)
                 {
+                    FillMode = FillMode.Fit,
                     RelativeSizeAxes = Axes.Both,
-                    Children = new Drawable[]
-                    {
-                        video = new TransferVideo(filename)
-                        {
-                            FillMode = FillMode.Fit,
-                            RelativeSizeAxes = Axes.Both,
-                            Loop = false
-                        },
-                    }
-                }
+                    Loop = false,
+                },
             };
         }
 

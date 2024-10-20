@@ -140,20 +140,18 @@ namespace Transfer.Game.Screens
             Logger.Log("Check Track success");
 
             try{
-                InternalChildren = new Drawable[]
+                InternalChild = new FinalContextMenuContainer
                 {
-                    new FinalContextMenuContainer{
+                    RelativeSizeAxes = Axes.Both,
+                    Child = video = new VideoContainer(videoPath)
+                    {
+                        Audio = audio,
                         RelativeSizeAxes = Axes.Both,
-                        Child = video = new VideoContainer(videoPath)
-                        {
-                            Audio = audio,
-                            RelativeSizeAxes = Axes.Both,
-                        },
                     }
-
                 };
             } catch(Exception ex)
             {
+                Logger.Error(ex, "Unhandled exception: ");
                 AddInternal(new ExceptionContainer{
                     HeaderText = "Error",
                     Text = ex.Message,

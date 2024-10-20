@@ -21,16 +21,8 @@ using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.Videos
 {
-    public partial class TransferVideo : Video, IHasContextMenu
+    public partial class TransferVideo : Video
     {
-        public string PathToVideo { get => PathToVideo; set {
-            if(value == pathToVideo) return;
-            pathToVideo = value;
-        }}
-        private string pathToVideo;
-        public MenuItem[] ContextMenuItems => [
-            new MenuItem("Convert to", () => new ScreenStack().Push(new ConvertScreen(PathToVideo)))
-        ];
 
         public TransferVideo(string filename, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
         {
@@ -42,7 +34,6 @@ namespace Transfer.Game.Graphics.Videos
         {
 
         }
-
 
         protected override void Dispose(bool isDisposing)
         {

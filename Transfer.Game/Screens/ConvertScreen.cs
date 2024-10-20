@@ -8,11 +8,11 @@ namespace Transfer.Game.Screens;
 public partial class ConvertScreen : TransferScreen
 {
     private BoxButton gifConvertButton, mpFConvertButton, aacConvertButton;
-    private readonly string pathToFile;
-    public ConvertScreen(string pathToVideo){
-        pathToFile = pathToVideo;
-    }
+    public ConvertScreen() { }
+    public ConvertScreen(params string[] args)
+    {
 
+    }
 
     [BackgroundDependencyLoader]
     private void load()

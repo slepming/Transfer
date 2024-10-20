@@ -22,7 +22,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         public double MinValue = 0;
         public double MaxValue = 1;
-        public double Value = 0.5d;
+        public double Value = 0.3d;
 
 
         public VolumeContainer()
