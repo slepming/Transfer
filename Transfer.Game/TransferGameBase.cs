@@ -67,12 +67,12 @@ namespace Transfer.Game
         {
             Host.Window.Title = HOST_NAME;
             audioTempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
+            Dependency.CacheAs(audioTempStorage);
 
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
             fontStore = new FontStore(renderer, null, 100f);
 
-            Dependency.CacheAs(audioTempStorage);
             Logger.Storage = Storage;
 
             Fonts.AddStore(fontStore);

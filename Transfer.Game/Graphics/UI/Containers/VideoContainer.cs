@@ -20,7 +20,7 @@ using Transfer.Game.Screens;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VideoContainer : Container, IHasContextMenu
+    public partial class VideoContainer : Container
     {
         private TransferVideo video;
         private VolumeContainer volumeContainer;
@@ -36,11 +36,6 @@ namespace Transfer.Game.UserInterface.Containers
 
         private string filename;
 
-
-        public MenuItem[] ContextMenuItems => new MenuItem[]
-        {
-            new MenuItem("Edit mode", () => new ScreenStack(new ConvertScreen())),
-        };
 
         public VideoContainer(string filename)
         {

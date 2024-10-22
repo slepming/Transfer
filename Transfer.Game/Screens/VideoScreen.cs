@@ -10,6 +10,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input;
+using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -17,21 +19,16 @@ using osu.Framework.Screens;
 using osuTK.Input;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Screens
 {
-    public partial class VideoScreen : TransferScreen
+    public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>, IHandleGlobalKeyboardInput
     {
 
-        // GameWindow window;
-
-
-        // private IClock clocks; // ! It's pretty weird how it works. The app closes
-        // private readonly double delay = 1000;
-        // private double lastMoveTime;
 
 
 
@@ -40,9 +37,8 @@ namespace Transfer.Game.Screens
         private VideoContainer video;
 
 
-
-
-        private ExplorerContainer explorerContainer = new ExplorerContainer();
+        [Resolved]
+        private ExplorerContainer explorerContainer { get; set; }
 
         private SpriteText editVolumeText;
 
@@ -67,12 +63,7 @@ namespace Transfer.Game.Screens
         }
 
 
-        public VideoScreen()
-        {
-
-            // lastMoveTime = clocks.CurrentTime;
-            // window = new();
-        }
+        public VideoScreen() {}
 
         public VideoScreen(string arg)
         {
@@ -99,24 +90,9 @@ namespace Transfer.Game.Screens
         {
             TempStore = new TempStore<Track>(){ AudioManager = am };
             explorerContainer.FoundVideo += onFoundVideo;
-            explorerContainer.Hide();
-            AddInternal(explorerContainer);
+            if(!explorerContainer.IsAlive) InternalChild = explorerContainer;
         }
 
-        private void videoStartContainer()
-        {
-
-            explorerContainer.Show();
-        }
-
-        protected override bool OnKeyDown(KeyDownEvent e)
-        {
-            if(e.Key == Key.LControl && e.Key == Key.R || e.Key == Key.R && e.Key == Key.LControl)
-            {
-                videoStartContainer();
-            }
-            return base.OnKeyDown(e);
-        }
 
 
 
@@ -127,7 +103,7 @@ namespace Transfer.Game.Screens
             {
                 string nullable = "Video null";
                 Logger.Log(nullable);
-                videoStartContainer();
+                explorerContainer.Show();
                 return;
             }
 
@@ -179,36 +155,29 @@ namespace Transfer.Game.Screens
             }
         }
 
-
-
-        protected override bool OnMouseMove(MouseMoveEvent e)
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
-            // lastMoveTime = clocks.CurrentTime;
-            // mediaOptionsContainer.Show();
-            // window.CursorVisible = isDev == false ? true : false;
+            if(e.Repeat)
+                return false;
+            Logger.Log(e.Action.ToString());
+            switch(e.Action)
+            {
+                case GlobalAction.OpenEditor:
 
-            return base.OnMouseMove(e);
-        }
-        public override bool OnExiting(ScreenExitEvent e)
-        {
-            Dispose();
-            return base.OnExiting(e);
-        }
+                    return true;
+                case GlobalAction.Explorer:
+                    explorerContainer.Show();
+                    return true;
 
 
-        protected override void Dispose(bool isDisposing)
-        {
-            audio?.Dispose();
-            video?.Dispose();
-            LoadingComponent?.Dispose();
-
-            editVolumeText?.Dispose();
-            mediaOptionsContainer?.Dispose();
-
-            base.Dispose(isDisposing);
+            }
+            return false;
         }
 
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
+        {
 
+        }
     }
 
 }

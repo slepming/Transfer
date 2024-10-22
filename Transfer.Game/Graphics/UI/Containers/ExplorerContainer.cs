@@ -19,6 +19,7 @@ public partial class ExplorerContainer : FocusedOverlayContainer
 
     public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
     {
+        Hide();
         Masking = true;
         BlockScrollInput = blockScrollInput;
         StartHidden = startHidden;

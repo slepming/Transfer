@@ -32,8 +32,9 @@ namespace Transfer.Game.Input.Bindings
         {
             new KeyBinding(new[] { InputKey.Control, InputKey.R }, GlobalAction.Explorer),
             new KeyBinding(new[] { InputKey.LShift, InputKey.C}, GlobalAction.ConfigurationMenu),
-            new KeyBinding(new[] { InputKey.LControl,InputKey.LShift, InputKey.D}, GlobalAction.ShortVideoMetaData),
-            new KeyBinding(new[] { InputKey.LControl, InputKey.Tab}, GlobalAction.OpenEditor)
+            new KeyBinding(new[] { InputKey.Control,InputKey.LShift, InputKey.D}, GlobalAction.ShortVideoMetaData),
+            new KeyBinding(new[] { InputKey.Shift, InputKey.V}, GlobalAction.OpenEditor),
+            new KeyBinding(InputKey.F5, GlobalAction.TakeScreenshot)
         };
         private static IEnumerable<KeyBinding> watchingBindings => new[]
         {
@@ -60,7 +61,8 @@ namespace Transfer.Game.Input.Bindings
 
         EditorConvertMenu,
 
-        WatchingRestart
+        WatchingRestart,
+        TakeScreenshot,
     }
     public enum GlobalActionCategory
     {

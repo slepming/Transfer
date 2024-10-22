@@ -6,6 +6,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
+using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.IO;
 using Transfer.Game.Screens;
 
@@ -18,7 +19,8 @@ namespace Transfer.Game
 
         private string openWithTransferArgument;
 
-
+        [Cached]
+        private readonly ExplorerContainer explorerContainer = new ExplorerContainer();
 
         public TransferGame(string[] args)
         {
