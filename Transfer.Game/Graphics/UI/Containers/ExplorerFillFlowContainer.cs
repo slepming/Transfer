@@ -99,7 +99,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
                 return;
             }
         }
-        catch(DirectoryNotFoundException directoryNotFoundEx)
+        catch (DirectoryNotFoundException)
         {
             TransitionPath?.Invoke(path, true);
         }

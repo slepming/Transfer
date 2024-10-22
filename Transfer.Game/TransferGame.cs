@@ -22,6 +22,9 @@ namespace Transfer.Game
         [Cached]
         private readonly ExplorerContainer explorerContainer = new ExplorerContainer();
 
+        [Cached]
+        private readonly ConfigurationContainer configurationContainer = new ConfigurationContainer() { RelativeSizeAxes = Axes.Both } ;
+
         public TransferGame(string[] args)
         {
             if(args.Length > 0 ) openWithTransferArgument = args[0];
@@ -36,7 +39,7 @@ namespace Transfer.Game
             Child = screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
         }
 
-        protected override async void LoadAsyncComplete()
+        protected override void LoadAsyncComplete()
         {
             base.LoadAsyncComplete();
             if(openWithTransferArgument != null) screenStack.Push(transferScreen = new VideoScreen(openWithTransferArgument));

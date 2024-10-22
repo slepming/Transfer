@@ -52,7 +52,7 @@ namespace Transfer.Game.IO
                 File.Delete(pathToFile);
                 return AudioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
-            catch(FFMpegException ffmpegEx)
+            catch(FFMpegException)
             {
                 throw;
             }

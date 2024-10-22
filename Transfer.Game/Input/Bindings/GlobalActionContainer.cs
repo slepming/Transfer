@@ -28,23 +28,23 @@ namespace Transfer.Game.Input.Bindings
         public override IEnumerable<IKeyBinding> DefaultKeyBindings => generalBindings.Concat(watchingBindings).Concat(videoEditorBindings);
         public static IEnumerable<GlobalAction> GetGlobalActionsFor(GlobalActionCategory category)
             => GetBindingsFor(category).Select(binding => binding.Action).Cast<GlobalAction>().Distinct();
-        private static IEnumerable<KeyBinding> generalBindings => new[]
-        {
+        private static IEnumerable<KeyBinding> generalBindings =>
+        [
             new KeyBinding(new[] { InputKey.Control, InputKey.R }, GlobalAction.Explorer),
-            new KeyBinding(new[] { InputKey.LShift, InputKey.C}, GlobalAction.ConfigurationMenu),
+            new KeyBinding(new[] { InputKey.Control, InputKey.O}, GlobalAction.ConfigurationMenu),
             new KeyBinding(new[] { InputKey.Control,InputKey.LShift, InputKey.D}, GlobalAction.ShortVideoMetaData),
             new KeyBinding(new[] { InputKey.Shift, InputKey.V}, GlobalAction.OpenEditor),
             new KeyBinding(InputKey.F5, GlobalAction.TakeScreenshot)
-        };
-        private static IEnumerable<KeyBinding> watchingBindings => new[]
-        {
+        ];
+        private static IEnumerable<KeyBinding> watchingBindings =>
+        [
             new KeyBinding(InputKey.F2, GlobalAction.WatchingRestart)
-        };
-        private static IEnumerable<KeyBinding> videoEditorBindings => new[]
-        {
+        ];
+        private static IEnumerable<KeyBinding> videoEditorBindings =>
+        [
             new KeyBinding(InputKey.F3, GlobalAction.EditorVideoFullMetaData),
             new KeyBinding(InputKey.F1, GlobalAction.EditorConvertMenu)
-        };
+        ];
     }
 
     public enum GlobalAction

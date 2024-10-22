@@ -26,7 +26,7 @@ using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Screens
 {
-    public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>, IHandleGlobalKeyboardInput
+    public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>
     {
 
 
@@ -39,6 +39,8 @@ namespace Transfer.Game.Screens
 
         [Resolved]
         private ExplorerContainer explorerContainer { get; set; }
+        [Resolved]
+        private ConfigurationContainer configurationContainer { get; set; }
 
         private SpriteText editVolumeText;
 
@@ -168,7 +170,6 @@ namespace Transfer.Game.Screens
                 case GlobalAction.Explorer:
                     explorerContainer.Show();
                     return true;
-
 
             }
             return false;
