@@ -93,6 +93,7 @@ namespace Transfer.Game.Screens
             TempStore = new TempStore<Track>(){ AudioManager = am };
             explorerContainer.FoundVideo += onFoundVideo;
             if(!explorerContainer.IsAlive) InternalChild = explorerContainer;
+            if(!configurationContainer.IsAlive) InternalChild = configurationContainer;
         }
 
 

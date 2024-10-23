@@ -21,6 +21,7 @@ using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.Screens;
 using Transfer.Game.UserInterface.Containers;
@@ -42,9 +43,14 @@ namespace Transfer.Game
         // the screen scaling for all components including the test browser and framework overlays.
         protected override Container<Drawable> Content { get; }
 
+
         private FontStore fontStore;
         protected Storage Storage;
         private Storage audioTempStorage;
+
+        protected SafeAreaContainer SafeAreaContainer;
+
+        private GlobalActionContainer globalBindings;
 
 
         protected DependencyContainer Dependency { get; private set; }
@@ -82,10 +88,23 @@ namespace Transfer.Game
             InitialiseFonts();
 
             InitialiseConfig(config);
+            Host.Window.CursorState = CursorState.Hidden;
 
-            base.Content.Add(new TransferCursorContainer());
+            base.Content.Add(SafeAreaContainer = new SafeAreaContainer{
+                RelativeSizeAxes = Axes.Both,
+                SafeAreaOverrideEdges = Edges.None,
+                Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this){
+                    Children = new Drawable[]{
+                        new TransferCursorContainer(){
+                            RelativeSizeAxes = Axes.Both
+                        }
+                    }
+                })
+            });
+            Dependency.Cache(globalBindings);
 
         }
+        protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();
 
         public override void SetHost(GameHost host)
         {

@@ -3,16 +3,19 @@ using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
+using osu.Framework.Input.Bindings;
+using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.Screens;
 
 namespace Transfer.Game
 {
-    public partial class TransferGame : TransferGameBase
+    public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalAction>
     {
         private ScreenStack screenStack;
         private Screen transferScreen;
@@ -47,5 +50,14 @@ namespace Transfer.Game
 
         }
 
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+        {
+            return false;
+        }
+
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
+        {
+
+        }
     }
 }

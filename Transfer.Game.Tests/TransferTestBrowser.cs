@@ -14,7 +14,7 @@ namespace Transfer.Game.Tests
             AddRange(new Drawable[]
             {
                 new TestBrowser("Transfer"),
-                new CursorContainer()
+                // new CursorContainer()
             });
         }
 

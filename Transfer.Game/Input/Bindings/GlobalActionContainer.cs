@@ -1,15 +1,23 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
+using osu.Framework.Input.Events;
 
 namespace Transfer.Game.Input.Bindings
 {
     public partial class GlobalActionContainer : KeyBindingContainer<GlobalAction>, IHandleGlobalKeyboardInput
     {
+        private IKeyBindingHandler<GlobalAction> handler;
+        public GlobalActionContainer(TransferGameBase? game) : base(matchingMode: KeyCombinationMatchingMode.Modifiers) {
+            if(game is IKeyBindingHandler<GlobalAction> h){
+                handler = h;
+            }
+        }
 
         public static IEnumerable<KeyBinding> GetBindingsFor(GlobalActionCategory globalActionCategory)
         {
@@ -25,6 +33,9 @@ namespace Transfer.Game.Input.Bindings
                     throw new ArgumentOutOfRangeException(nameof(globalActionCategory), globalActionCategory, $"Unexpected {nameof(GlobalActionCategory)}");
             }
         }
+         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e) => handler?.OnPressed(e) == true;
+
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e) => handler?.OnReleased(e);
         public override IEnumerable<IKeyBinding> DefaultKeyBindings => generalBindings.Concat(watchingBindings).Concat(videoEditorBindings);
         public static IEnumerable<GlobalAction> GetGlobalActionsFor(GlobalActionCategory category)
             => GetBindingsFor(category).Select(binding => binding.Action).Cast<GlobalAction>().Distinct();

@@ -4,6 +4,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Input.Bindings;
 
@@ -11,9 +12,10 @@ namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class ConfigurationContainer : FocusedOverlayContainer, IKeyBindingHandler<GlobalAction>
 {
-    private bool isHide = true;
+    private bool isHide;
     public ConfigurationContainer()
     {
+        isHide = true;
         Hide();
         InternalChildren = new Drawable[]
         {
@@ -29,6 +31,7 @@ public partial class ConfigurationContainer : FocusedOverlayContainer, IKeyBindi
 
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
     {
+        Logger.Log(e.Action.ToString());
         if(e.Repeat)
             return false;
         switch(e.Action){
