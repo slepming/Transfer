@@ -12,7 +12,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
-using Transfer.Game.UserInterface.DirectoryHandler;
+using Transfer.Game.Graphics.UI;
 
 namespace Transfer.Game.UserInterface
 {

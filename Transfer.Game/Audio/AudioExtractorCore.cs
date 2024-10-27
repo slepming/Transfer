@@ -17,10 +17,9 @@ namespace Transfer.Game.Audio
         /// Extract audio from video
         /// </summary>
         /// <param name="video">Path to video</param>
-        /// <param name="storage">Storage</param>
         /// <param name="audioExtension">Extension for video or audio, use with <see cref="AudioExtensionHelper"></see></param>
         /// <returns>Path to audio</returns>
-        public async Task<string> Extract(string video, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
+        public async Task<string> Extract(string video, AudioExtension audioExtension = AudioExtension.mp3)
         {
             string outputPath =  Path.Combine(Path.GetTempPath(), $"{Path.GetFileNameWithoutExtension(video)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
             try

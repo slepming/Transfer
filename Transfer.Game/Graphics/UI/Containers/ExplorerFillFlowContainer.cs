@@ -12,7 +12,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osuTK.Graphics;
-using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -25,12 +24,8 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
 
     private List<ExplorerButton> explorerButtons = new List<ExplorerButton>();
 
-    private readonly char pathSplitChar = RuntimeInfo.IsUnix ? '/' : '\\';
 
-    private List<string> awaibleExtensions = new List<string>()
-    {
-        ".mp4"
-    };
+    private List<string> awaibleExtensions = TransferGameBase.VIDEO_EXTENSIONS.ToList();
 
     public event TransitionEvent TransitionPath;
 

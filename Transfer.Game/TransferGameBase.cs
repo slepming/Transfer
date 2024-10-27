@@ -46,14 +46,14 @@ namespace Transfer.Game
 
         private FontStore fontStore;
         protected Storage Storage;
-        private Storage audioTempStorage;
+        private Storage tempStorage;
 
         protected SafeAreaContainer SafeAreaContainer;
 
         private GlobalActionContainer globalBindings;
 
 
-        protected DependencyContainer Dependency { get; private set; }
+        protected DependencyContainer Dependency;
         private int allowableExceptions;
 
         protected TransferGameBase()
@@ -72,8 +72,7 @@ namespace Transfer.Game
         private void load(FrameworkConfigManager config, IRenderer renderer)
         {
             Host.Window.Title = HOST_NAME;
-            audioTempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
-            Dependency.CacheAs(audioTempStorage);
+            tempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
 
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
@@ -101,8 +100,9 @@ namespace Transfer.Game
                     }
                 })
             });
-            Dependency.Cache(globalBindings);
 
+            Dependency.Cache(globalBindings);
+            Dependency.CacheAs(tempStorage);
         }
         protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();
 

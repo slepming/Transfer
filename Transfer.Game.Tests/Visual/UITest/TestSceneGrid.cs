@@ -13,7 +13,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
 using osu.Framework.Screens;
-using Transfer.Game.UserInterface.DirectoryHandler;
+using Transfer.Game.Graphics.UI;
 using Vector2 = osuTK.Vector2;
 
 

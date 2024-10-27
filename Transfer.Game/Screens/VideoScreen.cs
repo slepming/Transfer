@@ -22,7 +22,6 @@ using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
-using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Screens
 {
@@ -47,7 +46,8 @@ namespace Transfer.Game.Screens
         private DrawSizePreservingFillContainer mediaOptionsContainer;
 
         [Resolved]
-        private Storage audioTempStorage { get; set; }
+        private Storage tempStorage { get; set; }
+
 
         protected ITempStore<Track> TempStore { get; set; }
 
@@ -67,19 +67,6 @@ namespace Transfer.Game.Screens
 
         public VideoScreen() {}
 
-        public VideoScreen(string arg)
-        {
-            VideoPath = arg;
-        }
-        public VideoScreen(params string[] args)
-        {
-            VideoPath = args[0];
-        }
-        public VideoScreen(Track audio, params string[] args)
-        {
-            this.audio = audio;
-            VideoPath = args[0];
-        }
         public VideoScreen(Track audio, string pathToVideo)
         {
             this.audio = audio;
@@ -90,10 +77,10 @@ namespace Transfer.Game.Screens
         [BackgroundDependencyLoader]
         private void load(AudioManager am)
         {
-            TempStore = new TempStore<Track>(){ AudioManager = am };
+            TempStore = new TempStore<Track>();
             explorerContainer.FoundVideo += onFoundVideo;
             if(!explorerContainer.IsAlive) InternalChild = explorerContainer;
-            if(!configurationContainer.IsAlive) InternalChild = configurationContainer;
+            //if(!configurationContainer.IsAlive) InternalChild = configurationContainer;
         }
 
 
@@ -113,7 +100,7 @@ namespace Transfer.Game.Screens
 
             if (audio == null)
             {
-                this.Push(new VideoScreen(await TempStore.GetTrackAsync(videoPath, audioTempStorage), videoPath));
+                this.Push(new VideoScreen(await TempStore.CreateaAndGetTrackAsync(videoPath, tempStorage), videoPath));
                 return;
             }
             Logger.Log("Check Track success");
@@ -146,7 +133,7 @@ namespace Transfer.Game.Screens
 
             try
             {
-                this.Push(new VideoScreen(await TempStore.GetTrackAsync(path, audioTempStorage), path));
+                this.Push(new VideoScreen(await TempStore.CreateaAndGetTrackAsync(path, tempStorage), path));
             }
             catch(Exception ex){
                 ClearInternal();

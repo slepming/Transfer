@@ -39,8 +39,6 @@ public partial class ExplorerButton : ClickableContainer
         }
     }
 
-    public List<string> AllowedFileExtensions = new List<string>();
-
     private SpriteText spriteText;
     private Box background;
     public Colour4 TextColour = Colour4.White;
@@ -81,7 +79,7 @@ public partial class ExplorerButton : ClickableContainer
     protected override void LoadComplete()
     {
         base.LoadComplete();
-        spriteText.Text = text ?? (path == null ? "None" : (path.Split(RuntimeInfo.IsUnix ? '/' : '\\').Last() ?? "None"));
+        spriteText.Text = text ?? (System.IO.Path.GetFileName(path));
     }
 
     protected override bool OnHover(HoverEvent e)

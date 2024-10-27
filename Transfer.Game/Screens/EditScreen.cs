@@ -51,7 +51,7 @@ public partial class EditScreen : TransferScreen
     [BackgroundDependencyLoader]
     private async void load(ExplorerContainer explorerContainer, AudioManager audioManager)
     {
-        tempStore = new TempStore<Track>() { AudioManager = audioManager };
+        tempStore = new TempStore<Track>();
         if(transferVideo == null){
             if(pathToFile == null){
                 explorerContainer.Show();
@@ -66,7 +66,7 @@ public partial class EditScreen : TransferScreen
                 Size = new Vector2(1/4,1/4),
                 Anchor = Anchor.TopRight,
                 Origin = Anchor.Centre,
-                Audio = await tempStore.GetTrackAsync(pathToFile, audioTempStorage)
+                Audio = await tempStore.CreateaAndGetTrackAsync(pathToFile, audioTempStorage)
             };
         }
 

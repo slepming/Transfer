@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FFmpeg.NET.Exceptions;
 using FFMpegCore.Exceptions;
 using OpenTabletDriver.Plugin.DependencyInjection;
 using osu.Framework.Audio;
@@ -20,37 +21,42 @@ namespace Transfer.Game.IO
     {
         private AudioExtractorCore audioExtractorCore = new();
 
-        public AudioManager AudioManager { get; set; }
+        [Resolved]
+        private AudioManager audioManager { get; set; }
 
-        /// <summary>
-        /// Extract audio from video and convertion in <see cref="Track"></see>
-        /// </summary>
-        /// <param name="pathToVideo">Path to video</param>
-        /// <param name="storage">Storage for temp files</param>
-        /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
-        /// <returns>Track</returns>
-        public virtual async Task<T> GetTrackAsync(string pathToVideo, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
+        
+        public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
         {
-            if(pathToVideo == null) Logger.Error(new ArgumentNullException(nameof(pathToVideo)), "Path to video can not be null");
-            var audioName = $"{Path.GetFileNameWithoutExtension(pathToVideo)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            if(path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");
+            var audioName = $"{Path.GetFileNameWithoutExtension(path)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
             if(storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
             {
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
-                return AudioManager.GetTrackStore(resourceStore).Get(audioName) as  T;
+                return audioManager.GetTrackStore(resourceStore).Get(audioName) as  T;
             }
 
             try
             {
-                string pathToFile = await audioExtractorCore.Extract(pathToVideo, storage);
-                if(!File.Exists(pathToFile)) Logger.Error(new Exception(), $"{pathToFile} does not exists - {audioName} canceled");
-                using(Stream file = new FileStream(pathToFile,FileMode.Open))
+                string pathToFile = await audioExtractorCore.Extract(path);
+                if (!File.Exists(path))
                 {
-                    using(var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
-                    await file.CopyToAsync(audioFile);
+                    Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");
+                    throw new Exception($"{path} does not exists - {audioName} canceled");
+                }
+                using (Stream file = new FileStream(pathToFile,FileMode.Open))
+                {
+                    using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
+                    {
+                        await file.CopyToAsync(audioFile);
+                    }
+                    using (var videoFile = storage.GetStream(Path.GetFileName(path), FileAccess.Write, FileMode.OpenOrCreate))
+                    {
+                        await file.CopyToAsync(videoFile);
+                    }
                 }
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 File.Delete(pathToFile);
-                return AudioManager.GetTrackStore(resourceStore).Get(audioName) as T;
+                return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
             catch(FFMpegException)
             {
@@ -62,6 +68,55 @@ namespace Transfer.Game.IO
                 throw;
             }
 
+        }
+
+        /// <summary>
+        /// Extract audio and puts it is in the temp directory
+        /// </summary>
+        /// <param name="path">path to video file</param>
+        /// <param name="storage"></param>
+        /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
+        /// <returns></returns>
+        public virtual async Task CreateTrackInStorageAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
+        {
+            if (path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");
+            var audioName = $"{Path.GetFileNameWithoutExtension(path)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            if (storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
+            {
+                return;
+            }
+            try
+            {
+                string pathToAudio = await audioExtractorCore.Extract(path);
+                if (!File.Exists(path))
+                {
+                    Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");
+                    throw new Exception($"{path} does not exists - {audioName} canceled");
+                }
+                using(Stream file = new FileStream(path, FileMode.Open))
+                {
+                    using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
+                    {
+                        await file.CopyToAsync(audioFile);
+                    }
+                    using (var videoFile = storage.GetStream(Path.GetFileName(path), FileAccess.Write, FileMode.OpenOrCreate))
+                    {
+                        await file.CopyToAsync(videoFile);
+                    }
+
+
+                }
+                return;
+            }
+            catch (FFmpegException f)
+            {
+                Logger.Error(f, "Video extraction error due to FFmpeg");
+                throw;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
 
