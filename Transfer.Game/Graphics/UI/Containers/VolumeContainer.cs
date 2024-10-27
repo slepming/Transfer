@@ -12,7 +12,7 @@ using osuTK.Graphics;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VolumeContainer : FocusedOverlayContainer, IDisposable
+    public partial class VolumeContainer : FocusedOverlayContainer
     {
 
         private TransferBasicSliderBar<double> volumeSlider;
@@ -27,11 +27,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         public VolumeContainer()
         {
-
-        }
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
+            Show();
             sliderVolumeValue = new BindableDouble
             {
                 MinValue = MinValue,
@@ -45,7 +41,6 @@ namespace Transfer.Game.UserInterface.Containers
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Position = new Vector2(0, 0),
                     Size = new Vector2(200, 20),
                     TransferValueOnCommit = true,
                     KeyboardStep = 1,
@@ -55,15 +50,10 @@ namespace Transfer.Game.UserInterface.Containers
             volumeSlider.Current.ValueChanged += ValueChanged;
             volumeSlider.Current = sliderVolumeValue;
         }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            volumeSlider?.Dispose();
-            base.Dispose(isDisposing);
-        }
+       
         protected override bool OnHover(HoverEvent e)
         {
-            this.FadeColour(new Colour4(255, 255, 255, 1f), 300, Easing.OutQuint);
+            this.FadeColour(new Colour4(255, 255, 255, 0.5f), 300, Easing.OutQuint);
             return base.OnHover(e);
         }
         protected override void OnHoverLost(HoverLostEvent e)
@@ -74,12 +64,12 @@ namespace Transfer.Game.UserInterface.Containers
 
         protected override void PopIn()
         {
-            this.ScaleTo(new Vector2(1f, 1f), 200, Easing.Out);
+            this.ScaleTo(new Vector2(1f, 1f), 200, Easing.InCubic);
         }
 
         protected override void PopOut()
         {
-
+            this.ScaleTo(new Vector2(0.1f, 0.1f), 200, Easing.InOutCubic);
         }
     }
 }

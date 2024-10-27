@@ -23,9 +23,10 @@ namespace Transfer.Game.UserInterface.Containers
     public partial class VideoContainer : Container
     {
         private TransferVideo video;
+
         private VolumeContainer volumeContainer;
         private Container mediaOptionsContainer;
-
+        
 
         public SpriteText VolumeText;
         private SpriteText mutedText;
@@ -57,7 +58,15 @@ namespace Transfer.Game.UserInterface.Containers
                     RelativeSizeAxes = Axes.Both,
                     Loop = false,
                 },
+                volumeContainer = new VolumeContainer
+                {
+                    Width = 300,
+                    Height = 50,
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                },
             };
+            
         }
 
 
@@ -100,9 +109,18 @@ namespace Transfer.Game.UserInterface.Containers
             {
                 case osuTK.Input.Key.Space:
                 {
-                    if(isMuted) Audio.Start();
-                    else Audio.Stop();
+                    if(isMuted)
+                    {
+                        Audio.Start();
+                        video.IsPlaying = true;
+                    }
+                    else
+                    {
+                        Audio.Stop();
+                        video.IsPlaying = false;
+                    }
                     isMuted = !isMuted;
+                    
                     break;
                 }
                 case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;

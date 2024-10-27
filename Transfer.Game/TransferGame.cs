@@ -55,7 +55,7 @@ namespace Transfer.Game
             // Add your top-level game components here.
             // A screen stack and sample screen has been provided for convenience, but you can replace it if you don't want to use screens.
             Child = screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
-            tempStore = new TempStore<Track>();
+            tempStore = new TempStore<Track>(audioManager);
 
         }
 

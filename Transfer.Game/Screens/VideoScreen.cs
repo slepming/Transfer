@@ -77,7 +77,7 @@ namespace Transfer.Game.Screens
         [BackgroundDependencyLoader]
         private void load(AudioManager am)
         {
-            TempStore = new TempStore<Track>();
+            TempStore = new TempStore<Track>(am);
             explorerContainer.FoundVideo += onFoundVideo;
             if(!explorerContainer.IsAlive) InternalChild = explorerContainer;
             //if(!configurationContainer.IsAlive) InternalChild = configurationContainer;
@@ -136,9 +136,10 @@ namespace Transfer.Game.Screens
                 this.Push(new VideoScreen(await TempStore.CreateaAndGetTrackAsync(path, tempStorage), path));
             }
             catch(Exception ex){
+                Logger.Error(ex, "Unhandled exception: ");
                 ClearInternal();
                 AddInternal(new ExceptionContainer{
-                    HeaderText = "FFmpeg Error",
+                    HeaderText = "Fatal error",
                     Text = ex.Message,
                     RelativeSizeAxes = Axes.Both
                 });

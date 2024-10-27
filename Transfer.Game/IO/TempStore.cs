@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FFmpeg.NET.Exceptions;
 using FFMpegCore.Exceptions;
+using HidSharp.Reports.Units;
 using OpenTabletDriver.Plugin.DependencyInjection;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -20,15 +21,17 @@ namespace Transfer.Game.IO
     public class TempStore<T> : ITempStore<T> where T : Track
     {
         private AudioExtractorCore audioExtractorCore = new();
+        private AudioManager audioManager;
 
-        [Resolved]
-        private AudioManager audioManager { get; set; }
+        public TempStore(AudioManager audioManager) => this.audioManager = audioManager;
 
         
         public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
         {
-            if(path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");
+            if (path == null) throw new ArgumentNullException(nameof(path));
+            if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
             var audioName = $"{Path.GetFileNameWithoutExtension(path)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            Logger.Log($"Create file with name {audioName}");
             if(storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
             {
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
