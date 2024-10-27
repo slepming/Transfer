@@ -7,4 +7,7 @@ We are waiting for any ideas from users to improve our application. We try to co
 ## How it works
 When loaded using the framework, some data is cached, which is used further on in tasks. After that you are given a choice of file after which the video will be loaded, and further divided into audio and video components, the video component is discarded immediately using one of the FFMpeg libraries. To speed up future downloads, the videos are loaded into temporary memory where they will stay until you manually delete them. 
 ## Description
-As a student who has just started learning programming, it is quite hard for me to write code and releasing at least the first version of the application will take a lot of time. I will try to maintain the project, but I may abandon it due to some life problem at any moment,
+As a student who has just started learning programming, it is quite hard for me to write code and releasing at least the first version of the application will take a lot of time. I will try to maintain the project, but I may abandon it due to some life problem at any moment.
+## Core
+This application is written in osu-framework, which gives quite a wide range of possibilities for the developer
+
