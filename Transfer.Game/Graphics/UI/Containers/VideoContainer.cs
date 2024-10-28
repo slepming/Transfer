@@ -10,17 +10,19 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.Videos;
+using Transfer.Game.Input.Bindings;
 using Transfer.Game.Screens;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VideoContainer : Container
+    public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction>
     {
         private TransferVideo video;
 
@@ -28,7 +30,6 @@ namespace Transfer.Game.UserInterface.Containers
         private Container mediaOptionsContainer;
         
 
-        public SpriteText VolumeText;
         private SpriteText mutedText;
 
         public Track Audio;
@@ -66,6 +67,8 @@ namespace Transfer.Game.UserInterface.Containers
                     Origin = Anchor.BottomCentre,
                 },
             };
+            volumeContainer.Current.ValueChanged += onVolumeChanged;
+            Audio.Volume.ValueChanged += value => volumeContainer.DefaultValue = value.NewValue;
             
         }
 
@@ -94,22 +97,48 @@ namespace Transfer.Game.UserInterface.Containers
         private void onVolumeChanged(ValueChangedEvent<double> e)
         {
             Audio.Volume.Value = (float)e.NewValue;
-
-            VolumeText.Text = $"Volume {Math.Round(e.NewValue*100,0)}";
-
-            if(e.NewValue == 0)
-                mutedText.Text = "Muted!";
-            else
-                mutedText.Text = "";
         }
 
-        protected override bool OnKeyDown(KeyDownEvent e)
+        //protected override bool OnKeyDown(KeyDownEvent e)
+        //{
+        //    switch(e.Key)
+        //    {
+        //        case osuTK.Input.Key.Space:
+        //        {
+        //            if(isMuted)
+        //            {
+        //                Audio.Start();
+        //                video.IsPlaying = true;
+        //            }
+        //            else
+        //            {
+        //                Audio.Stop();
+        //                video.IsPlaying = false;
+        //            }
+        //            isMuted = !isMuted;
+                    
+        //            break;
+        //        }
+        //        case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;
+        //        case osuTK.Input.Key.Left: Audio.Volume.Value -= 5; break;
+        //    }
+        //    return base.OnKeyDown(e);
+        //}
+        protected override bool OnScroll(ScrollEvent e)
         {
-            switch(e.Key)
+            volumeContainer.ChangeSliderValue(e.ScrollDelta.Y/10);
+            return base.OnScroll(e);
+        }
+
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+        {
+            if (e.Repeat)
+                return false;
+            switch (e.Action)
             {
-                case osuTK.Input.Key.Space:
+                case GlobalAction.PauseVideo:
                 {
-                    if(isMuted)
+                    if (isMuted)
                     {
                         Audio.Start();
                         video.IsPlaying = true;
@@ -120,18 +149,16 @@ namespace Transfer.Game.UserInterface.Containers
                         video.IsPlaying = false;
                     }
                     isMuted = !isMuted;
-                    
-                    break;
+                    return true;
                 }
-                case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;
-                case osuTK.Input.Key.Left: Audio.Volume.Value -= 5; break;
+                default:
+                    return false;
             }
-            return base.OnKeyDown(e);
         }
-        protected override bool OnScroll(ScrollEvent e)
+
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
         {
-            Audio.Volume.Value += e.ScrollDelta.Y / 10;
-            return base.OnScroll(e);
+           
         }
     }
 }

@@ -18,21 +18,22 @@ namespace Transfer.Game.UserInterface.Containers
         private TransferBasicSliderBar<double> volumeSlider;
         private BindableDouble sliderVolumeValue;
 
-        public Action<ValueChangedEvent<double>> ValueChanged;
+        public Bindable<double> Current = new Bindable<double>();
 
         public double MinValue = 0;
         public double MaxValue = 1;
-        public double Value = 0.3d;
+        public double DefaultValue = 0.3d;
 
 
         public VolumeContainer()
         {
             Show();
+            
             sliderVolumeValue = new BindableDouble
             {
                 MinValue = MinValue,
                 MaxValue = MaxValue,
-                Value = Value
+                Value = DefaultValue
             };
 
             InternalChildren = new Drawable[]
@@ -47,10 +48,17 @@ namespace Transfer.Game.UserInterface.Containers
                     SelectionColour = Color4.Pink,
                 },
             };
-            volumeSlider.Current.ValueChanged += ValueChanged;
+            volumeSlider.Current.ValueChanged += value => Current.Value = value.NewValue;
             volumeSlider.Current = sliderVolumeValue;
+            
         }
-       
+
+        public void ChangeSliderValue(double value)
+        {
+            if (!(value > sliderVolumeValue.MinValue) && !(value < sliderVolumeValue.MaxValue)) return;
+            volumeSlider.Current.Value += value;
+        }
+
         protected override bool OnHover(HoverEvent e)
         {
             this.FadeColour(new Colour4(255, 255, 255, 0.5f), 300, Easing.OutQuint);
@@ -61,6 +69,8 @@ namespace Transfer.Game.UserInterface.Containers
             this.FadeColour(Colour4.Transparent, 5000, Easing.OutQuint);
             base.OnHoverLost(e);
         }
+
+
 
         protected override void PopIn()
         {

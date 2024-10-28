@@ -15,6 +15,9 @@ using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Input;
+using osu.Framework.Input.Bindings;
+using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -91,7 +94,7 @@ namespace Transfer.Game
 
             base.Content.Add(SafeAreaContainer = new SafeAreaContainer{
                 RelativeSizeAxes = Axes.Both,
-                SafeAreaOverrideEdges = Edges.None,
+                SafeAreaOverrideEdges = Edges.All,
                 Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this){
                     Children = new Drawable[]{
                         new TransferCursorContainer(){
@@ -156,6 +159,6 @@ namespace Transfer.Game
             fontStore.Dispose();
         }
 
-
+        
     }
 }

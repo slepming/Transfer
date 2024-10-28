@@ -10,9 +10,9 @@ using osu.Framework.Input.Events;
 
 namespace Transfer.Game.Input.Bindings
 {
-    public partial class GlobalActionContainer : KeyBindingContainer<GlobalAction>, IHandleGlobalKeyboardInput
+    public partial class GlobalActionContainer : KeyBindingContainer<GlobalAction>, IHandleGlobalKeyboardInput, IKeyBindingHandler<GlobalAction>
     {
-        private IKeyBindingHandler<GlobalAction> handler;
+        private IKeyBindingHandler<GlobalAction>? handler;
         public GlobalActionContainer(TransferGameBase? game) : base(matchingMode: KeyCombinationMatchingMode.Modifiers) {
             if(game is IKeyBindingHandler<GlobalAction> h){
                 handler = h;
@@ -33,7 +33,7 @@ namespace Transfer.Game.Input.Bindings
                     throw new ArgumentOutOfRangeException(nameof(globalActionCategory), globalActionCategory, $"Unexpected {nameof(GlobalActionCategory)}");
             }
         }
-         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e) => handler?.OnPressed(e) == true;
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e) => handler?.OnPressed(e) == true;
 
         public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e) => handler?.OnReleased(e);
         public override IEnumerable<IKeyBinding> DefaultKeyBindings => generalBindings.Concat(watchingBindings).Concat(videoEditorBindings);
@@ -49,7 +49,8 @@ namespace Transfer.Game.Input.Bindings
         ];
         private static IEnumerable<KeyBinding> watchingBindings =>
         [
-            new KeyBinding(InputKey.F2, GlobalAction.WatchingRestart)
+            new KeyBinding(InputKey.F2, GlobalAction.WatchingRestart),
+            new KeyBinding(InputKey.Space, GlobalAction.PauseVideo)
         ];
         private static IEnumerable<KeyBinding> videoEditorBindings =>
         [
@@ -74,6 +75,7 @@ namespace Transfer.Game.Input.Bindings
 
         WatchingRestart,
         TakeScreenshot,
+        PauseVideo,
     }
     public enum GlobalActionCategory
     {
