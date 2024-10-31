@@ -57,6 +57,8 @@ namespace Transfer.Game.UserInterface.Containers
                 {
                     FillMode = FillMode.Fit,
                     RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
                     Loop = false,
                 },
                 volumeContainer = new VolumeContainer

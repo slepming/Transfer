@@ -141,6 +141,7 @@ namespace Transfer.Game
 
         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
+            Logger.Log($"Pressed {e.Action.ToString()}");
             return false;
         }
 

@@ -94,7 +94,7 @@ namespace Transfer.Game
 
             base.Content.Add(SafeAreaContainer = new SafeAreaContainer{
                 RelativeSizeAxes = Axes.Both,
-                SafeAreaOverrideEdges = Edges.All,
+                SafeAreaOverrideEdges = Edges.None,
                 Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this){
                     Children = new Drawable[]{
                         new TransferCursorContainer(){

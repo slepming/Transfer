@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using osu.Framework;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
@@ -28,6 +29,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
     private List<string> awaibleExtensions = TransferGameBase.VIDEO_EXTENSIONS.ToList();
 
     public event TransitionEvent TransitionPath;
+    public Bindable<string> PathChanged = new Bindable<string>();
 
     protected override void LoadComplete()
     {
@@ -39,6 +41,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         if(path == transferDirectory.Path) return files(start_path);
         current_path = path;
         transferDirectory.Path = current_path;
+        PathChanged.Value = path;
         return transferDirectory.Directories.Union(transferDirectory.Files).ToArray();
     }
 
@@ -100,6 +103,14 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         }
     }
 
+    public void ExplorerPathChange(string path)
+    {
+        if(path != current_path)
+        {
+            getContent(path);
+        }
+    }
+
     public void AddExtension(string extension){
         awaibleExtensions.Add(extension);
     }
@@ -110,7 +121,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
             if (current_path != start_path)
             {
                 current_path = System.IO.Path.GetDirectoryName(current_path);
-                getContent(current_path);
+                ExplorerPathChange(current_path);
             }
         }
         return base.OnKeyDown(e);
