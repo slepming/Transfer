@@ -38,8 +38,6 @@ namespace Transfer.Game.Screens
 
         [Resolved]
         private ExplorerContainer explorerContainer { get; set; }
-        [Resolved]
-        private ConfigurationContainer configurationContainer { get; set; }
 
         private SpriteText editVolumeText;
 
@@ -64,7 +62,6 @@ namespace Transfer.Game.Screens
             }
         }
 
-
         public VideoScreen() {}
 
         public VideoScreen(Track audio, string pathToVideo)
@@ -72,7 +69,6 @@ namespace Transfer.Game.Screens
             this.audio = audio;
             VideoPath = pathToVideo;
         }
-
 
         [BackgroundDependencyLoader]
         private void load(AudioManager am)
@@ -103,7 +99,6 @@ namespace Transfer.Game.Screens
                 this.Push(new VideoScreen(await TempStore.CreateaAndGetTrackAsync(videoPath, tempStorage), videoPath));
                 return;
             }
-            Logger.Log("Check Track success");
 
             try{
                 InternalChild = new FinalContextMenuContainer
@@ -150,7 +145,7 @@ namespace Transfer.Game.Screens
         {
             if(e.Repeat)
                 return false;
-            Logger.Log(e.Action.ToString());
+            Logger.Log("VideoScreen Pressed: " + e.Action.ToString());
             switch(e.Action)
             {
                 case GlobalAction.OpenEditor:

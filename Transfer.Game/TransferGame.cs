@@ -53,8 +53,6 @@ namespace Transfer.Game
         [BackgroundDependencyLoader]
         private void load()
         {
-            // Add your top-level game components here.
-            // A screen stack and sample screen has been provided for convenience, but you can replace it if you don't want to use screens.
             Child = screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
             tempStore = new TempStore<Track>(audioManager);
 
@@ -141,7 +139,7 @@ namespace Transfer.Game
 
         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
-            Logger.Log($"Pressed {e.Action.ToString()}");
+            Logger.Log($"TransferGame Pressed: {e.Action.ToString()}");
             return false;
         }
 

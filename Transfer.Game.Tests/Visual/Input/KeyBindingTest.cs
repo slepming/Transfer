@@ -8,6 +8,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osu.Framework.Testing.Input;
 using Transfer.Game.Input.Bindings;
 
@@ -40,6 +41,7 @@ namespace Transfer.Game.Tests.Visual.Input
         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
             Action = e.Action == GlobalAction.EditorConvertMenu;
+            Logger.Log($"KeyBindingTest Pressed: {e.Action.ToString()}");
             return true;
         }
 

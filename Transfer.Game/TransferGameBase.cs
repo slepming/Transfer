@@ -32,11 +32,12 @@ using Transfer.Resources;
 
 namespace Transfer.Game
 {
+    [Cached]
     public partial class TransferGameBase : osu.Framework.Game
     {
         public static readonly string[] VIDEO_EXTENSIONS = { ".mp4" };
         #if DEBUG
-            public const string HOST_NAME = "Transfer(Development Mode)";
+            public const string HOST_NAME = "Transfer(Development)";
         #else
             public const string HOST_NAME = "Transfer";
         #endif
@@ -56,17 +57,15 @@ namespace Transfer.Game
         private GlobalActionContainer globalBindings;
 
 
-        protected DependencyContainer Dependency;
+        private DependencyContainer dependencies;
         private int allowableExceptions;
 
         protected TransferGameBase()
         {
 
 
-            // Ensure game and tests scale with window size and screen DPI.
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
-                // You may want to change TargetDrawSize to your "default" resolution, which will decide how things scale and position when using absolute coordinates.
                 TargetDrawSize = new Vector2(1600, 900)
             });
         }
@@ -104,8 +103,8 @@ namespace Transfer.Game
                 })
             });
 
-            Dependency.Cache(globalBindings);
-            Dependency.CacheAs(tempStorage);
+            dependencies.Cache(globalBindings);
+            dependencies.CacheAs(tempStorage);
         }
         protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();
 
@@ -146,7 +145,7 @@ namespace Transfer.Game
         }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
-            Dependency = new DependencyContainer(base.CreateChildDependencies(parent));
+            dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
         protected override bool OnExiting()
         {
