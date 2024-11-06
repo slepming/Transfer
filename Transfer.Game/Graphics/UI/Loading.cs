@@ -4,20 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using osuTK.Graphics;
 
 namespace Transfer.Game.UserInterface
 {
     public partial class Loading : CompositeDrawable
     {
-        private Circle circleLoadingComponent;
-        private Vector2 size = new Vector2(20,20);
+        private Box loadingComponent;
+        private Container backgroundContainer;
+        private EdgeEffect backgroundEffect;
         public Loading()
         {
-
+            Anchor = Anchor.Centre;
+            Origin = Anchor.Centre;
 
         }
 
@@ -26,7 +31,6 @@ namespace Transfer.Game.UserInterface
         {
             Container container = new Container()
             {
-                Masking = true,
                 RelativeSizeAxes = Axes.Both,
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
@@ -39,14 +43,27 @@ namespace Transfer.Game.UserInterface
                         Origin = Anchor.Centre,
                         Colour = Colour4.White,
                         RelativeSizeAxes = Axes.Both,
-                        Child = circleLoadingComponent = new Circle
+                        Children = new Drawable[]
                         {
-                            Size = size,
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.TopCentre,
-                            BorderColour = Colour4.Black,
-                            BorderThickness = 2,
-
+                            backgroundContainer = new Container
+                            {
+                                Size = new Vector2(Width/2, Height/2),
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                Masking = true,
+                                EdgeEffect = new EdgeEffectParameters() {
+                                    Radius = 400,
+                                    Colour = Colour4.Gray,
+                                    Type = EdgeEffectType.Shadow
+                                }
+                            },
+                            loadingComponent = new Box
+                            {
+                                Size = new Vector2(Width/2, Height/2),
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                EdgeSmoothness = new Vector2(1,1),
+                            },
                         }
                     }
                 }
@@ -58,7 +75,16 @@ namespace Transfer.Game.UserInterface
         {
 
             base.LoadComplete();
-            circleLoadingComponent.Loop(b => b.RotateTo(0).RotateTo(720,2000, Easing.OutBounce));
+            backgroundContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(EdgeEffect), new EdgeEffectParameters() {
+                                    Radius = 200,
+                                    Colour = Colour4.White,
+                                    Type = EdgeEffectType.Glow
+                                }).RotateTo(-720,4000, Easing.InOutElastic).TransformTo(nameof(EdgeEffect), new EdgeEffectParameters() {
+                                    Radius = 400,
+                                    Colour = Colour4.Gray,
+                                    Type = EdgeEffectType.Shadow
+                                }, 800, Easing.InOutQuad));
+            loadingComponent.Loop(b => b.RotateTo(0).TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.White)).RotateTo(720,4000, Easing.InOutElastic).TransformTo(nameof(Colour),ColourInfo.SingleColour(Color4.Black), 800, Easing.InOutQuad));
 
         }
     }

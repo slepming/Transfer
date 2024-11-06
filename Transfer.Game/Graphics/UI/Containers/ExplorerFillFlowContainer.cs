@@ -18,7 +18,7 @@ namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class ExplorerFillFlowContainer : FillFlowContainer
 {
-    private string start_path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private readonly string start_path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
     private string current_path;
 
     private TransferDirectory transferDirectory = new TransferDirectory();

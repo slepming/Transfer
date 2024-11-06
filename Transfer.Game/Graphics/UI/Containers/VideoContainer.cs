@@ -28,7 +28,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         private VolumeContainer volumeContainer;
         private Container mediaOptionsContainer;
-        
+
 
         private SpriteText mutedText;
 
@@ -70,8 +70,11 @@ namespace Transfer.Game.UserInterface.Containers
                 },
             };
             volumeContainer.Current.ValueChanged += onVolumeChanged;
-            Audio.Volume.ValueChanged += value => volumeContainer.DefaultValue = value.NewValue;
-            
+            if(Audio != null)
+            {
+                Audio.Volume.ValueChanged += value => volumeContainer.DefaultValue = value.NewValue;
+            }
+
         }
 
 
@@ -92,13 +95,16 @@ namespace Transfer.Game.UserInterface.Containers
         protected override void LoadAsyncComplete()
         {
             base.LoadAsyncComplete();
-            Audio.StartAsync();
+            Audio?.StartAsync();
         }
 
 
         private void onVolumeChanged(ValueChangedEvent<double> e)
         {
-            Audio.Volume.Value = (float)e.NewValue;
+            if(Audio != null)
+            {
+                Audio.Volume.Value = (float)e.NewValue;
+            }
         }
 
         //protected override bool OnKeyDown(KeyDownEvent e)
@@ -118,7 +124,7 @@ namespace Transfer.Game.UserInterface.Containers
         //                video.IsPlaying = false;
         //            }
         //            isMuted = !isMuted;
-                    
+
         //            break;
         //        }
         //        case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;
@@ -142,12 +148,12 @@ namespace Transfer.Game.UserInterface.Containers
                 {
                     if (isMuted)
                     {
-                        Audio.Start();
+                        Audio?.Start();
                         video.IsPlaying = true;
                     }
                     else
                     {
-                        Audio.Stop();
+                        Audio?.Stop();
                         video.IsPlaying = false;
                     }
                     isMuted = !isMuted;
@@ -160,7 +166,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
         {
-           
+
         }
     }
 }

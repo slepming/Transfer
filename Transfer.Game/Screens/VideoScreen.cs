@@ -1,6 +1,7 @@
 #nullable disable
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
@@ -36,8 +37,7 @@ namespace Transfer.Game.Screens
         private VideoContainer video;
 
 
-        [Resolved]
-        private ExplorerContainer explorerContainer { get; set; }
+        private ExplorerContainer explorerContainer { get; set; } = new ExplorerContainer();
 
         private SpriteText editVolumeText;
 
@@ -75,14 +75,13 @@ namespace Transfer.Game.Screens
         {
             TempStore = new TempStore<Track>(am);
             explorerContainer.FoundVideo += onFoundVideo;
-            if(!explorerContainer.IsAlive) InternalChild = explorerContainer;
-            //if(!configurationContainer.IsAlive) InternalChild = configurationContainer;
+            if(explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
         }
 
 
 
 
-        protected override async void LoadComplete()
+        protected override void LoadComplete()
         {
             base.LoadComplete();
             if (string.IsNullOrEmpty(VideoPath))
@@ -90,13 +89,6 @@ namespace Transfer.Game.Screens
                 string nullable = "Video null";
                 Logger.Log(nullable);
                 explorerContainer.Show();
-                return;
-            }
-
-
-            if (audio == null)
-            {
-                this.Push(new VideoScreen(await TempStore.CreateaAndGetTrackAsync(videoPath, tempStorage), videoPath));
                 return;
             }
 
@@ -128,7 +120,14 @@ namespace Transfer.Game.Screens
 
             try
             {
-                this.Push(new VideoScreen(await TempStore.CreateaAndGetTrackAsync(path, tempStorage), path));
+                LoadingOverlay loading;
+                Task<Track> trackTask = TempStore.CreateaAndGetTrackAsync(path, tempStorage);
+                ClearInternal();
+                AddInternal(loading = new LoadingOverlay());
+                Track track = await trackTask ?? null;
+                loading.Expire();
+
+                this.Push(new VideoScreen(track, path));
             }
             catch(Exception ex){
                 Logger.Error(ex, "Unhandled exception: ");

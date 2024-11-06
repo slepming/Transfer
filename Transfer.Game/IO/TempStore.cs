@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FFmpeg.NET.Exceptions;
+using FFMpegCore;
 using FFMpegCore.Exceptions;
 using HidSharp.Reports.Units;
 using OpenTabletDriver.Plugin.DependencyInjection;
@@ -15,6 +18,7 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.Audio;
 using Transfer.Game.Audio.Extensions;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.IO
 {
@@ -25,14 +29,14 @@ namespace Transfer.Game.IO
 
         public TempStore(AudioManager audioManager) => this.audioManager = audioManager;
 
-        
+
         public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
-            var audioName = $"{Path.GetFileNameWithoutExtension(path)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path))}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
             Logger.Log($"Create file with name {audioName}");
-            if(storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
+            if(storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName) && await FFProbe.AnalyseAsync(audioName) != null)
             {
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 return audioManager.GetTrackStore(resourceStore).Get(audioName) as  T;
@@ -59,6 +63,9 @@ namespace Transfer.Game.IO
                 }
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 File.Delete(pathToFile);
+
+                if(await FFProbe.AnalyseAsync(audioName) == null) return null;
+
                 return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
             catch(FFMpegException)
@@ -67,6 +74,7 @@ namespace Transfer.Game.IO
             }
             catch(Exception ex)
             {
+                if(ex is FileNotFoundException) return null;
                 Logger.Error(ex, $"{GetType().Name} error");
                 throw;
             }

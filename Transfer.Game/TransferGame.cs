@@ -30,11 +30,6 @@ namespace Transfer.Game
 
         private readonly string[] args;
 
-        [Cached]
-        private readonly ExplorerContainer explorerContainer = new ExplorerContainer();
-
-        [Cached]
-        private readonly ConfigurationContainer configurationContainer = new ConfigurationContainer() { RelativeSizeAxes = Axes.Both };
 
         [Resolved]
         private Storage tempStorage { get; set; }
@@ -42,7 +37,7 @@ namespace Transfer.Game
         [Resolved]
         private AudioManager audioManager { get; set; }
 
-        private ITempStore<Track> tempStore; 
+        private ITempStore<Track> tempStore;
 
         public TransferGame(string[] args)
         {
@@ -84,7 +79,7 @@ namespace Transfer.Game
                     allowedPaths.Clear();
                     Track audio = await tempStore.CreateaAndGetTrackAsync(Path.GetFileName(args[0]).Split('.')[0] + ".mp3", tempStorage);
                     if (audio != null) screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
-                    
+
                 }
             }
             else
@@ -135,7 +130,7 @@ namespace Transfer.Game
         }
 
 
-        
+
 
         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {

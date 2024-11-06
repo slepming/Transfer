@@ -7,6 +7,9 @@ using osu.Framework.Platform;
 using FFMpegCore.Exceptions;
 using osu.Framework.Logging;
 using Transfer.Game.Audio.Extensions;
+using System.Security.Cryptography;
+using System.Text;
+using Transfer.Game.Extensions;
 
 
 namespace Transfer.Game.Audio
@@ -21,7 +24,7 @@ namespace Transfer.Game.Audio
         /// <returns>Path to audio</returns>
         public async Task<string> Extract(string video, AudioExtension audioExtension = AudioExtension.mp3)
         {
-            string outputPath =  Path.Combine(Path.GetTempPath(), $"{Path.GetFileNameWithoutExtension(video)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
+            string outputPath =  Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video))}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
             try
             {
                 await FFMpegArguments
@@ -41,7 +44,8 @@ namespace Transfer.Game.Audio
                     Logger.Error(ffmpegEx,"File exists, return");
                     return outputPath;
                 }
-                throw;
+                Logger.Log($"Unhandled message: {ffmpegEx.StackTrace} \n");
+                return outputPath;
             } catch(Exception ex)
             {
                 Logger.Error(ex, "FFMpeg Exception");
