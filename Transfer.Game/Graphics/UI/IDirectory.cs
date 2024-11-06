@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Transfer.Game.UserInterface.DirectoryHandler
+namespace Transfer.Game.Graphics.UI
 {
     public interface IDirectory
     {

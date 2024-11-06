@@ -12,31 +12,28 @@ using osuTK.Graphics;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VolumeContainer : FocusedOverlayContainer, IDisposable
+    public partial class VolumeContainer : FocusedOverlayContainer
     {
 
         private TransferBasicSliderBar<double> volumeSlider;
         private BindableDouble sliderVolumeValue;
 
-        public Action<ValueChangedEvent<double>> ValueChanged;
+        public Bindable<double> Current = new Bindable<double>();
 
         public double MinValue = 0;
         public double MaxValue = 1;
-        public double Value = 0.3d;
+        public double DefaultValue = 0.3d;
 
 
         public VolumeContainer()
         {
-
-        }
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
+            Show();
+            
             sliderVolumeValue = new BindableDouble
             {
                 MinValue = MinValue,
                 MaxValue = MaxValue,
-                Value = Value
+                Value = DefaultValue
             };
 
             InternalChildren = new Drawable[]
@@ -45,25 +42,26 @@ namespace Transfer.Game.UserInterface.Containers
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Position = new Vector2(0, 0),
                     Size = new Vector2(200, 20),
                     TransferValueOnCommit = true,
                     KeyboardStep = 1,
                     SelectionColour = Color4.Pink,
                 },
             };
-            volumeSlider.Current.ValueChanged += ValueChanged;
+            volumeSlider.Current.ValueChanged += value => Current.Value = value.NewValue;
             volumeSlider.Current = sliderVolumeValue;
+            
         }
 
-        protected override void Dispose(bool isDisposing)
+        public void ChangeSliderValue(double value)
         {
-            volumeSlider?.Dispose();
-            base.Dispose(isDisposing);
+            if (!(value > sliderVolumeValue.MinValue) && !(value < sliderVolumeValue.MaxValue)) return;
+            volumeSlider.Current.Value += value;
         }
+
         protected override bool OnHover(HoverEvent e)
         {
-            this.FadeColour(new Colour4(255, 255, 255, 1f), 300, Easing.OutQuint);
+            this.FadeColour(new Colour4(255, 255, 255, 0.5f), 300, Easing.OutQuint);
             return base.OnHover(e);
         }
         protected override void OnHoverLost(HoverLostEvent e)
@@ -72,14 +70,16 @@ namespace Transfer.Game.UserInterface.Containers
             base.OnHoverLost(e);
         }
 
+
+
         protected override void PopIn()
         {
-            this.ScaleTo(new Vector2(1f, 1f), 200, Easing.Out);
+            this.ScaleTo(new Vector2(1f, 1f), 200, Easing.InCubic);
         }
 
         protected override void PopOut()
         {
-
+            this.ScaleTo(new Vector2(0.1f, 0.1f), 200, Easing.InOutCubic);
         }
     }
 }

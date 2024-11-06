@@ -1,6 +1,7 @@
 #nullable disable
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
@@ -10,6 +11,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input;
+using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -17,21 +20,15 @@ using osu.Framework.Screens;
 using osuTK.Input;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
-using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Screens
 {
-    public partial class VideoScreen : TransferScreen
+    public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>
     {
 
-        // GameWindow window;
-
-
-        // private IClock clocks; // ! It's pretty weird how it works. The app closes
-        // private readonly double delay = 1000;
-        // private double lastMoveTime;
 
 
 
@@ -40,16 +37,15 @@ namespace Transfer.Game.Screens
         private VideoContainer video;
 
 
-
-
-        private ExplorerContainer explorerContainer = new ExplorerContainer();
+        private ExplorerContainer explorerContainer { get; set; } = new ExplorerContainer();
 
         private SpriteText editVolumeText;
 
         private DrawSizePreservingFillContainer mediaOptionsContainer;
 
         [Resolved]
-        private Storage audioTempStorage { get; set; }
+        private Storage tempStorage { get; set; }
+
 
         protected ITempStore<Track> TempStore { get; set; }
 
@@ -66,78 +62,35 @@ namespace Transfer.Game.Screens
             }
         }
 
+        public VideoScreen() {}
 
-        public VideoScreen()
-        {
-
-            // lastMoveTime = clocks.CurrentTime;
-            // window = new();
-        }
-
-        public VideoScreen(string arg)
-        {
-            VideoPath = arg;
-        }
-        public VideoScreen(params string[] args)
-        {
-            VideoPath = args[0];
-        }
-        public VideoScreen(Track audio, params string[] args)
-        {
-            this.audio = audio;
-            VideoPath = args[0];
-        }
         public VideoScreen(Track audio, string pathToVideo)
         {
             this.audio = audio;
             VideoPath = pathToVideo;
         }
 
-
         [BackgroundDependencyLoader]
         private void load(AudioManager am)
         {
-            TempStore = new TempStore<Track>(){ AudioManager = am };
+            TempStore = new TempStore<Track>(am);
             explorerContainer.FoundVideo += onFoundVideo;
-            explorerContainer.Hide();
-            AddInternal(explorerContainer);
-        }
-
-        private void videoStartContainer()
-        {
-
-            explorerContainer.Show();
-        }
-
-        protected override bool OnKeyDown(KeyDownEvent e)
-        {
-            if(e.Key == Key.LControl && e.Key == Key.R || e.Key == Key.R && e.Key == Key.LControl)
-            {
-                videoStartContainer();
-            }
-            return base.OnKeyDown(e);
+            if(explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
         }
 
 
 
-        protected override async void LoadComplete()
+
+        protected override void LoadComplete()
         {
             base.LoadComplete();
             if (string.IsNullOrEmpty(VideoPath))
             {
                 string nullable = "Video null";
                 Logger.Log(nullable);
-                videoStartContainer();
+                explorerContainer.Show();
                 return;
             }
-
-
-            if (audio == null)
-            {
-                this.Push(new VideoScreen(await TempStore.GetTrackAsync(videoPath, audioTempStorage), videoPath));
-                return;
-            }
-            Logger.Log("Check Track success");
 
             try{
                 InternalChild = new FinalContextMenuContainer
@@ -167,48 +120,48 @@ namespace Transfer.Game.Screens
 
             try
             {
-                this.Push(new VideoScreen(await TempStore.GetTrackAsync(path, audioTempStorage), path));
+                LoadingOverlay loading;
+                Task<Track> trackTask = TempStore.CreateaAndGetTrackAsync(path, tempStorage);
+                ClearInternal();
+                AddInternal(loading = new LoadingOverlay());
+                Track track = await trackTask ?? null;
+                loading.Expire();
+
+                this.Push(new VideoScreen(track, path));
             }
             catch(Exception ex){
+                Logger.Error(ex, "Unhandled exception: ");
                 ClearInternal();
                 AddInternal(new ExceptionContainer{
-                    HeaderText = "FFmpeg Error",
+                    HeaderText = "Fatal error",
                     Text = ex.Message,
                     RelativeSizeAxes = Axes.Both
                 });
             }
         }
 
-
-
-        protected override bool OnMouseMove(MouseMoveEvent e)
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
-            // lastMoveTime = clocks.CurrentTime;
-            // mediaOptionsContainer.Show();
-            // window.CursorVisible = isDev == false ? true : false;
+            if(e.Repeat)
+                return false;
+            Logger.Log("VideoScreen Pressed: " + e.Action.ToString());
+            switch(e.Action)
+            {
+                case GlobalAction.OpenEditor:
 
-            return base.OnMouseMove(e);
-        }
-        public override bool OnExiting(ScreenExitEvent e)
-        {
-            Dispose();
-            return base.OnExiting(e);
-        }
+                    return true;
+                case GlobalAction.Explorer:
+                    explorerContainer.Show();
+                    return true;
 
-
-        protected override void Dispose(bool isDisposing)
-        {
-            audio?.Dispose();
-            video?.Dispose();
-            LoadingComponent?.Dispose();
-
-            editVolumeText?.Dispose();
-            mediaOptionsContainer?.Dispose();
-
-            base.Dispose(isDisposing);
+            }
+            return false;
         }
 
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
+        {
 
+        }
     }
 
 }

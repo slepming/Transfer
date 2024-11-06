@@ -15,12 +15,16 @@ using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Input;
+using osu.Framework.Input.Bindings;
+using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.Screens;
 using Transfer.Game.UserInterface.Containers;
@@ -28,11 +32,12 @@ using Transfer.Resources;
 
 namespace Transfer.Game
 {
+    [Cached]
     public partial class TransferGameBase : osu.Framework.Game
     {
         public static readonly string[] VIDEO_EXTENSIONS = { ".mp4" };
         #if DEBUG
-            public const string HOST_NAME = "Transfer(Development Mode)";
+            public const string HOST_NAME = "Transfer(Development)";
         #else
             public const string HOST_NAME = "Transfer";
         #endif
@@ -42,22 +47,25 @@ namespace Transfer.Game
         // the screen scaling for all components including the test browser and framework overlays.
         protected override Container<Drawable> Content { get; }
 
+
         private FontStore fontStore;
         protected Storage Storage;
-        private Storage audioTempStorage;
+        private Storage tempStorage;
+
+        protected SafeAreaContainer SafeAreaContainer;
+
+        private GlobalActionContainer globalBindings;
 
 
-        protected DependencyContainer Dependency { get; private set; }
+        private DependencyContainer dependencies;
         private int allowableExceptions;
 
         protected TransferGameBase()
         {
 
 
-            // Ensure game and tests scale with window size and screen DPI.
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
-                // You may want to change TargetDrawSize to your "default" resolution, which will decide how things scale and position when using absolute coordinates.
                 TargetDrawSize = new Vector2(1600, 900)
             });
         }
@@ -66,13 +74,12 @@ namespace Transfer.Game
         private void load(FrameworkConfigManager config, IRenderer renderer)
         {
             Host.Window.Title = HOST_NAME;
-            audioTempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
+            tempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
 
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
             fontStore = new FontStore(renderer, null, 100f);
 
-            Dependency.CacheAs(audioTempStorage);
             Logger.Storage = Storage;
 
             Fonts.AddStore(fontStore);
@@ -82,10 +89,24 @@ namespace Transfer.Game
             InitialiseFonts();
 
             InitialiseConfig(config);
+            Host.Window.CursorState = CursorState.Hidden;
 
-            base.Content.Add(new TransferCursorContainer());
+            base.Content.Add(SafeAreaContainer = new SafeAreaContainer{
+                RelativeSizeAxes = Axes.Both,
+                SafeAreaOverrideEdges = Edges.None,
+                Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this){
+                    Children = new Drawable[]{
+                        new TransferCursorContainer(){
+                            RelativeSizeAxes = Axes.Both
+                        }
+                    }
+                })
+            });
 
+            dependencies.Cache(globalBindings);
+            dependencies.CacheAs(tempStorage);
         }
+        protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();
 
         public override void SetHost(GameHost host)
         {
@@ -124,7 +145,7 @@ namespace Transfer.Game
         }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
-            Dependency = new DependencyContainer(base.CreateChildDependencies(parent));
+            dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
         protected override bool OnExiting()
         {
@@ -137,6 +158,6 @@ namespace Transfer.Game
             fontStore.Dispose();
         }
 
-
+        
     }
 }

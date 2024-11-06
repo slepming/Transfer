@@ -6,33 +6,30 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using osu.Framework;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osuTK.Graphics;
-using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class ExplorerFillFlowContainer : FillFlowContainer
 {
-    private string start_path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private readonly string start_path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
     private string current_path;
 
     private TransferDirectory transferDirectory = new TransferDirectory();
 
     private List<ExplorerButton> explorerButtons = new List<ExplorerButton>();
 
-    private readonly char pathSplitChar = RuntimeInfo.IsUnix ? '/' : '\\';
 
-    private List<string> awaibleExtensions = new List<string>()
-    {
-        ".mp4"
-    };
+    private List<string> awaibleExtensions = TransferGameBase.VIDEO_EXTENSIONS.ToList();
 
     public event TransitionEvent TransitionPath;
+    public Bindable<string> PathChanged = new Bindable<string>();
 
     protected override void LoadComplete()
     {
@@ -44,6 +41,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         if(path == transferDirectory.Path) return files(start_path);
         current_path = path;
         transferDirectory.Path = current_path;
+        PathChanged.Value = path;
         return transferDirectory.Directories.Union(transferDirectory.Files).ToArray();
     }
 
@@ -99,9 +97,17 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
                 return;
             }
         }
-        catch(DirectoryNotFoundException directoryNotFoundEx)
+        catch (DirectoryNotFoundException)
         {
             TransitionPath?.Invoke(path, true);
+        }
+    }
+
+    public void ExplorerPathChange(string path)
+    {
+        if(path != current_path)
+        {
+            getContent(path);
         }
     }
 
@@ -115,7 +121,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
             if (current_path != start_path)
             {
                 current_path = System.IO.Path.GetDirectoryName(current_path);
-                getContent(current_path);
+                ExplorerPathChange(current_path);
             }
         }
         return base.OnKeyDown(e);

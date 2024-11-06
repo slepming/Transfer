@@ -3,7 +3,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
-using Transfer.Game.UserInterface.DirectoryHandler;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -19,6 +18,7 @@ public partial class ExplorerContainer : FocusedOverlayContainer
 
     public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
     {
+        Hide();
         Masking = true;
         BlockScrollInput = blockScrollInput;
         StartHidden = startHidden;

@@ -21,7 +21,7 @@ namespace Transfer.Game.Tests.Visual.FunctionTests
         private async void load(Storage storage, AudioManager audioManager)
         {
             Storage audioStorage = new TestStorage(storage.GetStorageForDirectory(@"Temp/"));
-            string audioPath = await extractAudio.Extract(testVideoPath, audioStorage);
+            string audioPath = await extractAudio.Extract(testVideoPath);
             using(var audioFile = audioStorage.GetStream(audioPath.Split('/').Last(), FileAccess.Write, FileMode.Create))
                 using(FileStream readAudio = new FileStream(audioPath, FileMode.Open, FileAccess.Read))
                 {
