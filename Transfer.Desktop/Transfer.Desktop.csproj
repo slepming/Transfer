@@ -12,12 +12,16 @@
     <ProjectReference Include="..\Transfer.Game\Transfer.Game.csproj" />
   </ItemGroup>
   <ItemGroup Label="Resources">
-    <EmbeddedResource Include="game.ico"/>
+    <EmbeddedResource Include="game.ico" />
   </ItemGroup>
   <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm'">
   </PropertyGroup>
 
   <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ppy.osu.Framework" Version="2024.1025.0" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Transfer.Game.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Transfer.Game.Tests.Visual.TestSceneVideoScreen">
+            <summary>
+            Removed because it was causing dependency caching problems
+            </summary>
+        </member>
+        <member name="T:Transfer.Game.Tests.Visual.UITest.TestContextMenuContainer.TestCursorContainer">
+            https://github.com/ppy/osu-framework/blob/master/osu.Framework/Testing/Input/TestCursorContainer.cs
+        </member>
+    </members>
+</doc>

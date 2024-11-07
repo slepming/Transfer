@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Transfer.Game</name>
+    </assembly>
+    <members>
+        <member name="M:Transfer.Game.Audio.AudioExtractorCore.Extract(System.String,Transfer.Game.Audio.Extensions.AudioExtension)">
+            <summary>
+            Extract audio from video
+            </summary>
+            <param name="video">Path to video</param>
+            <param name="audioExtension">Extension for video or audio, use with <see cref="T:Transfer.Game.Audio.Extensions.AudioExtensionHelper"></see></param>
+            <returns>Path to audio</returns>
+        </member>
+        <member name="T:Transfer.Game.Extensions.FFmpegMetadata">
+            <summary>
+            Get metadata from path
+            </summary>
+        </member>
+        <member name="M:Transfer.Game.Extensions.FFmpegMetadata.GetData(System.String)">
+            <summary>
+            Get data from Metadata
+            </summary>
+            <param name="pathToFile">Path to file</param>
+            <returns>Dictionary with Type:Key, Value:Value</returns>
+        </member>
+        <member name="T:Transfer.Game.Extensions.Hash">
+            <summary>
+            Hashes data, typically used for names that may have incompatible characters
+            </summary>
+        </member>
+        <member name="M:Transfer.Game.Extensions.Hash.GetHashString(System.String)">
+            <summary>
+            Hashes input
+            </summary>
+            <param name="input">Input string</param>
+            <returns>Hash string</returns>
+        </member>
+        <member name="F:Transfer.Game.Graphics.UI.ExplorerButton.text">
+            <summary>
+            Keep text for button text. Can be null.
+            </summary>
+        </member>
+        <member name="T:Transfer.Game.UserInterface.Containers.ExceptionContainer">
+            <summary>
+            Container for handling exception and for notify user
+            </summary>
+        </member>
+        <member name="M:Transfer.Game.IO.ICanAcceptFile.Import(System.String[])">
+            <summary>
+            Import files into temp a folder
+            </summary>
+            <param name="paths">Path to file in explorer</param>
+            <returns></returns>
+        </member>
+        <member name="M:Transfer.Game.IO.ITempStore`1.CreateaAndGetTrackAsync(System.String,osu.Framework.Platform.Storage,osu.Framework.Audio.AudioManager,Transfer.Game.Audio.Extensions.AudioExtension)">
+            <summary>
+            Extract audio from video create audio in storage,and convertion in <see cref="T:osu.Framework.Audio.Track.Track"></see>
+            </summary>
+            <param name="path">Path to video</param>
+            <param name="storage"></param>
+            <param name="audioManager"></param>
+            <param name="audioExtension">Type audio extensions(using with <see cref="T:Transfer.Game.Audio.Extensions.AudioExtensionHelper"></see>)</param>
+            <returns>Track</returns>
+        </member>
+        <member name="M:Transfer.Game.IO.ITempStore`1.CreateTrackInStorageAsync(System.String,osu.Framework.Platform.Storage,Transfer.Game.Audio.Extensions.AudioExtension)">
+            <summary>
+            Extract audio and puts it is in the temp directory
+            </summary>
+            <param name="path">path to video file</param>
+            <param name="storage"></param>
+            <param name="audioExtension">Type audio extensions(using with <see cref="T:Transfer.Game.Audio.Extensions.AudioExtensionHelper"></see>)</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
