@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Platform;
 using Transfer.Game.Audio.Extensions;
@@ -16,9 +17,10 @@ namespace Transfer.Game.IO
         /// </summary>
         /// <param name="path">Path to video</param>
         /// <param name="storage"></param>
+        /// <param name="audioManager"></param>
         /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
         /// <returns>Track</returns>
-        public Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3);
+        public Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, AudioExtension audioExtension = AudioExtension.mp3);
 
         /// <summary>
         /// Extract audio and puts it is in the temp directory

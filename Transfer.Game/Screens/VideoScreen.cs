@@ -1,23 +1,15 @@
 #nullable disable
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
-using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Cursor;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
-using osuTK.Input;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Input.Bindings;
@@ -39,12 +31,12 @@ namespace Transfer.Game.Screens
 
         private ExplorerContainer explorerContainer { get; set; } = new ExplorerContainer();
 
-        private SpriteText editVolumeText;
-
-        private DrawSizePreservingFillContainer mediaOptionsContainer;
 
         [Resolved]
         private Storage tempStorage { get; set; }
+
+        [Resolved]
+        private AudioManager audioManager { get; set; }
 
 
         protected ITempStore<Track> TempStore { get; set; }
@@ -71,9 +63,9 @@ namespace Transfer.Game.Screens
         }
 
         [BackgroundDependencyLoader]
-        private void load(AudioManager am)
+        private void load()
         {
-            TempStore = new TempStore<Track>(am);
+            TempStore = new TempStore<Track>();
             explorerContainer.FoundVideo += onFoundVideo;
             if(explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
         }
@@ -121,7 +113,7 @@ namespace Transfer.Game.Screens
             try
             {
                 LoadingOverlay loading;
-                Task<Track> trackTask = TempStore.CreateaAndGetTrackAsync(path, tempStorage);
+                Task<Track> trackTask = TempStore.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
                 ClearInternal();
                 AddInternal(loading = new LoadingOverlay());
                 Track track = await trackTask ?? null;
@@ -151,7 +143,8 @@ namespace Transfer.Game.Screens
 
                     return true;
                 case GlobalAction.Explorer:
-                    explorerContainer.Show();
+                    if(explorerContainer.Visible) explorerContainer?.Hide();
+                    else explorerContainer?.Show();
                     return true;
 
             }

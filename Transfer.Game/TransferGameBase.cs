@@ -56,13 +56,14 @@ namespace Transfer.Game
 
         private GlobalActionContainer globalBindings;
 
+        protected ScreenStack ScreenStack;
+
 
         private DependencyContainer dependencies;
         private int allowableExceptions;
 
         protected TransferGameBase()
         {
-
 
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
@@ -98,7 +99,8 @@ namespace Transfer.Game
                     Children = new Drawable[]{
                         new TransferCursorContainer(){
                             RelativeSizeAxes = Axes.Both
-                        }
+                        },
+                        ScreenStack = new ScreenStack { RelativeSizeAxes = Axes.Both }
                     }
                 })
             });
@@ -158,6 +160,6 @@ namespace Transfer.Game
             fontStore.Dispose();
         }
 
-        
+
     }
 }

@@ -111,17 +111,13 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         }
     }
 
-    public void AddExtension(string extension){
-        awaibleExtensions.Add(extension);
-    }
     protected override bool OnKeyDown(KeyDownEvent e)
     {
         if (e.Key == osuTK.Input.Key.BackSpace)
         {
             if (current_path != start_path)
             {
-                current_path = System.IO.Path.GetDirectoryName(current_path);
-                ExplorerPathChange(current_path);
+                ExplorerPathChange(Path.GetDirectoryName(current_path));
             }
         }
         return base.OnKeyDown(e);

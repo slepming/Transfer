@@ -107,31 +107,15 @@ namespace Transfer.Game.UserInterface.Containers
             }
         }
 
-        //protected override bool OnKeyDown(KeyDownEvent e)
-        //{
-        //    switch(e.Key)
-        //    {
-        //        case osuTK.Input.Key.Space:
-        //        {
-        //            if(isMuted)
-        //            {
-        //                Audio.Start();
-        //                video.IsPlaying = true;
-        //            }
-        //            else
-        //            {
-        //                Audio.Stop();
-        //                video.IsPlaying = false;
-        //            }
-        //            isMuted = !isMuted;
-
-        //            break;
-        //        }
-        //        case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;
-        //        case osuTK.Input.Key.Left: Audio.Volume.Value -= 5; break;
-        //    }
-        //    return base.OnKeyDown(e);
-        //}
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+           switch(e.Key)
+           {
+               case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;
+               case osuTK.Input.Key.Left: Audio.Volume.Value -= 5; break;
+           }
+           return base.OnKeyDown(e);
+        }
         protected override bool OnScroll(ScrollEvent e)
         {
             volumeContainer.ChangeSliderValue(e.ScrollDelta.Y/10);

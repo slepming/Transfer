@@ -25,7 +25,6 @@ namespace Transfer.Game
 {
     public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalAction>, ICanAcceptFile
     {
-        private ScreenStack screenStack;
         private Screen transferScreen;
 
         private readonly string[] args;
@@ -48,8 +47,7 @@ namespace Transfer.Game
         [BackgroundDependencyLoader]
         private void load()
         {
-            Child = screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
-            tempStore = new TempStore<Track>(audioManager);
+            tempStore = new TempStore<Track>();
 
         }
 
@@ -77,15 +75,15 @@ namespace Transfer.Game
                         Import(allowedPaths.ToArray());
                     }
                     allowedPaths.Clear();
-                    Track audio = await tempStore.CreateaAndGetTrackAsync(Path.GetFileName(args[0]).Split('.')[0] + ".mp3", tempStorage);
-                    if (audio != null) screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
+                    Track audio = await tempStore.CreateaAndGetTrackAsync(Path.GetFileName(args[0]).Split('.')[0] + ".mp3", tempStorage, audioManager);
+                    if (audio != null) ScreenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
 
                 }
             }
             else
             {
                 Logger.Log("Audio File not exist");
-                screenStack.Push(transferScreen = new VideoScreen());
+                ScreenStack.Push(transferScreen = new VideoScreen());
             }
         }
 

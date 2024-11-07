@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using osu.Framework.Screens;
 using osu.Framework.Graphics;
 using osu.Framework.Logging;
@@ -16,10 +12,12 @@ namespace Transfer.Game.Screens
     public abstract partial class TransferScreen : Screen, ITransferScreen, IHasDescription
     {
         protected Loading LoadingComponent;
-        protected IconButton IconButton;
+        protected DisappearingIconButton OptionsButton;
         public virtual string Title => GetType().Name;
         public string Description => Title;
-        protected bool IsShowOptionsButton = true;
+        public bool OptionsButtonVisible = true;
+
+        public bool CursorVisible = true;
 
 
 
@@ -32,15 +30,15 @@ namespace Transfer.Game.Screens
 
         public override void OnEntering(ScreenTransitionEvent e)
         {
-            base.OnEntering(e);
             this.FadeInFromZero(1000, Easing.InOutElastic);
+            base.OnEntering(e);
 
         }
 
         protected override void LoadComplete()
         {
-            if(IsShowOptionsButton){
-                // IconButton.Show();
+            if(OptionsButtonVisible){
+                // OptionsButton.Show();
             }
             base.LoadComplete();
         }

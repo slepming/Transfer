@@ -1,16 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using FFmpeg.NET.Exceptions;
 using FFMpegCore;
 using FFMpegCore.Exceptions;
-using HidSharp.Reports.Units;
-using OpenTabletDriver.Plugin.DependencyInjection;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.IO.Stores;
@@ -25,21 +19,17 @@ namespace Transfer.Game.IO
     public class TempStore<T> : ITempStore<T> where T : Track
     {
         private AudioExtractorCore audioExtractorCore = new();
-        private AudioManager audioManager;
 
-        public TempStore(AudioManager audioManager) => this.audioManager = audioManager;
-
-
-        public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
+        public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, AudioExtension audioExtension = AudioExtension.mp3)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
-            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path))}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
             Logger.Log($"Create file with name {audioName}");
-            if(storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName) && await FFProbe.AnalyseAsync(audioName) != null)
+            if(storage.Exists(audioName))
             {
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
-                return audioManager.GetTrackStore(resourceStore).Get(audioName) as  T;
+                return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
 
             try
@@ -54,6 +44,7 @@ namespace Transfer.Game.IO
                 {
                     using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
                     {
+                        Logger.Log($"Files puts in {storage.GetFullPath(audioName)}");
                         await file.CopyToAsync(audioFile);
                     }
                     using (var videoFile = storage.GetStream(Path.GetFileName(path), FileAccess.Write, FileMode.OpenOrCreate))
@@ -64,7 +55,7 @@ namespace Transfer.Game.IO
                 IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 File.Delete(pathToFile);
 
-                if(await FFProbe.AnalyseAsync(audioName) == null) return null;
+                if(!storage.Exists(audioName)) throw new FileNotFoundException("Audio not found");
 
                 return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
@@ -81,13 +72,6 @@ namespace Transfer.Game.IO
 
         }
 
-        /// <summary>
-        /// Extract audio and puts it is in the temp directory
-        /// </summary>
-        /// <param name="path">path to video file</param>
-        /// <param name="storage"></param>
-        /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
-        /// <returns></returns>
         public virtual async Task CreateTrackInStorageAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
         {
             if (path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");

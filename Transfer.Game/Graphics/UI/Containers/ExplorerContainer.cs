@@ -6,12 +6,11 @@ using osuTK;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class ExplorerContainer : FocusedOverlayContainer
+public partial class ExplorerContainer : TransferFocusedOverlayContainer
 {
     protected override bool BlockScrollInput { get; }
     protected override bool StartHidden { get; }
     protected override bool BlockPositionalInput { get; }
-
     private ExplorerFillFlowContainer explorerFillFlowContainer;
 
     public event TransitionEvent FoundVideo;
@@ -58,6 +57,8 @@ public partial class ExplorerContainer : FocusedOverlayContainer
         explorerFillFlowContainer.TransitionPath += FoundVideo;
         base.LoadComplete();
     }
+
+
     protected override void PopIn()
     {
         this.FadeTo(1, 1000, Easing.InOutQuint);

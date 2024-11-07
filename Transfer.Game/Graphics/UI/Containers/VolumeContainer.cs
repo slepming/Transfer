@@ -9,10 +9,11 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
+using Transfer.Game.Graphics.UI.Containers;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VolumeContainer : FocusedOverlayContainer
+    public partial class VolumeContainer : TransferFocusedOverlayContainer
     {
 
         private TransferBasicSliderBar<double> volumeSlider;
@@ -28,7 +29,7 @@ namespace Transfer.Game.UserInterface.Containers
         public VolumeContainer()
         {
             Show();
-            
+
             sliderVolumeValue = new BindableDouble
             {
                 MinValue = MinValue,
@@ -50,7 +51,7 @@ namespace Transfer.Game.UserInterface.Containers
             };
             volumeSlider.Current.ValueChanged += value => Current.Value = value.NewValue;
             volumeSlider.Current = sliderVolumeValue;
-            
+
         }
 
         public void ChangeSliderValue(double value)

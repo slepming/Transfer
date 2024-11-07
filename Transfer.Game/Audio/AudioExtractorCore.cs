@@ -24,7 +24,7 @@ namespace Transfer.Game.Audio
         /// <returns>Path to audio</returns>
         public async Task<string> Extract(string video, AudioExtension audioExtension = AudioExtension.mp3)
         {
-            string outputPath =  Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video))}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
+            string outputPath =  Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
             try
             {
                 await FFMpegArguments
