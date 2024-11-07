@@ -13,7 +13,7 @@ using Transfer.Game.Graphics.UI.Containers;
 
 namespace Transfer.Game.UserInterface.Containers
 {
-    public partial class VolumeContainer : TransferFocusedOverlayContainer
+    public partial class VolumeContainer : Container
     {
 
         private TransferBasicSliderBar<double> volumeSlider;
@@ -28,7 +28,6 @@ namespace Transfer.Game.UserInterface.Containers
 
         public VolumeContainer()
         {
-            Show();
 
             sliderVolumeValue = new BindableDouble
             {
@@ -54,33 +53,21 @@ namespace Transfer.Game.UserInterface.Containers
 
         }
 
-        public void ChangeSliderValue(double value)
+        public void ChangeSliderValue(double value, char mathAction)
         {
             if (!(value > sliderVolumeValue.MinValue) && !(value < sliderVolumeValue.MaxValue)) return;
-            volumeSlider.Current.Value += value;
-        }
-
-        protected override bool OnHover(HoverEvent e)
-        {
-            this.FadeColour(new Colour4(255, 255, 255, 0.5f), 300, Easing.OutQuint);
-            return base.OnHover(e);
-        }
-        protected override void OnHoverLost(HoverLostEvent e)
-        {
-            this.FadeColour(Colour4.Transparent, 5000, Easing.OutQuint);
-            base.OnHoverLost(e);
+            switch(mathAction)
+            {
+                case '+':
+                    volumeSlider.Current.Value += value;
+                    break;
+                case '-':
+                    volumeSlider.Current.Value -= value;
+                    break;
+            }
         }
 
 
 
-        protected override void PopIn()
-        {
-            this.ScaleTo(new Vector2(1f, 1f), 200, Easing.InCubic);
-        }
-
-        protected override void PopOut()
-        {
-            this.ScaleTo(new Vector2(0.1f, 0.1f), 200, Easing.InOutCubic);
-        }
     }
 }

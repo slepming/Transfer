@@ -97,9 +97,12 @@ namespace Transfer.Game
                 SafeAreaOverrideEdges = Edges.None,
                 Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this){
                     Children = new Drawable[]{
+                        #if DEBUG
+                        #else
                         new TransferCursorContainer(){
                             RelativeSizeAxes = Axes.Both
                         },
+                        #endif
                         ScreenStack = new ScreenStack { RelativeSizeAxes = Axes.Both }
                     }
                 })

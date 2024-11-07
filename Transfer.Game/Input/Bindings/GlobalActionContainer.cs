@@ -51,7 +51,7 @@ namespace Transfer.Game.Input.Bindings
         [
             new KeyBinding(InputKey.F2, GlobalAction.WatchingRestart),
             new KeyBinding(InputKey.Space, GlobalAction.PauseVideo),
-            new KeyBinding(new[] { InputKey.Shift, InputKey.R}, GlobalAction.MovingToInternalExporer)
+            new KeyBinding(new[] { InputKey.Shift, InputKey.R}, GlobalAction.MoveToInternalExplorer)
         ];
         private static IEnumerable<KeyBinding> videoEditorBindings =>
         [
@@ -77,7 +77,7 @@ namespace Transfer.Game.Input.Bindings
         WatchingRestart,
         TakeScreenshot,
         PauseVideo,
-        MovingToInternalExporer
+        MoveToInternalExplorer
     }
     public enum GlobalActionCategory
     {

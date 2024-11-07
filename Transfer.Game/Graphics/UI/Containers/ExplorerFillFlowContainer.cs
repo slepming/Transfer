@@ -111,6 +111,8 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         }
     }
 
+    public void AddExtension(string extension) => awaibleExtensions.Add(extension);
+
     protected override bool OnKeyDown(KeyDownEvent e)
     {
         if (e.Key == osuTK.Input.Key.BackSpace)

@@ -6,7 +6,7 @@ using osu.Framework.Graphics.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers
 {
-    public partial class TransferFocusedOverlayContainer : FocusedOverlayContainer
+    public abstract partial class TransferFocusedOverlayContainer : FocusedOverlayContainer
     {
         public bool Visible = true;
         public TransferFocusedOverlayContainer()
@@ -24,15 +24,9 @@ namespace Transfer.Game.Graphics.UI.Containers
             Visible = true;
             base.Show();
         }
-        protected override void PopIn()
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract override void PopIn();
 
-        protected override void PopOut()
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract override void PopOut();
 
     }
 }

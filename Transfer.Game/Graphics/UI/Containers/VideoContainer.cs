@@ -16,6 +16,7 @@ using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.Screens;
@@ -26,7 +27,7 @@ namespace Transfer.Game.UserInterface.Containers
     {
         private TransferVideo video;
 
-        private VolumeContainer volumeContainer;
+        private WatchingToolsContainer toolsContainer;
         private Container mediaOptionsContainer;
 
 
@@ -61,18 +62,19 @@ namespace Transfer.Game.UserInterface.Containers
                     Origin = Anchor.Centre,
                     Loop = false,
                 },
-                volumeContainer = new VolumeContainer
+                toolsContainer = new WatchingToolsContainer
                 {
-                    Width = 300,
-                    Height = 50,
+                    RelativeSizeAxes = Axes.X,
+                    Size = new Vector2(1, 1/6),
                     Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.BottomCentre,
+                    Origin = Anchor.Centre,
                 },
             };
-            volumeContainer.Current.ValueChanged += onVolumeChanged;
+            toolsContainer.Show();
+            toolsContainer.VolumeContainer.Current.ValueChanged += onVolumeChanged;
             if(Audio != null)
             {
-                Audio.Volume.ValueChanged += value => volumeContainer.DefaultValue = value.NewValue;
+                Audio.Volume.ValueChanged += value => toolsContainer.VolumeContainer.DefaultValue = value.NewValue;
             }
 
         }
@@ -111,14 +113,18 @@ namespace Transfer.Game.UserInterface.Containers
         {
            switch(e.Key)
            {
-               case osuTK.Input.Key.Right: Audio.Volume.Value += 5; break;
-               case osuTK.Input.Key.Left: Audio.Volume.Value -= 5; break;
+               case osuTK.Input.Key.Up:
+                    toolsContainer.VolumeContainer.ChangeSliderValue(0.2, '+');
+                    break;
+               case osuTK.Input.Key.Down:
+                    toolsContainer.VolumeContainer.ChangeSliderValue(0.2, '-');
+                    break;
            }
            return base.OnKeyDown(e);
         }
         protected override bool OnScroll(ScrollEvent e)
         {
-            volumeContainer.ChangeSliderValue(e.ScrollDelta.Y/10);
+            toolsContainer.VolumeContainer.ChangeSliderValue(e.ScrollDelta.Y/10, '+');
             return base.OnScroll(e);
         }
 
@@ -141,6 +147,12 @@ namespace Transfer.Game.UserInterface.Containers
                         video.IsPlaying = false;
                     }
                     isMuted = !isMuted;
+                    return true;
+                }
+                case GlobalAction.WatchingRestart:
+                {
+                    Audio?.Restart();
+                    video.PlaybackPosition = 0;
                     return true;
                 }
                 default:
