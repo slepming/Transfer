@@ -33,10 +33,9 @@ namespace Transfer.Game
         [Resolved]
         private Storage tempStorage { get; set; }
 
-        [Resolved]
-        private AudioManager audioManager { get; set; }
 
         private ITempStore<Track> tempStore;
+        private DependencyContainer dependencies;
 
         public TransferGame(string[] args)
         {
@@ -48,42 +47,50 @@ namespace Transfer.Game
         private void load()
         {
             tempStore = new TempStore<Track>();
-
+            
         }
 
-        protected override async void LoadAsyncComplete()
+        protected override void LoadComplete()
         {
-            base.LoadAsyncComplete();
-            if(args != null)
+            base.LoadComplete();
+            if(dependencies.TryGet(out AudioManager audioManager))
             {
-                if (args.Length > 0)
+                if(dependencies.TryGet(out ScreenStack screenStack))
                 {
-                    List<string> allowedPaths = new List<string>();
-                    foreach (string path in args)
+                    if (args != null && args.Length > 0)
                     {
-                        string fileName = Path.GetFileName(path);
-                        if (tempStorage.Exists($"{fileName}"))
+                        List<string> allowedPaths = new List<string>();
+                        foreach (string path in args)
                         {
-                            if (VIDEO_EXTENSIONS.Contains(Path.GetExtension(path)))
+                            string fileName = Path.GetFileName(path);
+                            if (tempStorage.Exists($"{fileName}"))
                             {
-                                allowedPaths.Add(path);
+                                if (VIDEO_EXTENSIONS.Contains(Path.GetExtension(path)))
+                                {
+                                    allowedPaths.Add(path);
+                                }
                             }
                         }
+                        lock (allowedPaths)
+                        {
+                            Import(allowedPaths.ToArray());
+                        }
+                        allowedPaths.Clear();
+                        Scheduler.AddDelayed(async () =>
+                        {
+                            Track audio = await tempStore.CreateaAndGetTrackAsync(Path.GetFileName(args[0]).Split('.')[0] + ".mp3", tempStorage, audioManager);
+                            if (audio != null) screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
+                        }, 200, true);
                     }
-                    lock (allowedPaths)
+                    else
                     {
-                        Import(allowedPaths.ToArray());
+                        Logger.Log("Audio File not exist");
+                        Scheduler.AddDelayed(() =>
+                        {
+                            screenStack.Push(transferScreen = new VideoScreen());
+                        }, 500);
                     }
-                    allowedPaths.Clear();
-                    Track audio = await tempStore.CreateaAndGetTrackAsync(Path.GetFileName(args[0]).Split('.')[0] + ".mp3", tempStorage, audioManager);
-                    if (audio != null) ScreenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
-
                 }
-            }
-            else
-            {
-                Logger.Log("Audio File not exist");
-                ScreenStack.Push(transferScreen = new VideoScreen());
             }
         }
 
@@ -127,6 +134,8 @@ namespace Transfer.Game
             }
         }
 
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
+            dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
 
 

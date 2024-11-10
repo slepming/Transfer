@@ -36,6 +36,9 @@
 ehthumbs.db
 Thumbs.db
 
+# Directories #
+###############
 **/bin/
 **/obj/
 /.vs/
+/win-x64/

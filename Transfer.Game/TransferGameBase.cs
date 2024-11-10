@@ -56,7 +56,7 @@ namespace Transfer.Game
 
         private GlobalActionContainer globalBindings;
 
-        protected ScreenStack ScreenStack;
+        private ScreenStack screenStack;
 
 
         private DependencyContainer dependencies;
@@ -97,17 +97,15 @@ namespace Transfer.Game
                 SafeAreaOverrideEdges = Edges.None,
                 Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this){
                     Children = new Drawable[]{
-                        #if DEBUG
-                        #else
+                        screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both },
                         new TransferCursorContainer(){
                             RelativeSizeAxes = Axes.Both
                         },
-                        #endif
-                        ScreenStack = new ScreenStack { RelativeSizeAxes = Axes.Both }
                     }
                 })
             });
 
+            dependencies.Cache(screenStack);
             dependencies.Cache(globalBindings);
             dependencies.CacheAs(tempStorage);
         }

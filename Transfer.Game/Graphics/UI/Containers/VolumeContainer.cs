@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
 using osuTK;
@@ -44,8 +45,8 @@ namespace Transfer.Game.UserInterface.Containers
                     Origin = Anchor.Centre,
                     Size = new Vector2(200, 20),
                     TransferValueOnCommit = true,
-                    KeyboardStep = 1,
-                    SelectionColour = Color4.Pink,
+                    KeyboardStep = 0.1f,
+                    SelectionColour = Color4.DeepPink,
                 },
             };
             volumeSlider.Current.ValueChanged += value => Current.Value = value.NewValue;
