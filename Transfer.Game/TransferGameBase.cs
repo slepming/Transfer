@@ -50,7 +50,7 @@ namespace Transfer.Game
 
         private FontStore fontStore;
         protected Storage Storage;
-        private Storage tempStorage;
+        private WrappedStorage tempStorage;
 
         protected SafeAreaContainer SafeAreaContainer;
 
@@ -76,13 +76,14 @@ namespace Transfer.Game
         {
             Host.Window.Title = HOST_NAME;
             tempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
-
+            dependencies.CacheAs(tempStorage);
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
             fontStore = new FontStore(renderer, null, 100f);
 
-            Logger.Storage = Storage;
 
+            IResourceStore<byte[]> tempResourceStore = new StorageBackedResourceStore(tempStorage);
+            dependencies.Cache(tempResourceStore);
             Fonts.AddStore(fontStore);
 
             Resources.Get("Fonts/");
@@ -107,7 +108,6 @@ namespace Transfer.Game
 
             dependencies.Cache(screenStack);
             dependencies.Cache(globalBindings);
-            dependencies.CacheAs(tempStorage);
         }
         protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();
 

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FFmpeg.AutoGen;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
@@ -15,6 +17,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK;
+using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.Videos;
@@ -49,7 +52,9 @@ namespace Transfer.Game.UserInterface.Containers
         private void load()
         {
             if(string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
-            Logger.Log("Video initialization");
+            Logger.Log($"Video initialization");
+
+            
 
 
             InternalChildren = new Drawable[]
@@ -68,6 +73,7 @@ namespace Transfer.Game.UserInterface.Containers
                     Size = new Vector2(1, 1/6),
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.Centre,
+                    MaxValuePlayback = video.PlaybackPosition
                 },
             };
             toolsContainer.Show();
@@ -79,6 +85,12 @@ namespace Transfer.Game.UserInterface.Containers
 
         }
 
+        protected override void Update()
+        {
+            base.Update();
+            toolsContainer.SetPlaybackValueForSlider(video.PlaybackPosition);
+
+        }
 
 
 

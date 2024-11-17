@@ -39,7 +39,7 @@ namespace Transfer.Game.Screens
         private AudioManager audioManager { get; set; }
 
 
-        protected ITempStore<Track> TempStore { get; set; }
+        protected IAudioExtract<Track> TempStore { get; set; }
 
 
         private string videoPath { get; set;}
@@ -65,7 +65,7 @@ namespace Transfer.Game.Screens
         [BackgroundDependencyLoader]
         private void load()
         {
-            TempStore = new TempStore<Track>();
+            TempStore = new AudioExtract<Track>();
             explorerContainer.FoundVideo += onFoundVideo;
             if(explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
         }

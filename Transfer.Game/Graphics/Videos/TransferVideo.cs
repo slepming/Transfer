@@ -26,7 +26,7 @@ namespace Transfer.Game.Graphics.Videos
 
         public TransferVideo(string filename, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
         {
-
+            
         }
 
         [BackgroundDependencyLoader]
@@ -38,6 +38,11 @@ namespace Transfer.Game.Graphics.Videos
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
+        }
+
+        public double GetMaxLengthVideo()
+        {
+            return Duration;
         }
 
 

@@ -16,7 +16,7 @@ using Transfer.Game.Extensions;
 
 namespace Transfer.Game.IO
 {
-    public class TempStore<T> : ITempStore<T> where T : Track
+    public class AudioExtract<T> : IAudioExtract<T> where T : Track
     {
         private AudioExtractorCore audioExtractorCore = new();
 
@@ -26,9 +26,9 @@ namespace Transfer.Game.IO
             if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
             var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
             Logger.Log($"Create file with name {audioName}");
+            IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
             if(storage.Exists(audioName))
             {
-                IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
 
@@ -52,7 +52,6 @@ namespace Transfer.Game.IO
                         await file.CopyToAsync(videoFile);
                     }
                 }
-                IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
                 File.Delete(pathToFile);
 
                 if(!storage.Exists(audioName)) throw new FileNotFoundException("Audio not found");

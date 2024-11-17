@@ -10,7 +10,7 @@ using Transfer.Game.Audio.Extensions;
 
 namespace Transfer.Game.IO
 {
-    public interface ITempStore<T>  where T : class
+    public interface IAudioExtract<T>  where T : class
     {
         /// <summary>
         /// Extract audio from video create audio in storage,and convertion in <see cref="Track"></see>

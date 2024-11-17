@@ -18,7 +18,8 @@ namespace Transfer.Game.UserInterface
     {
         private Box loadingComponent;
         private Container backgroundContainer;
-        private EdgeEffect backgroundEffect;
+        private Container loadingContainer;
+        private Container fullComponentContainer;
         public Loading()
         {
             Anchor = Anchor.Centre;
@@ -57,13 +58,22 @@ namespace Transfer.Game.UserInterface
                                     Type = EdgeEffectType.Shadow
                                 }
                             },
-                            loadingComponent = new Box
+                            loadingContainer = new Container
                             {
                                 Size = new Vector2(Width/2, Height/2),
+                                Masking = true,
+                                MaskingSmoothness = 5f,
                                 Anchor = Anchor.Centre,
                                 Origin = Anchor.Centre,
-                                EdgeSmoothness = new Vector2(1,1),
-                            },
+                                CornerRadius = 15f,
+                                Child = loadingComponent = new Box
+                                {
+                                    Size = new Vector2(Width/2, Height/2),
+                                    Anchor = Anchor.Centre,
+                                    Origin = Anchor.Centre,
+                                    EdgeSmoothness = new Vector2(1,1),
+                                },
+                            }
                         }
                     }
                 }
@@ -82,9 +92,12 @@ namespace Transfer.Game.UserInterface
                                 }).RotateTo(-720,4000, Easing.InOutElastic).TransformTo(nameof(EdgeEffect), new EdgeEffectParameters() {
                                     Radius = 400,
                                     Colour = Colour4.Gray,
-                                    Type = EdgeEffectType.Shadow
+                                    Type = EdgeEffectType.Glow
                                 }, 800, Easing.InOutQuad));
-            loadingComponent.Loop(b => b.RotateTo(0).TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.White)).RotateTo(720,4000, Easing.InOutElastic).TransformTo(nameof(Colour),ColourInfo.SingleColour(Color4.Black), 800, Easing.InOutQuad));
+            loadingContainer.Loop(b => b.RotateTo(0)
+            .TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.White))
+            .RotateTo(720,4000, Easing.InOutElastic)
+            .TransformTo(nameof(Colour),ColourInfo.SingleColour(Color4.Black), 800, Easing.InOutQuad));
 
         }
     }

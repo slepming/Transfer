@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using FFmpeg.AutoGen;
 using osu.Framework.Logging;
+
 
 namespace Transfer.Game.Extensions
 {
@@ -14,6 +16,7 @@ namespace Transfer.Game.Extensions
     /// </summary>
     public unsafe class FFmpegMetadata
     {
+
         /// <summary>
         /// Get data from Metadata
         /// </summary>
@@ -21,27 +24,27 @@ namespace Transfer.Game.Extensions
         /// <returns>Dictionary with Type:Key, Value:Value</returns>
         public static Dictionary<string,string> GetData(string pathToFile)
         {
+            if (!File.Exists(pathToFile)) return null;
 #if DEBUG
-            Logger.Log("Current directory: " + Environment.CurrentDirectory, LoggingTarget.Runtime, LogLevel.Important);
-            Logger.Log($"Running in {(Environment.Is64BitProcess ? "64" : "32")}-bit mode.", LoggingTarget.Runtime, LogLevel.Important);
-            Logger.Log($"FFmpeg version info: {ffmpeg.av_version_info()}", LoggingTarget.Runtime, LogLevel.Important);
+            Logger.Log("Current directory: " + Environment.CurrentDirectory, LoggingTarget.Information, LogLevel.Verbose);
+            Logger.Log($"Running in {(Environment.Is64BitProcess ? "64" : "32")}-bit mode.", LoggingTarget.Information, LogLevel.Verbose);
 #endif
-            Logger.Log($"LIBAVFORMAT Version: {ffmpeg.LIBAVFORMAT_VERSION_MAJOR}.{ffmpeg.LIBAVFORMAT_VERSION_MINOR}");
-            return metaData(pathToFile);
+            Logger.Log($"LIBAVFORMAT Version: {ffmpeg.LIBAVFORMAT_VERSION_MAJOR}.{ffmpeg.LIBAVFORMAT_VERSION_MINOR}", LoggingTarget.Information,LogLevel.Verbose);
+            return showVideoMetaData(pathToFile);
         }
 
-        private static Dictionary<string,string> metaData(string pathToFile)
+        private static Dictionary<string,string> showVideoMetaData(string pathToFile)
         {
             AVFormatContext* fmt_ctx = null;
             try
             {
                 do
                 {
-                    Logger.Log("FFmpeg avformat open input check!", LoggingTarget.Runtime, LogLevel.Important);
+                    Logger.Log("FFmpeg avformat open input check!", LoggingTarget.Information, LogLevel.Verbose);
                     int ret = ffmpeg.avformat_open_input(&fmt_ctx,pathToFile, null,null);
 
                     if(ret != 0) break;
-                    Logger.Log("FFmpeg avformat find stream info check!", LoggingTarget.Runtime, LogLevel.Important);
+                    Logger.Log("FFmpeg avformat find stream info check!", LoggingTarget.Information, LogLevel.Verbose);
                     ret = ffmpeg.avformat_find_stream_info(fmt_ctx,null);
                     if(ret < 0)
                     {
@@ -59,14 +62,14 @@ namespace Transfer.Game.Extensions
 
                         pairs.Add(key,value);
                     }
-                    Logger.Log("Data collection is complete", LoggingTarget.Runtime, LogLevel.Important);
+                    Logger.Log("Data collection is complete", LoggingTarget.Information, LogLevel.Verbose);
                     return pairs;
                 } while(false);
                 if(fmt_ctx != null)
                 {
                     ffmpeg.avformat_close_input(&fmt_ctx);
                 }
-                Logger.Log("Dictionary is null", LoggingTarget.Runtime, LogLevel.Important);
+                Logger.Log("Dictionary is null", LoggingTarget.Information, LogLevel.Verbose);
                 return new Dictionary<string,string>{ {"null", "null"} };
             } catch(Exception ex)
             {
@@ -74,6 +77,7 @@ namespace Transfer.Game.Extensions
                 throw;
             }
         }
+
 
     }
 }

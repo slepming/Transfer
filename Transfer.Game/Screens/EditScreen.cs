@@ -20,7 +20,7 @@ public partial class EditScreen : TransferScreen
     private BoxButton gifConvertButton, mpFConvertButton, aacConvertButton;
     private VideoContainer transferVideo;
 
-    private TempStore<Track> tempStore;
+    private AudioExtract<Track> tempStore;
     [Resolved]
     private Storage audioTempStorage { get; set; }
 
@@ -51,7 +51,7 @@ public partial class EditScreen : TransferScreen
     [BackgroundDependencyLoader]
     private async void load(ExplorerContainer explorerContainer, AudioManager audioManager)
     {
-        tempStore = new TempStore<Track>();
+        tempStore = new AudioExtract<Track>();
         if(transferVideo == null){
             if(pathToFile == null){
                 explorerContainer.Show();

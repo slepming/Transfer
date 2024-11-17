@@ -13,11 +13,16 @@ namespace Transfer.Game.Graphics.UI.Containers
     public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
     {
         public readonly VolumeContainer VolumeContainer;
+        public readonly VideoPlaybackContainer PlaybackContainer;
         public bool VolumeSliderVisible { get; private set; } = true;
+
+        public double MaxValuePlayback { get; set; } = 0;
+        public long CurrentPlaybackPosition { get; set; } = 0;
 
         public WatchingToolsContainer()
         {
-            InternalChild = new Container{
+            InternalChild = new Container
+            {
                 RelativeSizeAxes = Axes.Both,
                 Children = [
                     VolumeContainer = new VolumeContainer
@@ -27,12 +32,31 @@ namespace Transfer.Game.Graphics.UI.Containers
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.BottomCentre,
                     },
+                    PlaybackContainer = new VideoPlaybackContainer
+                    {
+                        Width = 300,
+                        Height = 20,
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.BottomCentre,
+                        Size = new Vector2(1f, 1f),
+                    }
+
                 ]
             };
             VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width/3), -15);
         }
 
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            PlaybackContainer.SetMaxSliderValue(MaxValuePlayback);
+        }
 
+
+        public void SetPlaybackValueForSlider(double value)
+        {
+            PlaybackContainer.SetSliderBarValue(value);
+        }
 
         protected override void PopIn()
         {
