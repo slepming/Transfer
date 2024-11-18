@@ -161,10 +161,12 @@ namespace Transfer.Game.UserInterface.Containers
                     isMuted = !isMuted;
                     return true;
                 }
-                case GlobalAction.WatchingRestart:
+                case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
                 {
+                    Audio.RestartPoint = video.PlaybackPosition;
                     Audio?.Restart();
-                    video.PlaybackPosition = 0;
+                    video.PlaybackPosition = Audio.RestartPoint;
+                    Logger.Log("Restated");
                     return true;
                 }
                 default:

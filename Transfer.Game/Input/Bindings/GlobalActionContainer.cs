@@ -49,9 +49,10 @@ namespace Transfer.Game.Input.Bindings
         ];
         private static IEnumerable<KeyBinding> watchingBindings =>
         [
-            new KeyBinding(InputKey.F2, GlobalAction.WatchingRestart),
+            new KeyBinding(InputKey.F2, GlobalAction.WatchingVideoOnCurrentPlaybackRestart),
             new KeyBinding(InputKey.Space, GlobalAction.PauseVideo),
-            new KeyBinding(new[] { InputKey.Shift, InputKey.R}, GlobalAction.MoveToInternalExplorer)
+            new KeyBinding(new[] { InputKey.Shift, InputKey.R}, GlobalAction.MoveToInternalExplorer),
+            new KeyBinding(InputKey.F5, GlobalAction.WatchingVideoReset)
         ];
         private static IEnumerable<KeyBinding> videoEditorBindings =>
         [
@@ -74,7 +75,8 @@ namespace Transfer.Game.Input.Bindings
 
         EditorConvertMenu,
 
-        WatchingRestart,
+        WatchingVideoOnCurrentPlaybackRestart,
+        WatchingVideoReset,
         TakeScreenshot,
         PauseVideo,
         MoveToInternalExplorer
