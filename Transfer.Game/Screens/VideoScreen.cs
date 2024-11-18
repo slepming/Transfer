@@ -92,6 +92,7 @@ namespace Transfer.Game.Screens
                     {
                         Audio = audio,
                         RelativeSizeAxes = Axes.Both,
+                        SeekSpace = 5000
                     }
                 };
             } catch(Exception ex)

@@ -1,28 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using FFmpeg.AutoGen;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
-using osu.Framework.Screens;
 using osuTK;
-using Transfer.Game.Extensions;
-using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
-using Transfer.Game.Screens;
 
 namespace Transfer.Game.UserInterface.Containers
 {
@@ -51,10 +39,10 @@ namespace Transfer.Game.UserInterface.Containers
         [BackgroundDependencyLoader]
         private void load()
         {
-            if(string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
+            if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
             Logger.Log($"Video initialization");
 
-            
+
 
 
             InternalChildren = new Drawable[]
@@ -73,12 +61,12 @@ namespace Transfer.Game.UserInterface.Containers
                     Size = new Vector2(1, 1/6),
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.Centre,
-                    MaxValuePlayback = video.PlaybackPosition
                 },
             };
             toolsContainer.Show();
             toolsContainer.VolumeContainer.Current.ValueChanged += onVolumeChanged;
-            if(Audio != null)
+            toolsContainer.PlaybackContainer.SliderBar.Current.Value = video.PlaybackPosition;
+            if (Audio != null)
             {
                 Audio.Volume.ValueChanged += value => toolsContainer.VolumeContainer.DefaultValue = value.NewValue;
             }
@@ -88,21 +76,24 @@ namespace Transfer.Game.UserInterface.Containers
         protected override void Update()
         {
             base.Update();
-            toolsContainer.SetPlaybackValueForSlider(video.PlaybackPosition);
 
+
+            toolsContainer.PlaybackContainer.SliderBar.Current.Value = video.PlaybackPosition;
         }
-
 
 
         protected override void LoadComplete()
         {
-            if(video.IsFaulted){
-                AddInternal(new ExceptionContainer{
+            if (video.IsFaulted)
+            {
+                AddInternal(new ExceptionContainer
+                {
                     HeaderText = "Error",
                     Text = "Decoder error",
                     RelativeSizeAxes = Axes.Both,
                 });
             }
+            toolsContainer.SetMaxPlaybackValue(video.Duration);
             base.LoadComplete();
         }
 
@@ -115,28 +106,48 @@ namespace Transfer.Game.UserInterface.Containers
 
         private void onVolumeChanged(ValueChangedEvent<double> e)
         {
-            if(Audio != null)
+            if (Audio != null)
             {
                 Audio.Volume.Value = (float)e.NewValue;
             }
         }
 
+        private double seekSpace = 1000;
+        public double SeekSpace
+        {
+            get => seekSpace;
+            set
+            {
+                if (seekSpace == value) return;
+                seekSpace = value;
+            }
+        }
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-           switch(e.Key)
-           {
-               case osuTK.Input.Key.Up:
+            
+            switch (e.Key)
+            {
+                case osuTK.Input.Key.Up:
                     toolsContainer.VolumeContainer.ChangeSliderValue(0.2, '+');
                     break;
-               case osuTK.Input.Key.Down:
+                case osuTK.Input.Key.Down:
                     toolsContainer.VolumeContainer.ChangeSliderValue(0.2, '-');
                     break;
-           }
-           return base.OnKeyDown(e);
+                case osuTK.Input.Key.Right:
+                    video.Seek(video.PlaybackPosition + seekSpace);
+                    Audio?.Seek(video.PlaybackPosition);
+                    break;
+                case osuTK.Input.Key.Left:
+                    video.Seek(video.PlaybackPosition - seekSpace);
+                    Audio?.Seek(video.PlaybackPosition);
+                    break;
+
+            }
+            return base.OnKeyDown(e);
         }
         protected override bool OnScroll(ScrollEvent e)
         {
-            toolsContainer.VolumeContainer.ChangeSliderValue(e.ScrollDelta.Y/10, '+');
+            toolsContainer.VolumeContainer.ChangeSliderValue(e.ScrollDelta.Y / 10, '+');
             return base.OnScroll(e);
         }
 

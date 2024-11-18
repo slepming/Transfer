@@ -16,8 +16,6 @@ namespace Transfer.Game.Graphics.UI.Containers
         public readonly VideoPlaybackContainer PlaybackContainer;
         public bool VolumeSliderVisible { get; private set; } = true;
 
-        public double MaxValuePlayback { get; set; } = 0;
-        public long CurrentPlaybackPosition { get; set; } = 0;
 
         public WatchingToolsContainer()
         {
@@ -36,20 +34,25 @@ namespace Transfer.Game.Graphics.UI.Containers
                     {
                         Width = 300,
                         Height = 20,
-                        Anchor = Anchor.Centre,
+                        Anchor = Anchor.CentreLeft,
                         Origin = Anchor.BottomCentre,
-                        Size = new Vector2(1f, 1f),
                     }
 
                 ]
             };
+            PlaybackContainer.Position = new Vector2(VolumeContainer.X + (VolumeContainer.Width / 3), -15);
             VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width/3), -15);
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            PlaybackContainer.SetMaxSliderValue(MaxValuePlayback);
+            
+        }
+
+        public void SetMaxPlaybackValue(double value)
+        {
+            PlaybackContainer.SetMaxSliderValue(value);
         }
 
 

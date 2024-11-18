@@ -56,7 +56,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         public void ChangeSliderValue(double value, char mathAction)
         {
-            if (!(value > sliderVolumeValue.MinValue) && !(value < sliderVolumeValue.MaxValue)) return;
+            if (value < sliderVolumeValue.MinValue && value > sliderVolumeValue.MaxValue) return;
             switch(mathAction)
             {
                 case '+':
