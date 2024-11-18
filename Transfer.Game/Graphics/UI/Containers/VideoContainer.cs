@@ -166,7 +166,12 @@ namespace Transfer.Game.UserInterface.Containers
                     Audio.RestartPoint = video.PlaybackPosition;
                     Audio?.Restart();
                     video.PlaybackPosition = Audio.RestartPoint;
-                    Logger.Log("Restated");
+                    return true;
+                }
+                case GlobalAction.WatchingVideoReset:
+                {
+                    Audio?.Restart();
+                    video.PlaybackPosition = 0;
                     return true;
                 }
                 default:
