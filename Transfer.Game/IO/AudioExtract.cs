@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace Transfer.Game.IO
     public class AudioExtract<T> : IAudioExtract<T> where T : Track
     {
         private AudioExtractorCore audioExtractorCore = new();
+
 
         public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, AudioExtension audioExtension = AudioExtension.mp3)
         {
@@ -73,9 +75,11 @@ namespace Transfer.Game.IO
         public virtual async Task CreateTrackInStorageAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
         {
             if (path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");
-            var audioName = $"{Path.GetFileNameWithoutExtension(path)}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            var videoName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}";
             if (storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
             {
+                Logger.Log("File exist in local storage");
                 return;
             }
             try
@@ -92,7 +96,7 @@ namespace Transfer.Game.IO
                     {
                         await file.CopyToAsync(audioFile);
                     }
-                    using (var videoFile = storage.GetStream(Path.GetFileName(path), FileAccess.Write, FileMode.OpenOrCreate))
+                    using (var videoFile = storage.GetStream(videoName, FileAccess.Write, FileMode.OpenOrCreate))
                     {
                         await file.CopyToAsync(videoFile);
                     }

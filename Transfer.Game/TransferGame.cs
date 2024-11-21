@@ -27,11 +27,9 @@ namespace Transfer.Game
         private readonly string[] args;
 
 
-        [Resolved]
-        private Storage tempStorage { get; set; }
+        private WrappedStorage tempStorage = null;
 
-        [Resolved]
-        private StorageBackedResourceStore tempResouceStore { get; set; }
+        private StorageBackedResourceStore tempResouceStore = null;
 
 
         private IAudioExtract<Track> tempStore;
@@ -53,6 +51,11 @@ namespace Transfer.Game
         protected override void LoadComplete()
         {
             base.LoadComplete();
+            bool importSuccess = false;
+            importSuccess = dependencies.TryGet(out tempResouceStore);
+            if (!importSuccess) Logger.Log($"Filed get from cache tempResourceStore");
+            dependencies.TryGet(out tempStorage);
+            if (!importSuccess) Logger.Log($"Filed get from cache tempStorage");
             // Get Screenstack from cache
             if (dependencies.TryGet(out ScreenStack screenStack))
             {
@@ -63,8 +66,11 @@ namespace Transfer.Game
                         List<string> allowedPaths = new List<string>();
                         foreach (string path in args)
                         {
-                            if (!File.Exists(path)) continue;
-
+                            if (!File.Exists(path))
+                            {
+                                Logger.Log("File not exist");
+                                continue;
+                            }
                             string fileName = Path.GetFileName(path);
                             if (tempStorage.Exists(fileName))
                             {
@@ -81,10 +87,7 @@ namespace Transfer.Game
                         allowedPaths.Clear();
                         Scheduler.AddDelayed(async () =>
                         {
-                            if (dependencies.TryGet(out WrappedStorage tempStorage))
-                            {
-                                if (await audioManager.GetTrackStore(tempResouceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio) screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
-                            }
+                            if (await audioManager.GetTrackStore(tempResouceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio) screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
                         }, 200, true);
                     }
                 }
@@ -96,6 +99,13 @@ namespace Transfer.Game
                         screenStack.Push(transferScreen = new VideoScreen());
                     }, 500);
                 }
+            }
+            else
+            {
+                Scheduler.AddDelayed(() =>
+                {
+                    screenStack.Push(transferScreen = new VideoScreen());
+                }, 500);
             }
 
 
@@ -148,7 +158,6 @@ namespace Transfer.Game
 
         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
-            Logger.Log($"TransferGame Pressed: {e.Action.ToString()}");
             return false;
         }
 
@@ -174,6 +183,7 @@ namespace Transfer.Game
                         Logger.Log($"File {Path.GetFileName(Path.GetFullPath(path))} is not exists");
                         continue;
                     }
+                    Logger.Log(@$"""{Path.GetFileName(path)}"" been importing");
                     tempStore.CreateTrackInStorageAsync(Path.GetFullPath(path), tempStorage);
                 }
                 return Task.CompletedTask;
