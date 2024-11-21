@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
-using osu.Framework.Extensions.ObjectExtensions;
-using osu.Framework.Graphics;
-using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
@@ -20,7 +14,6 @@ using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osu.Framework.Threading;
 using Transfer.Game.Extensions;
-using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.Screens;
@@ -54,7 +47,7 @@ namespace Transfer.Game
         private void load()
         {
             tempStore = new AudioExtract<Track>();
-            
+
         }
 
         protected override void LoadComplete()
@@ -104,8 +97,8 @@ namespace Transfer.Game
                     }, 500);
                 }
             }
-            
-            
+
+
         }
 
         private readonly List<string> dropFiles = new List<string>();
@@ -114,7 +107,7 @@ namespace Transfer.Game
         public override void SetHost(GameHost host)
         {
             base.SetHost(host);
-            if(host.Window != null)
+            if (host.Window != null)
             {
                 host.Window.DragDrop += path =>
                 {
@@ -173,7 +166,7 @@ namespace Transfer.Game
                 {
                     tempStore.CreateTrackInStorageAsync(System.IO.Path.GetFullPath(paths[0]), tempStorage);
                 }
-                foreach(string path in paths)
+                foreach (string path in paths)
                 {
                     if (path == null) continue;
                     if (!File.Exists(Path.GetFullPath(path)))

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using osu.Framework.Bindables;
+﻿using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osuTK;
+using osu.Framework.Logging;
 using osuTK.Graphics;
 using Transfer.Game.UserInterface;
 
@@ -15,7 +10,7 @@ namespace Transfer.Game.Graphics.UI.Containers
 
     public partial class VideoPlaybackContainer : Container
     {
-        public TransferBasicSliderBar<double> SliderBar;
+        private TransferBasicSliderBar<double> sliderBar;
         private BindableDouble playbacklValue;
 
 
@@ -32,28 +27,40 @@ namespace Transfer.Game.Graphics.UI.Containers
 
             InternalChildren = new Drawable[]
             {
-                SliderBar = new TransferBasicSliderBar<double>
+                sliderBar = new TransferBasicSliderBar<double>
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = new Vector2(200, 20),
+                    Width = 200,
+                    Height = 20,
                     TransferValueOnCommit = true,
                     KeyboardStep = 0f,
                     SelectionColour = Color4.HotPink,
                 },
             };
-            SliderBar.Current = playbacklValue;
+            sliderBar.Current = playbacklValue;
+        }
+
+        public void SetSliderWidth(float value)
+        {
+            Logger.Log($"New value: {value}");
+            sliderBar.Width = value;
+        }
+
+        public float GetSliderWidth()
+        {
+            return sliderBar.Width;
         }
 
         public void SetSliderBarValue(double value)
         {
-            SliderBar.Current.Value = value;
+            sliderBar.Current.Value = value;
         }
 
         public void SetMaxSliderValue(double value)
         {
             playbacklValue.MaxValue = value;
-            SliderBar.Current = playbacklValue;
+            sliderBar.Current = playbacklValue;
         }
 
     }

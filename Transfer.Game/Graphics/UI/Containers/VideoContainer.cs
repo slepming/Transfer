@@ -63,9 +63,13 @@ namespace Transfer.Game.UserInterface.Containers
                     Origin = Anchor.Centre,
                 },
             };
+
+            video.SeekOccurs += onSeek;
+
             toolsContainer.Show();
             toolsContainer.VolumeContainer.Current.ValueChanged += onVolumeChanged;
-            toolsContainer.PlaybackContainer.SliderBar.Current.Value = video.PlaybackPosition;
+
+
             if (Audio != null)
             {
                 Audio.Volume.ValueChanged += value => toolsContainer.VolumeContainer.DefaultValue = value.NewValue;
@@ -73,12 +77,18 @@ namespace Transfer.Game.UserInterface.Containers
 
         }
 
+
+        private void onSeek(double obj)
+        {
+            return;
+        }
+
         protected override void Update()
         {
             base.Update();
 
 
-            toolsContainer.PlaybackContainer.SliderBar.Current.Value = video.PlaybackPosition;
+            toolsContainer.PlaybackContainer.SetSliderBarValue(video.PlaybackPosition);
         }
 
 
@@ -124,7 +134,7 @@ namespace Transfer.Game.UserInterface.Containers
         }
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-            
+
             switch (e.Key)
             {
                 case osuTK.Input.Key.Up:
@@ -174,7 +184,7 @@ namespace Transfer.Game.UserInterface.Containers
                 }
                 case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
                 {
-                    Audio.RestartPoint = video.PlaybackPosition;
+                    if (Audio != null) Audio.RestartPoint = video.PlaybackPosition;
                     Audio?.Restart();
                     video.PlaybackPosition = Audio.RestartPoint;
                     return true;

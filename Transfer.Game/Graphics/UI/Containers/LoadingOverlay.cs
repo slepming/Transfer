@@ -1,9 +1,5 @@
-using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Input.Events;
-using osu.Framework.Platform;
-using osuTK;
 using Transfer.Game.UserInterface;
 
 namespace Transfer.Game.Graphics.UI.Containers
@@ -13,11 +9,13 @@ namespace Transfer.Game.Graphics.UI.Containers
         protected override bool BlockScrollInput { get; }
 
         private readonly Loading loadingComponent;
-        public LoadingOverlay(bool blockScrollInput = true){
+        public LoadingOverlay(bool blockScrollInput = true)
+        {
             Show();
             BlockScrollInput = blockScrollInput;
             RelativeSizeAxes = Axes.Both;
-            InternalChild = loadingComponent = new Loading{
+            InternalChild = loadingComponent = new Loading
+            {
                 Width = 200,
                 Height = 200,
             };
@@ -28,7 +26,7 @@ namespace Transfer.Game.Graphics.UI.Containers
 
         protected override void PopIn()
         {
-            this.FadeTo(1,200, Easing.InOutCubic);
+            this.FadeTo(1, 200, Easing.InOutCubic);
         }
 
         protected override void PopOut()

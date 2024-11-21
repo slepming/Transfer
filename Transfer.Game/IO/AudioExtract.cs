@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FFmpeg.NET.Exceptions;
-using FFMpegCore;
 using FFMpegCore.Exceptions;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -27,7 +26,7 @@ namespace Transfer.Game.IO
             var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
             Logger.Log($"Create file with name {audioName}");
             IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
-            if(storage.Exists(audioName))
+            if (storage.Exists(audioName))
             {
                 return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
@@ -40,7 +39,7 @@ namespace Transfer.Game.IO
                     Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");
                     throw new Exception($"{path} does not exists - {audioName} canceled");
                 }
-                using (Stream file = new FileStream(pathToFile,FileMode.Open))
+                using (Stream file = new FileStream(pathToFile, FileMode.Open))
                 {
                     using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
                     {
@@ -54,17 +53,17 @@ namespace Transfer.Game.IO
                 }
                 File.Delete(pathToFile);
 
-                if(!storage.Exists(audioName)) throw new FileNotFoundException("Audio not found");
+                if (!storage.Exists(audioName)) throw new FileNotFoundException("Audio not found");
 
                 return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
             }
-            catch(FFMpegException)
+            catch (FFMpegException)
             {
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                if(ex is FileNotFoundException) return null;
+                if (ex is FileNotFoundException) return null;
                 Logger.Error(ex, $"{GetType().Name} error");
                 throw;
             }
@@ -87,7 +86,7 @@ namespace Transfer.Game.IO
                     Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");
                     throw new Exception($"{path} does not exists - {audioName} canceled");
                 }
-                using(Stream file = new FileStream(path, FileMode.Open))
+                using (Stream file = new FileStream(path, FileMode.Open))
                 {
                     using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
                     {

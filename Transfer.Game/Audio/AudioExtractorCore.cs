@@ -3,12 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using FFMpegCore;
 using FFMpegCore.Enums;
-using osu.Framework.Platform;
 using FFMpegCore.Exceptions;
 using osu.Framework.Logging;
 using Transfer.Game.Audio.Extensions;
-using System.Security.Cryptography;
-using System.Text;
 using Transfer.Game.Extensions;
 
 
@@ -24,7 +21,7 @@ namespace Transfer.Game.Audio
         /// <returns>Path to audio</returns>
         public async Task<string> Extract(string video, AudioExtension audioExtension = AudioExtension.mp3)
         {
-            string outputPath =  Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
+            string outputPath = Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
             try
             {
                 await FFMpegArguments
@@ -37,16 +34,18 @@ namespace Transfer.Game.Audio
 
 
                 return outputPath;
-            } catch(FFMpegException ffmpegEx)
+            }
+            catch (FFMpegException ffmpegEx)
             {
-                if(ffmpegEx.Message == "Output file already exists and overwrite is disabled")
+                if (ffmpegEx.Message == "Output file already exists and overwrite is disabled")
                 {
-                    Logger.Error(ffmpegEx,"File exists, return");
+                    Logger.Error(ffmpegEx, "File exists, return");
                     return outputPath;
                 }
                 Logger.Log($"Unhandled message: {ffmpegEx.StackTrace} \n");
                 return outputPath;
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.Error(ex, "FFMpeg Exception");
                 throw;
