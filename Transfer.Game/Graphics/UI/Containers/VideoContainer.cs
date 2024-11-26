@@ -7,7 +7,6 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
-using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.Videos;
@@ -74,7 +73,11 @@ namespace Transfer.Game.UserInterface.Containers
 
             if (Audio != null)
             {
-                Audio.Volume.ValueChanged += value => toolsContainer.VolumeContainer.SetSliderValue(value.NewValue);
+                Audio.Volume.ValueChanged += value =>
+                {
+                    toolsContainer.VolumeContainer.SetSliderValue(value.NewValue);
+                    tcm.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
+                };
             }
 
         }

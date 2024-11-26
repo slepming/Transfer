@@ -16,9 +16,11 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
     {
         SetDefault(TransferOptions.AudioBitrate, 128);
         SetDefault(TransferOptions.Rate, 1f);
-        SetDefault(TransferOptions.AudioCodec, AudioCodec.LibMp3Lame);
+        SetDefault(TransferOptions.AudioCodec, Codecs.libmp3lame);
         SetDefault(TransferOptions.Volume, 0.0, 0.0 , 1.0);
     }
+
+    
 }
 
 public enum TransferOptions{
@@ -26,5 +28,16 @@ public enum TransferOptions{
     Rate,
     AudioCodec,
     Volume
+
+}
+
+public enum Codecs
+{
+    libmp3lame,
+    eac3,
+    ac3,
+    libfdk_aac,
+    libvorbis,
+    aac
 
 }
