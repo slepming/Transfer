@@ -22,7 +22,6 @@ namespace Transfer.Game.UserInterface.Containers
         private WatchingToolsContainer toolsContainer;
         private Container mediaOptionsContainer;
 
-        private TransferConfigManager transferConfig = null;
 
 
         private SpriteText mutedText;
@@ -44,7 +43,6 @@ namespace Transfer.Game.UserInterface.Containers
         {
             if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
             Logger.Log($"Video initialization");
-            transferConfig = tcm;
 
 
 
@@ -61,7 +59,7 @@ namespace Transfer.Game.UserInterface.Containers
                 toolsContainer = new WatchingToolsContainer
                 {
                     RelativeSizeAxes = Axes.X,
-                    Size = new Vector2(1, 1/6),
+                    AutoSizeAxes = Axes.Y,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.Centre,
                 },
@@ -72,10 +70,11 @@ namespace Transfer.Game.UserInterface.Containers
             toolsContainer.Show();
             toolsContainer.VolumeContainer.Current.ValueChanged += onVolumeChanged;
 
+            toolsContainer.VolumeContainer.SetSliderValue(tcm.Get<double>(TransferOptions.Volume));
 
             if (Audio != null)
             {
-                Audio.Volume.ValueChanged += value => toolsContainer.VolumeContainer.DefaultValue = value.NewValue;
+                Audio.Volume.ValueChanged += value => toolsContainer.VolumeContainer.SetSliderValue(value.NewValue);
             }
 
         }
@@ -107,7 +106,6 @@ namespace Transfer.Game.UserInterface.Containers
                 });
             }
             toolsContainer.SetMaxPlaybackValue(video.Duration);
-            toolsContainer.VolumeContainer.SetSliderValue(transferConfig.Get<float>(TransferOptions.Volume));
             base.LoadComplete();
         }
 
