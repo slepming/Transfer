@@ -12,6 +12,7 @@ using Transfer.Game.IO;
 using osu.Framework.Audio.Track;
 using osu.Framework.Audio;
 using osu.Framework.Platform;
+using Transfer.Game.Configuration;
 
 namespace Transfer.Game.Screens;
 
@@ -49,9 +50,9 @@ public partial class EditScreen : TransferScreen
     }
 
     [BackgroundDependencyLoader]
-    private async void load(ExplorerContainer explorerContainer, AudioManager audioManager)
+    private async void load(ExplorerContainer explorerContainer, AudioManager audioManager, TransferConfigManager transferConfigManager)
     {
-        tempStore = new AudioExtract<Track>();
+        tempStore = new AudioExtract<Track>(transferConfigManager);
         if(transferVideo == null){
             if(pathToFile == null){
                 explorerContainer.Show();

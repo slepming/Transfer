@@ -4,6 +4,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
 using osu.Framework.Platform;
 using osuTK;
+using Transfer.Game.Configuration;
 using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers
@@ -30,6 +31,9 @@ namespace Transfer.Game.Graphics.UI.Containers
                         Height = 20,
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.BottomCentre,
+                        Masking = true,
+                        BorderThickness = 1f,
+                        BorderColour = Colour4.Black,
                     },
                     PlaybackContainer = new VideoPlaybackContainer
                     {
@@ -37,6 +41,9 @@ namespace Transfer.Game.Graphics.UI.Containers
                         Height = 20,
                         Anchor = Anchor.Centre,
                         Origin = Anchor.BottomCentre,
+                        Masking = true,
+                        BorderThickness = 1f,
+                        BorderColour = Colour4.Black,
                     }
 
                 ]
@@ -48,7 +55,7 @@ namespace Transfer.Game.Graphics.UI.Containers
         {
             base.LoadComplete();
             VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width / 3), -15);
-            PlaybackContainer.SetSliderWidth(host.Window.ClientSize.Width - VolumeContainer.SliderWidth * 2);
+            PlaybackContainer.SetSliderWidth(host.Window.ClientSize.Width - VolumeContainer.SliderWidth * 4);
             PlaybackContainer.Position = new Vector2(PlaybackContainer.Position.X - VolumeContainer.SliderWidth / 2, -15);
         }
 

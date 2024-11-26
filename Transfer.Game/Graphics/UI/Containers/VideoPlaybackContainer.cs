@@ -43,7 +43,6 @@ namespace Transfer.Game.Graphics.UI.Containers
 
         public void SetSliderWidth(float value)
         {
-            Logger.Log($"New value: {value}");
             sliderBar.Width = value;
         }
 

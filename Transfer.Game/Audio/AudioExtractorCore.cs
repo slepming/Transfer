@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using FFMpegCore;
 using FFMpegCore.Enums;
 using FFMpegCore.Exceptions;
+using osu.Framework.Allocation;
 using osu.Framework.Logging;
 using Transfer.Game.Audio.Extensions;
+using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 
 
@@ -13,13 +15,16 @@ namespace Transfer.Game.Audio
 {
     public class AudioExtractorCore
     {
+
+
         /// <summary>
         /// Extract audio from video
         /// </summary>
         /// <param name="video">Path to video</param>
+        /// <param name="transferConfig">Config</param>
         /// <param name="audioExtension">Extension for video or audio, use with <see cref="AudioExtensionHelper"></see></param>
         /// <returns>Path to audio</returns>
-        public async Task<string> Extract(string video, AudioExtension audioExtension = AudioExtension.mp3)
+        public static async Task<string> Extract(string video, TransferConfigManager transferConfig,AudioExtension audioExtension = AudioExtension.mp3)
         {
             string outputPath = Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
             try
@@ -27,8 +32,8 @@ namespace Transfer.Game.Audio
                 await FFMpegArguments
                 .FromFileInput(video)
                 .OutputToFile(outputPath, false, options => options
-                    .WithAudioBitrate(128)
-                    .WithAudioCodec(AudioCodec.LibMp3Lame)
+                    .WithAudioBitrate(transferConfig.Get<int>(TransferOptions.AudioBitrate))
+                    .WithAudioCodec(transferConfig.Get<Codec>(TransferOptions.AudioCodec))
                     .WithFastStart())
                 .ProcessAsynchronously();
 
@@ -42,7 +47,7 @@ namespace Transfer.Game.Audio
                     Logger.Error(ffmpegEx, "File exists, return");
                     return outputPath;
                 }
-                Logger.Log($"Unhandled message: {ffmpegEx.StackTrace} \n");
+                Logger.Error(ffmpegEx,$"Audio equal null:");
                 return outputPath;
             }
             catch (Exception ex)

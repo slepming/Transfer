@@ -13,6 +13,7 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osu.Framework.Threading;
+using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
@@ -28,6 +29,7 @@ namespace Transfer.Game
 
 
         private WrappedStorage tempStorage = null;
+        private TransferConfigManager transferConfigManager = null;
 
         private StorageBackedResourceStore tempResouceStore = null;
 
@@ -44,8 +46,9 @@ namespace Transfer.Game
         [BackgroundDependencyLoader]
         private void load()
         {
-            tempStore = new AudioExtract<Track>();
-
+            transferConfigManager = new TransferConfigManager(Host.Storage);
+            dependencies.Cache(transferConfigManager);
+            tempStore = new AudioExtract<Track>(transferConfigManager);
         }
 
         protected override void LoadComplete()

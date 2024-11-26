@@ -10,6 +10,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
+using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Input.Bindings;
@@ -63,9 +64,9 @@ namespace Transfer.Game.Screens
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(TransferConfigManager transferConfigManager)
         {
-            TempStore = new AudioExtract<Track>();
+            TempStore = new AudioExtract<Track>(transferConfigManager);
             explorerContainer.FoundVideo += onFoundVideo;
             if (explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
         }

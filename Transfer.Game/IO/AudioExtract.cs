@@ -12,21 +12,21 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.Audio;
 using Transfer.Game.Audio.Extensions;
+using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 
 namespace Transfer.Game.IO
 {
-    public class AudioExtract<T> : IAudioExtract<T> where T : Track
+    public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAudioExtract<T> where T : Track
     {
-        private AudioExtractorCore audioExtractorCore = new();
-
+        
 
         public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, AudioExtension audioExtension = AudioExtension.mp3)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
             var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
-            Logger.Log($"Create file with name {audioName}");
+            
             IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
             if (storage.Exists(audioName))
             {
@@ -35,7 +35,7 @@ namespace Transfer.Game.IO
 
             try
             {
-                string pathToFile = await audioExtractorCore.Extract(path);
+                string pathToFile = await AudioExtractorCore.Extract(path, transferConfigManager);
                 if (!File.Exists(path))
                 {
                     Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");
@@ -54,7 +54,7 @@ namespace Transfer.Game.IO
                     }
                 }
                 File.Delete(pathToFile);
-
+                Logger.Log($"Create file with name {audioName}");
                 if (!storage.Exists(audioName)) throw new FileNotFoundException("Audio not found");
 
                 return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
@@ -84,7 +84,7 @@ namespace Transfer.Game.IO
             }
             try
             {
-                string pathToAudio = await audioExtractorCore.Extract(path);
+                string pathToAudio = await AudioExtractorCore.Extract(path, transferConfigManager);
                 if (!File.Exists(path))
                 {
                     Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");

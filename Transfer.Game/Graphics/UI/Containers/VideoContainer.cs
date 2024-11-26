@@ -8,6 +8,7 @@ using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osuTK;
+using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
@@ -20,6 +21,8 @@ namespace Transfer.Game.UserInterface.Containers
 
         private WatchingToolsContainer toolsContainer;
         private Container mediaOptionsContainer;
+
+        private TransferConfigManager transferConfig = null;
 
 
         private SpriteText mutedText;
@@ -37,11 +40,11 @@ namespace Transfer.Game.UserInterface.Containers
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(TransferConfigManager tcm)
         {
             if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
             Logger.Log($"Video initialization");
-
+            transferConfig = tcm;
 
 
 
@@ -104,6 +107,7 @@ namespace Transfer.Game.UserInterface.Containers
                 });
             }
             toolsContainer.SetMaxPlaybackValue(video.Duration);
+            toolsContainer.VolumeContainer.SetSliderValue(transferConfig.Get<float>(TransferOptions.Volume));
             base.LoadComplete();
         }
 

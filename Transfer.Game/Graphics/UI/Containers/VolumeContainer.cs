@@ -49,6 +49,11 @@ namespace Transfer.Game.UserInterface.Containers
 
         }
 
+        public void SetSliderValue(double value)
+        {
+            volumeSlider.Current.Value = value;
+        }
+
         public void ChangeSliderValue(double value, char mathAction)
         {
             if (value < sliderVolumeValue.MinValue && value > sliderVolumeValue.MaxValue) return;
