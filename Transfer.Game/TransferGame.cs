@@ -33,6 +33,8 @@ namespace Transfer.Game
 
         private StorageBackedResourceStore tempResouceStore = null;
 
+        private ScreenStack screenStack = null;
+
 
         private IAudioExtract<Track> tempStore;
         private DependencyContainer dependencies;
@@ -59,56 +61,47 @@ namespace Transfer.Game
             if (!importSuccess) Logger.Log($"Filed get from cache tempResourceStore");
             dependencies.TryGet(out tempStorage);
             if (!importSuccess) Logger.Log($"Filed get from cache tempStorage");
-            // Get Screenstack from cache
-            if (dependencies.TryGet(out ScreenStack screenStack))
+            try
             {
-                if (args != null && args.Length > 0)
+                if (dependencies.TryGet(out screenStack))
                 {
-                    if (dependencies.TryGet(out AudioManager audioManager))
+                    if (args != null && args.Length > 0)
                     {
-                        List<string> allowedPaths = new List<string>();
-                        foreach (string path in args)
+                        if (dependencies.TryGet(out AudioManager audioManager))
                         {
-                            if (!File.Exists(path))
+                            List<string> allowedPaths = new List<string>();
+                            foreach (string path in args)
                             {
-                                Logger.Log("File not exist");
-                                continue;
-                            }
-                            string fileName = Path.GetFileName(path);
-                            if (tempStorage.Exists(fileName))
-                            {
-                                if (VIDEO_EXTENSIONS.Contains(Path.GetExtension(Path.GetFullPath(path))))
+                                if (!File.Exists(path))
                                 {
-                                    allowedPaths.Add(Path.GetFullPath(path));
+                                    Logger.Log("File not exist");
+                                    continue;
                                 }
+                                string fileName = Path.GetFileName(path);
+                                if(!tempStorage.Exists(fileName) & !VIDEO_EXTENSIONS.Contains(Path.GetExtension(path))) continue;
+                                allowedPaths.Add(path);
                             }
+                            lock (allowedPaths)
+                            {
+                                Import(allowedPaths.ToArray());
+                            }
+                            allowedPaths.Clear();
+                            Logger.Log("Move to screen");
+                            Scheduler.AddDelayed(async () =>
+                            {
+                                if (await audioManager.GetTrackStore(tempResouceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio) 
+                                    screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
+                                else
+                                {
+                                    screenStack.Push(transferScreen = new VideoScreen(pathToVideo: args[0], audio: null));
+                                }
+                            }, 500);
                         }
-                        lock (allowedPaths)
-                        {
-                            Import(allowedPaths.ToArray());
-                        }
-                        allowedPaths.Clear();
-                        Scheduler.AddDelayed(async () =>
-                        {
-                            if (await audioManager.GetTrackStore(tempResouceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio) screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
-                        }, 200, true);
                     }
+                    
                 }
-                else
-                {
-                    Logger.Log("Audio File not exist");
-                    Scheduler.AddDelayed(() =>
-                    {
-                        screenStack.Push(transferScreen = new VideoScreen());
-                    }, 500);
-                }
-            }
-            else
-            {
-                Scheduler.AddDelayed(() =>
-                {
-                    screenStack.Push(transferScreen = new VideoScreen());
-                }, 500);
+            } catch{
+                throw;
             }
 
 
