@@ -10,6 +10,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
+using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Input.Bindings;
@@ -42,7 +43,7 @@ namespace Transfer.Game.Screens
         protected IAudioExtract<Track> TempStore { get; set; }
 
 
-        private string videoPath { get; set;}
+        private string videoPath { get; set; }
 
         public string VideoPath
         {
@@ -54,7 +55,7 @@ namespace Transfer.Game.Screens
             }
         }
 
-        public VideoScreen() {}
+        public VideoScreen() { }
 
         public VideoScreen(Track audio, string pathToVideo)
         {
@@ -63,11 +64,11 @@ namespace Transfer.Game.Screens
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(TransferConfigManager transferConfigManager)
         {
-            TempStore = new AudioExtract<Track>();
+            TempStore = new AudioExtract<Track>(transferConfigManager);
             explorerContainer.FoundVideo += onFoundVideo;
-            if(explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
+            if (explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
         }
 
 
@@ -84,7 +85,8 @@ namespace Transfer.Game.Screens
                 return;
             }
 
-            try{
+            try
+            {
                 InternalChild = new FinalContextMenuContainer
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -95,10 +97,12 @@ namespace Transfer.Game.Screens
                         SeekSpace = 5000
                     }
                 };
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.Error(ex, "Unhandled exception: ");
-                AddInternal(new ExceptionContainer{
+                AddInternal(new ExceptionContainer
+                {
                     HeaderText = "Error",
                     Text = ex.Message,
                     RelativeSizeAxes = Axes.Both,
@@ -122,10 +126,12 @@ namespace Transfer.Game.Screens
 
                 this.Push(new VideoScreen(track, path));
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
                 Logger.Error(ex, "Unhandled exception: ");
                 ClearInternal();
-                AddInternal(new ExceptionContainer{
+                AddInternal(new ExceptionContainer
+                {
                     HeaderText = "Fatal error",
                     Text = ex.Message,
                     RelativeSizeAxes = Axes.Both
@@ -135,16 +141,16 @@ namespace Transfer.Game.Screens
 
         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
-            if(e.Repeat)
+            if (e.Repeat)
                 return false;
             Logger.Log("VideoScreen Pressed: " + e.Action.ToString());
-            switch(e.Action)
+            switch (e.Action)
             {
                 case GlobalAction.OpenEditor:
 
                     return true;
                 case GlobalAction.Explorer:
-                    if(explorerContainer.Visible) explorerContainer?.Hide();
+                    if (explorerContainer.Visible) explorerContainer?.Hide();
                     else explorerContainer?.Show();
                     return true;
 

@@ -7,7 +7,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
-using osuTK;
+using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
@@ -20,6 +20,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         private WatchingToolsContainer toolsContainer;
         private Container mediaOptionsContainer;
+
 
 
         private SpriteText mutedText;
@@ -37,11 +38,10 @@ namespace Transfer.Game.UserInterface.Containers
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(TransferConfigManager tcm)
         {
             if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
             Logger.Log($"Video initialization");
-
 
 
 
@@ -58,19 +58,34 @@ namespace Transfer.Game.UserInterface.Containers
                 toolsContainer = new WatchingToolsContainer
                 {
                     RelativeSizeAxes = Axes.X,
-                    Size = new Vector2(1, 1/6),
+                    AutoSizeAxes = Axes.Y,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.Centre,
                 },
             };
+
+            video.SeekOccurs += onSeek;
+
             toolsContainer.Show();
             toolsContainer.VolumeContainer.Current.ValueChanged += onVolumeChanged;
-            toolsContainer.PlaybackContainer.SliderBar.Current.Value = video.PlaybackPosition;
+
+            toolsContainer.VolumeContainer.SetSliderValue(tcm.Get<double>(TransferOptions.Volume));
+
             if (Audio != null)
             {
-                Audio.Volume.ValueChanged += value => toolsContainer.VolumeContainer.DefaultValue = value.NewValue;
+                Audio.Volume.ValueChanged += value =>
+                {
+                    toolsContainer.VolumeContainer.SetSliderValue(value.NewValue);
+                    tcm.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
+                };
             }
 
+        }
+
+
+        private void onSeek(double obj)
+        {
+            return;
         }
 
         protected override void Update()
@@ -78,7 +93,7 @@ namespace Transfer.Game.UserInterface.Containers
             base.Update();
 
 
-            toolsContainer.PlaybackContainer.SliderBar.Current.Value = video.PlaybackPosition;
+            toolsContainer.PlaybackContainer.SetSliderBarValue(video.PlaybackPosition);
         }
 
 
@@ -124,7 +139,7 @@ namespace Transfer.Game.UserInterface.Containers
         }
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-            
+
             switch (e.Key)
             {
                 case osuTK.Input.Key.Up:
@@ -174,7 +189,7 @@ namespace Transfer.Game.UserInterface.Containers
                 }
                 case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
                 {
-                    Audio.RestartPoint = video.PlaybackPosition;
+                    if (Audio != null) Audio.RestartPoint = video.PlaybackPosition;
                     Audio?.Restart();
                     video.PlaybackPosition = Audio.RestartPoint;
                     return true;

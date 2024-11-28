@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
+using osu.Framework.Platform;
 using osuTK;
+using Transfer.Game.Configuration;
 using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers
@@ -15,6 +14,9 @@ namespace Transfer.Game.Graphics.UI.Containers
         public readonly VolumeContainer VolumeContainer;
         public readonly VideoPlaybackContainer PlaybackContainer;
         public bool VolumeSliderVisible { get; private set; } = true;
+
+        [Resolved]
+        private GameHost host { get; set; }
 
 
         public WatchingToolsContainer()
@@ -29,25 +31,32 @@ namespace Transfer.Game.Graphics.UI.Containers
                         Height = 20,
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.BottomCentre,
+                        Masking = true,
+                        BorderThickness = 1f,
+                        BorderColour = Colour4.Black,
                     },
                     PlaybackContainer = new VideoPlaybackContainer
                     {
-                        Width = 300,
+                        RelativeSizeAxes = Axes.X,
                         Height = 20,
-                        Anchor = Anchor.CentreLeft,
+                        Anchor = Anchor.Centre,
                         Origin = Anchor.BottomCentre,
+                        Masking = true,
+                        BorderThickness = 1f,
+                        BorderColour = Colour4.Black,
                     }
 
                 ]
             };
-            PlaybackContainer.Position = new Vector2(VolumeContainer.X + (VolumeContainer.Width / 3), -15);
-            VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width/3), -15);
+
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            
+            VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width / 3), -15);
+            PlaybackContainer.SetSliderWidth(host.Window.ClientSize.Width - VolumeContainer.SliderWidth * 4);
+            PlaybackContainer.Position = new Vector2(PlaybackContainer.Position.X - VolumeContainer.SliderWidth / 2, -15);
         }
 
         public void SetMaxPlaybackValue(double value)
@@ -73,7 +82,7 @@ namespace Transfer.Game.Graphics.UI.Containers
 
         protected override bool OnHover(HoverEvent e)
         {
-            this.FadeTo(1,100, Easing.InOutQuad);
+            this.FadeTo(1, 100, Easing.InOutQuad);
             return base.OnHover(e);
         }
         protected override void OnHoverLost(HoverLostEvent e)

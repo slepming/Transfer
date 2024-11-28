@@ -1,16 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Input.Events;
-using osuTK;
 using osuTK.Graphics;
-using Transfer.Game.Graphics.UI.Containers;
 
 namespace Transfer.Game.UserInterface.Containers
 {
@@ -25,6 +16,8 @@ namespace Transfer.Game.UserInterface.Containers
         public double MinValue = 0;
         public double MaxValue = 1;
         public double DefaultValue = 0.3d;
+
+        public float SliderWidth { get; }
 
 
         public VolumeContainer()
@@ -43,7 +36,8 @@ namespace Transfer.Game.UserInterface.Containers
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = new Vector2(200, 20),
+                    Width = 200,
+                    Height = 20,
                     TransferValueOnCommit = true,
                     KeyboardStep = 0.1f,
                     SelectionColour = Color4.DeepPink,
@@ -51,13 +45,19 @@ namespace Transfer.Game.UserInterface.Containers
             };
             volumeSlider.Current.ValueChanged += value => Current.Value = value.NewValue;
             volumeSlider.Current = sliderVolumeValue;
+            SliderWidth = volumeSlider.Width;
 
+        }
+
+        public void SetSliderValue(double value)
+        {
+            volumeSlider.Current.Value = value;
         }
 
         public void ChangeSliderValue(double value, char mathAction)
         {
             if (value < sliderVolumeValue.MinValue && value > sliderVolumeValue.MaxValue) return;
-            switch(mathAction)
+            switch (mathAction)
             {
                 case '+':
                     volumeSlider.Current.Value += value;

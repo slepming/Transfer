@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
@@ -13,15 +11,17 @@ namespace Transfer.Game.Input.Bindings
     public partial class GlobalActionContainer : KeyBindingContainer<GlobalAction>, IHandleGlobalKeyboardInput, IKeyBindingHandler<GlobalAction>
     {
         private IKeyBindingHandler<GlobalAction>? handler;
-        public GlobalActionContainer(TransferGameBase? game) : base(matchingMode: KeyCombinationMatchingMode.Modifiers) {
-            if(game is IKeyBindingHandler<GlobalAction> h){
+        public GlobalActionContainer(TransferGameBase? game) : base(matchingMode: KeyCombinationMatchingMode.Modifiers)
+        {
+            if (game is IKeyBindingHandler<GlobalAction> h)
+            {
                 handler = h;
             }
         }
 
         public static IEnumerable<KeyBinding> GetBindingsFor(GlobalActionCategory globalActionCategory)
         {
-            switch(globalActionCategory)
+            switch (globalActionCategory)
             {
                 case GlobalActionCategory.General:
                     return generalBindings;

@@ -12,5 +12,3 @@ at the moment it's something not clear at all and if there is a desire to just h
 At the moment I just hit the nail with a hammer and try not to hit myself in the hands but unfortunately that is very rare
 ## Core
 This application is written in osu-framework, which gives quite a wide range of possibilities for the developer
-
-

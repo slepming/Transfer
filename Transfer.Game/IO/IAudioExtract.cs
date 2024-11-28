@@ -16,7 +16,7 @@ namespace Transfer.Game.IO
         /// Extract audio from video create audio in storage,and convertion in <see cref="Track"></see>
         /// </summary>
         /// <param name="path">Path to video</param>
-        /// <param name="storage"></param>
+        /// <param name="storage">Storage</param>
         /// <param name="audioManager"></param>
         /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
         /// <returns>Track</returns>
@@ -26,7 +26,7 @@ namespace Transfer.Game.IO
         /// Extract audio and puts it is in the temp directory
         /// </summary>
         /// <param name="path">path to video file</param>
-        /// <param name="storage"></param>
+        /// <param name="storage">Storage</param>
         /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
         /// <returns></returns>
         public Task CreateTrackInStorageAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3);

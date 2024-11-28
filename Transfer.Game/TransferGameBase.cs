@@ -1,23 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using osu.Framework;
 using osu.Framework.Allocation;
-using osu.Framework.Audio;
-using osu.Framework.Audio.Track;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Rendering;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.Textures;
-using osu.Framework.Input;
-using osu.Framework.Input.Bindings;
-using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -26,9 +14,6 @@ using osuTK;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
-using Transfer.Game.Screens;
-using Transfer.Game.UserInterface.Containers;
-using Transfer.Resources;
 
 namespace Transfer.Game
 {
@@ -36,11 +21,11 @@ namespace Transfer.Game
     public partial class TransferGameBase : osu.Framework.Game
     {
         public static readonly string[] VIDEO_EXTENSIONS = { ".mp4" };
-        #if DEBUG
-            public const string HOST_NAME = "Transfer(Development)";
-        #else
+#if DEBUG
+        public const string HOST_NAME = "Transfer(Development)";
+#else
             public const string HOST_NAME = "Transfer";
-        #endif
+#endif
 
         // Anything in this class is shared between the test browser and the game implementation.
         // It allows for caching global dependencies that should be accessible to tests, or changing
@@ -93,10 +78,12 @@ namespace Transfer.Game
             InitialiseConfig(config);
             Host.Window.CursorState = CursorState.Hidden;
 
-            base.Content.Add(SafeAreaContainer = new SafeAreaContainer{
+            base.Content.Add(SafeAreaContainer = new SafeAreaContainer
+            {
                 RelativeSizeAxes = Axes.Both,
                 SafeAreaOverrideEdges = Edges.None,
-                Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this){
+                Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this)
+                {
                     Children = new Drawable[]{
                         screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both },
                         new TransferCursorContainer(){
@@ -120,7 +107,7 @@ namespace Transfer.Game
 
         private bool onExceptionThrown(Exception exception)
         {
-            if(Interlocked.Decrement(ref allowableExceptions) < 0)
+            if (Interlocked.Decrement(ref allowableExceptions) < 0)
             {
                 Logger.Log("Too many unhandled exceptions, crashing out.");
                 return false;
@@ -144,6 +131,7 @@ namespace Transfer.Game
             config.GetBindable<FrameSync>(FrameworkSetting.FrameSync).Value = FrameSync.VSync;
             config.GetBindable<WindowMode>(FrameworkSetting.WindowMode).Value = WindowMode.Windowed;
             config.GetBindable<RendererType>(FrameworkSetting.Renderer).Value = RendererType.Automatic;
+            config.GetBindable<double>(FrameworkSetting.VolumeMusic).Value = 1d;
             config.Save();
         }
 
