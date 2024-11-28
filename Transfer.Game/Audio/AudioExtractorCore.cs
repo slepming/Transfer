@@ -29,12 +29,12 @@ namespace Transfer.Game.Audio
             string outputPath = Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
             try
             {
-                Logger.Log(transferConfig.Get<Codec>(TransferOptions.AudioCodec).ToString());
+                Logger.Log(transferConfig.Get<Codecs>(TransferOptions.AudioCodec).ToString());
                 await FFMpegArguments
                 .FromFileInput(video)
                 .OutputToFile(outputPath, false, options => options
                     .WithAudioBitrate(transferConfig.Get<int>(TransferOptions.AudioBitrate))
-                    .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<string>(TransferOptions.AudioCodec)))
+                    .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<Codecs>(TransferOptions.AudioCodec).ToString()))
                     .WithFastStart())
                 .ProcessAsynchronously();
 
