@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +10,6 @@ using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.Audio;
-using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 
@@ -19,14 +17,14 @@ namespace Transfer.Game.IO
 {
     public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAudioExtract<T> where T : Track
     {
-        
 
-        public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, AudioExtension audioExtension = AudioExtension.mp3)
+
+        public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
-            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
-            
+            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.mp3";
+
             IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
             if (storage.Exists(audioName))
             {
@@ -72,10 +70,10 @@ namespace Transfer.Game.IO
 
         }
 
-        public virtual async Task CreateTrackInStorageAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3)
+        public virtual async Task CreateTrackInStorageAsync(string path, Storage storage)
         {
             if (path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");
-            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}";
+            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.mp3";
             var videoName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}";
             if (storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
             {

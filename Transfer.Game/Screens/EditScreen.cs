@@ -13,15 +13,20 @@ using osu.Framework.Audio.Track;
 using osu.Framework.Audio;
 using osu.Framework.Platform;
 using Transfer.Game.Configuration;
+using System.IO;
 
 namespace Transfer.Game.Screens;
 
 public partial class EditScreen : TransferScreen
 {
     private BoxButton gifConvertButton, mpFConvertButton, aacConvertButton;
+
+
+
     private VideoContainer transferVideo;
 
     private AudioExtract<Track> tempStore;
+
     [Resolved]
     private Storage audioTempStorage { get; set; }
 
@@ -29,25 +34,7 @@ public partial class EditScreen : TransferScreen
 
     public EditScreen() { }
     public EditScreen(VideoContainer video) => transferVideo = video;
-
-    public EditScreen(params object[] args)
-    {
-        if(args[0] is string){
-            string tempPath = args[0].ToString();
-            if(!tempPath.StartsWith(!RuntimeInfo.IsUnix ? '\\' : '/'))
-                throw new ArgumentNullException("Edit Screen: first arguments is not path to file.");
-            pathToFile = tempPath;
-        }
-        if(args.Contains(transferVideo)){
-            foreach(object findVideo in args){
-                if(findVideo is VideoContainer videoContainer)
-                {
-                    transferVideo = videoContainer;
-                }
-            }
-        }
-
-    }
+    public EditScreen(string pathToFile) => this.pathToFile = pathToFile;
 
     [BackgroundDependencyLoader]
     private async void load(ExplorerContainer explorerContainer, AudioManager audioManager, TransferConfigManager transferConfigManager)
@@ -70,6 +57,7 @@ public partial class EditScreen : TransferScreen
                 Audio = await tempStore.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager)
             };
         }
+
 
 
     }

@@ -18,17 +18,15 @@ namespace Transfer.Game.IO
         /// <param name="path">Path to video</param>
         /// <param name="storage">Storage</param>
         /// <param name="audioManager"></param>
-        /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
         /// <returns>Track</returns>
-        public Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, AudioExtension audioExtension = AudioExtension.mp3);
+        public Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager);
 
         /// <summary>
         /// Extract audio and puts it is in the temp directory
         /// </summary>
         /// <param name="path">path to video file</param>
         /// <param name="storage">Storage</param>
-        /// <param name="audioExtension">Type audio extensions(using with <see cref="AudioExtensionHelper"></see>)</param>
         /// <returns></returns>
-        public Task CreateTrackInStorageAsync(string path, Storage storage, AudioExtension audioExtension = AudioExtension.mp3);
+        public Task CreateTrackInStorageAsync(string path, Storage storage);
     }
 }

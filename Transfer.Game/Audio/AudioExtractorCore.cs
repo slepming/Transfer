@@ -22,11 +22,10 @@ namespace Transfer.Game.Audio
         /// </summary>
         /// <param name="video">Path to video</param>
         /// <param name="transferConfig">Config</param>
-        /// <param name="audioExtension">Extension for video or audio, use with <see cref="AudioExtensionHelper"></see></param>
         /// <returns>Path to audio</returns>
-        public static async Task<string> Extract(string video, TransferConfigManager transferConfig,AudioExtension audioExtension = AudioExtension.mp3)
+        public static async Task<string> Extract(string video, TransferConfigManager transferConfig)
         {
-            string outputPath = Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.{AudioExtensionHelper.GetExtensionString(audioExtension)}");
+            var outputPath = Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.mp3");
             try
             {
                 Logger.Log(transferConfig.Get<Codecs>(TransferOptions.AudioCodec).ToString());
@@ -48,7 +47,7 @@ namespace Transfer.Game.Audio
                     Logger.Error(ffmpegEx, "File exists, return");
                     return outputPath;
                 }
-                Logger.Error(ffmpegEx,$"Audio equal null:");
+                Logger.Error(ffmpegEx, $"Audio equal null:");
                 return outputPath;
             }
             catch (Exception ex)
