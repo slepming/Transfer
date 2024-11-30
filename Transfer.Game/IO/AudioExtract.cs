@@ -91,15 +91,10 @@ namespace Transfer.Game.IO
                 using (Stream file = new FileStream(path, FileMode.Open))
                 {
                     using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
-                    {
                         await file.CopyToAsync(audioFile);
-                    }
+
                     using (var videoFile = storage.GetStream(videoName, FileAccess.Write, FileMode.OpenOrCreate))
-                    {
                         await file.CopyToAsync(videoFile);
-                    }
-
-
                 }
                 return;
             }

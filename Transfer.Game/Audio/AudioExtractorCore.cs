@@ -19,8 +19,9 @@ namespace Transfer.Game.Audio
         /// </summary>
         /// <param name="video">Path to video</param>
         /// <param name="transferConfig">Config</param>
+        /// <param name="customArguments">Here you can enter your arguments to modify in FFmpeg</param>
         /// <returns>Path to audio</returns>
-        public static async Task<string> Extract(string video, TransferConfigManager transferConfig)
+        public static async Task<string> Extract(string video, TransferConfigManager transferConfig, string customArguments = "")
         {
             var outputPath = Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.mp3");
             try
@@ -31,6 +32,7 @@ namespace Transfer.Game.Audio
                 .OutputToFile(outputPath, false, options => options
                     .WithAudioBitrate(transferConfig.Get<int>(TransferOptions.AudioBitrate))
                     .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<Codecs>(TransferOptions.AudioCodec).ToString()))
+                    .WithCustomArgument(customArguments)
                     .WithFastStart())
                 .ProcessAsynchronously();
 

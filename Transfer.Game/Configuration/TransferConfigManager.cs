@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using FFMpegCore.Enums;
 using osu.Framework.Configuration;
 using osu.Framework.Platform;
 
@@ -15,16 +13,17 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
     protected override void InitialiseDefaults()
     {
         SetDefault(TransferOptions.AudioBitrate, 128);
-        SetDefault(TransferOptions.Rate, 1f);
+        SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
         SetDefault(TransferOptions.AudioCodec, Codecs.libmp3lame);
-        SetDefault(TransferOptions.Volume, 0.0, 0.0 , 1.0);
-        
+        SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
+
     }
 
-    
+
 }
 
-public enum TransferOptions{
+public enum TransferOptions
+{
     AudioBitrate,
     Rate,
     AudioCodec,

@@ -21,6 +21,8 @@ namespace Transfer.Game.UserInterface.Containers
         private WatchingToolsContainer toolsContainer;
         private Container mediaOptionsContainer;
 
+        private Bindable<double> bindableRate = new Bindable<double>();
+
 
 
         private SpriteText mutedText;
@@ -43,7 +45,8 @@ namespace Transfer.Game.UserInterface.Containers
             if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
             Logger.Log($"Video initialization");
 
-
+            defaultRate = tcm.Get<double>(TransferOptions.Rate);
+            bindableRate.Value = defaultRate;
 
             InternalChildren = new Drawable[]
             {
@@ -80,8 +83,14 @@ namespace Transfer.Game.UserInterface.Containers
                 };
             }
 
+            bindableRate.ValueChanged += onRateChanged;
+
         }
 
+        private void onRateChanged(ValueChangedEvent<double> obj)
+        {
+            Audio.Tempo.Value = obj.NewValue;
+        }
 
         private void onSeek(double obj)
         {
@@ -91,8 +100,7 @@ namespace Transfer.Game.UserInterface.Containers
         protected override void Update()
         {
             base.Update();
-
-
+            video.PlaybackPosition = Audio.CurrentTime;
             toolsContainer.PlaybackContainer.SetSliderBarValue(video.PlaybackPosition);
         }
 
@@ -137,6 +145,8 @@ namespace Transfer.Game.UserInterface.Containers
                 seekSpace = value;
             }
         }
+
+        private double defaultRate;
         protected override bool OnKeyDown(KeyDownEvent e)
         {
 
@@ -156,10 +166,20 @@ namespace Transfer.Game.UserInterface.Containers
                     video.Seek(video.PlaybackPosition - seekSpace);
                     Audio?.Seek(video.PlaybackPosition);
                     break;
+                case osuTK.Input.Key.Number0:
+                    bindableRate.Value = defaultRate;
+                    break;
+                case osuTK.Input.Key.Number1:
+                    bindableRate.Value = 1.0;
+                    break;
+                case osuTK.Input.Key.Number2:
+                    bindableRate.Value = 2.0;
+                    break;
 
             }
             return base.OnKeyDown(e);
         }
+
         protected override bool OnScroll(ScrollEvent e)
         {
             toolsContainer.VolumeContainer.ChangeSliderValue(e.ScrollDelta.Y / 10, '+');
@@ -196,6 +216,7 @@ namespace Transfer.Game.UserInterface.Containers
                 }
                 case GlobalAction.WatchingVideoReset:
                 {
+                    bindableRate.Value = defaultRate;
                     Audio?.Restart();
                     video.PlaybackPosition = 0;
                     return true;

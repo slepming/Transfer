@@ -10,6 +10,7 @@ namespace Transfer.Game.Graphics.Videos
         /// You can do animations when it occurs
         /// </summary>
         public Action<double> SeekOccurs;
+
         public TransferVideo(string filename, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
         {
 
@@ -19,6 +20,11 @@ namespace Transfer.Game.Graphics.Videos
         private void load()
         {
 
+        }
+
+        protected override void Update()
+        {
+            base.Update();
         }
 
         protected override void Dispose(bool isDisposing)
