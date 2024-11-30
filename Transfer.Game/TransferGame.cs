@@ -98,6 +98,10 @@ namespace Transfer.Game
                             }, 500);
                         }
                     }
+                    else
+                    {
+                        screenStack.Push(transferScreen = new VideoScreen());
+                    }
                     
                 }
             } catch{

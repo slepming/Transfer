@@ -2,11 +2,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using FFMpegCore;
-using FFMpegCore.Enums;
 using FFMpegCore.Exceptions;
-using osu.Framework.Allocation;
 using osu.Framework.Logging;
-using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 
