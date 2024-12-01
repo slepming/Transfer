@@ -41,6 +41,8 @@ namespace Transfer.Game.Graphics.UI.Containers
             sliderBar.Current = playbacklValue;
         }
 
+        public Bindable<double> SubscribeOnValueChange() => sliderBar.Current;
+
         public void SetSliderWidth(float value)
         {
             sliderBar.Width = value;

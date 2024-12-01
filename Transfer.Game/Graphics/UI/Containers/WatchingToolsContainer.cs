@@ -1,7 +1,11 @@
+using System;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osuTK;
 using Transfer.Game.Configuration;
@@ -13,6 +17,8 @@ namespace Transfer.Game.Graphics.UI.Containers
     {
         public readonly VolumeContainer VolumeContainer;
         public readonly VideoPlaybackContainer PlaybackContainer;
+
+        private readonly SpriteText currentPlaybackText;
         public bool VolumeSliderVisible { get; private set; } = true;
 
         [Resolved]
@@ -35,28 +41,39 @@ namespace Transfer.Game.Graphics.UI.Containers
                         BorderThickness = 1f,
                         BorderColour = Colour4.Black,
                     },
-                    PlaybackContainer = new VideoPlaybackContainer
-                    {
-                        RelativeSizeAxes = Axes.X,
-                        Height = 20,
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.BottomCentre,
-                        Masking = true,
-                        BorderThickness = 1f,
-                        BorderColour = Colour4.Black,
+                    new Container{
+                        RelativeSizeAxes = Axes.Both,
+                        Children = [
+                            PlaybackContainer = new VideoPlaybackContainer
+                            {
+                                RelativeSizeAxes = Axes.X,
+                                Height = 20,
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.BottomCentre,
+                                Masking = true,
+                                BorderThickness = 1f,
+                                BorderColour = Colour4.Black,
+                            },
+                            currentPlaybackText = new SpriteText{
+                                Font = new FontUsage(family:"Oswald"),
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.BottomCentre,
+                            }
+                        ]
                     }
 
                 ]
             };
-
+            PlaybackContainer.SubscribeOnValueChange().ValueChanged += (ValueChangedEvent<double> value) => currentPlaybackText.Text = DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss");
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
             VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width / 3), -15);
-            PlaybackContainer.SetSliderWidth(host.Window.ClientSize.Width - VolumeContainer.SliderWidth * 4);
+            PlaybackContainer.SetSliderWidth(Width - VolumeContainer.SliderWidth * 4);
             PlaybackContainer.Position = new Vector2(PlaybackContainer.Position.X - VolumeContainer.SliderWidth / 2, -15);
+            currentPlaybackText.Position = new Vector2(currentPlaybackText.Position.X + PlaybackContainer.Position.X / 2);
         }
 
         public void SetMaxPlaybackValue(double value)
