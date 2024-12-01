@@ -64,7 +64,7 @@ namespace Transfer.Game.Graphics.UI.Containers
 
                 ]
             };
-            PlaybackContainer.SubscribeOnValueChange().ValueChanged += (ValueChangedEvent<double> value) => currentPlaybackText.Text = DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss");
+            PlaybackContainer.SubscribeOnValueChange().ValueChanged += (ValueChangedEvent<double> value) => currentPlaybackText.Text = $"{DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss")}/{DateTimeOffset.FromUnixTimeMilliseconds(duration).DateTime.ToString("HH:mm:ss")}";
         }
 
         protected override void LoadComplete()
@@ -76,9 +76,11 @@ namespace Transfer.Game.Graphics.UI.Containers
             currentPlaybackText.Position = new Vector2(currentPlaybackText.Position.X + PlaybackContainer.Position.X / 2);
         }
 
+        private long duration;
         public void SetMaxPlaybackValue(double value)
         {
             PlaybackContainer.SetMaxSliderValue(value);
+            duration = (long)value;
         }
 
 
