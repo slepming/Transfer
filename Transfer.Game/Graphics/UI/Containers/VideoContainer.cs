@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
@@ -27,7 +29,13 @@ namespace Transfer.Game.UserInterface.Containers
 
         private SpriteText mutedText;
 
-        public Track Audio;
+        private Track audio;
+
+        public Track Audio { set
+            {
+                if (value == audio) return;
+                audio = value;
+            } }
 
         private bool isMuted = false;
 
@@ -74,9 +82,9 @@ namespace Transfer.Game.UserInterface.Containers
 
             toolsContainer.VolumeContainer.SetSliderValue(tcm.Get<double>(TransferOptions.Volume));
 
-            if (Audio != null)
+            if (audio != null)
             {
-                Audio.Volume.ValueChanged += value =>
+                audio.Volume.ValueChanged += value =>
                 {
                     toolsContainer.VolumeContainer.SetSliderValue(value.NewValue);
                     tcm.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
@@ -89,7 +97,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         private void onRateChanged(ValueChangedEvent<double> obj)
         {
-            Audio.Tempo.Value = obj.NewValue;
+            audio.Tempo.Value = obj.NewValue;
         }
 
         private void onSeek(double obj)
@@ -100,7 +108,7 @@ namespace Transfer.Game.UserInterface.Containers
         protected override void Update()
         {
             base.Update();
-            video.PlaybackPosition = Audio.CurrentTime;
+            video.PlaybackPosition = audio.CurrentTime;
             toolsContainer.PlaybackContainer.SetSliderBarValue(video.PlaybackPosition);
         }
 
@@ -123,15 +131,15 @@ namespace Transfer.Game.UserInterface.Containers
         protected override void LoadAsyncComplete()
         {
             base.LoadAsyncComplete();
-            Audio?.StartAsync();
+            audio?.StartAsync();
         }
 
 
         private void onVolumeChanged(ValueChangedEvent<double> e)
         {
-            if (Audio != null)
+            if (audio != null)
             {
-                Audio.Volume.Value = (float)e.NewValue;
+                audio.Volume.Value = (float)e.NewValue;
             }
         }
 
@@ -160,11 +168,11 @@ namespace Transfer.Game.UserInterface.Containers
                     break;
                 case osuTK.Input.Key.Right:
                     video.Seek(video.PlaybackPosition + seekSpace);
-                    Audio?.Seek(video.PlaybackPosition);
+                    audio?.Seek(video.PlaybackPosition);
                     break;
                 case osuTK.Input.Key.Left:
                     video.Seek(video.PlaybackPosition - seekSpace);
-                    Audio?.Seek(video.PlaybackPosition);
+                    audio?.Seek(video.PlaybackPosition);
                     break;
                 case osuTK.Input.Key.Number0:
                     bindableRate.Value = defaultRate;
@@ -174,6 +182,9 @@ namespace Transfer.Game.UserInterface.Containers
                     break;
                 case osuTK.Input.Key.Number2:
                     bindableRate.Value = 2.0;
+                    break;
+                case var key when key == osuTK.Input.Key.LControl && key == osuTK.Input.Key.Number2:
+                    bindableRate.Value += 2.0;
                     break;
 
             }
@@ -196,12 +207,12 @@ namespace Transfer.Game.UserInterface.Containers
                 {
                     if (isMuted)
                     {
-                        Audio?.Start();
+                        audio?.Start();
                         video.IsPlaying = true;
                     }
                     else
                     {
-                        Audio?.Stop();
+                        audio?.Stop();
                         video.IsPlaying = false;
                     }
                     isMuted = !isMuted;
@@ -209,16 +220,22 @@ namespace Transfer.Game.UserInterface.Containers
                 }
                 case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
                 {
-                    if (Audio != null) Audio.RestartPoint = video.PlaybackPosition;
-                    Audio?.Restart();
-                    video.PlaybackPosition = Audio.RestartPoint;
+                    if (audio != null) audio.RestartPoint = video.PlaybackPosition;
+                    audio?.Restart();
+                    video.PlaybackPosition = audio.RestartPoint;
                     return true;
                 }
                 case GlobalAction.WatchingVideoReset:
                 {
                     bindableRate.Value = defaultRate;
-                    Audio?.Restart();
-                    video.PlaybackPosition = 0;
+                    lock (video)
+                    {
+                        Task.Run(() =>
+                        {
+                            audio?.Restart();
+                            video.Seek(0);
+                        });
+                    }
                     return true;
                 }
                 default:
@@ -230,5 +247,6 @@ namespace Transfer.Game.UserInterface.Containers
         {
 
         }
+
     }
 }

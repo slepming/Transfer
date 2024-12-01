@@ -16,6 +16,7 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
         SetDefault(TransferOptions.AudioCodec, Codecs.libmp3lame);
         SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
+        SetDefault(TransferOptions.SeekValue, 5000);
 
     }
 
@@ -27,7 +28,8 @@ public enum TransferOptions
     AudioBitrate,
     Rate,
     AudioCodec,
-    Volume
+    Volume,
+    SeekValue
 
 }
 

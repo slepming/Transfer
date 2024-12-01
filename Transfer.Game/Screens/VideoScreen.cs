@@ -13,6 +13,7 @@ using osu.Framework.Screens;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
@@ -40,7 +41,9 @@ namespace Transfer.Game.Screens
         private AudioManager audioManager { get; set; }
 
 
-        protected IAudioExtract<Track> TempStore { get; set; }
+        protected IAudioExtract<Track> AudioExtract { get; set; }
+
+        private int seek;
 
 
         private string videoPath { get; set; }
@@ -66,9 +69,10 @@ namespace Transfer.Game.Screens
         [BackgroundDependencyLoader]
         private void load(TransferConfigManager transferConfigManager)
         {
-            TempStore = new AudioExtract<Track>(transferConfigManager);
+            AudioExtract = new AudioExtract<Track>(transferConfigManager);
             explorerContainer.FoundVideo += onFoundVideo;
-            if (explorerContainer != null && !explorerContainer.IsAlive) InternalChild = (explorerContainer ??= []);
+            seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
+            InternalChild = (explorerContainer ??= []);
         }
 
 
@@ -94,7 +98,7 @@ namespace Transfer.Game.Screens
                     {
                         Audio = audio,
                         RelativeSizeAxes = Axes.Both,
-                        SeekSpace = 5000
+                        SeekSpace = seek
                     }
                 };
             }
@@ -118,7 +122,7 @@ namespace Transfer.Game.Screens
             try
             {
                 LoadingOverlay loading;
-                Task<Track> trackTask = TempStore.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
+                Task<Track> trackTask = AudioExtract.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
                 ClearInternal();
                 AddInternal(loading = new LoadingOverlay());
                 Track track = await trackTask ?? null;
@@ -143,19 +147,30 @@ namespace Transfer.Game.Screens
         {
             if (e.Repeat)
                 return false;
-            Logger.Log("VideoScreen Pressed: " + e.Action.ToString());
             switch (e.Action)
             {
                 case GlobalAction.OpenEditor:
 
                     return true;
                 case GlobalAction.Explorer:
-                    if (explorerContainer.Visible) explorerContainer?.Hide();
-                    else explorerContainer?.Show();
+                    releaseResources();
+                    this.Push(new VideoScreen());
                     return true;
 
             }
             return false;
+        }
+
+
+        /// <summary>
+        /// Releases resources in a way that does not affect the operation of the facility in question 
+        /// </summary>
+        private void releaseResources()
+        {
+            video?.Dispose();
+            audio?.Dispose();
+            explorerContainer?.Dispose();
+
         }
 
         public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)

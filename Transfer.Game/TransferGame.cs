@@ -36,7 +36,7 @@ namespace Transfer.Game
         private ScreenStack screenStack = null;
 
 
-        private IAudioExtract<Track> tempStore;
+        private IAudioExtract<Track> audioExtract;
         private DependencyContainer dependencies;
 
         public TransferGame(string[] args)
@@ -50,7 +50,7 @@ namespace Transfer.Game
         {
             transferConfigManager = new TransferConfigManager(Host.Storage);
             dependencies.Cache(transferConfigManager);
-            tempStore = new AudioExtract<Track>(transferConfigManager);
+            audioExtract = new AudioExtract<Track>(transferConfigManager);
         }
 
         protected override void LoadComplete()
@@ -173,7 +173,7 @@ namespace Transfer.Game
                 if (paths.Length == 0) return Task.CompletedTask;
                 if (paths.Length == 1)
                 {
-                    tempStore.CreateTrackInStorageAsync(System.IO.Path.GetFullPath(paths[0]), tempStorage);
+                    audioExtract.CreateTrackInStorageAsync(System.IO.Path.GetFullPath(paths[0]), tempStorage);
                 }
                 foreach (string path in paths)
                 {
@@ -184,7 +184,7 @@ namespace Transfer.Game
                         continue;
                     }
                     Logger.Log(@$"""{Path.GetFileName(path)}"" been importing");
-                    tempStore.CreateTrackInStorageAsync(Path.GetFullPath(path), tempStorage);
+                    audioExtract.CreateTrackInStorageAsync(Path.GetFullPath(path), tempStorage);
                 }
                 return Task.CompletedTask;
             }

@@ -19,7 +19,7 @@ namespace Transfer.Game.IO
     {
 
 
-        public virtual async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager)
+        public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
@@ -70,7 +70,7 @@ namespace Transfer.Game.IO
 
         }
 
-        public virtual async Task CreateTrackInStorageAsync(string path, Storage storage)
+        public async Task CreateTrackInStorageAsync(string path, Storage storage)
         {
             if (path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");
             var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.mp3";

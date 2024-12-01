@@ -39,7 +39,7 @@ namespace Transfer.Game.Graphics.Videos
 
         public new void Seek(double time)
         {
-            PlaybackPosition = time;
+            base.Seek(time);
             SeekOccurs?.Invoke(time);
         }
 
