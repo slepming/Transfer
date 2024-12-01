@@ -13,7 +13,6 @@ using osu.Framework.Screens;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
-using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
@@ -22,9 +21,6 @@ namespace Transfer.Game.Screens
 {
     public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>
     {
-
-
-
 
         private Track audio;
 

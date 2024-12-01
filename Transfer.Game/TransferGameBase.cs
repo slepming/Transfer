@@ -20,7 +20,7 @@ namespace Transfer.Game
     [Cached]
     public partial class TransferGameBase : osu.Framework.Game
     {
-        public static readonly string[] VIDEO_EXTENSIONS = { ".mp4" };
+        public static readonly string[] VIDEO_EXTENSIONS = { ".mp4", ".webm" };
 #if DEBUG
         public const string HOST_NAME = "Transfer(Development)";
 #else
@@ -34,6 +34,7 @@ namespace Transfer.Game
 
 
         private FontStore fontStore;
+
         protected Storage Storage;
         private WrappedStorage tempStorage;
 

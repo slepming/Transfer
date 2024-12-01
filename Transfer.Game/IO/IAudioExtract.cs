@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Platform;
-using Transfer.Game.Audio.Extensions;
 
 namespace Transfer.Game.IO
 {
-    public interface IAudioExtract<T>  where T : class
+    public interface IAudioExtract<T> where T : class
     {
         /// <summary>
         /// Extract audio from video create audio in storage,and convertion in <see cref="Track"></see>

@@ -108,7 +108,7 @@ namespace Transfer.Game.UserInterface.Containers
         protected override void Update()
         {
             base.Update();
-            video.PlaybackPosition = audio.CurrentTime;
+            if(audio != null) video.PlaybackPosition = audio.CurrentTime;
             toolsContainer.PlaybackContainer.SetSliderBarValue(video.PlaybackPosition);
         }
 
@@ -124,7 +124,7 @@ namespace Transfer.Game.UserInterface.Containers
                     RelativeSizeAxes = Axes.Both,
                 });
             }
-            toolsContainer.SetMaxPlaybackValue(video.Duration);
+            toolsContainer.SetMaxPlaybackValue(video.GetMaxLengthVideo());
             base.LoadComplete();
         }
 
@@ -172,23 +172,45 @@ namespace Transfer.Game.UserInterface.Containers
                     break;
                 case osuTK.Input.Key.Left:
                     video.Seek(video.PlaybackPosition - seekSpace);
-                    audio?.Seek(video.PlaybackPosition);
-                    break;
-                case osuTK.Input.Key.Number0:
-                    bindableRate.Value = defaultRate;
+                    audio?.Seek(video.PlaybackPosition - seekSpace);
                     break;
                 case osuTK.Input.Key.Number1:
-                    bindableRate.Value = 1.0;
+                    allSeek(video.GetMaxLengthVideo() * 0.1);
                     break;
                 case osuTK.Input.Key.Number2:
-                    bindableRate.Value = 2.0;
+                    allSeek(video.GetMaxLengthVideo() * 0.2);
                     break;
-                case var key when key == osuTK.Input.Key.LControl && key == osuTK.Input.Key.Number2:
-                    bindableRate.Value += 2.0;
+                case osuTK.Input.Key.Number3:
+                    allSeek(video.GetMaxLengthVideo() * 0.3);
                     break;
+                case osuTK.Input.Key.Number4:
+                    allSeek(video.GetMaxLengthVideo() * 0.4);
+                    break;
+                case osuTK.Input.Key.Number5:
+                    allSeek(video.GetMaxLengthVideo() * 0.5);
+                    break;
+                case osuTK.Input.Key.Number6:
+                    allSeek(video.GetMaxLengthVideo() * 0.6);
+                    break;
+                case osuTK.Input.Key.Number7:
+                    allSeek(video.GetMaxLengthVideo() * 0.7);
+                    break;
+                case osuTK.Input.Key.Number8:
+                    allSeek(video.GetMaxLengthVideo() * 0.8);
+                    break;
+                case osuTK.Input.Key.Number9:
+                    allSeek(video.GetMaxLengthVideo() * 0.9);
+                    break;
+                
 
             }
             return base.OnKeyDown(e);
+        }
+
+        private void allSeek(double time)
+        {
+            video?.Seek(time);
+            audio?.Seek(video.PlaybackPosition);
         }
 
         protected override bool OnScroll(ScrollEvent e)
