@@ -21,9 +21,6 @@ namespace Transfer.Game.Graphics.UI.Containers
         private readonly SpriteText currentPlaybackText;
         public bool VolumeSliderVisible { get; private set; } = true;
 
-        [Resolved]
-        private GameHost host { get; set; }
-
 
         public WatchingToolsContainer()
         {
