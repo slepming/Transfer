@@ -8,21 +8,17 @@ namespace Transfer.Game.Graphics.UI.Containers
 {
     public abstract partial class TransferFocusedOverlayContainer : FocusedOverlayContainer
     {
-        public bool Visible = true;
+        public bool Visible
+        {
+            get
+            {
+                if(State.Value == Visibility.Hidden) return false;
+                else return true;
+            }
+        }
         public TransferFocusedOverlayContainer()
         {
 
-        }
-        public override void Hide()
-        {
-            Visible = false;
-            base.Hide();
-        }
-
-        public override void Show()
-        {
-            Visible = true;
-            base.Show();
         }
         protected abstract override void PopIn();
 

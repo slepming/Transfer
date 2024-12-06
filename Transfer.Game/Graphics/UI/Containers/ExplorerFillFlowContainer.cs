@@ -76,11 +76,11 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
     {
         try
         {
-            string fullPath = System.IO.Path.GetFullPath(path);
+            string fullPath = Path.GetFullPath(path);
 
-            if (System.IO.File.Exists(fullPath))
+            if (File.Exists(fullPath))
             {
-                if (awaibleExtensions.Contains(System.IO.Path.GetExtension(fullPath)))
+                if (awaibleExtensions.Contains(Path.GetExtension(fullPath)))
                 {
                     TransitionPath?.Invoke(fullPath, true);
                     return;
@@ -91,7 +91,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
                     return;
                 }
             }
-            if (System.IO.Directory.Exists(fullPath))
+            if (Directory.Exists(fullPath))
             {
                 getContent(fullPath);
                 return;

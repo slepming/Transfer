@@ -1,21 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using osu.Framework;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
+using osu.Framework.Screens;
 using osuTK.Graphics;
+using Transfer.Game.Screens;
 
 namespace Transfer.Game.Graphics.UI;
 
 public delegate void TransitionEvent(string path, bool isFile);
-public partial class ExplorerButton : ClickableContainer
+public partial class ExplorerButton : ClickableContainer, IHasContextMenu
 {
     /// <summary>
     /// Keep text for button text. Can be null.
@@ -38,6 +44,14 @@ public partial class ExplorerButton : ClickableContainer
             path = value;
         }
     }
+
+    [Resolved]
+    private ScreenStack screenStack { get; set; }
+
+    public MenuItem[] ContextMenuItems => 
+    [
+        new MenuItem("Move to Edit", moveToEditScreen)
+    ];
 
     private SpriteText spriteText;
     private Box background;
@@ -93,5 +107,12 @@ public partial class ExplorerButton : ClickableContainer
         background.FadeColour(Colour4.White, 100, Easing.OutQuint);
         this.TransformTo(nameof(BorderColour), ColourInfo.SingleColour(Color4.Gray), 150, Easing.InOutQuad);
         base.OnHoverLost(e);
+    }
+
+    private void moveToEditScreen()
+    {
+        if(File.Exists(Path) && System.IO.Path.GetExtension(Path) == ".mp4"){
+            screenStack.Push(new EditScreen(Path));
+        }
     }
 }

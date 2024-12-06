@@ -7,9 +7,9 @@ using osuTK;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class ExplorerScrollContainer : TransferScrollContainer<Drawable>
+public partial class TransferScrollContainer : TransferScrollContainer<Drawable>
 {
-    public ExplorerScrollContainer(Direction direction = Direction.Vertical) : base(direction)
+    public TransferScrollContainer(Direction direction = Direction.Vertical) : base(direction)
     {
     }
 }

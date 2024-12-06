@@ -56,55 +56,49 @@ namespace Transfer.Game
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            bool importSuccess = false;
-            importSuccess = dependencies.TryGet(out tempResouceStore);
-            if (!importSuccess) Logger.Log($"Filed get from cache tempResourceStore");
-            dependencies.TryGet(out tempStorage);
-            if (!importSuccess) Logger.Log($"Filed get from cache tempStorage");
+            
+            dependencies.TryGet(out screenStack);
             try
             {
-                if (dependencies.TryGet(out screenStack))
+                
+                if (args != null && args.Length > 0)
                 {
-                    if (args != null && args.Length > 0)
+                    dependencies.TryGet(out tempResouceStore);
+                    dependencies.TryGet(out tempStorage);
+
+                    if (dependencies.TryGet(out AudioManager audioManager))
                     {
-                        if (dependencies.TryGet(out AudioManager audioManager))
+                        List<string> allowedPaths = new List<string>();
+
+                        foreach (string path in args)
                         {
-                            List<string> allowedPaths = new List<string>();
-                            foreach (string path in args)
-                            {
-                                if (!File.Exists(path))
-                                {
-                                    Logger.Log("File not exist");
-                                    continue;
-                                }
-                                string fileName = Path.GetFileName(path);
-                                if(!tempStorage.Exists(fileName) & !VIDEO_EXTENSIONS.Contains(Path.GetExtension(path))) continue;
-                                allowedPaths.Add(path);
-                            }
-                            lock (allowedPaths)
-                            {
-                                Import(allowedPaths.ToArray());
-                            }
-                            allowedPaths.Clear();
-                            Logger.Log("Move to screen");
-                            Scheduler.AddDelayed(async () =>
-                            {
-                                if (await audioManager.GetTrackStore(tempResouceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio) 
-                                    screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
-                                else
-                                {
-                                    screenStack.Push(transferScreen = new VideoScreen(pathToVideo: args[0], audio: null));
-                                }
-                            }, 500);
+                            if (!File.Exists(path))
+                                continue;
+                            string fileName = Path.GetFileName(path);
+                            if(!tempStorage.Exists(fileName) && !VIDEO_EXTENSIONS.Contains(Path.GetExtension(path))) 
+                                continue;
+                            allowedPaths.Add(path);
                         }
+
+                        lock (allowedPaths)
+                            Import(allowedPaths.ToArray());
+
+                        allowedPaths.Clear();
+                        Scheduler.AddDelayed(async () =>
+                        {
+                            if (await audioManager.GetTrackStore(tempResouceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio) 
+                                screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
+                            else
+                                screenStack.Push(transferScreen = new VideoScreen(pathToVideo: args[0], audio: null));
+                        }, 500);
                     }
-                    else
-                    {
-                        screenStack.Push(transferScreen = new VideoScreen());
-                    }
-                    
                 }
-            } catch{
+                else
+                    screenStack.Push(transferScreen = new VideoScreen());
+                    
+            } 
+            catch
+            {
                 throw;
             }
 
@@ -133,9 +127,7 @@ namespace Transfer.Game
                         }
                     }
                     else
-                    {
                         Logger.Log("Unhandled extension");
-                    }
                 };
             }
         }
@@ -172,9 +164,7 @@ namespace Transfer.Game
             {
                 if (paths.Length == 0) return Task.CompletedTask;
                 if (paths.Length == 1)
-                {
                     audioExtract.CreateTrackInStorageAsync(System.IO.Path.GetFullPath(paths[0]), tempStorage);
-                }
                 foreach (string path in paths)
                 {
                     if (path == null) continue;

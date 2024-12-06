@@ -35,7 +35,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     Origin = Anchor.TopCentre,
                     Font = new FontUsage("Oswald",size: 40)
                 },
-                new ExplorerScrollContainer{
+                new TransferScrollContainer{
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.Both,

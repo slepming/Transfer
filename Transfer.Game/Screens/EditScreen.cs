@@ -19,7 +19,7 @@ namespace Transfer.Game.Screens;
 
 public partial class EditScreen : TransferScreen
 {
-    private BoxButton gifConvertButton, mpFConvertButton, aacConvertButton;
+    private BoxButton convertButton, videoAcceleration;
 
 
 
@@ -57,8 +57,18 @@ public partial class EditScreen : TransferScreen
                 Audio = await tempStore.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager)
             };
         }
+        convertButton = new BoxButton{
+            Text = "Convert",
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
 
-
+        };
+        videoAcceleration = new BoxButton{
+            Text = "Acceleration",
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Position = new Vector2(convertButton.Width + 10, 0)
+        };
 
     }
 
