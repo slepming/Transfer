@@ -61,7 +61,7 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu
     public ExplorerButton()
     {
         Masking = true;
-        Width = 200;
+        RelativeSizeAxes = Axes.X;
         Height = 50;
         BorderColour = Colour4.Gray;
         BorderThickness = 2;
@@ -77,7 +77,6 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu
                 Origin =  Anchor.Centre,
                 Anchor = Anchor.Centre,
                 Font = new FontUsage("Oswald",size: 30)
-
             }
         ];
         Action += pathTransition;
@@ -111,7 +110,7 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu
 
     private void moveToEditScreen()
     {
-        if(File.Exists(Path) && System.IO.Path.GetExtension(Path) == ".mp4"){
+        if(File.Exists(Path) && TransferGameBase.VIDEO_EXTENSIONS.Contains(System.IO.Path.GetExtension(Path))){
             screenStack.Push(new EditScreen(Path));
         }
     }

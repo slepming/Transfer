@@ -25,9 +25,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         private Bindable<double> bindableRate = new Bindable<double>();
 
-
-
-        private SpriteText mutedText;
+        public bool WatchingToolsVisible = true;
 
         private Track audio;
 
@@ -41,6 +39,8 @@ namespace Transfer.Game.UserInterface.Containers
 
         private string filename;
 
+        public double DefaultRate { get; private set; }
+
 
         public VideoContainer(string filename)
         {
@@ -53,27 +53,26 @@ namespace Transfer.Game.UserInterface.Containers
             if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
             Logger.Log($"Video initialization");
 
-            defaultRate = tcm.Get<double>(TransferOptions.Rate);
-            bindableRate.Value = defaultRate;
+            DefaultRate = tcm.Get<double>(TransferOptions.Rate);
+            bindableRate.Value = DefaultRate;
 
-            InternalChildren = new Drawable[]
+            video = new TransferVideo(filename)
             {
-                video = new TransferVideo(filename)
-                {
-                    FillMode = FillMode.Fit,
-                    RelativeSizeAxes = Axes.Both,
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Loop = false,
-                },
-                toolsContainer = new WatchingToolsContainer
-                {
-                    RelativeSizeAxes = Axes.X,
-                    AutoSizeAxes = Axes.Y,
-                    Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.Centre,
-                },
+                FillMode = FillMode.Fit,
+                RelativeSizeAxes = Axes.Both,
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                Loop = false,
             };
+            toolsContainer = new WatchingToolsContainer
+            {
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y,
+                Anchor = Anchor.BottomCentre,
+                Origin = Anchor.Centre,
+            };
+            Add(video);
+            if(WatchingToolsVisible) Add(toolsContainer);
 
             video.SeekOccurs += onSeek;
 
@@ -95,15 +94,8 @@ namespace Transfer.Game.UserInterface.Containers
 
         }
 
-        private void onRateChanged(ValueChangedEvent<double> obj)
-        {
-            audio.Tempo.Value = obj.NewValue;
-        }
 
-        private void onSeek(double obj)
-        {
-            return;
-        }
+        private void onRateChanged(ValueChangedEvent<double> obj) => audio.Tempo.Value = obj.NewValue;
 
         protected override void Update()
         {
@@ -143,18 +135,8 @@ namespace Transfer.Game.UserInterface.Containers
             }
         }
 
-        private double seekSpace = 1000;
-        public double SeekSpace
-        {
-            get => seekSpace;
-            set
-            {
-                if (seekSpace == value) return;
-                seekSpace = value;
-            }
-        }
+        
 
-        private double defaultRate;
         protected override bool OnKeyDown(KeyDownEvent e)
         {
 
@@ -167,12 +149,10 @@ namespace Transfer.Game.UserInterface.Containers
                     toolsContainer.VolumeContainer.ChangeSliderValue(0.2, '-');
                     break;
                 case osuTK.Input.Key.Right:
-                    video.Seek(video.PlaybackPosition + seekSpace);
-                    audio?.Seek(video.PlaybackPosition);
+                    allSeek(video.PlaybackPosition + seekSpace);
                     break;
                 case osuTK.Input.Key.Left:
-                    video.Seek(video.PlaybackPosition - seekSpace);
-                    audio?.Seek(video.PlaybackPosition - seekSpace);
+                    allSeek(video.PlaybackPosition - seekSpace);
                     break;
                 case osuTK.Input.Key.Number1:
                     allSeek(video.GetMaxLengthVideo() * 0.1);
@@ -207,11 +187,28 @@ namespace Transfer.Game.UserInterface.Containers
             return base.OnKeyDown(e);
         }
 
+        private double seekSpace = 1000;
+        public double SeekSpace
+        {
+            get => seekSpace;
+            set
+            {
+                if (seekSpace == value) return;
+                seekSpace = value;
+            }
+        }
+
         private void allSeek(double time)
         {
             video?.Seek(time);
-            audio?.Seek(video.PlaybackPosition);
+            audio?.Seek(time);
         }
+        private void onSeek(double obj)
+        {
+            return;
+        }
+
+        public void Seek(double time) => allSeek(time);
 
         protected override bool OnScroll(ScrollEvent e)
         {
@@ -244,19 +241,16 @@ namespace Transfer.Game.UserInterface.Containers
                 {
                     if (audio != null) audio.RestartPoint = video.PlaybackPosition;
                     audio?.Restart();
-                    video.PlaybackPosition = audio.RestartPoint;
                     return true;
                 }
                 case GlobalAction.WatchingVideoReset:
                 {
-                    bindableRate.Value = defaultRate;
+                    bindableRate.Value = DefaultRate;
                     lock (video)
                     {
-                        Task.Run(() =>
-                        {
-                            audio?.Restart();
-                            video.Seek(0);
-                        });
+                        if(audio != null) audio.RestartPoint = 0;
+                        audio?.Restart();
+                        video.Seek(0);
                     }
                     return true;
                 }

@@ -120,7 +120,10 @@ namespace Transfer.Game.Screens
                 LoadingOverlay loading;
                 Task<Track> trackTask = AudioExtract.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
                 ClearInternal();
-                AddInternal(loading = new LoadingOverlay());
+                AddInternal(loading = new LoadingOverlay()
+                {
+                    Header = "Uploading a video"
+                });
                 Track track = await trackTask ?? null;
                 loading.Expire();
 

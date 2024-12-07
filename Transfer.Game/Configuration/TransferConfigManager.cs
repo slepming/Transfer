@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using osu.Framework.Configuration;
 using osu.Framework.Platform;
 
@@ -17,6 +19,7 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
         SetDefault(TransferOptions.AudioCodec, Codecs.libmp3lame);
         SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
         SetDefault(TransferOptions.SeekValue, 5000);
+        SetDefault(TransferOptions.OutputPath, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
     }
 
@@ -29,7 +32,8 @@ public enum TransferOptions
     Rate,
     AudioCodec,
     Volume,
-    SeekValue
+    SeekValue,
+    OutputPath
 
 }
 

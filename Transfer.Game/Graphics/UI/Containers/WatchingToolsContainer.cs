@@ -19,7 +19,7 @@ namespace Transfer.Game.Graphics.UI.Containers
         public readonly VideoPlaybackContainer PlaybackContainer;
 
         private readonly SpriteText currentPlaybackText;
-        public bool VolumeSliderVisible { get; private set; } = true;
+
 
 
         public WatchingToolsContainer()

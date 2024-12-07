@@ -17,7 +17,10 @@ namespace Transfer.Game.Graphics.UI
     {
         public FinalMenu(Direction direction, bool topLevelMenu = false) : base(direction, topLevelMenu)
         {
-            BackgroundColour = Colour4.Transparent;
+            BackgroundColour = Colour4.Gray.Opacity(100);
+            Width = 600;
+            Height = 300;
+            Size = new Vector2(0,0);
         }
 
         protected override DrawableMenuItem CreateDrawableMenuItem(MenuItem item) => new FinalDrawableMenuItem(item);
@@ -29,15 +32,14 @@ namespace Transfer.Game.Graphics.UI
             Anchor = Direction == Direction.Horizontal ? Anchor.BottomLeft : Anchor.TopRight
         };
 
+
         protected override void AnimateClose()
         {
-            this.FadeColour(Colour4.Transparent, 200, Easing.InOutQuad);
-            base.AnimateClose();
+            this.ScaleTo(0, 100, Easing.Out);
         }
         protected override void AnimateOpen()
         {
-            this.FadeColour(Colour4.White, 200, Easing.InOutQuad);
-            base.AnimateOpen();
+            this.ScaleTo(1, 100, Easing.In);
         }
 
         public partial class FinalDrawableMenuItem : DrawableMenuItem
@@ -45,30 +47,30 @@ namespace Transfer.Game.Graphics.UI
             public FinalDrawableMenuItem(MenuItem item) : base(item)
             {
                 Masking = true;
-                Content.Width = 125;
-                Content.Height = 25;
                 Content.Anchor = Anchor.Centre;
                 Content.Origin = Anchor.Centre;
-                Content.Colour = new Color4(255, 255, 255, 1f);
-                BackgroundColour = Colour4.Transparent;
+                Content.Colour = new Color4(255, 255, 255, 0.5f);
+                
+                RelativeSizeAxes = Axes.Both;
+                BackgroundColour = Colour4.Gray.Opacity(100);
+                BorderThickness = 2;
+                BorderColour = Colour4.White.Opacity(150);
             }
 
 
             protected override bool OnHover(HoverEvent e)
             {
-                this.TransformTo(nameof(Content.Colour), ColourInfo.SingleColour(new Color4(255, 255, 255, 1f)), 400, Easing.InOutQuad);
+                Content.FadeColour(Colour4.White, 200, Easing.In);
                 return false;
             }
             protected override void OnHoverLost(HoverLostEvent e)
             {
-                this.TransformTo(nameof(Content.Colour), ColourInfo.SingleColour(new Color4(255, 255, 255, 0.5f)), 200, Easing.InOutQuad);
+                Content.FadeColour(Colour4.White.Opacity(100), 200, Easing.Out);
             }
 
             protected override Drawable CreateContent() => new SpriteText
             {
                 Font = new FontUsage("Oswald", size:30),
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
             };
         }
     }

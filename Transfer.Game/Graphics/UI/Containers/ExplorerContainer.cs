@@ -1,6 +1,7 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using Transfer.Game.Graphics.Cursor;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -35,19 +36,22 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     Origin = Anchor.TopCentre,
                     Font = new FontUsage("Oswald",size: 40)
                 },
-                new TransferScrollContainer{
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
+                new FinalContextMenuContainer{
                     RelativeSizeAxes = Axes.Both,
-                    Position = new Vector2(0, 50),
-
-
-                    Child = explorerFillFlowContainer = new ExplorerFillFlowContainer{
+                    Child = new TransferScrollContainer{
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        AutoSizeAxes = Axes.Y,
-                        RelativeSizeAxes = Axes.X,
-                        Spacing = new Vector2(15,15),
+                        RelativeSizeAxes = Axes.Both,
+                        Position = new Vector2(0, 50),
+
+
+                        Child = explorerFillFlowContainer = new ExplorerFillFlowContainer{
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            AutoSizeAxes = Axes.Y,
+                            RelativeSizeAxes = Axes.X,
+                            Spacing = new Vector2(15,15),
+                        }
                     }
                 }
 

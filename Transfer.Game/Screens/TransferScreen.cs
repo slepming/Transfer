@@ -19,7 +19,7 @@ namespace Transfer.Game.Screens
 
         public bool CursorVisible = true;
 
-
+        protected Bindable<string> NotifyError = new Bindable<string>();
 
 
         public TransferScreen(){

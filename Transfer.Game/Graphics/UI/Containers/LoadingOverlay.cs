@@ -1,5 +1,6 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
 using Transfer.Game.UserInterface;
 
 namespace Transfer.Game.Graphics.UI.Containers
@@ -8,20 +9,41 @@ namespace Transfer.Game.Graphics.UI.Containers
     {
         protected override bool BlockScrollInput { get; }
 
-        private readonly Loading loadingComponent;
+        private string header = "None";
+
+        public string Header {
+            get => header;
+            set{
+                if(header == value) return;
+                header = value;
+            }
+        }
+
+        private Loading loadingComponent;
         public LoadingOverlay(bool blockScrollInput = true)
         {
             Show();
             BlockScrollInput = blockScrollInput;
             RelativeSizeAxes = Axes.Both;
-            InternalChild = loadingComponent = new Loading
-            {
-                Width = 200,
-                Height = 200,
-            };
-
+            
         }
 
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            InternalChildren = [
+                new SpriteText{
+                    Text = Header,
+                    Font = new FontUsage("FiraCodeNerdFont-Bold")   
+                },
+                loadingComponent = new Loading
+                {
+                    Width = 200,
+                    Height = 200,
+                }
+            ]; 
+
+        }
 
 
         protected override void PopIn()

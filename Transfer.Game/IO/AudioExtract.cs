@@ -19,43 +19,28 @@ namespace Transfer.Game.IO
     {
 
 
-        public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager)
+        public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputPath = null,string arguments = null)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
             if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
-            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.mp3";
 
-            IResourceStore<byte[]> resourceStore = new StorageBackedResourceStore(storage);
-            if (storage.Exists(audioName))
+            outputPath ??= getHashName(path, "mp3");
+            var resourceStore = new StorageBackedResourceStore(storage);
+
+            if (storage.Exists((string)outputPath))
             {
-                return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
+                return getTrackFromStorage(audioManager, resourceStore, (string)outputPath);
             }
 
             try
             {
-                string pathToFile = await AudioExtractorCore.Extract(path, transferConfigManager);
-                if (!File.Exists(path))
-                {
-                    Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");
-                    throw new Exception($"{path} does not exists - {audioName} canceled");
-                }
-                using (Stream file = new FileStream(pathToFile, FileMode.Open))
-                {
-                    using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
-                    {
-                        Logger.Log($"Files puts in {storage.GetFullPath(audioName)}");
-                        await file.CopyToAsync(audioFile);
-                    }
-                    using (var videoFile = storage.GetStream(Path.GetFileName(path), FileAccess.Write, FileMode.OpenOrCreate))
-                    {
-                        await file.CopyToAsync(videoFile);
-                    }
-                }
+                string pathToFile = await convertFileAsync(path);
+                await saveFileToStorageAsync(pathToFile, storage, outputPath);
                 File.Delete(pathToFile);
-                Logger.Log($"Create file with name {audioName}");
-                if (!storage.Exists(audioName)) throw new FileNotFoundException("Audio not found");
 
-                return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
+                if (!storage.Exists((string)outputPath)) throw new FileNotFoundException("Audio not found");
+
+                return getTrackFromStorage(audioManager, resourceStore, outputPath);
             }
             catch (FFMpegException)
             {
@@ -63,52 +48,93 @@ namespace Transfer.Game.IO
             }
             catch (Exception ex)
             {
-                if (ex is FileNotFoundException) return null;
-                Logger.Error(ex, $"{GetType().Name} error");
-                throw;
+                handleException(ex, outputPath);
+                return null;
             }
-
         }
 
         public async Task CreateTrackInStorageAsync(string path, Storage storage)
         {
-            if (path == null) Logger.Error(new ArgumentNullException(nameof(path)), "Path to video can not be null");
-            var audioName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.mp3";
-            var videoName = $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}";
+            if (path == null)
+            {
+                Logger.Error(new ArgumentNullException(nameof(path)), "Path to video cannot be null");
+                return;
+            }
+
+            var audioName = getHashName(path, "mp3");
+            var videoName = getHashName(path, "mp4");
+
             if (storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
             {
-                Logger.Log("File exist in local storage");
+                Logger.Log("File exists in local storage");
                 return;
             }
+
             try
             {
-                string pathToAudio = await AudioExtractorCore.Extract(path, transferConfigManager);
-                if (!File.Exists(path))
-                {
-                    Logger.Error(new Exception(), $"{path} does not exists - {audioName} canceled");
-                    throw new Exception($"{path} does not exists - {audioName} canceled");
-                }
-                using (Stream file = new FileStream(path, FileMode.Open))
-                {
-                    using (var audioFile = storage.GetStream(audioName, FileAccess.Write, FileMode.OpenOrCreate))
-                        await file.CopyToAsync(audioFile);
-
-                    using (var videoFile = storage.GetStream(videoName, FileAccess.Write, FileMode.OpenOrCreate))
-                        await file.CopyToAsync(videoFile);
-                }
-                return;
+                string pathToAudio = await convertFileAsync(path);
+                await saveFileToStorageAsync(pathToAudio, storage, audioName);
+                await saveFileToStorageAsync(pathToAudio, storage, videoName);
+                File.Delete(pathToAudio);
             }
-            catch (FFmpegException f)
+            catch (FFMpegException f)
             {
                 Logger.Error(f, "Video extraction error due to FFmpeg");
                 throw;
             }
-            catch
+            catch (Exception ex)
             {
+                handleException(ex, audioName);
                 throw;
             }
         }
 
+        private string getHashName(string path, string extension)
+        {
+            return $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{extension}";
+        }
+
+        private T getTrackFromStorage(AudioManager audioManager, IResourceStore<byte[]> resourceStore, string audioName)
+        {
+            return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
+        }
+
+        private async Task<string> convertFileAsync(string path, string outputPath = null,string arguments = null)
+        {
+            string pathToFile = await TransferFFmpegCore.Conversion(path, transferConfigManager, outputPath, arguments);
+            if (!File.Exists(path))
+            {
+                Logger.Error(new Exception(), $"{path} does not exist - conversion canceled");
+                throw new Exception($"{path} does not exist - conversion canceled");
+            }
+            return pathToFile;
+        }
+
+        private async Task saveFileToStorageAsync(string pathToFile, Storage storage, string name)
+        {
+            using (Stream file = new FileStream(pathToFile, FileMode.Open))
+            {
+                await saveStreamToStorageAsync(file, storage, name);
+            }
+        }
+
+        private async Task saveStreamToStorageAsync(Stream file, Storage storage, string fileName)
+        {
+            using (var storageStream = storage.GetStream(fileName, FileAccess.Write, FileMode.OpenOrCreate))
+            {
+                Logger.Log($"File saved to {storage.GetFullPath(fileName)}");
+                await file.CopyToAsync(storageStream);
+            }
+        }
+
+        private void handleException(Exception ex, string audioName)
+        {
+            if (ex is FileNotFoundException) return;
+            Logger.Error(ex, $"{GetType().Name} error");
+        }
+
+
+        
 
     }
 
