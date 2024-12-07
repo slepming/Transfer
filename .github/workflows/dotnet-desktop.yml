@@ -51,8 +51,7 @@ jobs:
         Configuration: ${{ matrix.configuration }}
 
     - name: Zip the publish folder
-      run: |
-        Compress-Archive -Path ./publish/* -DestinationPath ./publish/YourProjectName.zip
+      run: Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
 
     - name: Create Release
       id: create_release
@@ -71,6 +70,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish/YourProjectName.zip
-        asset_name: YourProjectName.zip
+        asset_path: ./publish/Transfer.zip
+        asset_name: Transfer.zip
         asset_content_type: application/zip
