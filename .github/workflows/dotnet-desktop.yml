@@ -50,8 +50,8 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
-    - name: Zip the publish folder
-      run: Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
+    #- name: Zip the publish folder
+     # run: Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
 
     - name: Create Release
       id: create_release
