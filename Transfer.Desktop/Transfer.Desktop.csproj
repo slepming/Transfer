@@ -4,9 +4,11 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>Transfer</AssemblyName>
     <ApplicationIcon>game.ico</ApplicationIcon>
+    <PublishDir>publish/</PublishDir>
+    <PublishSingleFile>true</PublishSingleFile>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.0.0</Version>
-    <FileVersion>0.0.0</FileVersion>
+    <Version>0.0.1</Version>
+    <FileVersion>0.0.1</FileVersion>
   </PropertyGroup>
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\Transfer.Game\Transfer.Game.csproj" />
