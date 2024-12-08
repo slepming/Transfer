@@ -105,8 +105,10 @@ public partial class EditScreen : TransferScreen
             Anchor = Anchor.BottomCentre,
             Origin = Anchor.BottomCentre,
             Position = new Vector2(videoAcceleration.X, -50),
-            LengthLimit = 4
-            
+            LengthLimit = 4,
+            Tooltip = "Acceleration factor.",
+            CanAddCharacters = false,
+            PlaceholderText = "Enter speed."
         };
 
         textBox.Hide();
@@ -170,10 +172,12 @@ public partial class EditScreen : TransferScreen
         if(File.Exists(path)) path = Path.Combine(transferConfigManager.Get<string>(TransferOptions.OutputPath), Path.GetFileNameWithoutExtension(pathToFile) + $"_{DateTime.Now.ToShortTimeString()}{Path.GetExtension(pathToFile)}");
         Logger.Log($"File create in {path} with arguments {arguments}");
         ClearInternal();
-        InternalChild = new LoadingOverlay()
+        LoadingOverlay loadingStatus;
+        InternalChild = loadingStatus  = new LoadingOverlay()
         {
             Header = "Asking FFmpeg for help..."
         };
+        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += (e) => loadingStatus.Header = e.NewValue;
         await TransferFFmpegCore.Conversion(pathToFile, transferConfigManager, path, arguments);
         ClearInternal();
         InternalChild = new SpriteText{

@@ -10,26 +10,44 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osuTK.Graphics;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class ExplorerFillFlowContainer : FillFlowContainer
+public partial class ExplorerFillFlowContainer : SearchContainer
 {
-    private readonly string start_path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    private string start_path => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
     private string current_path;
 
     private TransferDirectory transferDirectory = new TransferDirectory();
 
     private List<ExplorerButton> explorerButtons = new List<ExplorerButton>();
 
+    
 
+    /// <summary>
+    /// If file extension not in List then it's skipping
+    /// </summary>
     private List<string> awaibleExtensions = TransferGameBase.VIDEO_EXTENSIONS.ToList();
 
+    /// <summary>
+    /// Fired when pressing the button
+    /// </summary>
     public event TransitionEvent TransitionPath;
-    public Bindable<string> PathChanged = new Bindable<string>();
+
+    public Bindable<string> PathChanged => new Bindable<string>();
+
+
+    public ExplorerFillFlowContainer()
+    {
+        AllowNonContiguousMatching = true;
+        
+    }
+
+
 
     protected override void LoadComplete()
     {
@@ -70,6 +88,12 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
         }
         Clear();
         foreach (ExplorerButton button in explorerButtons) Add(button);
+        Add(new Box
+        {
+            Colour = Colour4.Transparent,
+            RelativeSizeAxes = Axes.X,
+            Height = 50
+        });
     }
 
     private void changeDirectoryExplorer(string path, bool isFile)
@@ -94,6 +118,7 @@ public partial class ExplorerFillFlowContainer : FillFlowContainer
             if (Directory.Exists(fullPath))
             {
                 getContent(fullPath);
+                TransitionPath?.Invoke(path, false);
                 return;
             }
         }

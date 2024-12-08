@@ -44,11 +44,6 @@ namespace Transfer.Game.Graphics.Cursor
                     Masking = true,
                     BorderThickness = 2,
                     BorderColour = Color4.White,
-                    Child = new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Colour = Colour4.GreenYellow
-                    }
                 },
             };
         }
@@ -58,11 +53,11 @@ namespace Transfer.Game.Graphics.Cursor
             switch (e.Button)
             {
                 case MouseButton.Left:
-                    circle.ScaleTo(1.2f, 200);
+                    circle.ScaleTo(1.2f, 50);
                     break;
 
                 case MouseButton.Right:
-                    circle.ScaleTo(1.2f, 200);
+                    circle.ScaleTo(1.2f, 50);
                     break;
             }
 
@@ -74,11 +69,11 @@ namespace Transfer.Game.Graphics.Cursor
             switch (e.Button)
             {
                 case MouseButton.Left:
-                    circle.ScaleTo(1f, 100);
+                    circle.ScaleTo(1f, 50);
                     break;
 
                 case MouseButton.Right:
-                    circle.ScaleTo(1f, 100);
+                    circle.ScaleTo(1f, 50);
                     break;
             }
 
@@ -87,7 +82,7 @@ namespace Transfer.Game.Graphics.Cursor
 
         protected override bool OnScroll(ScrollEvent e)
         {
-            circle.MoveTo(circle.Position - e.ScrollDelta * 5).MoveTo(Vector2.Zero, 500, Easing.OutQuint);
+            circle.MoveTo(circle.Position - e.ScrollDelta*2).MoveTo(Vector2.Zero, 200, Easing.OutQuint);
             return base.OnScroll(e);
         }
 

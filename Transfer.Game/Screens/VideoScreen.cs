@@ -114,7 +114,7 @@ namespace Transfer.Game.Screens
 
         private async void onFoundVideo(string path, bool isFile)
         {
-
+            if (!isFile) return;
             try
             {
                 LoadingOverlay loading;

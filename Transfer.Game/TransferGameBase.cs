@@ -22,7 +22,7 @@ namespace Transfer.Game
     {
         public static readonly string[] VIDEO_EXTENSIONS = { ".mp4", ".webm" };
 #if DEBUG
-        public const string HOST_NAME = "Transfer(Development)";
+            public const string HOST_NAME = "Transfer(Development)";
 #else
             public const string HOST_NAME = "Transfer";
 #endif

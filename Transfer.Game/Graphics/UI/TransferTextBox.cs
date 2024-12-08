@@ -18,7 +18,8 @@ using osuTK.Graphics;
 namespace Transfer.Game.Graphics.UI;
 public partial class TransferTextBox : TextBox, IHasTooltip
 {
-    public LocalisableString TooltipText => "Acceleration factor.";
+    public LocalisableString Tooltip { get; set; }
+    public LocalisableString TooltipText => Tooltip;
     private const float caret_move_time = 100f;
     
     private Box background;
@@ -29,8 +30,24 @@ public partial class TransferTextBox : TextBox, IHasTooltip
         get => backgroundColour;
         set => backgroundColour = value;
     }
+
+    public override bool HandleNonPositionalInput => true;
+    public override bool RequestsFocus => true;
+
+    /// <summary>
+    /// If false then user can writing only numbers
+    /// </summary>
+    public bool CanAddCharacters { get; set; } = true;
+
+    protected new SpriteText Placeholder = new SpriteText()
+    {
+        Font = new FontUsage(size: 20, family: "Oswald"),
+    };
+
+
     public TransferTextBox()
     {
+        CommitOnFocusLost = true;
         Masking = true;
         BorderThickness = 3;
         BorderColour = Colour4.White;
@@ -40,6 +57,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
             Depth = 1,
             Colour = backgroundColour
         });
+
     }
     protected override Caret CreateCaret() => new TransferCaret(){
         CaretWidth = 2,
@@ -47,13 +65,14 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     protected override SpriteText CreatePlaceholder()
     {
-        return new SpriteText(){
-            Text = "Enter speed",
-            Font = new FontUsage(size: 20, family: "Oswald"),
-        };
+        return Placeholder;
     }
 
     protected override void NotifyInputError()
+    {
+        
+    }
+    protected override void OnTextCommitted(bool textChanged)
     {
         
     }
@@ -66,7 +85,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     protected override bool CanAddCharacter(char character)
     {
-        return !char.IsLetter(character);
+        return CanAddCharacters ? true : !char.IsLetter(character);
     }
 
     private partial class ZoomableContainer : Container

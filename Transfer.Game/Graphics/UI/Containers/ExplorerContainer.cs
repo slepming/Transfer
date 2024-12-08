@@ -1,5 +1,9 @@
+using System;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Graphics.Cursor;
 
@@ -10,9 +14,14 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
     protected override bool BlockScrollInput { get; }
     protected override bool StartHidden { get; }
     protected override bool BlockPositionalInput { get; }
+
     private ExplorerFillFlowContainer explorerFillFlowContainer;
 
     public event TransitionEvent FoundVideo;
+
+    private TransferTextBox searchTextBox;
+    
+
 
     public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
     {
@@ -34,7 +43,18 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     Text = "Choice file",
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
+                    Position = new Vector2(0,9),
                     Font = new FontUsage("Oswald",size: 40)
+                },
+                searchTextBox = new TransferTextBox
+                {
+                    RelativeSizeAxes = Axes.X,
+                    Size = new Vector2(0.2f, 1),
+                    Height = 40,
+                    Tooltip = "Search your file",
+                    PlaceholderText = "Enter",
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
                 },
                 new FinalContextMenuContainer{
                     RelativeSizeAxes = Axes.Both,
@@ -55,19 +75,30 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     }
                 }
 
-            ];
-        explorerFillFlowContainer.TransitionPath += FoundVideo;
+        ];
+        searchTextBox.Current.ValueChanged += searchInExplorer;
+        explorerFillFlowContainer.TransitionPath += onTransitionPath;
         base.LoadComplete();
     }
 
+    private void onTransitionPath(string path, bool isFile)
+    {
+        searchTextBox.Text = "";
+        FoundVideo?.Invoke(path, isFile);
+    }
+
+    private void searchInExplorer(ValueChangedEvent<string> text)
+    {
+        explorerFillFlowContainer.SearchTerm = text.NewValue;
+    }
 
     protected override void PopIn()
     {
-        this.FadeTo(1, 1000, Easing.InOutQuint);
+        this.FadeIn(1000, Easing.In).ScaleTo(1, 600, Easing.In);
     }
 
     protected override void PopOut()
     {
-        this.FadeTo(0.1f, 600, Easing.InOutQuint);
+        this.FadeOut(600,Easing.Out).ScaleTo(0.8f);
     }
 }

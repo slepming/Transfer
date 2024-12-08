@@ -14,6 +14,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
+using osu.Framework.Localisation;
 using osu.Framework.Screens;
 using osuTK.Graphics;
 using Transfer.Game.Screens;
@@ -21,7 +22,7 @@ using Transfer.Game.Screens;
 namespace Transfer.Game.Graphics.UI;
 
 public delegate void TransitionEvent(string path, bool isFile);
-public partial class ExplorerButton : ClickableContainer, IHasContextMenu
+public partial class ExplorerButton : ClickableContainer, IHasContextMenu, IFilterable
 {
     /// <summary>
     /// Keep text for button text. Can be null.
@@ -29,8 +30,8 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu
     private string text;
     public string Text {
         get => text;
-        set{
-            if(value == text) return;
+        set {
+            if (value == text) return;
             text = value;
         }
     }
@@ -48,10 +49,21 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu
     [Resolved]
     private ScreenStack screenStack { get; set; }
 
-    public MenuItem[] ContextMenuItems => 
+    public MenuItem[] ContextMenuItems =>
     [
         new MenuItem("Move to Edit", moveToEditScreen)
     ];
+
+    public bool MatchingFilter { set => this.FadeTo(value ? 1 : 0); }
+    public bool FilteringActive { get; set; }
+
+    public IEnumerable<LocalisableString> FilterTerms
+    {
+        get
+        {
+            if(path != null) yield return System.IO.Path.GetFileName(path);
+        }
+    }
 
     private SpriteText spriteText;
     private Box background;
