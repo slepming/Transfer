@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transfer.Desktop", "Transfer.Desktop\Transfer.Desktop.csproj", "{AEB3FC89-DC3E-4BC9-9EC7-03B72FC5D849}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transfer.iOS", "Transfer.iOS\Transfer.iOS.csproj", "{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}"
+#Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transfer.iOS", "Transfer.iOS\Transfer.iOS.csproj", "{7AA1DB5D-78DB-4693-AE50-D6078F5A0CAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transfer.Game", "Transfer.Game\Transfer.Game.csproj", "{1ADACD09-7BE3-46A1-AEAB-C41E78E8700F}"
 EndProject

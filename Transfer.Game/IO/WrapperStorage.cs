@@ -7,7 +7,6 @@ using osu.Framework.Platform;
 
 namespace Transfer.Game.IO
 {
-    // Taken from https://github.com/ppy/osu/blob/master/osu.Game/IO/WrappedStorage.cs
     public class WrappedStorage : Storage
     {
         protected Storage UnderlyingStorage { get; private set; }

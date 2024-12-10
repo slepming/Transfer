@@ -41,7 +41,7 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                         Origin = Anchor.TopLeft,
                         Text = "Options",
                         Position = new Vector2(40, Y),
-                        Font = new FontUsage("Oswald", size: 50, fixedWidth: true)
+                        Font = new FontUsage("FiraCodeNerdFont-Light", size: 50, fixedWidth: true)
                     },
                     appSettings = new FillFlowContainer
                     {
@@ -52,11 +52,12 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                         Direction = FillDirection.Vertical,
                         Position = new Vector2(X, Y+5),
                         Spacing = new Vector2(0, 20),
-                        Children = new Drawable[]{
+                        Children = 
+                        [
                             new SpriteText{
                                 Text = TransferOptions.AudioBitrate.ToString()
                             }
-                        }
+                        ]
                     }
                 }
             }
@@ -68,15 +69,15 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
             appSettings.Add(new Container
             {
                 AutoSizeAxes = Axes.Y,
-                Children = new Drawable[]
-                {
+                Children =
+                [
                     new SpriteText
                     {
                         Text = option.ToString(),
                         Position = new Vector2(40, 0),
-                        Font = new FontUsage("Oswald", size: 30, fixedWidth: true)
+                        Font = new FontUsage("FiraCodeNerdFont-Light", size: 30)
                     }
-                }
+                ]
             });
         }
 

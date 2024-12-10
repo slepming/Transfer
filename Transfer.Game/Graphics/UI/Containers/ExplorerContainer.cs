@@ -46,16 +46,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     Position = new Vector2(0,9),
                     Font = new FontUsage("Oswald",size: 40)
                 },
-                searchTextBox = new TransferTextBox
-                {
-                    RelativeSizeAxes = Axes.X,
-                    Size = new Vector2(0.2f, 1),
-                    Height = 40,
-                    Tooltip = "Search your file",
-                    PlaceholderText = "Enter",
-                    Anchor = Anchor.TopLeft,
-                    Origin = Anchor.TopLeft,
-                },
+                
                 new FinalContextMenuContainer{
                     RelativeSizeAxes = Axes.Both,
                     Child = new TransferScrollContainer{
@@ -73,7 +64,17 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                             Spacing = new Vector2(15,15),
                         }
                     }
-                }
+                },
+                searchTextBox = new TransferTextBox(true)
+                {
+                    RelativeSizeAxes = Axes.X,
+                    Size = new Vector2(0.2f, 1),
+                    Height = 40,
+                    Tooltip = "Search your file",
+                    PlaceholderText = "Enter",
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                },
 
         ];
         searchTextBox.Current.ValueChanged += searchInExplorer;

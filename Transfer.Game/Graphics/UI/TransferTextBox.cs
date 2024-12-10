@@ -31,8 +31,9 @@ public partial class TransferTextBox : TextBox, IHasTooltip
         set => backgroundColour = value;
     }
 
-    public override bool HandleNonPositionalInput => true;
-    public override bool RequestsFocus => true;
+    public override bool HandleNonPositionalInput { get; }
+    
+    public override bool RequestsFocus => false;
 
     /// <summary>
     /// If false then user can writing only numbers
@@ -45,8 +46,9 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     };
 
 
-    public TransferTextBox()
+    public TransferTextBox(bool handleNonPositionalInput = false)
     {
+        HandleNonPositionalInput = handleNonPositionalInput;    
         CommitOnFocusLost = true;
         Masking = true;
         BorderThickness = 3;
