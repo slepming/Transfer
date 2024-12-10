@@ -12,7 +12,6 @@ namespace Transfer.Game.Screens
     public abstract partial class TransferScreen : Screen, ITransferScreen, IHasDescription
     {
         protected Loading LoadingComponent;
-        protected DisappearingIconButton OptionsButton;
         public virtual string Title => GetType().Name;
         public string Description => Title;
         public bool OptionsButtonVisible = true;

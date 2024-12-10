@@ -49,7 +49,7 @@ namespace Transfer.Game.UserInterface
                                 EdgeEffect = new EdgeEffectParameters() {
                                     Radius = 400,
                                     Colour = Colour4.Gray,
-                                    Type = EdgeEffectType.Shadow
+                                    Type = EdgeEffectType.Glow
                                 }
                             },
                             loadingContainer = new Container
