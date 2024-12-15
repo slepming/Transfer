@@ -53,7 +53,7 @@ namespace Transfer.Game
 
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
-                TargetDrawSize = new Vector2(1600, 900)
+                TargetDrawSize = new Vector2(1280, 720)
             });
         }
 
@@ -64,6 +64,10 @@ namespace Transfer.Game
             tempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
             dependencies.CacheAs(tempStorage);
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
+
+            var videos = new ResourceStore<byte[]>();
+            videos.AddStore(new NamespacedResourceStore<byte[]>(Resources, @"Videos"));
+            dependencies.Cache(videos);
 
             fontStore = new FontStore(renderer, null, 100f);
 

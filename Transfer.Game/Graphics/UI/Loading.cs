@@ -80,7 +80,11 @@ namespace Transfer.Game.UserInterface
 
             base.LoadComplete();
             loadingContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.White))
-            .RotateTo(180, 1000, Easing.InOutCubic).Then().RotateTo(-180, 1000, Easing.InOutCubic).Then().TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.Black), 400, Easing.InOutQuad));
+            .RotateTo(180, 1000, Easing.InOutCubic)
+            .Then()
+            .RotateTo(-180, 1000, Easing.InOutCubic)
+            .Then()
+            .TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.Black), 400, Easing.InOutQuad));
             backgroundContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
             {
                 Radius = 200,

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
@@ -20,7 +21,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 {
     public LocalisableString Tooltip { get; set; }
     public LocalisableString TooltipText => Tooltip;
-    private const float caret_move_time = 100f;
+    private const float caret_move_time = 200f;
     
     private Box background;
 
@@ -33,7 +34,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     public override bool HandleNonPositionalInput { get; }
     
-    public override bool RequestsFocus => false;
+    public override bool RequestsFocus { get; }
 
     /// <summary>
     /// If false then user can writing only numbers
@@ -46,9 +47,10 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     };
 
 
-    public TransferTextBox(bool handleNonPositionalInput = false)
+    public TransferTextBox(bool handleNonPositionalInput = false, bool requestsFocus = false)
     {
-        HandleNonPositionalInput = handleNonPositionalInput;    
+        HandleNonPositionalInput = handleNonPositionalInput;
+        RequestsFocus = requestsFocus;    
         CommitOnFocusLost = true;
         Masking = true;
         BorderThickness = 3;
@@ -72,7 +74,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     protected override void NotifyInputError()
     {
-        
+        this.FlashColour(ColourInfo.GradientVertical(Color4.Red, Color4.OrangeRed), 600, Easing.Out);
     }
     protected override void OnTextCommitted(bool textChanged)
     {
@@ -82,7 +84,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     protected override Drawable GetDrawableCharacter(char c) => new ZoomableContainer()
     {
         AutoSizeAxes = Axes.Both,
-        Child = new SpriteText { Text = c.ToString(), Font = new FontUsage(family: "Oswald", size: 30)}
+        Child = new SpriteText { Text = c.ToString(), Font = new FontUsage(family: "Oswald", size: 25)}
     };
 
     protected override bool CanAddCharacter(char character)

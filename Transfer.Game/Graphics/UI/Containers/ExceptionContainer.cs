@@ -90,12 +90,14 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                         Origin = Anchor.TopCentre,
                         Font = new FontUsage(family: "FiraCodeNerdFont",size: 50, fixedWidth: true),
                         Text = "Null Header",
-                        Colour = Colour4.Red
+                        Colour = Colour4.Red,
+                        
                     },
                     ContentObject = new TextFlowContainer{
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
                         Position = new Vector2(0,45),
+                        
                         RelativeSizeAxes = Axes.Both,
                         Width = 1,
                         Height = 0.4f,
@@ -214,7 +216,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
     }
     protected override void LoadComplete()
     {
-        ContentObject.Text = "";
+        ContentObject.Text = string.Empty;
         ContentObject.AddText(text);
         Header.Text = HeaderText;
         base.LoadComplete();

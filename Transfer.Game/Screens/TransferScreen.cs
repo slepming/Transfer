@@ -6,6 +6,7 @@ using Transfer.Game.UserInterface;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI;
+using System;
 
 namespace Transfer.Game.Screens
 {
@@ -14,46 +15,57 @@ namespace Transfer.Game.Screens
         protected Loading LoadingComponent;
         public virtual string Title => GetType().Name;
         public string Description => Title;
-        public bool OptionsButtonVisible = true;
-
-        public bool CursorVisible = true;
+        protected bool CursorVisible = true;
 
         protected Bindable<string> NotifyError = new Bindable<string>();
-
-
         public TransferScreen(){
             Logger.Log($"Initialization {Description}");
+            NotifyError.ValueChanged += onNotifyError;
         }
+
+        private void onNotifyError(ValueChangedEvent<string> e)
+        {
+            OnNotifyError(e.NewValue);
+        }
+
+        
+        public virtual void CursorHide()
+        {
+            CursorVisible = !CursorVisible;
+        }
+
+
+        
         protected virtual void OnExit() => this.Exit();
 
 
         public override void OnEntering(ScreenTransitionEvent e)
         {
-            this.FadeInFromZero(1000, Easing.InOutElastic);
+            this.FadeInFromZero(1000, Easing.Out);
             base.OnEntering(e);
 
         }
 
-        protected override void LoadComplete()
-        {
-            if(OptionsButtonVisible){
-                // OptionsButton.Show();
-            }
-            base.LoadComplete();
-        }
 
         public override bool OnExiting(ScreenExitEvent e)
         {
 
-            this.FadeIn(1000,Easing.InOutQuad).ScaleTo(0.1f,2000,Easing.InOutQuad);
+            this.FadeIn(1000,Easing.InOutQuad).ScaleTo(0.1f,2000,Easing.In);
             return base.OnExiting(e);
         }
-        protected void OnException(TransformException transformException)
+        protected void Exception(TransferException transferException)
         {
             AddInternal(new ExceptionContainer{
+                HeaderText = transferException.InnerException.Message,
+                Text = transferException.Message,
                 AutoSizeAxes = Axes.X,
                 Height = 50,
             });
+        }
+
+        protected virtual void OnNotifyError(string text)
+        {
+
         }
 
 

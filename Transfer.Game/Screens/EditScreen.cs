@@ -16,26 +16,24 @@ using Transfer.Game.Configuration;
 using System.IO;
 using osu.Framework.Logging;
 using osu.Framework.Graphics.Shapes;
-using Transfer.Game.UserInterface;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics.Cursor;
 using System.Collections.Generic;
-using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Audio;
 using System.Globalization;
 using osu.Framework.Bindables;
 using osu.Framework.Screens;
-using osu.Framework.Graphics.Sprites;
 
 namespace Transfer.Game.Screens;
 
 public partial class EditScreen : TransferScreen
 {
     private string pathToFile;
+    private string fileName = string.Empty;
     private Dictionary<VideoEditingFunction, string> ffmpegFunctions = new Dictionary<VideoEditingFunction,string>();
-    private BoxButton confirmButton, videoAcceleration;
+    private TransparentButton confirmButton, videoSpeedUp;
 
-    private TransferTextBox textBox;
+    private TransferTextBox speedUpTextBox, videoNameAndExtensionTextBox;
 
     private VideoContainer transferVideo;
 
@@ -79,7 +77,7 @@ public partial class EditScreen : TransferScreen
 
             
         }
-        confirmButton = new BoxButton{
+        confirmButton = new TransparentButton{
             Text = "Confirm",
             Width = 100,
             Height = 50,
@@ -87,7 +85,8 @@ public partial class EditScreen : TransferScreen
             Origin = Anchor.BottomCentre,
 
         };
-        videoAcceleration = new BoxButton{
+        confirmButton.Action += confirmVideoEditingButtonAction;
+        videoSpeedUp = new TransparentButton{
             Text = "Acceleration",
             Width = 100,
             Height = 50,
@@ -95,59 +94,83 @@ public partial class EditScreen : TransferScreen
             Origin = Anchor.BottomCentre,
             Position = new Vector2(confirmButton.Width + 10, 0)
         };
-        videoAcceleration.Action += accelerationVideoButtonAction;
-        confirmButton.Action += confirmVideoEditingButtonAction;
+        videoSpeedUp.Action += accelerationVideoButtonAction;
 
-        textBox = new TransferTextBox
+        videoNameAndExtensionTextBox = new TransferTextBox(true)
+        {
+            Width = 100,
+            Height = 30,
+            Anchor = Anchor.TopLeft,
+            Origin = Anchor.TopLeft,
+            Tooltip = "You can change the file name here",
+            PlaceholderText = "Enter name",
+            Depth = 1,
+        };
+
+        videoNameAndExtensionTextBox.Current.ValueChanged += onChangeValueInNameTextBox;
+
+        speedUpTextBox = new TransferTextBox(true)
         {
             Width = 100,
             Height = 30,
             Anchor = Anchor.BottomCentre,
             Origin = Anchor.BottomCentre,
-            Position = new Vector2(videoAcceleration.X, -50),
+            Position = new Vector2(videoSpeedUp.X, -50),
             LengthLimit = 4,
-            Tooltip = "Acceleration factor.",
+            Tooltip = "Acceleration factor. Press 'Enter' to confirm",
             CanAddCharacters = false,
-            PlaceholderText = "Enter speed."
+            PlaceholderText = "Enter speed.",
+            Depth = 1
         };
 
-        textBox.Hide();
-        textBox.OnCommit += commitAccelerationTextBox;
+        speedUpTextBox.Hide();
+        speedUpTextBox.OnCommit += commitAccelerationTextBox;
 
         Box background = new Box()
         {
             RelativeSizeAxes = Axes.Both,
             Colour = Colour4.DimGray,
-            Alpha = 0.3f
+            Alpha = 0.3f,
+            Depth = 0
         };
         
         Scheduler.AddDelayed(() => {
             InternalChildren = [
-                background,
                 new TooltipContainer{
                     RelativeSizeAxes = Axes.Both,
-                    Child = textBox,
+                    Children = [
+                        speedUpTextBox,
+                        videoNameAndExtensionTextBox
+                        ],
                 },
+                background,
                 transferVideo,
                 confirmButton,
-                videoAcceleration
+                videoSpeedUp,
+                
             ];
         }, 500);
+    }
+
+    private void onChangeValueInNameTextBox(ValueChangedEvent<string> e)
+    {
+        fileName = e.NewValue;
     }
 
     private void commitAccelerationTextBox(TextBox sender, bool newText)
     {
         float factor = float.TryParse(sender.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out float value) ? value : 0f;
+        if (factor == 1) return;
         if(factor > 100 || factor < 0.5f) NotifyError.Value = "The factor cannot be above 100 and below 0.5";
         float modifiedFactor = 1/factor;
 
-        if (ffmpegFunctions.TryGetValue(VideoEditingFunction.VideoAcceleration, out _)) {
-            ffmpegFunctions[VideoEditingFunction.VideoAcceleration] = FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoAcceleration, modifiedFactor.ToString(CultureInfo.InvariantCulture));
-            ffmpegFunctions.Add(VideoEditingFunction.AudioAcceleration, FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioAcceleration, factor.ToString(CultureInfo.InvariantCulture)));
+        if (ffmpegFunctions.TryGetValue(VideoEditingFunction.VideoSpeedUp, out _)) {
+            ffmpegFunctions[VideoEditingFunction.VideoSpeedUp] = FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, modifiedFactor.ToString(CultureInfo.InvariantCulture));
+            ffmpegFunctions[VideoEditingFunction.AudioSpeedUp] = FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioSpeedUp, factor.ToString(CultureInfo.InvariantCulture));
             return;
         }
-        ffmpegFunctions.Add(VideoEditingFunction.VideoAcceleration,FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoAcceleration, modifiedFactor.ToString(CultureInfo.InvariantCulture)));
-        ffmpegFunctions.Add(VideoEditingFunction.AudioAcceleration, FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioAcceleration, factor.ToString(CultureInfo.InvariantCulture)));
+        ffmpegFunctions.Add(VideoEditingFunction.VideoSpeedUp,FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, modifiedFactor.ToString(CultureInfo.InvariantCulture)));
+        ffmpegFunctions.Add(VideoEditingFunction.AudioSpeedUp, FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioSpeedUp, factor.ToString(CultureInfo.InvariantCulture)));
     }
 
     protected override void LoadComplete()
@@ -156,21 +179,47 @@ public partial class EditScreen : TransferScreen
     }
 
 
-    private bool textBoxVisible = false;
+    private bool speedUpTextBoxVisible = false;
     private void accelerationVideoButtonAction()
     {
-        textBoxVisible = !textBoxVisible;
-        if (textBoxVisible) textBox.Hide();
-        else textBox.Show();
+        if (speedUpTextBoxVisible) speedUpTextBox.Hide();
+        else speedUpTextBox.Show();
+        speedUpTextBoxVisible = !speedUpTextBoxVisible;
 
     }
     private async void confirmVideoEditingButtonAction()
     {
         string arguments = string.Join(" ", ffmpegFunctions.Values);
+
         if(string.IsNullOrEmpty(arguments)) return;
-        string path = Path.Combine(transferConfigManager.Get<string>(TransferOptions.OutputPath), Path.GetFileNameWithoutExtension(pathToFile) + "_modified" + Path.GetExtension(pathToFile));
-        if(File.Exists(path)) path = Path.Combine(transferConfigManager.Get<string>(TransferOptions.OutputPath), Path.GetFileNameWithoutExtension(pathToFile) + $"_{DateTime.Now.ToShortTimeString()}{Path.GetExtension(pathToFile)}");
+
+        string path;
+        if (string.IsNullOrEmpty(Path.GetExtension(fileName)) || Path.GetExtension(fileName) == "mp4")
+            path = getFileName();
+        else if (Path.GetExtension(fileName) != "mp4")
+            path = getFileName(Path.GetFileNameWithoutExtension(fileName), Path.GetExtension(fileName));
+        else
+            path = getFileName();
+
         Logger.Log($"File create in {path} with arguments {arguments}");
+
+        initializeLoadingOverlay();
+        
+        await TransferFFmpegCore.Conversion(pathToFile, transferConfigManager, path, arguments);
+
+        ClearInternal();
+        
+        Scheduler.AddDelayed(() => this.Push(new VideoScreen()), 2000);
+    }
+
+    private string getFileName(string name = null, string extension = null)
+    {
+        string fileName = (name ?? Path.GetFileNameWithoutExtension(pathToFile) + "_modified") + $"_{DateTime.Now.ToString("H/m/ss")}" +extension ?? Path.GetExtension(pathToFile);
+        string path = Path.Combine(transferConfigManager.Get<string>(TransferOptions.OutputPath), fileName);
+        return path;
+    }
+    private void initializeLoadingOverlay()
+    {
         ClearInternal();
         LoadingOverlay loadingStatus;
         InternalChild = loadingStatus  = new LoadingOverlay()
@@ -178,14 +227,5 @@ public partial class EditScreen : TransferScreen
             Header = "Asking FFmpeg for help..."
         };
         TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += (e) => loadingStatus.Header = e.NewValue;
-        await TransferFFmpegCore.Conversion(pathToFile, transferConfigManager, path, arguments);
-        ClearInternal();
-        InternalChild = new SpriteText{
-            Text = $"Done, you can open the video at path {path}",
-            Anchor = Anchor.Centre,
-            Origin = Anchor.Centre,
-            Font = new FontUsage("FiraCodeNerdFont-Bold")
-        };
-        Scheduler.AddDelayed(() => this.Push(new VideoScreen()), 2000);
     }
 }

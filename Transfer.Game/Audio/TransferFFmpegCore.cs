@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using FFMpegCore;
+using FFMpegCore.Enums;
 using FFMpegCore.Exceptions;
 using osu.Framework.Bindables;
 using osu.Framework.Logging;
@@ -22,21 +23,23 @@ namespace Transfer.Game.Audio
         /// <param name="transferConfig">Config</param>
         /// <param name="outputPath">The path to which the file will be written</param>
         /// <param name="customArguments">Here you can enter your arguments to modify in FFmpeg</param>
+        /// <param name="outputExtension">Output file extension(Start with '.'). If output path is not null, then output extension it's no use</param>
         /// <returns>Path to audio</returns>
-        public static async Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null)
+        public static async Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, string outputExtension = ".mp3")
         {
             CONVERSION_STATUS.Value = "Checking output path";
-            outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}.mp3");
+            outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}{outputExtension}");
             CONVERSION_STATUS.Value = "Argument validation";
             try
             {
-                Logger.Log($"Starting conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments}");
+                Logger.Log($"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments}");
                 CONVERSION_STATUS.Value = "Start conversion";
                 await FFMpegArguments
                     .FromFileInput(video)
                     .OutputToFile(outputPath, false, options => options
                         .WithAudioBitrate(transferConfig.Get<int>(TransferOptions.AudioBitrate))
-                        .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<Codecs>(TransferOptions.AudioCodec).ToString()))
+                        .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<AudioCodecs>(TransferOptions.AudioCodec).ToString()))
+                        .WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
                         .WithCustomArgument(customArguments ?? "")
                         .WithFastStart())
                     .ProcessAsynchronously();
@@ -53,8 +56,8 @@ namespace Transfer.Game.Audio
                     CONVERSION_STATUS.Value = "File exists, return";
                     return outputPath;
                 }
-                CONVERSION_STATUS.Value = "Audio equal null";
-                Logger.Log("Audio equal null");
+                CONVERSION_STATUS.Value = "FFmpeg Error(can be false)";
+                Logger.Error(ffmpegEx, "FFmpeg error(can be false)");
                 return outputPath;
             }
             catch (Exception ex)

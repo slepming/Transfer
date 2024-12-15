@@ -31,7 +31,7 @@ namespace Transfer.Game.Graphics.UI.Containers
                     VolumeContainer = new VolumeContainer
                     {
                         Width = 300,
-                        Height = 20,
+                        Height = 10,
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.BottomCentre,
                         Masking = true,
@@ -44,15 +44,16 @@ namespace Transfer.Game.Graphics.UI.Containers
                             PlaybackContainer = new VideoPlaybackContainer
                             {
                                 RelativeSizeAxes = Axes.X,
-                                Height = 20,
+                                Height = 10,
                                 Anchor = Anchor.Centre,
                                 Origin = Anchor.BottomCentre,
                                 Masking = true,
                                 BorderThickness = 1f,
+                                CornerRadius = 5,
                                 BorderColour = Colour4.Black,
                             },
                             currentPlaybackText = new SpriteText{
-                                Font = new FontUsage(family:"Oswald"),
+                                Font = new FontUsage(family:"FiraCodeNerdFont"),
                                 Anchor = Anchor.Centre,
                                 Origin = Anchor.BottomCentre,
                             }
@@ -81,10 +82,6 @@ namespace Transfer.Game.Graphics.UI.Containers
         }
 
 
-        public void SetPlaybackValueForSlider(double value)
-        {
-            PlaybackContainer.SetSliderBarValue(value);
-        }
 
         protected override void PopIn()
         {

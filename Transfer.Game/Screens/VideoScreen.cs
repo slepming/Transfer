@@ -13,6 +13,7 @@ using osu.Framework.Screens;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
@@ -24,7 +25,7 @@ namespace Transfer.Game.Screens
 
         private Track audio;
 
-        private VideoContainer video;
+        private VideoContainer videoContainer;
 
 
         private ExplorerContainer explorerContainer { get; set; } = new ExplorerContainer();
@@ -54,7 +55,10 @@ namespace Transfer.Game.Screens
             }
         }
 
+        private TransferVideo transferVideo;
+
         public VideoScreen() { }
+        public VideoScreen(TransferVideo video) => transferVideo = video;
 
         public VideoScreen(Track audio, string pathToVideo)
         {
@@ -77,7 +81,7 @@ namespace Transfer.Game.Screens
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            if (string.IsNullOrEmpty(VideoPath))
+            if (string.IsNullOrEmpty(VideoPath) && transferVideo == null)
             {
                 string nullable = "Video null";
                 Logger.Log(nullable);
@@ -87,15 +91,28 @@ namespace Transfer.Game.Screens
 
             try
             {
-                InternalChild = new FinalContextMenuContainer
+                if(transferVideo == null)
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Child = video = new VideoContainer(videoPath)
+                    videoContainer = new VideoContainer(videoPath)
                     {
                         Audio = audio,
                         RelativeSizeAxes = Axes.Both,
                         SeekSpace = seek
-                    }
+                    };
+                }
+                else{
+                    videoContainer = new VideoContainer(transferVideo)
+                    {
+                        Audio = audio,
+                        RelativeSizeAxes = Axes.Both,
+                        SeekSpace = seek
+                    };
+                }
+                
+                InternalChild = new FinalContextMenuContainer
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Child = videoContainer
                 };
             }
             catch (Exception ex)
@@ -166,7 +183,7 @@ namespace Transfer.Game.Screens
         /// </summary>
         private void releaseResources()
         {
-            video?.Dispose();
+            videoContainer?.Dispose();
             audio?.Dispose();
             explorerContainer?.Dispose();
 

@@ -11,22 +11,22 @@ namespace Transfer.Game.Graphics.UI.Containers
     public partial class VideoPlaybackContainer : Container
     {
         private TransferBasicSliderBar<double> sliderBar;
-        private BindableDouble playbacklValue;
+        private BindableDouble playbackValue;
 
 
         private double maxValue = 0;
         private double minValue = 0;
         public VideoPlaybackContainer()
         {
-            playbacklValue = new BindableDouble()
+            playbackValue = new BindableDouble()
             {
                 MinValue = minValue,
                 MaxValue = maxValue,
                 Default = 0
             };
 
-            InternalChildren = new Drawable[]
-            {
+            InternalChildren =
+            [
                 sliderBar = new TransferBasicSliderBar<double>
                 {
                     Anchor = Anchor.Centre,
@@ -37,8 +37,8 @@ namespace Transfer.Game.Graphics.UI.Containers
                     KeyboardStep = 0f,
                     SelectionColour = Color4.HotPink,
                 },
-            };
-            sliderBar.Current = playbacklValue;
+            ];
+            sliderBar.Current = playbackValue;
         }
 
         public Bindable<double> SubscribeOnValueChange() => sliderBar.Current;
@@ -60,8 +60,8 @@ namespace Transfer.Game.Graphics.UI.Containers
 
         public void SetMaxSliderValue(double value)
         {
-            playbacklValue.MaxValue = value;
-            sliderBar.Current = playbacklValue;
+            playbackValue.MaxValue = value;
+            sliderBar.Current = playbackValue;
         }
 
     }

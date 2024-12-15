@@ -8,8 +8,8 @@ public static class FFmpegArgument
 {
     private static readonly Dictionary<VideoEditingFunction, string> video_editing_arguments = new Dictionary<VideoEditingFunction, string>()
     {
-        { VideoEditingFunction.VideoAcceleration, "-vf setpts={0}*PTS"},
-        { VideoEditingFunction.AudioAcceleration, "-af atempo={0}"}
+        { VideoEditingFunction.VideoSpeedUp, "-vf setpts={0}*PTS"},
+        { VideoEditingFunction.AudioSpeedUp, "-af atempo={0}"},
     };
     public static string GetVideoEditingArgument(VideoEditingFunction function, params object[] args)
     {
@@ -24,7 +24,6 @@ public static class FFmpegArgument
 }
 
 public enum VideoEditingFunction{
-    VideoAcceleration,
-    AudioAcceleration,
-
+    VideoSpeedUp,
+    AudioSpeedUp,
 }

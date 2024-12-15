@@ -3,12 +3,15 @@ using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
+using osuTK.Graphics;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.Videos;
@@ -41,7 +44,7 @@ namespace Transfer.Game.UserInterface.Containers
 
         public double DefaultRate { get; private set; }
 
-
+        public VideoContainer(TransferVideo transferVideo) => video = transferVideo;
         public VideoContainer(string filename)
         {
             this.filename = filename;
@@ -56,7 +59,7 @@ namespace Transfer.Game.UserInterface.Containers
             DefaultRate = tcm.Get<double>(TransferOptions.Rate);
             bindableRate.Value = DefaultRate;
 
-            video = new TransferVideo(filename)
+            video ??= new TransferVideo(filename)
             {
                 FillMode = FillMode.Fit,
                 RelativeSizeAxes = Axes.Both,
@@ -64,6 +67,7 @@ namespace Transfer.Game.UserInterface.Containers
                 Origin = Anchor.Centre,
                 Loop = false,
             };
+            
             toolsContainer = new WatchingToolsContainer
             {
                 RelativeSizeAxes = Axes.X,
@@ -102,6 +106,7 @@ namespace Transfer.Game.UserInterface.Containers
             base.Update();
             if(audio != null) video.PlaybackPosition = audio.CurrentTime;
             toolsContainer.PlaybackContainer.SetSliderBarValue(video.PlaybackPosition);
+
         }
 
 
@@ -183,7 +188,7 @@ namespace Transfer.Game.UserInterface.Containers
                     break;
                 
 
-            }
+        }
             return base.OnKeyDown(e);
         }
 
@@ -205,7 +210,7 @@ namespace Transfer.Game.UserInterface.Containers
         }
         private void onSeek(double obj)
         {
-            return;
+            
         }
 
         public void Seek(double time) => allSeek(time);
@@ -245,7 +250,6 @@ namespace Transfer.Game.UserInterface.Containers
                 }
                 case GlobalAction.WatchingVideoReset:
                 {
-                    bindableRate.Value = DefaultRate;
                     lock (video)
                     {
                         if(audio != null) audio.RestartPoint = 0;

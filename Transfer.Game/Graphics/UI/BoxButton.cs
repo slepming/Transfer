@@ -8,7 +8,7 @@ using osu.Framework.Input.Events;
 
 namespace Transfer.Game.Graphics.UI;
 
-public partial class BoxButton : ClickableContainer
+public partial class TransparentButton : ClickableContainer
 {
     private Box background;
     private SpriteText spriteText;
@@ -23,13 +23,10 @@ public partial class BoxButton : ClickableContainer
         }
     }
 
-    public BoxButton()
+    public TransparentButton()
     {
         Masking = true;
-        BorderColour = FrameworkColour.BlueDark;
         Colour = Colour4.White;
-        BorderThickness = 2;
-        CornerRadius = 4;
         InternalChildren = [
             spriteText = new SpriteText{
                 Colour = Colour4.White,
@@ -43,13 +40,13 @@ public partial class BoxButton : ClickableContainer
 
     protected override bool OnHover(HoverEvent e)
     {
-        spriteText.FadeColour(Colour4.NavajoWhite, 400, Easing.InOutQuart);
+        spriteText.FadeColour(Colour4.NavajoWhite, 400, Easing.Out);
         return base.OnHover(e);
     }
 
     protected override void OnHoverLost(HoverLostEvent e)
     {
-        spriteText.FadeColour(Colour4.White, 300, Easing.InOutQuart);
+        spriteText.FadeColour(Colour4.White, 300, Easing.In);
         base.OnHoverLost(e);
     }
 

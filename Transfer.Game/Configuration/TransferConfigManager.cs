@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using osu.Framework.Configuration;
 using osu.Framework.Platform;
 
@@ -16,7 +15,8 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
     {
         SetDefault(TransferOptions.AudioBitrate, 128);
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
-        SetDefault(TransferOptions.AudioCodec, Codecs.libmp3lame);
+        SetDefault(TransferOptions.AudioCodec, AudioCodecs.libmp3lame);
+        SetDefault(TransferOptions.VideoCodec, VideoCodecs.libx265);
         SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
         SetDefault(TransferOptions.SeekValue, 5000);
         SetDefault(TransferOptions.OutputPath, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
@@ -33,11 +33,12 @@ public enum TransferOptions
     AudioCodec,
     Volume,
     SeekValue,
-    OutputPath
+    OutputPath,
+    VideoCodec
 
 }
 
-public enum Codecs
+public enum AudioCodecs
 {
     libmp3lame,
     eac3,
@@ -45,5 +46,13 @@ public enum Codecs
     libfdk_aac,
     libvorbis,
     aac
-
+}
+public enum VideoCodecs
+{
+    libx264,
+    libx265,
+    libvpx,
+    libtheora,
+    png,
+    mpegts
 }
