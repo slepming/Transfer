@@ -15,6 +15,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osuTK;
 using osuTK.Graphics;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Graphics.UI;
 public partial class TransferTextBox : TextBox, IHasTooltip
@@ -43,7 +44,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     protected new SpriteText Placeholder = new SpriteText()
     {
-        Font = new FontUsage(size: 20, family: "Oswald"),
+        Font = new FontUsage(size: 20, family: TransferFonts.Oswald),
     };
 
 
@@ -84,7 +85,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     protected override Drawable GetDrawableCharacter(char c) => new ZoomableContainer()
     {
         AutoSizeAxes = Axes.Both,
-        Child = new SpriteText { Text = c.ToString(), Font = new FontUsage(family: "Oswald", size: 25)}
+        Child = new SpriteText { Text = c.ToString(), Font = new FontUsage(family: TransferFonts.Oswald, size: 25)}
     };
 
     protected override bool CanAddCharacter(char character)

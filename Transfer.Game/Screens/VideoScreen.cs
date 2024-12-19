@@ -55,10 +55,8 @@ namespace Transfer.Game.Screens
             }
         }
 
-        private TransferVideo transferVideo;
-
         public VideoScreen() { }
-        public VideoScreen(TransferVideo video) => transferVideo = video;
+        public VideoScreen(string pathToVideo) => VideoPath = pathToVideo;
 
         public VideoScreen(Track audio, string pathToVideo)
         {
@@ -81,33 +79,23 @@ namespace Transfer.Game.Screens
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            if (string.IsNullOrEmpty(VideoPath) && transferVideo == null)
+            if (string.IsNullOrEmpty(VideoPath))
             {
                 string nullable = "Video null";
                 Logger.Log(nullable);
                 explorerContainer.Show();
                 return;
             }
+            if(audio == null && !string.IsNullOrEmpty(VideoPath)) AudioExtract.CreateaAndGetTrackAsync(VideoPath, tempStorage, audioManager: audioManager);
 
             try
             {
-                if(transferVideo == null)
+                videoContainer = new VideoContainer(videoPath)
                 {
-                    videoContainer = new VideoContainer(videoPath)
-                    {
-                        Audio = audio,
-                        RelativeSizeAxes = Axes.Both,
-                        SeekSpace = seek
-                    };
-                }
-                else{
-                    videoContainer = new VideoContainer(transferVideo)
-                    {
-                        Audio = audio,
-                        RelativeSizeAxes = Axes.Both,
-                        SeekSpace = seek
-                    };
-                }
+                    Audio = audio,
+                    RelativeSizeAxes = Axes.Both,
+                    SeekSpace = seek
+                };
                 
                 InternalChild = new FinalContextMenuContainer
                 {

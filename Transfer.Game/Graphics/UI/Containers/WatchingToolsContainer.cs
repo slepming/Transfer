@@ -9,6 +9,7 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osuTK;
 using Transfer.Game.Configuration;
+using Transfer.Game.Extensions;
 using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers
@@ -53,7 +54,7 @@ namespace Transfer.Game.Graphics.UI.Containers
                                 BorderColour = Colour4.Black,
                             },
                             currentPlaybackText = new SpriteText{
-                                Font = new FontUsage(family:"FiraCodeNerdFont"),
+                                Font = new FontUsage(family:TransferFonts.FiraCodeNerdFont),
                                 Anchor = Anchor.Centre,
                                 Origin = Anchor.BottomCentre,
                             }

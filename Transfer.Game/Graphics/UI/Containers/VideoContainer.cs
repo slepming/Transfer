@@ -104,7 +104,7 @@ namespace Transfer.Game.UserInterface.Containers
         protected override void Update()
         {
             base.Update();
-            if(audio != null) video.PlaybackPosition = audio.CurrentTime;
+            if(audio != null) video.SpySeek(audio.CurrentTime);
             toolsContainer.PlaybackContainer.SetSliderBarValue(video.PlaybackPosition);
 
         }

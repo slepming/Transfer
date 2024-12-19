@@ -10,6 +10,11 @@ using Transfer.Game.IO;
 using Transfer.Game.Screens;
 using Transfer.Game.Graphics.Videos;
 using System.IO;
+using osu.Framework.Logging;
+using System.Linq;
+using osu.Framework;
+using System.Collections.Generic;
+using Transfer.Game.Testing;
 
 namespace Transfer.Game.Tests.Visual
 {
@@ -19,35 +24,46 @@ namespace Transfer.Game.Tests.Visual
     [TestFixture]
     public partial class TestSceneVideoScreen : TransferTestScene
     {
-        private TransferVideo transferVideo;
-        private ResourceStore<byte[]> videoStore;
-        [BackgroundDependencyLoader]
-        private void load(ResourceStore<byte[]> videos)
-        {
-            videoStore = videos;
-            
-        }
+        private VideoTestingByte video;
+        private string tempFilePath;
 
+        private byte[] targetVideo;
+
+        [BackgroundDependencyLoader]
+        private void load(VideoTestingByte resource)
+        {
+            video = resource;
+        }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            AddAssert("Video store", () => videoStore == null ? false : true, "Video store added");
+            AddAssert("Video", () => video != null, "Video store added");
+            AddStep("Check store", () =>
+            {
+                if (video == null)
+                    Logger.Log("ResourceStore is not initialized", level: LogLevel.Error);
+                else
+                    Logger.Log("ResourceStore is initialized", level: LogLevel.Verbose);
+            });
+
+            AddStep("View Videos content", () =>
+            {
+                targetVideo = video.Data;
+            });
             
             AddStep("Writing video bytes to a file", () => {
                 byte[] videoInByteArray;
-                string tempFilePath;
-                videoInByteArray = videoStore.Get("TestVideo.mp4");
+                videoInByteArray = targetVideo;
                 tempFilePath = Path.Combine(Path.GetTempPath(), "test_video.mp4");
                 File.WriteAllBytes(tempFilePath, videoInByteArray);
-                transferVideo = new TransferVideo(tempFilePath);
             });
-            AddAssert("File added", () => transferVideo == null ? false : true);        
-            AddStep("Push to a new screen", () => Add(new ScreenStack(new VideoScreen())
+            AddStep("Push to a new screen", () => Add(new ScreenStack(new VideoScreen(tempFilePath))
                     {
                         RelativeSizeAxes = osu.Framework.Graphics.Axes.Both,
 
                     }));
         }
+        
     }
 }

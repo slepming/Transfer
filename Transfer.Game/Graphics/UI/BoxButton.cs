@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Graphics.UI;
 
@@ -30,7 +31,7 @@ public partial class TransparentButton : ClickableContainer
         InternalChildren = [
             spriteText = new SpriteText{
                 Colour = Colour4.White,
-                Font = new FontUsage("FiraCodeNerdFont", size: 15, fixedWidth: true),
+                Font = new FontUsage(TransferFonts.FiraCodeNerdFont, size: 15, fixedWidth: true),
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
             }

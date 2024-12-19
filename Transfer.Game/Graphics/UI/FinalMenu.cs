@@ -10,6 +10,7 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Graphics.UI
 {
@@ -70,7 +71,7 @@ namespace Transfer.Game.Graphics.UI
 
             protected override Drawable CreateContent() => new SpriteText
             {
-                Font = new FontUsage("Oswald", size:30),
+                Font = new FontUsage(TransferFonts.Oswald, size:30),
             };
         }
     }

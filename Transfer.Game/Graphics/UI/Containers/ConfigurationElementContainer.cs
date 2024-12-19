@@ -3,6 +3,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
+using Transfer.Game.Extensions;
 using Transfer.Game.UserInterface;
 
 namespace Transfer.Game.Graphics.UI.Containers;
@@ -10,7 +11,7 @@ namespace Transfer.Game.Graphics.UI.Containers;
 public partial class ConfigurationElementContainer : Container
 {
     private SpriteText optionSpriteText = new SpriteText(){
-        Font = new FontUsage("Oswald", size:30, fixedWidth: true)
+        Font = new FontUsage(TransferFonts.Oswald, size:30, fixedWidth: true)
     };
 
     /// <summary>

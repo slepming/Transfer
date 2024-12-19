@@ -17,6 +17,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osu.Framework.Screens;
 using osuTK.Graphics;
+using Transfer.Game.Extensions;
 using Transfer.Game.Screens;
 
 namespace Transfer.Game.Graphics.UI;
@@ -88,7 +89,7 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu, IFilt
                 Colour = TextColour,
                 Origin =  Anchor.Centre,
                 Anchor = Anchor.Centre,
-                Font = new FontUsage("Oswald",size: 30)
+                Font = new FontUsage(TransferFonts.Oswald,size: 30)
             }
         ];
         Action += pathTransition;

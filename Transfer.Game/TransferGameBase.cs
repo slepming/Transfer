@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using osu.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
@@ -11,9 +12,11 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK;
+using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
+using Transfer.Game.Testing;
 
 namespace Transfer.Game
 {
@@ -43,6 +46,8 @@ namespace Transfer.Game
         private GlobalActionContainer globalBindings;
 
         private ScreenStack screenStack;
+        private TransferConfigManager transferConfigManager;
+        
 
 
         private DependencyContainer dependencies;
@@ -53,7 +58,7 @@ namespace Transfer.Game
 
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
-                TargetDrawSize = new Vector2(1280, 720)
+                TargetDrawSize = new Vector2(640, 480)
             });
         }
 
@@ -65,22 +70,25 @@ namespace Transfer.Game
             dependencies.CacheAs(tempStorage);
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
-            var videos = new ResourceStore<byte[]>();
-            videos.AddStore(new NamespacedResourceStore<byte[]>(Resources, @"Videos"));
-            dependencies.Cache(videos);
+            VideoTestingByte videoTestData = new VideoTestingByte(Resources.Get(@"Videos/TestVideo.mp4"));
+            dependencies.CacheAs(videoTestData);
 
-            fontStore = new FontStore(renderer, null, 100f);
+            transferConfigManager = new TransferConfigManager(Host.Storage);
+            dependencies.Cache(transferConfigManager);
+
+
 
 
             IResourceStore<byte[]> tempResourceStore = new StorageBackedResourceStore(tempStorage);
             dependencies.Cache(tempResourceStore);
-            Fonts.AddStore(fontStore);
 
+            fontStore = new FontStore(renderer, null, 100f);
+            Fonts.AddStore(fontStore);
             Resources.Get("Fonts/");
 
             InitialiseFonts();
-
             InitialiseConfig(config);
+
             Host.Window.CursorState = CursorState.Hidden;
 
             base.Content.Add(SafeAreaContainer = new SafeAreaContainer

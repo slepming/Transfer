@@ -23,6 +23,9 @@ using Transfer.Game.Audio;
 using System.Globalization;
 using osu.Framework.Bindables;
 using osu.Framework.Screens;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Screens;
 
@@ -100,8 +103,8 @@ public partial class EditScreen : TransferScreen
         {
             Width = 100,
             Height = 30,
-            Anchor = Anchor.TopLeft,
-            Origin = Anchor.TopLeft,
+            Anchor = Anchor.BottomCentre,
+            Origin = Anchor.TopCentre,
             Tooltip = "You can change the file name here",
             PlaceholderText = "Enter name",
             Depth = 1,
@@ -140,7 +143,19 @@ public partial class EditScreen : TransferScreen
                     RelativeSizeAxes = Axes.Both,
                     Children = [
                         speedUpTextBox,
-                        videoNameAndExtensionTextBox
+                        new Container{
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Children = [
+                                new SpriteText{
+                                    Font = new FontUsage(TransferFonts.FiraCodeNerdFont),
+                                    Text = "Change file name",
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.BottomCentre,
+                                },
+                                videoNameAndExtensionTextBox
+                                ]
+                        }
                         ],
                 },
                 background,

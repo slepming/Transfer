@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
+using Transfer.Game.Extensions;
 using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Tests.Visual.UITest;
@@ -20,7 +21,7 @@ public partial class TestSceneExceptionContainer : TransferTestScene
         exceptionContainer = new ExceptionContainer
         {
             RelativeSizeAxes = Axes.Both,
-            Font = new FontUsage("FiraCodeNerdFont", size: 30),
+            Font = new FontUsage(TransferFonts.FiraCodeNerdFont, size: 30),
             Text = "sdfkgskbfsgdfsdfhsdfbgsd s sggsd sdfdhbgdkjhbg \nf hjsdfb jghbd gshjdfb gjhsdfbg hjskdbsjdhfbghjdb gjh j  bfdhgbdj",
             HeaderText = "Suck"
         };
@@ -34,7 +35,7 @@ public partial class TestSceneExceptionContainer : TransferTestScene
         AddStep("Add container", () => Add(exceptionContainer));
         AddStep("Create container", () => exceptionContainer = new ExceptionContainer{
             RelativeSizeAxes = Axes.Both,
-            Font = new FontUsage("FiraCodeNerdFont", size: 30),
+            Font = new FontUsage(TransferFonts.FiraCodeNerdFont, size: 30),
             Text = "sdfkgskbfsgdfsdfhsdfbgsd s sggsd sdfdhbgdkjhbg \nf hjsdfb jghbd gshjdfb gjhsdfbg hjskdbsjdhfbghjdb gjh j  bfdhgbdj",
             HeaderText = "Suck"
         });

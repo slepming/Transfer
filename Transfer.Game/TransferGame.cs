@@ -29,7 +29,7 @@ namespace Transfer.Game
 
 
         private WrappedStorage tempStorage = null;
-        private TransferConfigManager transferConfigManager = null;
+        
 
         private StorageBackedResourceStore tempResouceStore = null;
 
@@ -46,10 +46,9 @@ namespace Transfer.Game
         public TransferGame() { }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(TransferConfigManager transferConfigManager)
         {
-            transferConfigManager = new TransferConfigManager(Host.Storage);
-            dependencies.Cache(transferConfigManager);
+            
             audioExtract = new AudioExtract<Track>(transferConfigManager);
         }
 

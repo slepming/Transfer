@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osuTK.Graphics;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.UserInterface;
 
@@ -58,7 +59,7 @@ public partial class ExceptionButton : ClickableContainer
             SpriteText = new SpriteText{
                 Text = Text,
                 Colour = TextColour,
-                Font = new FontUsage("FiraCodeNerdFont", size: 20, fixedWidth: true),
+                Font = new FontUsage(TransferFonts.FiraCodeNerdFont, size: 20, fixedWidth: true),
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre
             },

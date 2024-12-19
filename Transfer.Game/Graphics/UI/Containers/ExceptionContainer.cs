@@ -8,6 +8,7 @@ using osuTK;
 using osu.Framework.Localisation;
 using System.Diagnostics;
 using osu.Framework.Logging;
+using Transfer.Game.Extensions;
 
 namespace Transfer.Game.UserInterface.Containers;
 
@@ -49,7 +50,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
         }
     }
 
-    public FontUsage Font { get; set; } = new FontUsage(family: "FiraCodeNerdFont",size: 30);
+    public FontUsage Font { get; set; } = new FontUsage(family: TransferFonts.FiraCodeNerdFont, size: 30);
 
 
 
@@ -88,7 +89,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                     Header = new SpriteText{
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Font = new FontUsage(family: "FiraCodeNerdFont",size: 50, fixedWidth: true),
+                        Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont,size: 50, fixedWidth: true),
                         Text = "Null Header",
                         Colour = Colour4.Red,
                         
@@ -153,7 +154,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                     Header = new SpriteText{
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Font = new FontUsage(family: "FiraCodeNerdFont",size: 50, fixedWidth: true),
+                        Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont,size: 50, fixedWidth: true),
                         Text = HeaderText,
                         Colour = Colour4.Red
                     },

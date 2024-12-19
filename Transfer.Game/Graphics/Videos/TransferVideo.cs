@@ -37,6 +37,11 @@ namespace Transfer.Game.Graphics.Videos
             return Duration;
         }
 
+        public void SpySeek(double time)
+        {
+            base.Seek(time);
+        }
+
         public new void Seek(double time)
         {
             base.Seek(time);

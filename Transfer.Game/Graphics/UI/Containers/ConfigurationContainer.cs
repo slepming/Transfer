@@ -8,6 +8,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
+using Transfer.Game.Extensions;
 using Transfer.Game.Input.Bindings;
 
 namespace Transfer.Game.Graphics.UI.Containers;
@@ -41,7 +42,7 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                         Origin = Anchor.TopLeft,
                         Text = "Options",
                         Position = new Vector2(40, Y),
-                        Font = new FontUsage("FiraCodeNerdFont-Light", size: 50, fixedWidth: true)
+                        Font = new FontUsage(TransferFonts.FiraCodeNerdFontLight, size: 50, fixedWidth: true)
                     },
                     appSettings = new FillFlowContainer
                     {
@@ -75,7 +76,7 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                     {
                         Text = option.ToString(),
                         Position = new Vector2(40, 0),
-                        Font = new FontUsage("FiraCodeNerdFont-Light", size: 30)
+                        Font = new FontUsage(TransferFonts.FiraCodeNerdFontLight, size: 30)
                     }
                 ]
             });

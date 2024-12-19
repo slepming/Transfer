@@ -1,6 +1,7 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
+using Transfer.Game.Extensions;
 using Transfer.Game.UserInterface;
 
 namespace Transfer.Game.Graphics.UI.Containers
@@ -34,7 +35,7 @@ namespace Transfer.Game.Graphics.UI.Containers
             InternalChildren = [
                 new SpriteText{
                     Text = Header,
-                    Font = new FontUsage("FiraCodeNerdFont-Bold")   
+                    Font = new FontUsage(TransferFonts.FiraCodeNerdFontBold)   
                 },
                 loadingComponent = new Loading
                 {

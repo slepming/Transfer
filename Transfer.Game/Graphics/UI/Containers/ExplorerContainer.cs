@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Logging;
 using osuTK;
+using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.Cursor;
 
 namespace Transfer.Game.Graphics.UI.Containers;
@@ -44,7 +45,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
                     Position = new Vector2(0,9),
-                    Font = new FontUsage("Oswald",size: 40)
+                    Font = new FontUsage(TransferFonts.Oswald,size: 40)
                 },
                 
                 new FinalContextMenuContainer{
