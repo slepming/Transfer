@@ -31,8 +31,9 @@ namespace Transfer.Game.Screens;
 
 public partial class EditScreen : TransferScreen
 {
-    private string pathToFile;
+    private string pathToFile = string.Empty;
     private string fileName = string.Empty;
+    private SpriteText timeCode;
     private Dictionary<VideoEditingFunction, string> ffmpegFunctions = new Dictionary<VideoEditingFunction,string>();
     private TransparentButton confirmButton, videoSpeedUp;
 
@@ -70,10 +71,9 @@ public partial class EditScreen : TransferScreen
             }
             transferVideo = new VideoContainer(pathToFile)
             {
-                RelativeSizeAxes = Axes.Both,
-                Size = new Vector2(Size.X/1.5f, Size.Y/1.5f),
                 Anchor = Anchor.Centre,
-                Origin = Anchor.BottomCentre,
+                Origin = Anchor.Centre,
+                RelativeSizeAxes = Axes.Both,
                 Audio = await tempStore.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager),
                 WatchingToolsVisible = false,
             };
@@ -160,11 +160,18 @@ public partial class EditScreen : TransferScreen
                 },
                 background,
                 new Container{
-                    Anchor = Anchor.TopRight,
-                    Origin = Anchor.TopRight,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.BottomLeft,
                     RelativeSizeAxes = Axes.Both,
+                    Size = new Vector2(Size.X/2,Size.Y/2),
                     Children = [
-                        transferVideo
+                        transferVideo,
+                        timeCode = new SpriteText{
+                            Text = "",
+                            Font = new FontUsage(TransferFonts.FiraCodeNerdFont),
+                            Anchor = Anchor.BottomCentre,
+                            Origin = Anchor.BottomCentre
+                        }
                     ]
                 },
                 confirmButton,
@@ -193,6 +200,12 @@ public partial class EditScreen : TransferScreen
         }
         ffmpegFunctions.Add(VideoEditingFunction.VideoSpeedUp,FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, modifiedFactor.ToString(CultureInfo.InvariantCulture)));
         ffmpegFunctions.Add(VideoEditingFunction.AudioSpeedUp, FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioSpeedUp, factor.ToString(CultureInfo.InvariantCulture)));
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if(timeCode != null) timeCode.Text = transferVideo.GetTimecode();
     }
 
     protected override void OnNotifyError(string text)

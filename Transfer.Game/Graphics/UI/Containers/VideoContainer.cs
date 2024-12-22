@@ -98,6 +98,10 @@ namespace Transfer.Game.UserInterface.Containers
 
         }
 
+        public string GetTimecode(){
+            return toolsContainer.GetTimeCodeText();
+        }
+
 
         private void onRateChanged(ValueChangedEvent<double> obj) => audio.Tempo.Value = obj.NewValue;
 

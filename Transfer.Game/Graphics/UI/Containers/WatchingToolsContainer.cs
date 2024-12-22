@@ -91,7 +91,7 @@ namespace Transfer.Game.Graphics.UI.Containers
         /// You can get already filtered timecode
         /// </summary>
         /// <returns>text time code</returns>
-        public string GetTimeCodeText() => timeCodeText;
+        public string GetTimeCodeText() => timeCodeText ?? "Null";
 
 
 
