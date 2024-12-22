@@ -21,7 +21,7 @@ namespace Transfer.Game.Graphics.UI.Containers
         public readonly VideoPlaybackContainer PlaybackContainer;
 
         private readonly SpriteText currentTimecodeText;
-        private string timeCodeText = string.Empty;
+        private string timecode = string.Empty;
 
 
 
@@ -66,8 +66,8 @@ namespace Transfer.Game.Graphics.UI.Containers
                 ]
             };
             PlaybackContainer.SubscribeOnValueChange().ValueChanged += (ValueChangedEvent<double> value) => {
-                timeCodeText = $"{DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss")}/{DateTimeOffset.FromUnixTimeMilliseconds(duration).DateTime.ToString("HH:mm:ss")}";
-                currentTimecodeText.Text = timeCodeText;
+                timecode = $"{DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss")}/{DateTimeOffset.FromUnixTimeMilliseconds(duration).DateTime.ToString("HH:mm:ss")}";
+                currentTimecodeText.Text = timecode;
             };
         }
 
@@ -91,7 +91,7 @@ namespace Transfer.Game.Graphics.UI.Containers
         /// You can get already filtered timecode
         /// </summary>
         /// <returns>text time code</returns>
-        public string GetTimeCodeText() => timeCodeText ?? "Null";
+        public string GetTimeCodeText() => timecode ?? "Null";
 
 
 

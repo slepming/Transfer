@@ -97,7 +97,11 @@ namespace Transfer.Game.UserInterface.Containers
             bindableRate.ValueChanged += onRateChanged;
 
         }
-
+        
+        /// <summary>
+        /// You can get already filtered timecode
+        /// </summary>
+        /// <returns>text time code</returns>
         public string GetTimecode(){
             return toolsContainer.GetTimeCodeText();
         }

@@ -35,13 +35,13 @@ public partial class EditScreen : TransferScreen
     private string fileName = string.Empty;
     private SpriteText timeCode;
     private Dictionary<VideoEditingFunction, string> ffmpegFunctions = new Dictionary<VideoEditingFunction,string>();
-    private TransparentButton confirmButton, videoSpeedUp;
+    private TransparentButton confirmButton, videoSpeedUpButton;
 
-    private TransferTextBox speedUpTextBox, videoNameAndExtensionTextBox;
+    private TransferTextBox speedUpTextBox, editNameFileTextBox;
 
-    private VideoContainer transferVideo;
+    private VideoContainer videoContainer;
 
-    private AudioExtract<Track> tempStore;
+    private AudioExtract<Track> audioExtract;
 
     private ExplorerContainer explorerContainer = new();
 
@@ -54,14 +54,14 @@ public partial class EditScreen : TransferScreen
     private TransferConfigManager transferConfigManager{ get; set; }
 
     public EditScreen() { }
-    public EditScreen(VideoContainer video) => transferVideo = video;
+    public EditScreen(VideoContainer video) => videoContainer = video;
     public EditScreen(string pathToFile) => this.pathToFile = pathToFile;
 
     [BackgroundDependencyLoader]
     private async void load(AudioManager audioManager)
     {
-        tempStore = new AudioExtract<Track>(transferConfigManager);
-        if(transferVideo == null){
+        audioExtract = new AudioExtract<Track>(transferConfigManager);
+        if(videoContainer == null){
             if(pathToFile == null){
                 explorerContainer.Show();
                 explorerContainer.FoundVideo += (string path, bool isFile) =>
@@ -69,12 +69,12 @@ public partial class EditScreen : TransferScreen
                     pathToFile = path;
                 };
             }
-            transferVideo = new VideoContainer(pathToFile)
+            videoContainer = new VideoContainer(pathToFile)
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both,
-                Audio = await tempStore.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager),
+                Audio = await audioExtract.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager),
                 WatchingToolsVisible = false,
             };
 
@@ -89,7 +89,7 @@ public partial class EditScreen : TransferScreen
 
         };
         confirmButton.Action += confirmVideoEditingButtonAction;
-        videoSpeedUp = new TransparentButton{
+        videoSpeedUpButton = new TransparentButton{
             Text = "Acceleration",
             Width = 100,
             Height = 50,
@@ -97,9 +97,9 @@ public partial class EditScreen : TransferScreen
             Origin = Anchor.BottomCentre,
             Position = new Vector2(confirmButton.Width + 10, 0)
         };
-        videoSpeedUp.Action += accelerationVideoButtonAction;
+        videoSpeedUpButton.Action += accelerationVideoButtonAction;
 
-        videoNameAndExtensionTextBox = new TransferTextBox(true)
+        editNameFileTextBox = new TransferTextBox(true)
         {
             Width = 100,
             Height = 30,
@@ -110,7 +110,7 @@ public partial class EditScreen : TransferScreen
             Depth = 1,
         };
 
-        videoNameAndExtensionTextBox.Current.ValueChanged += onChangeValueInNameTextBox;
+        editNameFileTextBox.Current.ValueChanged += onChangeValueInNameTextBox;
 
         speedUpTextBox = new TransferTextBox(true)
         {
@@ -118,7 +118,7 @@ public partial class EditScreen : TransferScreen
             Height = 30,
             Anchor = Anchor.BottomCentre,
             Origin = Anchor.BottomCentre,
-            Position = new Vector2(videoSpeedUp.X, -50),
+            Position = new Vector2(videoSpeedUpButton.X, -50),
             LengthLimit = 4,
             Tooltip = "Acceleration factor. Press 'Enter' to confirm",
             CanAddCharacters = false,
@@ -153,7 +153,7 @@ public partial class EditScreen : TransferScreen
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.BottomLeft,
                                 },
-                                videoNameAndExtensionTextBox
+                                editNameFileTextBox
                                 ]
                         }
                         ],
@@ -165,7 +165,7 @@ public partial class EditScreen : TransferScreen
                     RelativeSizeAxes = Axes.Both,
                     Size = new Vector2(Size.X/2,Size.Y/2),
                     Children = [
-                        transferVideo,
+                        videoContainer,
                         timeCode = new SpriteText{
                             Text = "",
                             Font = new FontUsage(TransferFonts.FiraCodeNerdFont),
@@ -175,7 +175,7 @@ public partial class EditScreen : TransferScreen
                     ]
                 },
                 confirmButton,
-                videoSpeedUp,
+                videoSpeedUpButton,
                 
             ];
         }, 500);
@@ -205,7 +205,7 @@ public partial class EditScreen : TransferScreen
     protected override void Update()
     {
         base.Update();
-        if(timeCode != null) timeCode.Text = transferVideo.GetTimecode();
+        if(timeCode != null) timeCode.Text = videoContainer.GetTimecode();
     }
 
     protected override void OnNotifyError(string text)
