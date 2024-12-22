@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -19,7 +20,8 @@ namespace Transfer.Game.Graphics.UI.Containers
         public readonly VolumeContainer VolumeContainer;
         public readonly VideoPlaybackContainer PlaybackContainer;
 
-        private readonly SpriteText currentPlaybackText;
+        private readonly SpriteText currentTimecodeText;
+        private string timeCodeText = string.Empty;
 
 
 
@@ -53,7 +55,7 @@ namespace Transfer.Game.Graphics.UI.Containers
                                 CornerRadius = 5,
                                 BorderColour = Colour4.Black,
                             },
-                            currentPlaybackText = new SpriteText{
+                            currentTimecodeText = new SpriteText{
                                 Font = new FontUsage(family:TransferFonts.FiraCodeNerdFont),
                                 Anchor = Anchor.Centre,
                                 Origin = Anchor.BottomCentre,
@@ -63,7 +65,10 @@ namespace Transfer.Game.Graphics.UI.Containers
 
                 ]
             };
-            PlaybackContainer.SubscribeOnValueChange().ValueChanged += (ValueChangedEvent<double> value) => currentPlaybackText.Text = $"{DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss")}/{DateTimeOffset.FromUnixTimeMilliseconds(duration).DateTime.ToString("HH:mm:ss")}";
+            PlaybackContainer.SubscribeOnValueChange().ValueChanged += (ValueChangedEvent<double> value) => {
+                timeCodeText = $"{DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss")}/{DateTimeOffset.FromUnixTimeMilliseconds(duration).DateTime.ToString("HH:mm:ss")}";
+                currentTimecodeText.Text = timeCodeText;
+            };
         }
 
         protected override void LoadComplete()
@@ -72,7 +77,7 @@ namespace Transfer.Game.Graphics.UI.Containers
             VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width / 3), -15);
             PlaybackContainer.SetSliderWidth(Width - VolumeContainer.SliderWidth * 4);
             PlaybackContainer.Position = new Vector2(PlaybackContainer.Position.X - VolumeContainer.SliderWidth / 2, -15);
-            currentPlaybackText.Position = new Vector2(currentPlaybackText.Position.X + PlaybackContainer.Position.X / 2);
+            currentTimecodeText.Position = new Vector2(currentTimecodeText.Position.X + PlaybackContainer.Position.X / 2);
         }
 
         private long duration;
@@ -81,6 +86,12 @@ namespace Transfer.Game.Graphics.UI.Containers
             PlaybackContainer.SetMaxSliderValue(value);
             duration = (long)value;
         }
+
+        /// <summary>
+        /// You can get already filtered timecode
+        /// </summary>
+        /// <returns>text time code</returns>
+        public string GetTimeCodeText() => timeCodeText;
 
 
 
@@ -104,5 +115,7 @@ namespace Transfer.Game.Graphics.UI.Containers
             this.FadeTo(0.001f, 2000, Easing.InOutQuad);
             base.OnHoverLost(e);
         }
+
+        
     }
 }

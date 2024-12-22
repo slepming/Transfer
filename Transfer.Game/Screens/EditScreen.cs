@@ -71,9 +71,9 @@ public partial class EditScreen : TransferScreen
             transferVideo = new VideoContainer(pathToFile)
             {
                 RelativeSizeAxes = Axes.Both,
-                Size = new Vector2(Size.X/2, Size.Y/2),
-                Anchor = Anchor.TopRight,
-                Origin = Anchor.TopRight,
+                Size = new Vector2(Size.X/1.5f, Size.Y/1.5f),
+                Anchor = Anchor.Centre,
+                Origin = Anchor.BottomCentre,
                 Audio = await tempStore.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager),
                 WatchingToolsVisible = false,
             };
@@ -104,9 +104,9 @@ public partial class EditScreen : TransferScreen
             Width = 100,
             Height = 30,
             Anchor = Anchor.BottomCentre,
-            Origin = Anchor.TopCentre,
+            Origin = Anchor.TopLeft,
             Tooltip = "You can change the file name here",
-            PlaceholderText = "Enter name",
+            PlaceholderText = "Enter file name",
             Depth = 1,
         };
 
@@ -122,7 +122,7 @@ public partial class EditScreen : TransferScreen
             LengthLimit = 4,
             Tooltip = "Acceleration factor. Press 'Enter' to confirm",
             CanAddCharacters = false,
-            PlaceholderText = "Enter speed.",
+            PlaceholderText = "Enter speed",
             Depth = 1
         };
 
@@ -151,7 +151,7 @@ public partial class EditScreen : TransferScreen
                                     Font = new FontUsage(TransferFonts.FiraCodeNerdFont),
                                     Text = "Change file name",
                                     Anchor = Anchor.TopCentre,
-                                    Origin = Anchor.BottomCentre,
+                                    Origin = Anchor.BottomLeft,
                                 },
                                 videoNameAndExtensionTextBox
                                 ]
@@ -159,7 +159,14 @@ public partial class EditScreen : TransferScreen
                         ],
                 },
                 background,
-                transferVideo,
+                new Container{
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    RelativeSizeAxes = Axes.Both,
+                    Children = [
+                        transferVideo
+                    ]
+                },
                 confirmButton,
                 videoSpeedUp,
                 
@@ -186,6 +193,11 @@ public partial class EditScreen : TransferScreen
         }
         ffmpegFunctions.Add(VideoEditingFunction.VideoSpeedUp,FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, modifiedFactor.ToString(CultureInfo.InvariantCulture)));
         ffmpegFunctions.Add(VideoEditingFunction.AudioSpeedUp, FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioSpeedUp, factor.ToString(CultureInfo.InvariantCulture)));
+    }
+
+    protected override void OnNotifyError(string text)
+    {
+        this.FlashColour(Colour4.Red, 1000);
     }
 
     protected override void LoadComplete()

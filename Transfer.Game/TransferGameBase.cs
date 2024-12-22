@@ -58,7 +58,7 @@ namespace Transfer.Game
 
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
-                TargetDrawSize = new Vector2(640, 480)
+                TargetDrawSize = new Vector2(1024, 720)
             });
         }
 
@@ -70,8 +70,7 @@ namespace Transfer.Game
             dependencies.CacheAs(tempStorage);
             Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
-            VideoTestingByte videoTestData = new VideoTestingByte(Resources.Get(@"Videos/TestVideo.mp4"));
-            dependencies.CacheAs(videoTestData);
+            
 
             transferConfigManager = new TransferConfigManager(Host.Storage);
             dependencies.Cache(transferConfigManager);
