@@ -29,12 +29,12 @@ namespace Transfer.Game.Tests.Visual
         {
             base.LoadComplete();
             AddAssert("Video", () => videoTestBytes != null, "Video store added");
-            AddStep("Check store", () =>
+            AddStep("Check bytes", () =>
             {
                 if (videoTestBytes == null)
-                    Logger.Log("ResourceStore is not initialized", level: LogLevel.Error);
+                    Logger.Log("Resources is not initialized", level: LogLevel.Error);
                 else
-                    Logger.Log("ResourceStore is initialized", level: LogLevel.Verbose);
+                    Logger.Log("Resources is initialized", level: LogLevel.Verbose);
             });
 
             AddStep("View Videos content", () =>

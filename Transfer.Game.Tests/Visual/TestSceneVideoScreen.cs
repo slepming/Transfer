@@ -24,7 +24,7 @@ namespace Transfer.Game.Tests.Visual
     [TestFixture]
     public partial class TestSceneVideoScreen : TransferTestScene
     {
-        private VideoTestingByte video;
+        private VideoTestingByte videoTestBytes;
         private string tempFilePath;
 
         private byte[] targetVideo;
@@ -32,24 +32,24 @@ namespace Transfer.Game.Tests.Visual
         [BackgroundDependencyLoader]
         private void load(VideoTestingByte resource)
         {
-            video = resource;
+            videoTestBytes = resource;
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            AddAssert("Video", () => video != null, "Video store added");
-            AddStep("Check store", () =>
+            AddAssert("Video", () => videoTestBytes != null, "Video store added");
+            AddStep("Check bytes", () =>
             {
-                if (video == null)
-                    Logger.Log("ResourceStore is not initialized", level: LogLevel.Error);
+                if (videoTestBytes == null)
+                    Logger.Log("Resources is not initialized", level: LogLevel.Error);
                 else
-                    Logger.Log("ResourceStore is initialized", level: LogLevel.Verbose);
+                    Logger.Log("Resources is initialized", level: LogLevel.Verbose);
             });
 
             AddStep("View Videos content", () =>
             {
-                targetVideo = video.Data;
+                targetVideo = videoTestBytes.Data;
             });
             
             AddStep("Writing video bytes to a file", () => {
@@ -59,10 +59,10 @@ namespace Transfer.Game.Tests.Visual
                 File.WriteAllBytes(tempFilePath, videoInByteArray);
             });
             AddStep("Push to a new screen", () => Add(new ScreenStack(new VideoScreen(tempFilePath))
-                    {
-                        RelativeSizeAxes = osu.Framework.Graphics.Axes.Both,
+                {
+                    RelativeSizeAxes = osu.Framework.Graphics.Axes.Both,
 
-                    }));
+                }));
         }
         
     }
