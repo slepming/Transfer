@@ -11,9 +11,13 @@ namespace Transfer.Game.Graphics.Videos
         /// </summary>
         public Action<double> SeekOccurs;
 
-        public TransferVideo(string filename, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
-        {
+        private bool enableRate;
 
+        private float playbackSpeed = 1.0f;
+
+        public TransferVideo(string filename,bool enableRate = false, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
+        {
+            this.enableRate = enableRate;
         }
 
         [BackgroundDependencyLoader]
@@ -24,6 +28,8 @@ namespace Transfer.Game.Graphics.Videos
 
         protected override void Update()
         {
+            if(enableRate) SpySeek(Time.Elapsed * playbackSpeed);
+
             base.Update();
         }
 
@@ -44,8 +50,8 @@ namespace Transfer.Game.Graphics.Videos
 
         public new void Seek(double time)
         {
-            base.Seek(time);
             SeekOccurs?.Invoke(time);
+            base.Seek(time);
         }
 
     }

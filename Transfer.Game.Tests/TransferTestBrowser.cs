@@ -18,7 +18,7 @@ namespace Transfer.Game.Tests
         {
             base.LoadComplete();
 
-            VideoTestingByte videoTestData = new VideoTestingByte(Resources.Get(@"Videos/TestVideo.mp4"));
+            VideoTestingByte videoTestData = new VideoTestingByte(Resources.Get(@"Videos/Priroda.mp4"));
             testDependencies.CacheAs(videoTestData);
             
             AddRange(

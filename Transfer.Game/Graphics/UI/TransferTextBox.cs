@@ -26,12 +26,16 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     
     private Box background;
 
-    private Color4 backgroundColour = Color4.Gray.Opacity(100);
+    private Color4 backgroundColour;
     public Color4 BackgroundColour
     {
         get => backgroundColour;
         set => backgroundColour = value;
     }
+
+    public float CharacterSize = 25;
+
+    
 
     public override bool HandleNonPositionalInput { get; }
     
@@ -40,12 +44,9 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     /// <summary>
     /// If false then user can writing only numbers
     /// </summary>
-    public bool CanAddCharacters { get; set; } = true;
+    public bool OnlyNumbers { get; set; } = false;
 
-    protected new SpriteText Placeholder = new SpriteText()
-    {
-        Font = new FontUsage(size: 20, family: TransferFonts.Oswald),
-    };
+    public string Font { get; set; } = TransferFonts.Oswald;
 
 
     public TransferTextBox(bool handleNonPositionalInput = false, bool requestsFocus = false)
@@ -65,13 +66,14 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     }
     protected override Caret CreateCaret() => new TransferCaret(){
-        CaretWidth = 2,
+        CaretWidth = 10,
     };
 
     protected override SpriteText CreatePlaceholder()
     {
-        return Placeholder;
+        return Placeholder = new SpriteText{ Font = new FontUsage(size: CharacterSize, family: Font) };
     }
+
 
     protected override void NotifyInputError()
     {
@@ -85,12 +87,14 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     protected override Drawable GetDrawableCharacter(char c) => new ZoomableContainer()
     {
         AutoSizeAxes = Axes.Both,
-        Child = new SpriteText { Text = c.ToString(), Font = new FontUsage(family: TransferFonts.Oswald, size: 25)}
+        Child = new SpriteText { Text = c.ToString(), Font = new FontUsage(family: Font, size: CharacterSize)}
     };
 
     protected override bool CanAddCharacter(char character)
     {
-        return CanAddCharacters ? true : !char.IsLetter(character);
+        if(character == '\0') return false;
+        if (OnlyNumbers) return char.IsDigit(character) || character == '.';
+        return true;
     }
 
     private partial class ZoomableContainer : Container
@@ -126,6 +130,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
         public override void Hide() => this.FadeOut(400);
         public override void DisplayAt(Vector2 position, float? selectionWidth)
         {
+            this.FlashColour(Colour4.Blue.Opacity(50), 500);
             if(selectionWidth != null)
             {
                 this.MoveTo(position, 50, Easing.Out);

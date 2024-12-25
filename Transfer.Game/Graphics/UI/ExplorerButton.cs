@@ -101,6 +101,13 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu, IFilt
         Transition?.Invoke(path, false);
 
     }
+    private void moveToEditScreen()
+    {
+        if (File.Exists(Path) && TransferGameBase.VIDEO_EXTENSIONS.Contains(System.IO.Path.GetExtension(Path)))
+        {
+            screenStack.Push(new EditScreen(Path));
+        }
+    }
 
     protected override void LoadComplete()
     {
@@ -121,10 +128,5 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu, IFilt
         base.OnHoverLost(e);
     }
 
-    private void moveToEditScreen()
-    {
-        if(File.Exists(Path) && TransferGameBase.VIDEO_EXTENSIONS.Contains(System.IO.Path.GetExtension(Path))){
-            screenStack.Push(new EditScreen(Path));
-        }
-    }
+    
 }

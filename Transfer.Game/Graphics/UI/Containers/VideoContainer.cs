@@ -28,7 +28,6 @@ namespace Transfer.Game.UserInterface.Containers
 
         private Bindable<double> bindableRate = new Bindable<double>();
 
-        public bool WatchingToolsVisible = true;
 
         private Track audio;
 
@@ -38,6 +37,7 @@ namespace Transfer.Game.UserInterface.Containers
                 audio = value;
             } }
 
+        public bool WatchingToolsVisible = true;
         private bool isMuted = false;
 
         private string filename;
@@ -67,7 +67,7 @@ namespace Transfer.Game.UserInterface.Containers
                 Origin = Anchor.Centre,
                 Loop = false,
             };
-            
+
             toolsContainer = new WatchingToolsContainer
             {
                 RelativeSizeAxes = Axes.X,
@@ -97,17 +97,21 @@ namespace Transfer.Game.UserInterface.Containers
             bindableRate.ValueChanged += onRateChanged;
 
         }
-        
+
         /// <summary>
         /// You can get already filtered timecode
         /// </summary>
         /// <returns>text time code</returns>
         public string GetTimecode(){
-            return toolsContainer.GetTimeCodeText();
+            if(toolsContainer != null) return toolsContainer.GetTimeCodeText();
+            else return "";
         }
 
 
-        private void onRateChanged(ValueChangedEvent<double> obj) => audio.Tempo.Value = obj.NewValue;
+        private void onRateChanged(ValueChangedEvent<double> obj)
+        {
+            if (audio != null) audio.Tempo.Value = obj.NewValue;
+        }
 
         protected override void Update()
         {
@@ -148,7 +152,7 @@ namespace Transfer.Game.UserInterface.Containers
             }
         }
 
-        
+
 
         protected override bool OnKeyDown(KeyDownEvent e)
         {
@@ -194,7 +198,7 @@ namespace Transfer.Game.UserInterface.Containers
                 case osuTK.Input.Key.Number9:
                     allSeek(video.GetMaxLengthVideo() * 0.9);
                     break;
-                
+
 
         }
             return base.OnKeyDown(e);
@@ -218,16 +222,20 @@ namespace Transfer.Game.UserInterface.Containers
         }
         private void onSeek(double obj)
         {
-            
+
         }
 
         public void Seek(double time) => allSeek(time);
+
+        public void Rate(double rate) => bindableRate.Value = rate;
+
 
         protected override bool OnScroll(ScrollEvent e)
         {
             toolsContainer.VolumeContainer.ChangeSliderValue(e.ScrollDelta.Y / 10, '+');
             return base.OnScroll(e);
         }
+
 
         public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
         {
@@ -237,6 +245,12 @@ namespace Transfer.Game.UserInterface.Containers
             {
                 case GlobalAction.PauseVideo:
                 {
+                    if(video.PlaybackPosition == video.Duration)
+                    {
+                        audio?.Restart();
+                        video.Seek(0);
+                        return true;
+                    }
                     if (isMuted)
                     {
                         audio?.Start();
@@ -274,6 +288,13 @@ namespace Transfer.Game.UserInterface.Containers
         public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
         {
 
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            audio?.Dispose();
+            video.Expire();
+            base.Dispose(isDisposing);
         }
 
     }
