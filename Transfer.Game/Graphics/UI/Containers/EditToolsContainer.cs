@@ -31,24 +31,16 @@ namespace Transfer.Game.Graphics.UI.Containers
             RelativeSizeAxes = Axes.Both;
             InternalChildren = [
                 speedUpSlider = new SpeedUpSlider(),
-                new SpriteText{
-                    Font = new FontUsage(TransferFonts.Oswald, size: 25),
-                    Text = "Speed",
-                    Anchor = Anchor.BottomLeft,
-                    Origin = Anchor.BottomLeft,
-                    Position = new Vector2(50,-3),
-
-                },
                 transferTextBox = new TransferTextBox(true){
                     Width = 40,
-                    Height = 30,
+                    Height = 43,
                     OnlyNumbers = true,
-                    Anchor = Anchor.BottomLeft,
-                    Origin = Anchor.BottomLeft,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopLeft,
                     BackgroundColour = Colour4.Transparent,
                     BorderColour = Colour4.Transparent,
                     CharacterSize = 20,
-                    Position = new Vector2(100,0)
+                    Position = new Vector2(50,0)
                 },
                 confirmButton = new ConfirmButton{
                     Width = 80,
@@ -68,7 +60,7 @@ namespace Transfer.Game.Graphics.UI.Containers
         [BackgroundDependencyLoader]
         private void load(TextureStore textureStore)
         {
-            Texture lightning = textureStore.Get("Lightning.png");
+            Texture lightning = textureStore.Get("Lightning");
             if(lightning == null) Logger.Log("Lightning is null");
             AddInternal(lightningSprite = new Sprite{
                 Texture = lightning,

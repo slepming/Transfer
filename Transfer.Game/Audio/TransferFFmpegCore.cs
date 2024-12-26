@@ -34,17 +34,24 @@ namespace Transfer.Game.Audio
             {
                 Logger.Log($"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments}");
                 CONVERSION_STATUS.Value = "Start conversion";
+                DateTime startTime = DateTime.Now;
                 await FFMpegArguments
                     .FromFileInput(video)
                     .OutputToFile(outputPath, false, options => options
                         .WithAudioBitrate(transferConfig.Get<int>(TransferOptions.AudioBitrate))
                         .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<AudioCodecs>(TransferOptions.AudioCodec).ToString()))
                         .WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
+                        .WithCustomArgument($"-preset {transferConfig.Get<Presets>(TransferOptions.Preset)} " +
+                            $"-threads {transferConfig.Get<int>(TransferOptions.Threads)} " +
+                            $"-max_muxing_queue_size 1024 " +
+                            $"-crf {transferConfig.Get<int>(TransferOptions.ConstantRateFactor)} " +
+                            $"-profile:v {transferConfig.Get<Profiles>(TransferOptions.Profile)}")
                         .WithCustomArgument(customArguments ?? "")
                         .WithFastStart())
                     .ProcessAsynchronously();
+                DateTime endTime = DateTime.Now;
                 CONVERSION_STATUS.Value = "Conversion completed";
-                Logger.Log($"Conversion completed successfully. Output: {outputPath}");
+                Logger.Log($"Conversion completed successfully. Output: {outputPath}, Time: {endTime - startTime}");
                 return outputPath;
             }
             catch (FFMpegException ffmpegEx)

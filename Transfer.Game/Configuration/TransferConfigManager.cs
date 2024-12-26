@@ -15,11 +15,15 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
     {
         SetDefault(TransferOptions.AudioBitrate, 128);
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
-        SetDefault(TransferOptions.AudioCodec, AudioCodecs.libmp3lame);
+        SetDefault(TransferOptions.AudioCodec, AudioCodecs.libfdk_aac);
         SetDefault(TransferOptions.VideoCodec, VideoCodecs.libx265);
         SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
         SetDefault(TransferOptions.SeekValue, 5000);
         SetDefault(TransferOptions.OutputPath, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        SetDefault(TransferOptions.Preset, Presets.faster);
+        SetDefault(TransferOptions.Threads, Environment.ProcessorCount);
+        SetDefault(TransferOptions.ConstantRateFactor, 23);
+        SetDefault(TransferOptions.Profile, Profiles.main);
 
     }
 
@@ -34,8 +38,32 @@ public enum TransferOptions
     Volume,
     SeekValue,
     OutputPath,
-    VideoCodec
+    VideoCodec,
+    Preset,
+    Threads,
+    ConstantRateFactor,
+    Profile
 
+}
+
+public enum Profiles
+{
+    baseline,
+    main,
+    high
+}
+
+public enum Presets
+{
+    ultrafast,
+    superfast,
+    veryfast,
+    faster,
+    fast,
+    medium,
+    slow,
+    slower,
+    veryslow
 }
 
 public enum AudioCodecs
