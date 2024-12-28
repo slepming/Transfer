@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FFmpeg.AutoGen;
 using FFmpeg.NET.Exceptions;
 using FFMpegCore.Exceptions;
 using osu.Framework.Audio;
@@ -29,16 +30,16 @@ namespace Transfer.Game.IO
 
             if (storage.Exists((string)outputPath))
             {
-                return getTrackFromStorage(audioManager, resourceStore, (string)outputPath);
+                return getTrackFromStorage(audioManager, resourceStore, outputPath);
             }
 
             try
             {
-                string pathToFile = await convertFileAsync(path);
+                string pathToFile = await convertFileAsync(Path.GetFileNameWithoutExtension(path), "mp3");
                 await saveFileToStorageAsync(pathToFile, storage, outputPath);
                 File.Delete(pathToFile);
 
-                if (!storage.Exists((string)outputPath)) throw new FileNotFoundException("Audio not found");
+                if (!storage.Exists(outputPath)) throw new FileNotFoundException("Audio not found");
 
                 return getTrackFromStorage(audioManager, resourceStore, outputPath);
             }
@@ -62,7 +63,7 @@ namespace Transfer.Game.IO
             }
 
             var audioName = getHashName(path, "mp3");
-            var videoName = getHashName(path, "mp4");
+            var videoName = getHashName(path, Path.GetExtension(path));
 
             if (storage.GetFiles(storage.GetFullPath(@"")).Contains(audioName))
             {
@@ -72,7 +73,7 @@ namespace Transfer.Game.IO
 
             try
             {
-                string pathToAudio = await convertFileAsync(path);
+                string pathToAudio = await convertFileAsync(Path.GetFileNameWithoutExtension(path), "mp3");
                 await saveFileToStorageAsync(pathToAudio, storage, audioName);
                 await saveFileToStorageAsync(pathToAudio, storage, videoName);
                 File.Delete(pathToAudio);
@@ -99,9 +100,9 @@ namespace Transfer.Game.IO
             return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
         }
 
-        private async Task<string> convertFileAsync(string path, string outputPath = null,string arguments = null)
+        private async Task<string> convertFileAsync(string path, string extension, string outputPath = null,string arguments = null)
         {
-            string pathToFile = await TransferFFmpegCore.Conversion(path, transferConfigManager, outputPath, arguments);
+            string pathToFile = await TransferFFmpegCore.Conversion(path, transferConfigManager, outputPath, arguments, outputExtension: extension);
             if (!File.Exists(path))
             {
                 Logger.Error(new Exception(), $"{path} does not exist - conversion canceled");

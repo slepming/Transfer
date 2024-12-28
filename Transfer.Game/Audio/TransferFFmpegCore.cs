@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using FFmpeg.NET.Enums;
 using FFMpegCore;
 using FFMpegCore.Enums;
 using FFMpegCore.Exceptions;
@@ -25,10 +26,10 @@ namespace Transfer.Game.Audio
         /// <param name="customArguments">Here you can enter your arguments to modify in FFmpeg</param>
         /// <param name="outputExtension">Output file extension(Start with '.'). If output path is not null, then output extension it's no use</param>
         /// <returns>Path to audio</returns>
-        public static async Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, string outputExtension = ".mp3")
+        public static async Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, string outputExtension = null)
         {
             CONVERSION_STATUS.Value = "Checking output path";
-            outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}{outputExtension}");
+            outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower()}");
             CONVERSION_STATUS.Value = "Argument validation";
             try
             {
@@ -41,6 +42,7 @@ namespace Transfer.Game.Audio
                         .WithAudioBitrate(transferConfig.Get<int>(TransferOptions.AudioBitrate))
                         .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<AudioCodecs>(TransferOptions.AudioCodec).ToString()))
                         .WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
+                        .ForceFormat(outputExtension)
                         .WithCustomArgument($"-preset {transferConfig.Get<Presets>(TransferOptions.Preset)} " +
                             $"-threads {transferConfig.Get<int>(TransferOptions.Threads)} " +
                             $"-max_muxing_queue_size 1024 " +

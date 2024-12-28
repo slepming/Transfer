@@ -15,7 +15,7 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
     {
         SetDefault(TransferOptions.AudioBitrate, 128);
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
-        SetDefault(TransferOptions.AudioCodec, AudioCodecs.libfdk_aac);
+        SetDefault(TransferOptions.AudioCodec, AudioCodecs.aac);
         SetDefault(TransferOptions.VideoCodec, VideoCodecs.libx265);
         SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
         SetDefault(TransferOptions.SeekValue, 5000);
@@ -24,6 +24,7 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
         SetDefault(TransferOptions.Threads, Environment.ProcessorCount);
         SetDefault(TransferOptions.ConstantRateFactor, 23);
         SetDefault(TransferOptions.Profile, Profiles.main);
+        
 
     }
 
