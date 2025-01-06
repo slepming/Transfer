@@ -1,121 +1,221 @@
-using System;
-using System.Text;
-using osu.Framework.Allocation;
-using osu.Framework.Bindables;
+using JetBrains.Annotations;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input.Events;
-using osu.Framework.Logging;
-using osu.Framework.Platform;
 using osuTK;
-using Transfer.Game.Configuration;
-using Transfer.Game.Extensions;
+using osuTK.Graphics;
 using Transfer.Game.UserInterface.Containers;
 
-namespace Transfer.Game.Graphics.UI.Containers
+namespace Transfer.Game.Graphics.UI.Containers;
+
+public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
 {
-    public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
+    public VolumeContainer VolumeContainer;
+    public VideoPlaybackContainer PlaybackContainer;
+
+    private readonly SpriteText currentTimecodeText;
+
+    public Color4 BackgroundColour
     {
-        public readonly VolumeContainer VolumeContainer;
-        public readonly VideoPlaybackContainer PlaybackContainer;
+        set => background.Colour = value;
+    }
 
-        private readonly SpriteText currentTimecodeText;
-        private string timecode = string.Empty;
+    private Box background;
+    private Container videoBox;
+    private Container toolsBox;
 
+    private SpriteButton backButton, nextButton, nextSeekButton, backSeekButton, stopButton;
+    private SpriteButton repeatButton, settingsButton;
 
+    [NotNull]
+    public VideoContainer Video;
 
-        public WatchingToolsContainer()
-        {
-            InternalChild = new Container
+    private string timecode = string.Empty;
+
+    public WatchingToolsContainer() => Show();
+
+    protected override void LoadComplete()
+    {
+        base.LoadComplete();
+        InternalChildren =
+        [
+            background = new Box
+            {
+                Colour = Colour4.FromHex("#010216"),
+                RelativeSizeAxes = Axes.Both,
+                Depth = 3
+            },
+            videoBox = new Container
             {
                 RelativeSizeAxes = Axes.Both,
-                Children = [
-                    VolumeContainer = new VolumeContainer
+                Child = Video,
+                Depth = 2,
+            },
+            toolsBox = new Container
+            {
+                RelativeSizeAxes = Axes.Both,
+                Size = new Vector2(Size.X, Size.Y / 10),
+                Depth = 1,
+                Anchor = Anchor.BottomCentre,
+                Origin = Anchor.BottomCentre,
+                Masking = true,
+                BorderColour = Colour4.Gray.Opacity(80),
+                BorderThickness = 3,
+                Children =
+                [
+                    new Box // background
                     {
-                        Width = 300,
-                        Height = 10,
-                        Anchor = Anchor.CentreRight,
-                        Origin = Anchor.BottomCentre,
-                        Masking = true,
-                        BorderThickness = 1f,
-                        BorderColour = Colour4.Black,
+                        Colour = Colour4.Black,
+                        Alpha = 0.5f,
+                        RelativeSizeAxes = Axes.Both
                     },
-                    new Container{
+                    PlaybackContainer = new VideoPlaybackContainer
+                    {
+                        RelativeSizeAxes = Axes.X,
+                        Size = new Vector2(Size.X, 3),
+                        Anchor = Anchor.TopCentre,
+                        Origin = Anchor.TopCentre,
+                    },
+                    new TransferContainer
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
                         RelativeSizeAxes = Axes.Both,
-                        Children = [
-                            PlaybackContainer = new VideoPlaybackContainer
+                        Children =
+                        [
+                            settingsButton = new SpriteButton
                             {
-                                RelativeSizeAxes = Axes.X,
-                                Height = 10,
-                                Anchor = Anchor.Centre,
-                                Origin = Anchor.BottomCentre,
-                                Masking = true,
-                                BorderThickness = 1f,
-                                CornerRadius = 5,
-                                BorderColour = Colour4.Black,
+                                TextureName = "settings",
+                                Anchor = Anchor.CentreLeft,
+                                Origin = Anchor.CentreLeft,
+                                Margin = new MarginPadding(5),
+                                Size = new Vector2(25, 25),
                             },
-                            currentTimecodeText = new SpriteText{
-                                Font = new FontUsage(family:TransferFonts.FiraCodeNerdFont),
+                            new TransferContainer
+                            {
+                                RelativeSizeAxes = Axes.Both,
                                 Anchor = Anchor.Centre,
-                                Origin = Anchor.BottomCentre,
-                            }
+                                Origin = Anchor.Centre,
+                                Size = new Vector2(Size.X / 3, Size.Y),
+                                Children =
+                                [
+                                    nextButton = new SpriteButton
+                                    {
+                                        TextureName = "next",
+                                        Anchor = Anchor.CentreRight,
+                                        Origin = Anchor.Centre,
+                                        Margin = new MarginPadding(50),
+                                        Size = new Vector2(50, 50)
+                                    },
+                                    backButton = new SpriteButton
+                                    {
+                                        TextureName = "back",
+                                        Anchor = Anchor.CentreLeft,
+                                        Origin = Anchor.Centre,
+                                        Margin = new MarginPadding(50),
+                                        Size = new Vector2(50, 50)
+                                    },
+                                    nextSeekButton = new SpriteButton
+                                    {
+                                        TextureName = "nextSeek",
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.CentreLeft,
+                                        // Position = new Vector2(50, 0),
+                                        Margin = new MarginPadding(50),
+                                        Size = new Vector2(50, 50)
+                                    },
+                                    backSeekButton = new SpriteButton
+                                    {
+                                        TextureName = "backSeek",
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.CentreRight,
+                                        // Position = new Vector2(-50, 0),
+                                        Margin = new MarginPadding(50),
+                                        Size = new Vector2(50, 50)
+                                    },
+                                    stopButton = new SpriteButton
+                                    {
+                                        TextureName = "play",
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                        Size = new Vector2(50, 50)
+                                    }
+                                ],
+                            },
+                            repeatButton = new SpriteButton
+                            {
+                                TextureName = "repeatBlack",
+                                Anchor = Anchor.CentreRight,
+                                Origin = Anchor.CentreRight,
+                                Margin = new MarginPadding(5),
+                                Size = new Vector2(50, 50),
+                            },
                         ]
                     }
-
                 ]
-            };
-            PlaybackContainer.SubscribeOnValueChange().ValueChanged += (ValueChangedEvent<double> value) => {
-                timecode = $"{DateTimeOffset.FromUnixTimeMilliseconds((long)value.NewValue).DateTime.ToString("HH:mm:ss")}/{DateTimeOffset.FromUnixTimeMilliseconds(duration).DateTime.ToString("HH:mm:ss")}";
-                currentTimecodeText.Text = timecode;
-            };
-        }
+            }
+        ];
+        nextButton.Action += onNextVideoClick;
+        nextSeekButton.Action += positiveSeek;
+        stopButton.Action += onClickPlayButton;
+        backButton.Action += onBackVideoClick;
+        backSeekButton.Action += negativeSeek;
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            VolumeContainer.Position = new Vector2(VolumeContainer.X - (VolumeContainer.Width / 3), -15);
-            PlaybackContainer.SetSliderWidth(Width - VolumeContainer.SliderWidth * 4);
-            PlaybackContainer.Position = new Vector2(PlaybackContainer.Position.X - VolumeContainer.SliderWidth / 2, -15);
-            currentTimecodeText.Position = new Vector2(currentTimecodeText.Position.X + PlaybackContainer.Position.X / 2);
-        }
+        settingsButton.Action += onOpenSettings;
+        repeatButton.Action += onActivateRepeat;
 
-        private long duration;
-        public void SetMaxPlaybackValue(double value)
-        {
-            PlaybackContainer.SetMaxSliderValue(value);
-            duration = (long)value;
-        }
+        SetMaxPlaybackValue(Video.GetDuration());
+    }
 
-        /// <summary>
-        /// You can get already filtered timecode
-        /// </summary>
-        /// <returns>text time code</returns>
-        public string GetTimeCodeText() => timecode ?? "Null";
+    private void negativeSeek()
+    {
+        throw new System.NotImplementedException();
+    }
 
+    private void onBackVideoClick()
+    {
+        throw new System.NotImplementedException();
+    }
 
+    private void positiveSeek()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        protected override void PopIn()
-        {
-            this.FadeTo(1, 1000, Easing.InOutQuad);
-        }
+    private void onNextVideoClick()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        protected override void PopOut()
-        {
-            this.FadeTo(0, 0);
-        }
+    private void onOpenSettings()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        protected override bool OnHover(HoverEvent e)
-        {
-            this.FadeTo(1, 100, Easing.InOutQuad);
-            return base.OnHover(e);
-        }
-        protected override void OnHoverLost(HoverLostEvent e)
-        {
-            this.FadeTo(0.001f, 2000, Easing.InOutQuad);
-            base.OnHoverLost(e);
-        }
+    private void onActivateRepeat()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        
+    private void onClickPlayButton()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private long duration;
+
+    public void SetMaxPlaybackValue(double value)
+    {
+        PlaybackContainer.SetMaxSliderValue(value);
+        duration = (long)value;
+    }
+
+    protected override void PopIn()
+    {
+    }
+
+    protected override void PopOut()
+    {
     }
 }

@@ -15,6 +15,7 @@ namespace Transfer.Game.Graphics.Videos
 
         private float playbackSpeed = 1.0f;
 
+
         public TransferVideo(string filename,bool enableRate = false, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
         {
             this.enableRate = enableRate;
@@ -51,6 +52,7 @@ namespace Transfer.Game.Graphics.Videos
         public new void Seek(double time)
         {
             SeekOccurs?.Invoke(time);
+
             base.Seek(time);
         }
 

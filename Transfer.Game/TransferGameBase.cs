@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using osu.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
@@ -16,7 +15,6 @@ using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
-using Transfer.Game.Testing;
 
 namespace Transfer.Game
 {

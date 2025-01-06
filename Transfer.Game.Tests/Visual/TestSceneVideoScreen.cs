@@ -1,19 +1,9 @@
 using NUnit.Framework;
 using osu.Framework.Allocation;
-using osu.Framework.IO.Stores;
-using osu.Framework.Platform;
 using osu.Framework.Screens;
-using osu.Framework.Audio.Track;
-using Transfer.Game.Graphics.UI.Containers;
-using Transfer.Game.Configuration;
-using Transfer.Game.IO;
 using Transfer.Game.Screens;
-using Transfer.Game.Graphics.Videos;
 using System.IO;
 using osu.Framework.Logging;
-using System.Linq;
-using osu.Framework;
-using System.Collections.Generic;
 using Transfer.Game.Testing;
 
 namespace Transfer.Game.Tests.Visual

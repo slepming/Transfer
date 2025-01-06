@@ -2,12 +2,9 @@ using System;
 using osu.Framework.Allocation;
 using Transfer.Game.Graphics.UI;
 using osu.Framework.Graphics;
-using osu.Framework;
-using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.UserInterface.Containers;
 using osuTK;
-using System.Linq;
 using Transfer.Game.IO;
 using osu.Framework.Audio.Track;
 using osu.Framework.Audio;
@@ -16,16 +13,14 @@ using Transfer.Game.Configuration;
 using System.IO;
 using osu.Framework.Logging;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.UserInterface;
-using osu.Framework.Graphics.Cursor;
 using System.Collections.Generic;
 using Transfer.Game.Audio;
-using System.Globalization;
 using osu.Framework.Bindables;
 using osu.Framework.Screens;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using Transfer.Game.Extensions;
+using Transfer.Game.Audio.ConversionModels;
 
 namespace Transfer.Game.Screens;
 
@@ -81,7 +76,6 @@ public partial class EditScreen : TransferScreen
                 RelativeSizeAxes = Axes.Both,
                 Padding = new MarginPadding { Horizontal = 10 },
                 Audio = await audioExtract.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager),
-                WatchingToolsVisible = false,
                 Depth = 1,
             };
 
@@ -167,6 +161,8 @@ public partial class EditScreen : TransferScreen
         }, 500);
     }
 
+
+
     private void onSpeedVideoChange(ValueChangedEvent<double> e)
     {
         videoContainer.Rate(e.NewValue);
@@ -181,17 +177,7 @@ public partial class EditScreen : TransferScreen
     private void commitAccelerationTextBox(double sender)
     {
         float factor = (float)sender;
-        if (factor == 1) return;
-        if(factor > 100 || factor < 0.5f) NotifyError.Value = "The factor cannot be above 100 and below 0.5";
-        float modifiedFactor = 1/factor;
 
-        if (ffmpegFunctions.TryGetValue(VideoEditingFunction.VideoSpeedUp, out _)) {
-            ffmpegFunctions[VideoEditingFunction.VideoSpeedUp] = FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, modifiedFactor.ToString(CultureInfo.InvariantCulture));
-            ffmpegFunctions[VideoEditingFunction.AudioSpeedUp] = FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioSpeedUp, factor.ToString(CultureInfo.InvariantCulture));
-            return;
-        }
-        ffmpegFunctions.Add(VideoEditingFunction.VideoSpeedUp,FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, modifiedFactor.ToString(CultureInfo.InvariantCulture)));
-        ffmpegFunctions.Add(VideoEditingFunction.AudioSpeedUp, FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.AudioSpeedUp, factor.ToString(CultureInfo.InvariantCulture)));
     }
 
     protected override void Update()
@@ -213,7 +199,7 @@ public partial class EditScreen : TransferScreen
 
     private async void confirmVideoEditingButtonAction()
     {
-        string arguments = string.Join(" ", ffmpegFunctions.Values);
+        string arguments = string.Join(" ", ffmpegFunctions.Values) ?? null;
 
         if(string.IsNullOrEmpty(arguments)) return;
 
@@ -229,7 +215,7 @@ public partial class EditScreen : TransferScreen
 
         initializeLoadingOverlay();
 
-        await TransferFFmpegCore.Conversion(pathToFile, transferConfigManager, path, arguments);
+        await ConversionBase<SpeedUpModel>.Conversion(pathToFile, transferConfigManager, path, arguments);
 
         ClearInternal();
 

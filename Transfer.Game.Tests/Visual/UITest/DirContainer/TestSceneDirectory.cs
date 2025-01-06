@@ -1,4 +1,3 @@
-using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
@@ -6,7 +5,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using Transfer.Game.Graphics.UI.Containers;
 using osu.Framework.Logging;
-using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Tests.Visual.UITest.DirContainer;
 

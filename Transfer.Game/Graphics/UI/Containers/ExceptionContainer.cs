@@ -7,7 +7,6 @@ using osu.Framework.Input.Events;
 using osuTK;
 using osu.Framework.Localisation;
 using System.Diagnostics;
-using osu.Framework.Logging;
 using Transfer.Game.Extensions;
 
 namespace Transfer.Game.UserInterface.Containers;

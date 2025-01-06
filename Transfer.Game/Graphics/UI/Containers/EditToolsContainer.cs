@@ -1,10 +1,8 @@
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics;
-using Transfer.Game.Extensions;
 using osu.Framework.Bindables;
 using System;
-using osu.Framework.Graphics.Shapes;
 using osuTK;
 using osu.Framework.Graphics.UserInterface;
 using System.Globalization;

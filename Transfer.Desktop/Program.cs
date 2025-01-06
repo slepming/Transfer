@@ -1,8 +1,6 @@
 ﻿using osu.Framework.Platform;
 using osu.Framework;
 using Transfer.Game;
-using System.Runtime.CompilerServices;
-using System;
 
 namespace Transfer.Desktop
 {

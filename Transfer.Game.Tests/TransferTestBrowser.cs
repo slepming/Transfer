@@ -1,11 +1,8 @@
 using osu.Framework.Allocation;
-using osu.Framework.Graphics;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Platform;
 using osu.Framework.Testing;
-using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Input.Bindings;
-using Transfer.Game.IO;
 using Transfer.Game.Testing;
 
 namespace Transfer.Game.Tests

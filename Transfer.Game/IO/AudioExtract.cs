@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FFmpeg.AutoGen;
-using FFmpeg.NET.Exceptions;
 using FFMpegCore.Exceptions;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -11,6 +9,7 @@ using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.Audio;
+using Transfer.Game.Audio.ConversionModels;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 
@@ -102,7 +101,7 @@ namespace Transfer.Game.IO
 
         private async Task<string> convertFileAsync(string path, string extension, string outputPath = null,string arguments = null)
         {
-            string pathToFile = await TransferFFmpegCore.Conversion(path, transferConfigManager, outputPath, arguments, outputExtension: extension);
+            string pathToFile = await ConversionBase<AudioExtractModel>.Conversion(path, transferConfigManager, outputPath, arguments);
             if (!File.Exists(path))
             {
                 Logger.Error(new Exception(), $"{path} does not exist - conversion canceled");
@@ -135,7 +134,7 @@ namespace Transfer.Game.IO
         }
 
 
-        
+
 
     }
 

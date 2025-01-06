@@ -1,10 +1,8 @@
-using System;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using Transfer.Game.Extensions;
-using Transfer.Game.UserInterface;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 

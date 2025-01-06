@@ -1,12 +1,6 @@
-using System;
-using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using Transfer.Game.Extensions;
 using Transfer.Game.UserInterface.Containers;
 

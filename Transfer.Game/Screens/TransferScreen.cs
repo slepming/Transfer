@@ -5,8 +5,6 @@ using osu.Framework.Bindables;
 using Transfer.Game.UserInterface;
 using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.Extensions;
-using Transfer.Game.Graphics.UI;
-using System;
 
 namespace Transfer.Game.Screens
 {

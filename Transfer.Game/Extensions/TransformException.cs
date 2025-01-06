@@ -1,5 +1,3 @@
-using System;
-
 namespace Transfer.Game.Extensions;
 
 [System.Serializable]
