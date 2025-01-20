@@ -2,7 +2,7 @@
 {
 
     /// <summary>
-    /// Designed to easily manipulate data in Transfer.Tests without conflicts directly from dependencies. 
+    /// Designed to easily manipulate data in Transfer.Tests without conflicts directly from dependencies.
     /// </summary>
     public class VideoTestingByte(byte[] data)
     {

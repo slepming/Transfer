@@ -11,12 +11,13 @@ using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
+using Transfer.Game.UserInterface.Containers;
 
-namespace Transfer.Game.UserInterface.Containers;
+namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction>
 {
-    private TransferVideo video;
+    public TransferVideo Video { get; private set; }
     private Container mediaOptionsContainer;
 
     private Bindable<double> bindableRate = new Bindable<double>();
@@ -40,7 +41,7 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
 
     public double DefaultRate { get; private set; }
 
-    public VideoContainer(TransferVideo transferVideo) => video = transferVideo;
+    public VideoContainer(TransferVideo transferVideo) => Video = transferVideo;
 
     public VideoContainer(string filename)
     {
@@ -56,7 +57,7 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
         bindableRate.Value = DefaultRate;
 
-        video ??= new TransferVideo(filename)
+        Video ??= new TransferVideo(filename)
         {
             FillMode = FillMode.Fit,
             RelativeSizeAxes = Axes.Both,
@@ -64,9 +65,9 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
             Origin = Anchor.Centre,
             Loop = false,
         };
-        Add(video);
+        Add(Video);
 
-        video.SeekOccurs += onSeek;
+        Video.SeekOccurs += onSeek;
 
         if (audio != null)
         {
@@ -79,11 +80,11 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         bindableRate.ValueChanged += onRateChanged;
     }
 
-    public double GetDuration() => video.Duration;
+    public double GetDuration() => Video.Duration;
 
-    public string GetTimecode() => video == null ? null : $"{DateTimeOffset.FromUnixTimeMilliseconds((long)video.PlaybackPosition).DateTime:HH:mm:ss}/{DateTimeOffset.FromUnixTimeMilliseconds((long)video.Duration).DateTime:HH:mm:ss}";
+    public string GetTimecode() => Video == null ? null : $"{DateTimeOffset.FromUnixTimeMilliseconds((long)Video.PlaybackPosition).DateTime:HH:mm:ss}/{DateTimeOffset.FromUnixTimeMilliseconds((long)Video.Duration).DateTime:HH:mm:ss}";
 
-    public Vector2 GetVideoSize() => new Vector2(video.Width, video.Height);
+    public Vector2 GetVideoSize() => new Vector2(Video.Width, Video.Height);
 
     private void onRateChanged(ValueChangedEvent<double> obj)
     {
@@ -93,12 +94,12 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     protected override void Update()
     {
         base.Update();
-        if (audio != null) video.SpySeek(audio.CurrentTime);
+        if (audio != null) Video.SpySeek(audio.CurrentTime);
     }
 
     protected override void LoadComplete()
     {
-        if (video.IsFaulted)
+        if (Video.IsFaulted)
         {
             AddInternal(new ExceptionContainer
             {
@@ -130,47 +131,47 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         switch (e.Key)
         {
             case osuTK.Input.Key.Right:
-                allSeek(video.PlaybackPosition + seekSpace);
+                allSeek(Video.PlaybackPosition + seekSpace);
                 break;
 
             case osuTK.Input.Key.Left:
-                allSeek(video.PlaybackPosition - seekSpace);
+                allSeek(Video.PlaybackPosition - seekSpace);
                 break;
 
             case osuTK.Input.Key.Number1:
-                allSeek(video.GetMaxLengthVideo() * 0.1);
+                allSeek(Video.GetMaxLengthVideo() * 0.1);
                 break;
 
             case osuTK.Input.Key.Number2:
-                allSeek(video.GetMaxLengthVideo() * 0.2);
+                allSeek(Video.GetMaxLengthVideo() * 0.2);
                 break;
 
             case osuTK.Input.Key.Number3:
-                allSeek(video.GetMaxLengthVideo() * 0.3);
+                allSeek(Video.GetMaxLengthVideo() * 0.3);
                 break;
 
             case osuTK.Input.Key.Number4:
-                allSeek(video.GetMaxLengthVideo() * 0.4);
+                allSeek(Video.GetMaxLengthVideo() * 0.4);
                 break;
 
             case osuTK.Input.Key.Number5:
-                allSeek(video.GetMaxLengthVideo() * 0.5);
+                allSeek(Video.GetMaxLengthVideo() * 0.5);
                 break;
 
             case osuTK.Input.Key.Number6:
-                allSeek(video.GetMaxLengthVideo() * 0.6);
+                allSeek(Video.GetMaxLengthVideo() * 0.6);
                 break;
 
             case osuTK.Input.Key.Number7:
-                allSeek(video.GetMaxLengthVideo() * 0.7);
+                allSeek(Video.GetMaxLengthVideo() * 0.7);
                 break;
 
             case osuTK.Input.Key.Number8:
-                allSeek(video.GetMaxLengthVideo() * 0.8);
+                allSeek(Video.GetMaxLengthVideo() * 0.8);
                 break;
 
             case osuTK.Input.Key.Number9:
-                allSeek(video.GetMaxLengthVideo() * 0.9);
+                allSeek(Video.GetMaxLengthVideo() * 0.9);
                 break;
         }
 
@@ -192,7 +193,7 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
 
     private void allSeek(double time)
     {
-        video?.Seek(time);
+        Video?.Seek(time);
         audio?.Seek(time);
     }
 
@@ -200,6 +201,10 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     {
     }
 
+    /// <summary>
+    /// Seek video(in ms)
+    /// </summary>
+    /// <param name="time">ms for seeking</param>
     public void Seek(double time) => allSeek(time);
 
     public void Rate(double rate) => bindableRate.Value = rate;
@@ -211,6 +216,8 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         return base.OnScroll(e);
     }
 
+    public void SetVideoLoop(bool loop) => Video.Loop = loop;
+
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
     {
         if (e.Repeat)
@@ -220,22 +227,22 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         {
             case GlobalAction.PauseVideo:
             {
-                if(video.PlaybackPosition == video.Duration)
+                if (Video.PlaybackPosition == Video.Duration)
                 {
                     audio?.Restart();
-                    video.Seek(0);
+                    Video.Seek(0);
                     return true;
                 }
 
                 if (isMuted)
                 {
                     audio?.Start();
-                    video.IsPlaying = true;
+                    Video.IsPlaying = true;
                 }
                 else
                 {
                     audio?.Stop();
-                    video.IsPlaying = false;
+                    Video.IsPlaying = false;
                 }
 
                 isMuted = !isMuted;
@@ -244,18 +251,18 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
 
             case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
             {
-                if (audio != null) audio.RestartPoint = video.PlaybackPosition;
+                if (audio != null) audio.RestartPoint = Video.PlaybackPosition;
                 audio?.Restart();
                 return true;
             }
 
             case GlobalAction.WatchingVideoReset:
             {
-                lock (video)
+                lock (Video)
                 {
                     if(audio != null) audio.RestartPoint = 0;
                     audio?.Restart();
-                    video.Seek(0);
+                    Video.Seek(0);
                 }
 
                 return true;
@@ -273,7 +280,7 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     protected override void Dispose(bool isDisposing)
     {
         audio?.Dispose();
-        video.Expire();
+        Video.Expire();
         base.Dispose(isDisposing);
     }
 }

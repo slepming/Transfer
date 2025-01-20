@@ -46,7 +46,7 @@ namespace Transfer.Game.Graphics.UI
                 Content.Anchor = Anchor.Centre;
                 Content.Origin = Anchor.Centre;
                 Content.Colour = new Color4(255, 255, 255, 0.5f);
-                
+
                 RelativeSizeAxes = Axes.Both;
                 BackgroundColour = Colour4.Gray.Opacity(100);
                 BorderThickness = 2;

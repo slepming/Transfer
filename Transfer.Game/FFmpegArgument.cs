@@ -17,7 +17,7 @@ public static class FFmpegArgument
         return null;
     }
 
-    
+
 }
 
 public enum VideoEditingFunction{

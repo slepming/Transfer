@@ -37,7 +37,7 @@ namespace Transfer.Game.Tests.Visual
             {
                 targetVideo = videoTestBytes.Data;
             });
-            
+
             AddStep("Writing video bytes to a file", () => {
                 byte[] videoInByteArray;
                 videoInByteArray = targetVideo;

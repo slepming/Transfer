@@ -26,14 +26,14 @@ namespace Transfer.Game.Screens
             OnNotifyError(e.NewValue);
         }
 
-        
+
         public virtual void CursorHide()
         {
             CursorVisible = !CursorVisible;
         }
 
 
-        
+
         protected virtual void OnExit() => this.Exit();
 
 

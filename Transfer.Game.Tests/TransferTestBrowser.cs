@@ -9,26 +9,24 @@ namespace Transfer.Game.Tests
 {
     public partial class TransferTestBrowser : TransferGameBase
     {
-
         private DependencyContainer testDependencies;
+
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
-            VideoTestingByte videoTestData = new VideoTestingByte(Resources.Get(@"Videos/Priroda.mp4"));
+            VideoTestingByte videoTestData = new VideoTestingByte(Resources.Get(@"Videos/SampleVideoWithAudio.mp4"));
             testDependencies.CacheAs(videoTestData);
-            
+
             AddRange(
             [
-                new GlobalActionContainer(this){
-                    Children = [
+                new GlobalActionContainer(this)
+                {
+                    Children =
+                    [
                         new TestBrowser("Transfer"),
                         new CursorContainer()
                     ]
                 },
-                
-                
-                
             ]);
         }
 

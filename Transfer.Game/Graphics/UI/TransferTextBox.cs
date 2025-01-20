@@ -17,7 +17,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     public LocalisableString Tooltip { get; set; }
     public LocalisableString TooltipText => Tooltip;
     private const float caret_move_time = 200f;
-    
+
     private Box background;
 
     private Color4 backgroundColour;
@@ -29,10 +29,10 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     public float CharacterSize = 25;
 
-    
+
 
     public override bool HandleNonPositionalInput { get; }
-    
+
     public override bool RequestsFocus { get; }
 
     /// <summary>
@@ -46,7 +46,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     public TransferTextBox(bool handleNonPositionalInput = false, bool requestsFocus = false)
     {
         HandleNonPositionalInput = handleNonPositionalInput;
-        RequestsFocus = requestsFocus;    
+        RequestsFocus = requestsFocus;
         CommitOnFocusLost = true;
         Masking = true;
         BorderThickness = 3;
@@ -75,7 +75,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     }
     protected override void OnTextCommitted(bool textChanged)
     {
-        
+
     }
 
     protected override Drawable GetDrawableCharacter(char c) => new ZoomableContainer()

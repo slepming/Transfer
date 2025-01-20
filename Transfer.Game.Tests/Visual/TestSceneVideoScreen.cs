@@ -8,9 +8,6 @@ using Transfer.Game.Testing;
 
 namespace Transfer.Game.Tests.Visual
 {
-    /// <summary>
-    /// Removed because it was causing dependency caching problems
-    /// </summary>
     [TestFixture]
     public partial class TestSceneVideoScreen : TransferTestScene
     {
@@ -41,19 +38,18 @@ namespace Transfer.Game.Tests.Visual
             {
                 targetVideo = videoTestBytes.Data;
             });
-            
-            AddStep("Writing video bytes to a file", () => {
-                byte[] videoInByteArray;
-                videoInByteArray = targetVideo;
+
+            AddAssert("Check target video is null or not", () => targetVideo is not null);
+            AddStep("Writing video bytes to a file", () =>
+            {
+                var videoInByteArray = targetVideo;
                 tempFilePath = Path.Combine(Path.GetTempPath(), "test_video.mp4");
                 File.WriteAllBytes(tempFilePath, videoInByteArray);
             });
             AddStep("Push to a new screen", () => Add(new ScreenStack(new VideoScreen(tempFilePath))
-                {
-                    RelativeSizeAxes = osu.Framework.Graphics.Axes.Both,
-
-                }));
+            {
+                RelativeSizeAxes = osu.Framework.Graphics.Axes.Both,
+            }));
         }
-        
     }
 }

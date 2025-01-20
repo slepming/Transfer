@@ -41,7 +41,7 @@ namespace Transfer.Game.Tests.Visual.Input
 
         public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
         {
-            
+
         }
     }
 }

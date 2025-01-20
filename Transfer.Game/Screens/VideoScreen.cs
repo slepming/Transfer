@@ -1,9 +1,11 @@
 #nullable disable
 using System;
+using System.Drawing;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
+using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
@@ -12,6 +14,8 @@ using osu.Framework.Platform;
 using osu.Framework.Screens;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Graphics.UI.Containers.Menu;
+using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.UserInterface.Containers;
@@ -28,11 +32,16 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     private WatchingToolsContainer toolsContainer;
 
+    private ExtensionMenu extensionMenu;
+
     [Resolved]
     private Storage tempStorage { get; set; }
 
     [Resolved]
     private AudioManager audioManager { get; set; }
+
+    [Resolved]
+    private FrameworkConfigManager frameworkConfigManager { get; set; }
 
     protected IAudioExtract<Track> AudioExtract { get; set; }
 
@@ -66,7 +75,9 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         AudioExtract = new AudioExtract<Track>(transferConfigManager);
         explorerContainer.FoundVideo += onFoundVideo;
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
-        InternalChild = (explorerContainer ??= []);
+        extensionMenu = new ExtensionMenu();
+        AddInternal((explorerContainer ??= []));
+        AddInternal(extensionMenu = new ExtensionMenu());
     }
 
     protected override void LoadComplete()
@@ -81,7 +92,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
             return;
         }
 
-        if (audio == null && !string.IsNullOrEmpty(VideoPath)) AudioExtract.CreateaAndGetTrackAsync(VideoPath, tempStorage, audioManager: audioManager);
+        if (audio is null) AudioExtract.CreateaAndGetTrackAsync(VideoPath, tempStorage, audioManager: audioManager);
 
         try
         {
@@ -91,6 +102,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                 RelativeSizeAxes = Axes.Both,
                 SeekSpace = seek
             };
+            //frameworkConfigManager?.SetValue(FrameworkSetting.WindowedSize, videoContainer is not null ? new Size((int)videoContainer.Video.Size.X, (int)videoContainer.Video.Size.Y) : new Size(1280, 720));
             InternalChild = toolsContainer = new WatchingToolsContainer
             {
                 RelativeSizeAxes = Axes.Both,
@@ -111,10 +123,10 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     private async void onFoundVideo(string path, bool isFile)
     {
-        if (!isFile) return;
-
         try
         {
+            if (!isFile) return;
+
             LoadingOverlay loading;
             Task<Track> trackTask = AudioExtract.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
             ClearInternal();
@@ -154,6 +166,13 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
             case GlobalAction.Explorer:
                 releaseResources();
                 this.Push(new VideoScreen());
+                return true;
+
+            case GlobalAction.ExtensionMenu:
+                if (extensionMenu.Visible)
+                    extensionMenu.Show();
+                else
+                    extensionMenu.Hide();
                 return true;
         }
 

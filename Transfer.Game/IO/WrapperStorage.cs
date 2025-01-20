@@ -82,6 +82,5 @@ namespace Transfer.Game.IO
 
             return new WrappedStorage(this, path);
         }
-
     }
 }

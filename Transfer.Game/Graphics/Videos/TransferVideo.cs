@@ -1,5 +1,4 @@
 using System;
-using osu.Framework.Allocation;
 using osu.Framework.Graphics.Video;
 
 namespace Transfer.Game.Graphics.Videos
@@ -15,21 +14,15 @@ namespace Transfer.Game.Graphics.Videos
 
         private float playbackSpeed = 1.0f;
 
-
-        public TransferVideo(string filename,bool enableRate = false, bool startAtCurrentTime = true) : base(filename, startAtCurrentTime)
+        public TransferVideo(string filename,bool enableRate = false, bool startAtCurrentTime = true)
+            : base(filename, startAtCurrentTime)
         {
             this.enableRate = enableRate;
         }
 
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-
-        }
-
         protected override void Update()
         {
-            if(enableRate) SpySeek(Time.Elapsed * playbackSpeed);
+            if (enableRate) SpySeek(Time.Elapsed * playbackSpeed);
 
             base.Update();
         }
