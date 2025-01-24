@@ -1,7 +1,5 @@
 using System;
 using osu.Framework.Allocation;
-using osu.Framework.Audio.Track;
-using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Bindings;
@@ -19,20 +17,6 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
 {
     public TransferVideo Video { get; private set; }
     private Container mediaOptionsContainer;
-
-    private Bindable<double> bindableRate = new Bindable<double>();
-
-    private Track audio;
-
-    public Track Audio
-    {
-        set
-        {
-            if (value != null && value == audio) return;
-
-            audio = value;
-        }
-    }
 
     private bool isMuted = false;
 
@@ -55,8 +39,6 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         Logger.Log($"Video initialization");
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
-        bindableRate.Value = DefaultRate;
-
         Video ??= new TransferVideo(filename)
         {
             FillMode = FillMode.Fit,
@@ -68,16 +50,6 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         Add(Video);
 
         Video.SeekOccurs += onSeek;
-
-        if (audio != null)
-        {
-            audio.Volume.ValueChanged += value =>
-            {
-                tcm.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
-            };
-        }
-
-        bindableRate.ValueChanged += onRateChanged;
     }
 
     public double GetDuration() => Video.Duration;
@@ -85,17 +57,6 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     public string GetTimecode() => Video == null ? null : $"{DateTimeOffset.FromUnixTimeMilliseconds((long)Video.PlaybackPosition).DateTime:HH:mm:ss}/{DateTimeOffset.FromUnixTimeMilliseconds((long)Video.Duration).DateTime:HH:mm:ss}";
 
     public Vector2 GetVideoSize() => new Vector2(Video.Width, Video.Height);
-
-    private void onRateChanged(ValueChangedEvent<double> obj)
-    {
-        if (audio != null) audio.Tempo.Value = obj.NewValue;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        if (audio != null) Video.SpySeek(audio.CurrentTime);
-    }
 
     protected override void LoadComplete()
     {
@@ -110,20 +71,6 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         }
 
         base.LoadComplete();
-    }
-
-    protected override void LoadAsyncComplete()
-    {
-        base.LoadAsyncComplete();
-        audio?.StartAsync();
-    }
-
-    private void onVolumeChanged(ValueChangedEvent<double> e)
-    {
-        if (audio != null)
-        {
-            audio.Volume.Value = (float)e.NewValue;
-        }
     }
 
     protected override bool OnKeyDown(KeyDownEvent e)
@@ -194,7 +141,6 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     private void allSeek(double time)
     {
         Video?.Seek(time);
-        audio?.Seek(time);
     }
 
     private void onSeek(double obj)
@@ -205,16 +151,8 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     /// Seek video(in ms)
     /// </summary>
     /// <param name="time">ms for seeking</param>
+    [Obsolete("this method is obsolete, please use method from TransferVideo", false)] // Can be deleted
     public void Seek(double time) => allSeek(time);
-
-    public void Rate(double rate) => bindableRate.Value = rate;
-
-    protected override bool OnScroll(ScrollEvent e)
-    {
-        if (audio != null)
-            audio.Volume.Value += e.ScrollDelta.Y / 10;
-        return base.OnScroll(e);
-    }
 
     public void SetVideoLoop(bool loop) => Video.Loop = loop;
 
@@ -223,63 +161,24 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         if (e.Repeat)
             return false;
 
-        switch (e.Action)
-        {
-            case GlobalAction.PauseVideo:
-            {
-                if (Video.PlaybackPosition == Video.Duration)
-                {
-                    audio?.Restart();
-                    Video.Seek(0);
-                    return true;
-                }
-
-                if (isMuted)
-                {
-                    audio?.Start();
-                    Video.IsPlaying = true;
-                }
-                else
-                {
-                    audio?.Stop();
-                    Video.IsPlaying = false;
-                }
-
-                isMuted = !isMuted;
-                return true;
-            }
-
-            case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
-            {
-                if (audio != null) audio.RestartPoint = Video.PlaybackPosition;
-                audio?.Restart();
-                return true;
-            }
-
-            case GlobalAction.WatchingVideoReset:
-            {
-                lock (Video)
-                {
-                    if(audio != null) audio.RestartPoint = 0;
-                    audio?.Restart();
-                    Video.Seek(0);
-                }
-
-                return true;
-            }
-
-            default:
-                return false;
-        }
+        return true;
     }
 
     public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
     {
     }
 
+    public void UpdateVideo(string path, TransferVideo video = null) => Video = video ?? new TransferVideo(path)
+    {
+        FillMode = FillMode.Fit,
+        RelativeSizeAxes = Axes.Both,
+        Anchor = Anchor.Centre,
+        Origin = Anchor.Centre,
+        Loop = false,
+    };
+
     protected override void Dispose(bool isDisposing)
     {
-        audio?.Dispose();
         Video.Expire();
         base.Dispose(isDisposing);
     }

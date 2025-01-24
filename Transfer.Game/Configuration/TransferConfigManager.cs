@@ -18,8 +18,8 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
 
     protected override void InitialiseDefaults()
     {
-        string defaultPlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonVideos), "Standard");
-        if (string.IsNullOrEmpty(defaultPlaylistPath)) defaultPlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Standard");
+        string defaultPlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Playlist");
+        if (string.IsNullOrEmpty(defaultPlaylistPath) || defaultPlaylistPath == "Playlist") defaultPlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Playlist");
         SetDefault(TransferOptions.AudioBitrate, 128);
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
         SetDefault(TransferOptions.AudioCodec, AudioCodecs.aac);

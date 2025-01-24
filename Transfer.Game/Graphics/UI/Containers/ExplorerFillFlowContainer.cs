@@ -20,7 +20,7 @@ public partial class ExplorerFillFlowContainer : SearchContainer
 
     private List<ExplorerButton> explorerButtons = new List<ExplorerButton>();
 
-    
+
 
     /// <summary>
     /// If file extension not in List then it's skipping
@@ -38,7 +38,7 @@ public partial class ExplorerFillFlowContainer : SearchContainer
     public ExplorerFillFlowContainer()
     {
         AllowNonContiguousMatching = true;
-        
+
     }
 
 
