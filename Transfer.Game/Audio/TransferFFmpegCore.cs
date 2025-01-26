@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using FFMpegCore;
 using FFMpegCore.Exceptions;
@@ -24,13 +25,22 @@ namespace Transfer.Game.Audio
         protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath, string customArguments = null, string outputExtension = null)
         {
             CONVERSION_STATUS.Value = "Checking output path";
-            if (string.IsNullOrEmpty(outputPath)) return null;
+
+            if (string.IsNullOrEmpty(outputPath))
+            {
+                throw new ArgumentNullException(nameof(outputPath));
+            }
 
             CONVERSION_STATUS.Value = "Argument validation";
 
+            if (!File.Exists(video))
+            {
+                throw new FileNotFoundException("Input video file not found.", video);
+            }
+
             try
             {
-                Logger.Log($"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments}");
+                Logger.Log($"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments ?? "null"}");
                 CONVERSION_STATUS.Value = "Start conversion";
                 DateTime startTime = DateTime.Now;
                 await FFMpegArguments
@@ -42,7 +52,7 @@ namespace Transfer.Game.Audio
                                                                   .ForceFormat(outputExtension)
                                                                   .WithCustomArgument($"-preset {transferConfig.Get<Presets>(TransferOptions.Preset)} " +
                                                                                       $"-threads {transferConfig.Get<int>(TransferOptions.Threads)} " +
-                                                                                      $"-max_muxing_queue_size 1024 " +
+                                                                                      $"-max_muxing_queue_size 2048" +
                                                                                       $"-crf {transferConfig.Get<int>(TransferOptions.ConstantRateFactor)} " +
                                                                                       $"-profile:v {transferConfig.Get<Profiles>(TransferOptions.Profile)}")
                                                                   .WithCustomArgument(customArguments ?? "")

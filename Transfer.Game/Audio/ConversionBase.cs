@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Transfer.Game.Audio.ConversionModels;
 using Transfer.Game.Configuration;
@@ -17,9 +18,13 @@ namespace Transfer.Game.Audio
         /// <returns>Path to video</returns>
         public static Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, params object[] conversionValue)
         {
-            if (typeof(T) is IConversionModel model) return model.HandleConversion(video, transferConfig, outputPath, customArguments, conversionValue);
+            if (typeof(IConversionModel).IsAssignableFrom(typeof(T)))
+            {
+                var model = Activator.CreateInstance<T>();
+                return model.HandleConversion(video, transferConfig, outputPath, customArguments, conversionValue);
+            }
 
-            return null;
+            throw new InvalidOperationException("Type T must implement IConversionModel");
         }
     }
 }

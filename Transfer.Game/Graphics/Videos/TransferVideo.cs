@@ -8,7 +8,9 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics.Video;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osu.Framework.Platform;
+using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
@@ -64,10 +66,15 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
 
         bindableRate.Value = (float)transferConfigManager.Get<double>(TransferOptions.Rate);
 
-        Task.Run(async () =>
+        if (AudioExtractCoreExtension.ItContainsAudio(filename))
         {
-            audio = await getAudio(tempStorage);
-        });
+            Logger.Log("Video have audio");
+            Task.Run(async () =>
+            {
+                audio = await getAudio(tempStorage);
+            });
+        }
+        else Logger.Log("Video have not audio");
 
         if (audio != null)
         {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FFMpegCore.Exceptions;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
+using osu.Framework.Bindables;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -15,8 +16,15 @@ using Transfer.Game.Extensions;
 
 namespace Transfer.Game.IO;
 
-public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAudioExtract<T> where T : Track
+public class AudioExtract<T> : IAudioExtract<T> where T : Track
 {
+    private readonly TransferConfigManager transferConfigManager1;
+
+    public AudioExtract(TransferConfigManager transferConfigManager)
+    {
+        transferConfigManager1 = transferConfigManager ?? throw new ArgumentNullException(nameof(transferConfigManager));
+    }
+
     public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputPath = null,string arguments = null)
     {
         if (path == null) throw new ArgumentNullException(nameof(path));
@@ -25,14 +33,14 @@ public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAud
         outputPath ??= getHashName(path, "mp3");
         var resourceStore = new StorageBackedResourceStore(storage);
 
-        if (storage.Exists((string)outputPath))
+        if (storage.Exists(outputPath))
         {
             return getTrackFromStorage(audioManager, resourceStore, outputPath);
         }
 
         try
         {
-            string pathToFile = await convertFileAsync(Path.GetFileNameWithoutExtension(path), "mp3");
+            string pathToFile = await convertFileAsync(Path.GetFileNameWithoutExtension(path), "mp3", storage.GetFullPath(""));
             await saveFileToStorageAsync(pathToFile, storage, outputPath);
             File.Delete(pathToFile);
 
@@ -97,9 +105,11 @@ public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAud
         return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
     }
 
-    private async Task<string> convertFileAsync(string path, string extension, string outputPath = null,string arguments = null)
+    private async Task<string> convertFileAsync(string path, string extension, string outputPath = null, string arguments = null)
     {
-        string pathToFile = await ConversionBase<AudioExtractModel>.Conversion(path, transferConfigManager, outputPath, arguments);
+        Logger.Log($"Path is null: {path is null}\n Extension is null: {extension is null}\n Output is null: {outputPath is null}\n Arguments: {arguments is null}");
+        outputPath ??= Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.{extension}");
+        string pathToFile = await ConversionBase<AudioExtractModel>.Conversion(path, transferConfigManager1, outputPath, arguments);
 
         if (!File.Exists(path))
         {

@@ -20,7 +20,7 @@ namespace Transfer.Game.Tests
         private void load()
         {
             transferConfigManager = new TransferConfigManager(Host.Storage);
-            testDependencies.CacheAs(transferConfigManager);
+            testDependencies.Cache(transferConfigManager);
             Logger.Log($"Playlist path: {transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath)}");
             playlistStorage = new PlaylistStorage(new NativeStorage(transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath)));
             testDependencies.CacheAs(playlistStorage);
