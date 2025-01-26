@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FFMpegCore.Exceptions;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
-using osu.Framework.Bindables;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -16,14 +15,10 @@ using Transfer.Game.Extensions;
 
 namespace Transfer.Game.IO;
 
-public class AudioExtract<T> : IAudioExtract<T> where T : Track
+public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAudioExtract<T>
+    where T : Track
 {
-    private readonly TransferConfigManager transferConfigManager1;
-
-    public AudioExtract(TransferConfigManager transferConfigManager)
-    {
-        transferConfigManager1 = transferConfigManager ?? throw new ArgumentNullException(nameof(transferConfigManager));
-    }
+    private readonly TransferConfigManager transferConfigManager1 = transferConfigManager ?? throw new ArgumentNullException(nameof(transferConfigManager));
 
     public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputPath = null,string arguments = null)
     {
