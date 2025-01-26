@@ -38,10 +38,10 @@ jobs:
 
     - name: Restore the application
       run: |
-        if [ "${{ matrix.os }}" == 'windows-latest']; then
+        if [ "${{ matrix.os }}" == 'windows-latest' ]; then
           dotnet restore $Solution_Name --configuration $Configuration
         else
-          dotnet restore $Solution_Name /p:Configuration:$Configuration /p:Platform="Any CPU"
+          dotnet restore $Solution_Name /p:Configuration=$Configuration /p:Platform="Any CPU"
         fi
       env:
         Solution_Name: Transfer.sln
@@ -49,7 +49,7 @@ jobs:
 
     - name: Build the application
       run: |
-        if [ "${{ matrix.os }}" == 'windows-latest']; then 
+        if [ "${{ matrix.os }}" == 'windows-latest' ]; then 
           msbuild $Solution_Name /p:Configuration=$Configuration
         else
           dotnet build $Solution_Name -c $Configuration
@@ -65,7 +65,7 @@ jobs:
 
     - name: Zip the publish folder
       run: |
-        if [ "${{ matrix.os }}" == 'windows-latest']; then
+        if [ "${{ matrix.os }}" == 'windows-latest' ]; then
           Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
         else
           zip -r ./publish/Transfer.zip ./publish/*
