@@ -16,8 +16,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      Solution_Name: Transfer.sln                         
-      Test_Project_Path: Transfer.Game.Tests/Transfer.Game.Tests.csproj                     
+      Solution_Name: Transfer.sln
+      Test_Project_Path: Transfer.Game.Tests/Transfer.Game.Tests.csproj
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -38,10 +39,10 @@ jobs:
 
     - name: Restore the application
       run: |
-        if [ "${{ matrix.os }}" == 'windows-latest' ]; then
-          dotnet restore $Solution_Name --configuration $Configuration
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          dotnet restore $env:Solution_Name --configuration $env:Configuration
         else
-          dotnet restore $Solution_Name /p:Configuration=$Configuration /p:Platform="Any CPU"
+          dotnet restore $env:Solution_Name /p:Configuration=$env:Configuration /p:Platform="Any CPU"
         fi
       env:
         Solution_Name: Transfer.sln
@@ -49,23 +50,23 @@ jobs:
 
     - name: Build the application
       run: |
-        if [ "${{ matrix.os }}" == 'windows-latest' ]; then 
-          msbuild $Solution_Name /p:Configuration=$Configuration
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          msbuild $env:Solution_Name /p:Configuration=$env:Configuration /p:Platform="Any CPU"
         else
-          dotnet build $Solution_Name -c $Configuration
+          dotnet build $env:Solution_Name -c $env:Configuration
         fi
       env:
         Solution_Name: Transfer.sln
         Configuration: ${{ matrix.configuration }}
 
     - name: Publish Transfer.Desktop
-      run: dotnet publish Transfer.Desktop/Transfer.Desktop.csproj -c $Configuration -r ${{matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64'}} --self-contained -o ./publish/Transfer.Desktop
+      run: dotnet publish Transfer.Desktop/Transfer.Desktop.csproj -c $env:Configuration -r ${{ matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64' }} --self-contained -o ./publish/Transfer.Desktop
       env:
         Configuration: ${{ matrix.configuration }}
 
     - name: Zip the publish folder
       run: |
-        if [ "${{ matrix.os }}" == 'windows-latest' ]; then
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
           Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
         else
           zip -r ./publish/Transfer.zip ./publish/*
