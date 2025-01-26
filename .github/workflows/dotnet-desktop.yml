@@ -11,8 +11,9 @@ jobs:
     strategy:
       matrix:
         configuration: [Release]
+        os: [windows-latest, ubuntu-latest]
 
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
 
     env:
       Solution_Name: Transfer.sln                         
@@ -28,7 +29,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Setup MSBuild.exe
+    - name: Setup MSBuild.exe (only for Windows)
+      if: matrix.os == 'windows-latest'
       uses: microsoft/setup-msbuild@v2
 
     #- name: Execute unit tests
@@ -40,17 +42,27 @@ jobs:
         Configuration: ${{ matrix.configuration }}
 
     - name: Build the application
-      run: msbuild $env:Solution_Name /p:Configuration=$env:Configuration
+      run: |
+        if [ "${{ matrix.os }}" == 'windows-latest']; then 
+          msbuild $env:Solution_Name /p:Configuration=$env:Configuration
+        else
+          dotnet build $env:Solution_Name -c $env:Configuration
+        fi
       env:
         Configuration: ${{ matrix.configuration }}
 
     - name: Publish Transfer.Desktop
-      run: dotnet publish Transfer.Desktop/Transfer.Desktop.csproj -c $env:Configuration -r win-x64 --self-contained -o ./publish/Transfer.Desktop
+      run: dotnet publish Transfer.Desktop/Transfer.Desktop.csproj -c $env:Configuration -r ${{matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64'}} --self-contained -o ./publish/Transfer.Desktop
       env:
         Configuration: ${{ matrix.configuration }}
 
     - name: Zip the publish folder
-      run: Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
+      run: |
+        if [ "${{ matrix.os }}" == 'windows-latest']; then
+          Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
+        else
+          zip -r ./publish/Transfer.zip ./publish/*
+        fi
 
     - name: Create Release
       id: create_release
@@ -70,5 +82,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./publish/Transfer.zip
-        asset_name: Transfer.zip
+        asset_name: Transfer-${{ matrix.os }}.zip
         asset_content_type: application/zip
