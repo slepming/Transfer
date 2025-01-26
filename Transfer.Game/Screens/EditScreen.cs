@@ -3,7 +3,6 @@ using osu.Framework.Allocation;
 using Transfer.Game.Graphics.UI;
 using osu.Framework.Graphics;
 using Transfer.Game.Graphics.UI.Containers;
-using Transfer.Game.UserInterface.Containers;
 using osuTK;
 using Transfer.Game.IO;
 using osu.Framework.Audio.Track;
@@ -21,6 +20,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using Transfer.Game.Extensions;
 using Transfer.Game.Audio.ConversionModels;
+using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Screens;
 
@@ -44,9 +44,6 @@ public partial class EditScreen : TransferScreen
 
     private float windowScalingFactorX = 1.05f;
 
-
-
-
     [Resolved]
     private Storage audioTempStorage { get; set; }
 
@@ -61,25 +58,26 @@ public partial class EditScreen : TransferScreen
     private async void load(AudioManager audioManager)
     {
         audioExtract = new AudioExtract<Track>(transferConfigManager);
-        if(videoContainer == null){
-            if(pathToFile == null){
+
+        if (videoContainer == null)
+        {
+            if (pathToFile == null)
+            {
                 explorerContainer.Show();
                 explorerContainer.FoundVideo += (string path, bool isFile) =>
                 {
                     pathToFile = path;
                 };
             }
+
             videoContainer = new VideoContainer(pathToFile)
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both,
                 Padding = new MarginPadding { Horizontal = 10 },
-                Audio = await audioExtract.CreateaAndGetTrackAsync(pathToFile, audioTempStorage, audioManager),
                 Depth = 1,
             };
-
-
         }
 
         videoWithBackgroundContainer = new Container{
@@ -161,11 +159,9 @@ public partial class EditScreen : TransferScreen
         }, 500);
     }
 
-
-
     private void onSpeedVideoChange(ValueChangedEvent<double> e)
     {
-        videoContainer.Rate(e.NewValue);
+        videoContainer.Video.Rate((float)e.NewValue);
         commitAccelerationTextBox(e.NewValue);
     }
 

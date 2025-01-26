@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
+using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -19,7 +20,7 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
         RelativeSizeAxes = Axes.Both;
         Anchor = Anchor.CentreLeft;
         Origin = Anchor.Centre;
-        
+
     }
 
     [BackgroundDependencyLoader]
@@ -49,7 +50,7 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                         Direction = FillDirection.Vertical,
                         Position = new Vector2(X, Y+5),
                         Spacing = new Vector2(0, 20),
-                        Children = 
+                        Children =
                         [
                             new SpriteText{
                                 Text = TransferOptions.AudioBitrate.ToString()

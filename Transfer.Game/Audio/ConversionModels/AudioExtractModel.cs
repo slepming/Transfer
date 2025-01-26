@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Transfer.Game.Configuration;
@@ -9,6 +10,11 @@ namespace Transfer.Game.Audio.ConversionModels
     {
         public async Task<string> HandleConversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, params object[] conversionValue)
         {
+            if (string.IsNullOrEmpty(video))
+            {
+                throw new ArgumentNullException(nameof(video));
+            }
+
             string pathWithoutExtension = Path.GetFileNameWithoutExtension(video);
             outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(pathWithoutExtension.ToLower())}");
             return await Conversion(pathWithoutExtension, transferConfig, outputPath, customArguments, "mp3");

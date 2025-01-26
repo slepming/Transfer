@@ -124,5 +124,5 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu, IFilt
         base.OnHoverLost(e);
     }
 
-    
+
 }

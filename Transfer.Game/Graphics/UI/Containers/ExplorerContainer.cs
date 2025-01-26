@@ -4,6 +4,7 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -18,7 +19,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
     public event TransitionEvent FoundVideo;
 
     private TransferTextBox searchTextBox;
-    
+
 
 
     public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
@@ -44,7 +45,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     Position = new Vector2(0,9),
                     Font = new FontUsage(TransferFonts.Oswald,size: 40)
                 },
-                
+
                 new FinalContextMenuContainer{
                     RelativeSizeAxes = Axes.Both,
                     Child = new TransferScrollContainer{

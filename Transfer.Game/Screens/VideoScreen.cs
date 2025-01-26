@@ -1,6 +1,5 @@
 #nullable disable
 using System;
-using System.Drawing;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
@@ -24,8 +23,6 @@ namespace Transfer.Game.Screens;
 
 public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>
 {
-    private readonly Track audio;
-
     private VideoContainer videoContainer;
 
     private ExplorerContainer explorerContainer { get; set; } = new ExplorerContainer();
@@ -35,13 +32,13 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     private ExtensionMenu extensionMenu;
 
     [Resolved]
-    private Storage tempStorage { get; set; }
-
-    [Resolved]
     private AudioManager audioManager { get; set; }
 
     [Resolved]
     private FrameworkConfigManager frameworkConfigManager { get; set; }
+
+    [Resolved]
+    private Storage tempStorage { get; set; }
 
     protected IAudioExtract<Track> AudioExtract { get; set; }
 
@@ -65,7 +62,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     public VideoScreen(Track audio, string pathToVideo)
     {
-        this.audio = audio;
         VideoPath = pathToVideo;
     }
 
@@ -92,13 +88,10 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
             return;
         }
 
-        if (audio is null) AudioExtract.CreateaAndGetTrackAsync(VideoPath, tempStorage, audioManager: audioManager);
-
         try
         {
             videoContainer = new VideoContainer(videoPath)
             {
-                Audio = audio,
                 RelativeSizeAxes = Axes.Both,
                 SeekSpace = seek
             };
@@ -185,7 +178,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     private void releaseResources()
     {
         videoContainer?.Dispose();
-        audio?.Dispose();
         explorerContainer?.Dispose();
     }
 

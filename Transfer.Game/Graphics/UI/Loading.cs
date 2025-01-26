@@ -7,108 +7,107 @@ using osu.Framework.Graphics.Shapes;
 using osuTK;
 using osuTK.Graphics;
 
-namespace Transfer.Game.UserInterface
+namespace Transfer.Game.Graphics.UI;
+
+public partial class Loading : CompositeDrawable
 {
-    public partial class Loading : CompositeDrawable
+    private Box loadingComponent;
+    private Container backgroundContainer;
+    private Container loadingContainer;
+    private Container fullComponentContainer;
+
+    public Loading()
     {
-        private Box loadingComponent;
-        private Container backgroundContainer;
-        private Container loadingContainer;
-        private Container fullComponentContainer;
-        public Loading()
-        {
-            Anchor = Anchor.Centre;
-            Origin = Anchor.Centre;
-        }
+        Anchor = Anchor.Centre;
+        Origin = Anchor.Centre;
+    }
 
-        [BackgroundDependencyLoader]
-        private void load()
+    [BackgroundDependencyLoader]
+    private void load()
+    {
+        Container container = new Container()
         {
-            Container container = new Container()
+            RelativeSizeAxes = Axes.Both,
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Colour = Colour4.White,
+            Children = new Drawable[]
             {
-                RelativeSizeAxes = Axes.Both,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Colour = Colour4.White,
-                Children = new Drawable[]
+                new Container
                 {
-                    new Container
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Colour = Colour4.White,
-                        RelativeSizeAxes = Axes.Both,
-                        Children = new Drawable[]
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = Colour4.White,
+                    RelativeSizeAxes = Axes.Both,
+                    Children =
+                    [
+                        backgroundContainer = new Container
                         {
-                            backgroundContainer = new Container
+                            Size = new Vector2(Width / 2, Height / 2),
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Masking = true,
+                            EdgeEffect = new EdgeEffectParameters
                             {
-                                Size = new Vector2(Width/2, Height/2),
-                                Anchor = Anchor.Centre,
-                                Origin = Anchor.Centre,
-                                Masking = true,
-                                EdgeEffect = new EdgeEffectParameters() {
-                                    Radius = 400,
-                                    Colour = Colour4.Gray,
-                                    Type = EdgeEffectType.Glow
-                                }
-                            },
-                            loadingContainer = new Container
-                            {
-                                Size = new Vector2(Width/2, Height/2),
-                                Masking = true,
-                                MaskingSmoothness = 5f,
-                                Anchor = Anchor.Centre,
-                                Origin = Anchor.Centre,
-                                CornerRadius = 15f,
-                                Child = loadingComponent = new Box
-                                {
-                                    Size = new Vector2(Width/2, Height/2),
-                                    Anchor = Anchor.Centre,
-                                    Origin = Anchor.Centre,
-                                    EdgeSmoothness = new Vector2(1,1),
-                                },
+                                Radius = 400,
+                                Colour = Colour4.Gray,
+                                Type = EdgeEffectType.Glow
                             }
+                        },
+                        loadingContainer = new Container
+                        {
+                            Size = new Vector2(Width / 2, Height / 2),
+                            Masking = true,
+                            MaskingSmoothness = 5f,
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            CornerRadius = 15f,
+                            Child = loadingComponent = new Box
+                            {
+                                Size = new Vector2(Width / 2, Height / 2),
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                EdgeSmoothness = new Vector2(1, 1),
+                            },
                         }
-                    }
+                    ]
                 }
-            };
-            InternalChild = container;
-        }
+            }
+        };
+        InternalChild = container;
+    }
 
-        protected override void LoadComplete()
-        {
-
-            base.LoadComplete();
-            loadingContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.White))
-            .RotateTo(180, 1000, Easing.InOutCubic)
-            .Then()
-            .RotateTo(-180, 1000, Easing.InOutCubic)
-            .Then()
-            .TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.Black), 400, Easing.InOutQuad));
-            backgroundContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
-            {
-                Radius = 200,
-                Colour = Colour4.White,
-                Type = EdgeEffectType.Glow
-            })
-            .RotateTo(-180, 1000, Easing.InOutCubic)
-            .TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
-            {
-                Radius = 400,
-                Colour = Colour4.Gray,
-                Type = EdgeEffectType.Glow
-            }, 800, Easing.InOutQuad)
-            .Then()
-            .RotateTo(180, 1000, Easing.InOutCubic)
-            .Then()
-            .TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
-            {
-                Radius = 200,
-                Colour = Colour4.White,
-                Type = EdgeEffectType.Glow
-            }, 400, Easing.OutQuad)
-            );
-
-        }
+    protected override void LoadComplete()
+    {
+        base.LoadComplete();
+        loadingContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.White))
+                                    .RotateTo(180, 1000, Easing.InOutCubic)
+                                    .Then()
+                                    .RotateTo(-180, 1000, Easing.InOutCubic)
+                                    .Then()
+                                    .TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.Black), 400, Easing.InOutQuad));
+        backgroundContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
+                                       {
+                                           Radius = 200,
+                                           Colour = Colour4.White,
+                                           Type = EdgeEffectType.Glow
+                                       })
+                                       .RotateTo(-180, 1000, Easing.InOutCubic)
+                                       .TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
+                                       {
+                                           Radius = 400,
+                                           Colour = Colour4.Gray,
+                                           Type = EdgeEffectType.Glow
+                                       }, 800, Easing.InOutQuad)
+                                       .Then()
+                                       .RotateTo(180, 1000, Easing.InOutCubic)
+                                       .Then()
+                                       .TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
+                                       {
+                                           Radius = 200,
+                                           Colour = Colour4.White,
+                                           Type = EdgeEffectType.Glow
+                                       }, 400, Easing.OutQuad)
+        );
     }
 }
