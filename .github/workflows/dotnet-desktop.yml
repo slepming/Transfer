@@ -47,13 +47,14 @@ jobs:
         if [ "${{ matrix.os }}" == 'windows-latest']; then 
           msbuild $env:Solution_Name /p:Configuration=$env:Configuration
         else
-          dotnet build $env:Solution_Name -c $env:Configuration
+          dotnet build $Solution_Name -c $Configuration
         fi
       env:
+        Solution_Name: Transfer.sln
         Configuration: ${{ matrix.configuration }}
 
     - name: Publish Transfer.Desktop
-      run: dotnet publish Transfer.Desktop/Transfer.Desktop.csproj -c $env:Configuration -r ${{matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64'}} --self-contained -o ./publish/Transfer.Desktop
+      run: dotnet publish Transfer.Desktop/Transfer.Desktop.csproj -c $Configuration -r ${{matrix.os == 'windows-latest' && 'win-x64' || 'linux-x64'}} --self-contained -o ./publish/Transfer.Desktop
       env:
         Configuration: ${{ matrix.configuration }}
 
