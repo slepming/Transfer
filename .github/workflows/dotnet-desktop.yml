@@ -15,9 +15,8 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Solution_Name: Transfer.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: Transfer.Game.Tests/Transfer.Game.Tests.csproj                     # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
-
+      Solution_Name: Transfer.sln                         
+      Test_Project_Path: Transfer.Game.Tests/Transfer.Game.Tests.csproj                     
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -36,7 +35,7 @@ jobs:
      # run: dotnet test
 
     - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      run: dotnet restore $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
 
@@ -55,9 +54,9 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: actions/create-release@v2
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v1.0.${{ github.run_number }}
         release_name: Release v1.0.${{ github.run_number }}
@@ -65,9 +64,9 @@ jobs:
         prerelease: false
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v2
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./publish/Transfer.zip
