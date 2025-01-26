@@ -37,8 +37,9 @@ jobs:
      # run: dotnet test
 
     - name: Restore the application
-      run: dotnet restore $env:Solution_Name /p:Configuration=$env:Configuration
+      run: dotnet restore $Solution_Name /p:Configuration=$Configuration
       env:
+        Solution_Name: Transfer.sln
         Configuration: ${{ matrix.configuration }}
 
     - name: Build the application
