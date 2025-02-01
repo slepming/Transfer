@@ -7,9 +7,9 @@ public partial class TestSceneExtensionMenu : TransferTestScene
 {
     private ExtensionMenu extensionMenu = null!;
 
-    [BackgroundDependencyLoader]
-    private void load()
+    protected override void LoadComplete()
     {
+        base.LoadComplete();
         AddStep("Create extension menu", () => extensionMenu = new ExtensionMenu());
         AddAssert("Extension menu is nut null", () => extensionMenu != null);
         AddStep("Adding object on screen", () => Add(extensionMenu));

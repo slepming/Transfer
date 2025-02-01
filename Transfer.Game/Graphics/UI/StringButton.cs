@@ -4,6 +4,8 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
+using osu.Framework.Localisation;
+using osuTK.Graphics;
 using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Graphics.UI;
@@ -13,22 +15,38 @@ public partial class StringButton : ClickableContainer
     private Box background;
     private SpriteText spriteText;
 
-    private string text;
+    private LocalisableString text;
 
-    public string Text {
+    public LocalisableString Text
+    {
         get => text;
-        set{
+        set
+        {
             if(text == value) return;
             text = value;
         }
+    }
+
+    public Color4 BackgroundColour
+    {
+        get => background.Colour;
+        set => background.Colour = value;
     }
 
     public StringButton()
     {
         Masking = true;
         Colour = Colour4.White;
-        InternalChildren = [
-            spriteText = new SpriteText{
+        InternalChildren =
+        [
+            background = new Box()
+            {
+                Alpha = 0.3f,
+                Colour = Colour4.White,
+                RelativeSizeAxes = Axes.Both
+            },
+            spriteText = new SpriteText
+            {
                 Colour = Colour4.White,
                 Font = new FontUsage(TransferFonts.FiraCodeNerdFont, size: 15, fixedWidth: true),
                 Anchor = Anchor.Centre,
@@ -36,7 +54,6 @@ public partial class StringButton : ClickableContainer
             }
         ];
     }
-
 
     protected override bool OnHover(HoverEvent e)
     {
@@ -50,12 +67,9 @@ public partial class StringButton : ClickableContainer
         base.OnHoverLost(e);
     }
 
-
-
-
-
     [BackgroundDependencyLoader]
-    private void load(){
-        spriteText.Text = text ?? "Not loaded text";
+    private void load()
+    {
+        spriteText.Text = text.ToString() ?? "Not loaded text";
     }
 }

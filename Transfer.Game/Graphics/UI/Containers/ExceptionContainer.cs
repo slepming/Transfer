@@ -1,22 +1,23 @@
+using System.Diagnostics;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
-using osuTK;
 using osu.Framework.Localisation;
-using System.Diagnostics;
+using osuTK;
 using Transfer.Game.Extensions;
+using Transfer.Game.Graphics.UI.Containers.Overlays;
+using Transfer.Game.UserInterface;
 
-namespace Transfer.Game.UserInterface.Containers;
+namespace Transfer.Game.Graphics.UI.Containers;
 
 /// <summary>
 /// Container for handling exception and for notify user
 /// </summary>
-public partial class ExceptionContainer : FocusedOverlayContainer
+public partial class ExceptionContainer : TransferFocusedOverlayContainer
 {
-
     private Container container;
     private ClickableContainer exceptionButton, fullLogButton, contactDeveloperButton;
 
@@ -25,12 +26,11 @@ public partial class ExceptionContainer : FocusedOverlayContainer
     protected override bool BlockPositionalInput { get; }
     protected override bool BlockNonPositionalInput => false;
 
-
     public TextFlowContainer ContentObject;
     public SpriteText Header;
 
-
     private string text;
+
     public string Text
     {
         get => text;
@@ -39,7 +39,9 @@ public partial class ExceptionContainer : FocusedOverlayContainer
             text = value;
         }
     }
+
     private string headerText;
+
     public string HeaderText
     {
         get => headerText;
@@ -51,14 +53,9 @@ public partial class ExceptionContainer : FocusedOverlayContainer
 
     public FontUsage Font { get; set; } = new FontUsage(family: TransferFonts.FiraCodeNerdFont, size: 30);
 
-
-
-
-
     public ExceptionContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
     {
         Show();
-
 
         BlockScrollInput = blockScrollInput;
         StartHidden = startHidden;
@@ -72,38 +69,40 @@ public partial class ExceptionContainer : FocusedOverlayContainer
         Origin = Anchor.TopCentre;
         Width = 1f;
         Height = 0.2f;
-        Scale = new Vector2(1,1);
+        Scale = new Vector2(1, 1);
 
         InternalChildren =
         [
-
-            container = new Container{
+            container = new Container
+            {
                 RelativeSizeAxes = Axes.Both,
-                Children = [
-                    new Box{
+                Children =
+                [
+                    new Box
+                    {
                         Colour = new Colour4(255,255,255,0.01f),
                         RelativeSizeAxes = Axes.Both,
-
                     },
-                    Header = new SpriteText{
+                    Header = new SpriteText
+                    {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont,size: 50, fixedWidth: true),
+                        Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont, size: 50, fixedWidth: true),
                         Text = "Null Header",
                         Colour = Colour4.Red,
-
                     },
-                    ContentObject = new TextFlowContainer{
+                    ContentObject = new TextFlowContainer
+                    {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
-                        Position = new Vector2(0,45),
+                        Position = new Vector2(0, 45),
 
                         RelativeSizeAxes = Axes.Both,
-                        Width = 1,
-                        Height = 0.4f,
+                        Size = new Vector2(1, 1f / 3f),
                         Colour = Colour4.White,
                         TextAnchor = Anchor.Centre,
                         Masking = true,
+                        MaskingSmoothness = 0.1f,
                     },
                     exceptionButton = new ExceptionButton
                     {
@@ -114,9 +113,10 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                         Height = 50,
                         Anchor = Anchor.BottomCentre,
                         Origin = Anchor.BottomCentre,
-                        Position = new Vector2(-125,0)
+                        Position = new Vector2(-125, 0)
                     },
-                    fullLogButton = new ExceptionButton{
+                    fullLogButton = new ExceptionButton
+                    {
                         Text = "Full log",
                         TextColour = Colour4.White,
                         BackgroundColour = new Colour4(255,255,255,1),
@@ -126,38 +126,41 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                         Origin = Anchor.BottomCentre,
                         Position = new Vector2(125, 0),
                     }
-            ]
+                ]
             }
         ];
         exceptionButton.Action += closeButtonActionWidth;
         fullLogButton.Action += fullLogAction;
-
     }
 
-    private void fullLogAction(){
+    private void fullLogAction()
+    {
         ClearInternal();
         this.TransformTo(nameof(Height), 1f, 500, Easing.InOutQuint);
         Anchor = Anchor.Centre;
         Origin = Anchor.Centre;
         InternalChildren =
         [
-
-            container = new Container{
+            container = new Container
+            {
                 RelativeSizeAxes = Axes.Both,
-                Children = [
-                    new Box{
+                Children =
+                [
+                    new Box
+                    {
                         Colour = new Colour4(255,255,255,0.01f),
                         RelativeSizeAxes = Axes.Both,
-
                     },
-                    Header = new SpriteText{
+                    Header = new SpriteText
+                    {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
                         Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont,size: 50, fixedWidth: true),
                         Text = HeaderText,
                         Colour = Colour4.Red
                     },
-                    ContentObject = new TextFlowContainer{
+                    ContentObject = new TextFlowContainer
+                    {
                         Text = text,
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
@@ -178,9 +181,10 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                         Height = 50,
                         Anchor = Anchor.BottomCentre,
                         Origin = Anchor.BottomCentre,
-                        Position = new Vector2((int)Width/2 - 150,0)
+                        Position = new Vector2(Width / 2 - 150, 0)
                     },
-                    contactDeveloperButton = new ExceptionButton{
+                    contactDeveloperButton = new ExceptionButton
+                    {
                         Text = "Contact developer",
                         TextColour = Colour4.White,
                         BackgroundColour = new Colour4(255,255,255,1),
@@ -188,9 +192,9 @@ public partial class ExceptionContainer : FocusedOverlayContainer
                         Height = 50,
                         Anchor = Anchor.BottomCentre,
                         Origin = Anchor.BottomCentre,
-                        Position = new Vector2((int)Width/2 + 150,0)
+                        Position = new Vector2(Width / 2 + 150, 0)
                     }
-            ]
+                ]
             }
         ];
         contactDeveloperButton.Action += contactWithDeveloperAction;
@@ -202,9 +206,12 @@ public partial class ExceptionContainer : FocusedOverlayContainer
         Process.Start(new ProcessStartInfo(@"https://github.com/slepming") { UseShellExecute = true });
         closeButtonActionWH();
     }
-    private void closeButtonActionWH(){
+
+    private void closeButtonActionWH()
+    {
         this.TransformTo(nameof(Height), 0.2f, 200, Easing.InOutQuint).Then().TransformTo(nameof(Width), 0.1f, 400, Easing.InOutQuint).Expire();
     }
+
     private void closeButtonActionWidth()
     {
         this.TransformTo(nameof(Width), 0.1f, 400, Easing.InOutQuint).Expire();
@@ -214,6 +221,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
     private void load()
     {
     }
+
     protected override void LoadComplete()
     {
         ContentObject.Text = string.Empty;
@@ -226,6 +234,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
     {
         ContentObject.AddText(localisableString);
     }
+
     public void ReplaceText(LocalisableString localisableString)
     {
         ContentObject.Text = localisableString;
@@ -237,6 +246,7 @@ public partial class ExceptionContainer : FocusedOverlayContainer
         this.TransformTo(nameof(CornerRadius), 10f, 500, Easing.InOutQuint);
         return base.OnHover(e);
     }
+
     protected override void OnHoverLost(HoverLostEvent e)
     {
         this.TransformTo(nameof(BorderThickness), 1f, 200, Easing.InOutQuad);
@@ -244,15 +254,14 @@ public partial class ExceptionContainer : FocusedOverlayContainer
         base.OnHoverLost(e);
     }
 
-
     protected override void PopIn()
     {
-        this.TransformTo(nameof(Width), 1f, 1000, Easing.InOutQuint);
+        this.ScaleTo(new Vector2(1, 1), 1000, Easing.OutExpo);
     }
 
     protected override void PopOut()
     {
-        this.TransformTo(nameof(Width), 0f, 200, Easing.InOutQuint);
+        this.ScaleTo(new Vector2(0, 1), 200, Easing.OutExpo);
     }
 
 

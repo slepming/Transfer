@@ -13,10 +13,11 @@ namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
 public partial class ExtensionMenu : TransferFocusedOverlayContainer
 {
-    private BasicButton explorerButton, playlistButton, optionsButton;
+    private BasicButton explorerButton, optionsButton;
+    private StringButton playlistButton;
     private Container hub;
-    private TransferScrollContainer playlistContainer;
-    private FillFlowContainer playlists;
+    private Container playlistContainer;
+    private PlaylistWindow playlists;
 
     public ExtensionMenu()
     {
@@ -59,7 +60,7 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
                             RelativeSizeAxes = Axes.X,
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
-                            Spacing = new Vector2(5,5),
+                            Spacing = new Vector2(5, 5),
                             Children =
                             [
                                 //explorerButton = new BasicButton
@@ -71,11 +72,10 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
                                 //    Anchor = Anchor.Centre,
                                 //    Origin = Anchor.Centre
                                 //},
-                                playlistButton = new BasicButton
+                                playlistButton = new StringButton
                                 {
                                     RelativeSizeAxes = Axes.X,
-                                    Height = 30,
-                                    Size = new Vector2(1 / 1.1f, 30),
+                                    Size = new Vector2(1f / 1.1f, 30),
                                     Text = "Go to current playlist",
                                     Anchor = Anchor.Centre,
                                     Origin = Anchor.Centre,
@@ -84,7 +84,6 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
                                     BorderColour = Colour4.FromHex("#CCCCCC"),
                                     BorderThickness = 2,
                                     Colour = Colour4.White,
-                                    CornerRadius = 5,
                                 }
                             ]
                         }
@@ -99,13 +98,12 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
     [BackgroundDependencyLoader]
     private void load(PlaylistStorage playlistStorage)
     {
-        playlistContainer = new TransferScrollContainer
+        playlistContainer = new Container
         {
             RelativeSizeAxes = Axes.Both,
             Child = playlists = new PlaylistWindow(playlistStorage)
             {
-                RelativeSizeAxes = Axes.X,
-                AutoSizeAxes = Axes.Y,
+                RelativeSizeAxes = Axes.Both,
             }
         };
         playlistContainer.Hide();

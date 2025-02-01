@@ -51,6 +51,7 @@ public enum TransferOptions
     Profile,
     LoopVideo,
     CurrentPlaylistPath,
+    DarkTheme,
 }
 
 public enum Profiles

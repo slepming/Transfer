@@ -3,14 +3,18 @@ using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Textures;
+using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osuTK;
+using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
-public partial class PlaylistWindow : FillFlowContainer
+public partial class PlaylistWindow : Container
 {
     private TransparentButton close, changeState;
+    private FillFlowContainer mainContainer;
 
     /// <summary>
     /// If state false when playlist window in Extension menu
@@ -28,8 +32,6 @@ public partial class PlaylistWindow : FillFlowContainer
         Masking = true;
         BorderThickness = 1;
         BorderColour = Colour4.White;
-        Direction = FillDirection.Vertical;
-        Spacing = new Vector2(5, 15);
         InternalChildren =
         [
             close = new TransparentButton
@@ -39,17 +41,38 @@ public partial class PlaylistWindow : FillFlowContainer
                 Text = "X",
                 Anchor = Anchor.TopRight,
                 Origin = Anchor.TopRight,
+                Action = onCloseButton
+            },
+            new TransferScrollContainer()
+            {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                RelativeSizeAxes = Axes.Both,
+                Size = new Vector2(1, 1f / 1.25f),
+                Child =
+                    mainContainer = new FillFlowContainer()
+                    {
+                        Spacing = new Vector2(5, 15),
+                        RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
+                        Direction = FillDirection.Vertical
+                    }
             }
         ];
     }
 
-    protected override void LoadComplete()
+    private void onCloseButton()
     {
-        base.LoadComplete();
-        loadStorage(playlistStorage);
+        Hide();
     }
 
-    private void loadStorage(Storage storage)
+    [BackgroundDependencyLoader]
+    private void load(TextureStore textureStore)
+    {
+        loadStorage(playlistStorage, textureStore);
+    }
+
+    private void loadStorage(Storage storage, TextureStore textureStore = null)
     {
         var files = storage.GetFiles("./");
 
@@ -57,12 +80,13 @@ public partial class PlaylistWindow : FillFlowContainer
         {
             if (!TransferGameBase.VIDEO_EXTENSIONS.Contains(Path.GetExtension(file))) continue;
 
-            Add(new Explorer.ExplorerButton()
+            mainContainer.Add(new PrefixButton
             {
                 AutoSizeAxes = Axes.Y,
                 RelativeSizeAxes = Axes.X,
                 Text = file,
-                Action = onActionExplorerButton
+                Prefix = textureStore?.Get("video-camera.png"),
+                // Action = onActionExplorerButton
             });
         }
     }
@@ -70,6 +94,5 @@ public partial class PlaylistWindow : FillFlowContainer
     private void onActionExplorerButton(string path, bool isDirectory)
     {
         // Крч нужно оптимизировать дело смены видео. Каждый раз создавать новый Screen не варик, слишком много ОЗУ ест.
-
     }
 }
