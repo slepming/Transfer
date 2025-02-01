@@ -93,6 +93,5 @@ public partial class PlaylistWindow : Container
 
     private void onActionExplorerButton(string path, bool isDirectory)
     {
-        // Крч нужно оптимизировать дело смены видео. Каждый раз создавать новый Screen не варик, слишком много ОЗУ ест.
     }
 }
