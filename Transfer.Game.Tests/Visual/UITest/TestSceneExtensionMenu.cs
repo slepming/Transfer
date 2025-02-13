@@ -1,4 +1,3 @@
-using osu.Framework.Allocation;
 using Transfer.Game.Graphics.UI.Containers.Menu;
 
 namespace Transfer.Game.Tests.Visual.UITest;

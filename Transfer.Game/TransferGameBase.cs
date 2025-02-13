@@ -2,24 +2,31 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input.Bindings;
+using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osuTK;
+using Transfer.Game.Audio;
 using Transfer.Game.Configuration;
+using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.Graphics.UI.Containers.Windows;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 
 namespace Transfer.Game;
 
 [Cached]
-public partial class TransferGameBase : osu.Framework.Game
+public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<GlobalAction>
 {
     public static readonly string[] VIDEO_EXTENSIONS = [".mp4", ".webm"];
 #if DEBUG
@@ -36,7 +43,7 @@ public partial class TransferGameBase : osu.Framework.Game
     private FontStore fontStore;
 
     protected Storage Storage;
-    private WrappedStorage tempStorage;
+    private TempStorage tempStorage;
     private PlaylistStorage playlistStorage;
 
     protected SafeAreaContainer SafeAreaContainer;
@@ -47,7 +54,10 @@ public partial class TransferGameBase : osu.Framework.Game
     private TransferConfigManager transferConfigManager;
 
     private DependencyContainer dependencies;
+
     private int allowableExceptions;
+
+    private AssemblyInfoWindow assemblyInfoWindow;
 
     protected TransferGameBase()
     {
@@ -60,14 +70,16 @@ public partial class TransferGameBase : osu.Framework.Game
     [BackgroundDependencyLoader]
     private void load(FrameworkConfigManager config, IRenderer renderer)
     {
+        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += (ValueChangedEvent<string> value) => Logger.Log(value.NewValue);
         Host.Window.Title = HOST_NAME;
-        tempStorage = new WrappedStorage(Storage.GetStorageForDirectory(@"Temp/"));
+        tempStorage = new TempStorage(Storage.GetStorageForDirectory(@"./Temp/"));
         dependencies.CacheAs(tempStorage);
         Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
 
         transferConfigManager = new TransferConfigManager(Host.Storage);
         dependencies.Cache(transferConfigManager);
         playlistStorage = new PlaylistStorage(new NativeStorage(transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath)));
+        dependencies.Cache(playlistStorage);
 
         IResourceStore<byte[]> tempResourceStore = new StorageBackedResourceStore(tempStorage);
         dependencies.Cache(tempResourceStore);
@@ -87,11 +99,14 @@ public partial class TransferGameBase : osu.Framework.Game
             SafeAreaOverrideEdges = Edges.None,
             Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this)
             {
-                Children = new Drawable[]{
+                Children = new Drawable[]
+                {
                     screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both },
-                    new TransferCursorContainer(){
+                    new TransferCursorContainer
+                    {
                         RelativeSizeAxes = Axes.Both
                     },
+                    assemblyInfoWindow = new AssemblyInfoWindow()
                 }
             })
         });
@@ -144,14 +159,28 @@ public partial class TransferGameBase : osu.Framework.Game
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
         dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
-    protected override bool OnExiting()
-    {
-        return base.OnExiting();
-    }
-
     protected override void Dispose(bool isDisposing)
     {
         base.Dispose(isDisposing);
         fontStore.Dispose();
+    }
+
+    public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+    {
+        if (e.Repeat)
+            return false;
+
+        switch (e.Action)
+        {
+            case GlobalAction.OpenAssemblyVersion:
+                assemblyInfoWindow.Show();
+                return true;
+        }
+
+        return false;
+    }
+
+    public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
+    {
     }
 }

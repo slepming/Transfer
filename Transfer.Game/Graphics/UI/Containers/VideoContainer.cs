@@ -9,7 +9,6 @@ using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
-using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 

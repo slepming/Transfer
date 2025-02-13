@@ -20,7 +20,7 @@ public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAud
 {
     private readonly TransferConfigManager transferConfigManager1 = transferConfigManager ?? throw new ArgumentNullException(nameof(transferConfigManager));
 
-    public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputPath = null,string arguments = null)
+    public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputPath = null, string arguments = null)
     {
         if (path == null) throw new ArgumentNullException(nameof(path));
         if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
@@ -35,11 +35,14 @@ public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAud
 
         try
         {
-            string pathToFile = await convertFileAsync(Path.GetFileNameWithoutExtension(path), "mp3", storage.GetFullPath(""));
+            string pathToFile = await convertFileAsync(path, "mp3", storage.GetFullPath(""));
             await saveFileToStorageAsync(pathToFile, storage, outputPath);
             File.Delete(pathToFile);
 
-            if (!storage.Exists(outputPath)) throw new FileNotFoundException("Audio not found");
+            if (!storage.Exists(outputPath))
+            {
+                throw new FileNotFoundException("Audio not found");
+            }
 
             return getTrackFromStorage(audioManager, resourceStore, outputPath);
         }
@@ -50,7 +53,7 @@ public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAud
         catch (Exception ex)
         {
             handleException(ex, outputPath);
-            return null;
+            throw;
         }
     }
 
@@ -102,15 +105,16 @@ public class AudioExtract<T>(TransferConfigManager transferConfigManager) : IAud
 
     private async Task<string> convertFileAsync(string path, string extension, string outputPath = null, string arguments = null)
     {
-        Logger.Log($"Path is null: {path is null}\n Extension is null: {extension is null}\n Output is null: {outputPath is null}\n Arguments: {arguments is null}");
+        Logger.Log($"Path is null: {path is null}({path})\n Extension is null: {extension is null}\n Output is null: {outputPath is null}\n Arguments: {arguments is null}");
         outputPath ??= Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.{extension}");
-        string pathToFile = await ConversionBase<AudioExtractModel>.Conversion(path, transferConfigManager1, outputPath, arguments);
 
         if (!File.Exists(path))
         {
             Logger.Error(new Exception(), $"{path} does not exist - conversion canceled");
             throw new Exception($"{path} does not exist - conversion canceled");
         }
+
+        string pathToFile = await ConversionBase<AudioExtractModel>.Conversion(path, transferConfigManager1, outputPath, arguments);
 
         return pathToFile;
     }

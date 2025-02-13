@@ -3,7 +3,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers;
-using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Tests.Visual.UITest;
 

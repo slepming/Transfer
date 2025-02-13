@@ -24,6 +24,7 @@ namespace Transfer.Game.Audio
         /// <returns>Path to audio</returns>
         protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath, string customArguments = null, string outputExtension = null)
         {
+            CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments ?? "null"}";
             CONVERSION_STATUS.Value = "Checking output path";
 
             if (string.IsNullOrEmpty(outputPath))
@@ -40,7 +41,6 @@ namespace Transfer.Game.Audio
 
             try
             {
-                Logger.Log($"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments ?? "null"}");
                 CONVERSION_STATUS.Value = "Start conversion";
                 DateTime startTime = DateTime.Now;
                 await FFMpegArguments

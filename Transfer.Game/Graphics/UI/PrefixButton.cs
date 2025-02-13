@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -6,7 +5,6 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Localisation;
-using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Extensions;
 
@@ -49,18 +47,32 @@ public partial class PrefixButton : ClickableContainer
                 Colour = Colour4.White,
                 RelativeSizeAxes = Axes.Both
             },
-            prefix = new Sprite()
+            new Container
             {
-                Width = 15,
-                Height = 15,
+                // Masking = true,
+                // BorderColour = Colour4.White.Opacity(90),
+                // BorderThickness = 3,
+                RelativeSizeAxes = Axes.Both,
                 Anchor = Anchor.CentreLeft,
                 Origin = Anchor.CentreLeft,
-                Texture = Prefix,
+                Size = new Vector2(1 / 12f, 1),
+                Position = new Vector2(3, 0),
+                Children =
+                [
+                    prefix = new Sprite()
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Size = new Vector2(1, 1 / 1.5f),
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        Texture = Prefix,
+                    },
+                ]
             },
             new Container
             {
                 RelativeSizeAxes = Axes.Both,
-                Size = new Vector2(1 / 1.2f, 1),
+                Size = new Vector2(1 / 1.3f, 1),
                 Masking = true,
                 MaskingSmoothness = 5f,
                 Anchor = Anchor.Centre,
@@ -70,7 +82,7 @@ public partial class PrefixButton : ClickableContainer
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont),
+                        Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont, size: 12f),
                         Text = text
                     }
             }

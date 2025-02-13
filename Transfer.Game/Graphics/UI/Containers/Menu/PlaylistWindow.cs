@@ -4,10 +4,8 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osuTK;
-using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
@@ -74,7 +72,7 @@ public partial class PlaylistWindow : Container
 
     private void loadStorage(Storage storage, TextureStore textureStore = null)
     {
-        var files = storage.GetFiles("./");
+        var files = storage.GetFiles("");
 
         foreach (var file in files)
         {
@@ -82,7 +80,7 @@ public partial class PlaylistWindow : Container
 
             mainContainer.Add(new PrefixButton
             {
-                AutoSizeAxes = Axes.Y,
+                Height = 25,
                 RelativeSizeAxes = Axes.X,
                 Text = file,
                 Prefix = textureStore?.Get("video-camera.png"),

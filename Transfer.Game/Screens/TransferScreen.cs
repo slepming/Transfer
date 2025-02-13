@@ -2,7 +2,6 @@ using osu.Framework.Screens;
 using osu.Framework.Graphics;
 using osu.Framework.Logging;
 using osu.Framework.Bindables;
-using Transfer.Game.UserInterface.Containers;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;

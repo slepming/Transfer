@@ -55,6 +55,9 @@ namespace Transfer.Game.Input.Bindings
             new KeyBinding(new[] { InputKey.Shift, InputKey.V }, GlobalAction.OpenEditor),
             new KeyBinding(InputKey.F5, GlobalAction.TakeScreenshot),
             new KeyBinding(new[] { InputKey.Control, InputKey.M }, GlobalAction.ExtensionMenu),
+            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.C }, GlobalAction.CreatePlaylist),
+            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.O }, GlobalAction.OpenPlaylist),
+            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.A }, GlobalAction.OpenAssemblyVersion)
         ];
 
         private static IEnumerable<KeyBinding> watchingBindings =>
@@ -75,23 +78,20 @@ namespace Transfer.Game.Input.Bindings
     public enum GlobalAction
     {
         Explorer,
-
+        OpenAssemblyVersion,
         ConfigurationMenu,
-
         OpenEditor,
-
         ShortVideoMetaData,
-
         EditorVideoFullMetaData,
-
         EditorConvertMenu,
-
         WatchingVideoOnCurrentPlaybackRestart,
         WatchingVideoReset,
         TakeScreenshot,
         PauseVideo,
         MoveToInternalExplorer,
         ExtensionMenu,
+        OpenPlaylist,
+        CreatePlaylist
     }
 
     public enum GlobalActionCategory

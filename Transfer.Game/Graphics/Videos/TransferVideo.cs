@@ -10,6 +10,7 @@ using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
+using Transfer.Game.Audio;
 using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
 using Transfer.Game.Input.Bindings;
@@ -25,7 +26,7 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
     public Action<double> SeekOccurs;
 
     [Resolved]
-    private Storage tempStorage { get; set; }
+    private TempStorage tempStorage { get; set; }
 
     private bool enableRate;
 
@@ -35,6 +36,8 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
     };
 
     private string filename;
+
+    private TransferConfigManager transferConfigManager;
 
     [CanBeNull]
     private Track audio;
@@ -61,18 +64,27 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager, AudioManager audioManager)
     {
+        Logger.Log(@$"Open file {filename}");
+        Logger.Log($"Open folder {tempStorage.GetFullPath(".")}");
         this.audioManager = audioManager;
         audioExtract = new AudioExtract<Track>(transferConfigManager);
-
+        this.transferConfigManager = transferConfigManager;
         bindableRate.Value = (float)transferConfigManager.Get<double>(TransferOptions.Rate);
+    }
+
+    private void rateChanged(ValueChangedEvent<float> obj)
+    {
+        if (audio != null) audio.Tempo.Value = obj.NewValue;
+    }
+
+    protected override async void LoadAsyncComplete()
+    {
+        base.LoadAsyncComplete();
 
         if (AudioExtractCoreExtension.ItContainsAudio(filename))
         {
             Logger.Log("Video have audio");
-            Task.Run(async () =>
-            {
-                audio = await getAudio(tempStorage);
-            });
+            audio = await getAudio(tempStorage);
         }
         else Logger.Log("Video have not audio");
 
@@ -85,16 +97,6 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
         }
 
         bindableRate.ValueChanged += rateChanged;
-    }
-
-    private void rateChanged(ValueChangedEvent<float> obj)
-    {
-        if (audio != null) audio.Tempo.Value = obj.NewValue;
-    }
-
-    protected override void LoadAsyncComplete()
-    {
-        base.LoadAsyncComplete();
         audio?.StartAsync();
     }
 
@@ -195,9 +197,9 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
 
     public void SetAudio(Track track) => audio = track;
 
-    private Task<Track> getAudio(Storage audioStorage)
+    private async Task<Track> getAudio(Storage audioStorage)
     {
-        return audioExtract.CreateaAndGetTrackAsync(filename, audioStorage, audioManager);
+        return await audioExtract.CreateaAndGetTrackAsync(filename, audioStorage, audioManager);
     }
 
     #endregion

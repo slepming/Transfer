@@ -26,7 +26,7 @@ namespace Transfer.Game
 
         private readonly string[] args;
 
-        private WrappedStorage tempStorage = null;
+        private TempStorage tempStorage = null;
 
         private StorageBackedResourceStore tempResouceStore = null;
 
@@ -34,6 +34,7 @@ namespace Transfer.Game
 
         private IAudioExtract<Track> audioExtract;
         private DependencyContainer dependencies;
+        private TransferConfigManager transferConfigManager;
 
         public TransferGame(string[] args)
         {
@@ -42,17 +43,13 @@ namespace Transfer.Game
 
         public TransferGame() { }
 
-        [BackgroundDependencyLoader]
-        private void load(TransferConfigManager transferConfigManager)
-        {
-            audioExtract = new AudioExtract<Track>(transferConfigManager);
-        }
-
         protected override void LoadComplete()
         {
             base.LoadComplete();
 
             dependencies.TryGet(out screenStack);
+            dependencies.TryGet(out transferConfigManager);
+            audioExtract = new AudioExtract<Track>(transferConfigManager);
 
             try
             {

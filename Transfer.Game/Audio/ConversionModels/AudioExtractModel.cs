@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using osu.Framework.Logging;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 
@@ -16,8 +17,8 @@ namespace Transfer.Game.Audio.ConversionModels
             }
 
             string pathWithoutExtension = Path.GetFileNameWithoutExtension(video);
-            outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(pathWithoutExtension.ToLower())}");
-            return await Conversion(pathWithoutExtension, transferConfig, outputPath, customArguments, "mp3");
+            outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(pathWithoutExtension.ToLower())}.mp3");
+            return await Conversion(video, transferConfig, outputPath, customArguments, "mp3");
         }
     }
 }

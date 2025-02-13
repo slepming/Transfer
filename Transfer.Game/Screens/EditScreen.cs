@@ -234,7 +234,6 @@ public partial class EditScreen : TransferScreen
         {
             Header = "Asking FFmpeg for help..."
         };
-        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += (e) => loadingStatus.Header = e.NewValue;
     }
 
     public override bool OnExiting(ScreenExitEvent e)
