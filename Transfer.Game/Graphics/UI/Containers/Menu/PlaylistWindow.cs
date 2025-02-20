@@ -11,7 +11,7 @@ namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
 public partial class PlaylistWindow : Container
 {
-    private TransparentButton close, changeState;
+    private TransparentButton close;
     private FillFlowContainer mainContainer;
 
     /// <summary>

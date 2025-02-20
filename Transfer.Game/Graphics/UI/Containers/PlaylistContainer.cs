@@ -15,10 +15,6 @@ public partial class PlaylistContainer : Container, IKeyBindingHandler<GlobalAct
         if (e.Repeat)
             return false;
 
-        switch (e.Action)
-        {
-        }
-
         return true;
     }
 

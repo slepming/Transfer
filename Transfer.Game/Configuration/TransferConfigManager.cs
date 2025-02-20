@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Platform;
 

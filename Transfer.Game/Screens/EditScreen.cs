@@ -55,7 +55,7 @@ public partial class EditScreen : TransferScreen
     public EditScreen(string pathToFile) => this.pathToFile = pathToFile;
 
     [BackgroundDependencyLoader]
-    private async void load(AudioManager audioManager)
+    private void load(AudioManager audioManager)
     {
         audioExtract = new AudioExtract<Track>(transferConfigManager);
 

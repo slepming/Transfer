@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
@@ -78,7 +79,10 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
 
         transferConfigManager = new TransferConfigManager(Host.Storage);
         dependencies.Cache(transferConfigManager);
-        playlistStorage = new PlaylistStorage(new NativeStorage(transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath)));
+        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath);
+        if (!Path.Exists(pathToPlaylist))
+            Directory.CreateDirectory(pathToPlaylist);
+        playlistStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
         dependencies.Cache(playlistStorage);
 
         IResourceStore<byte[]> tempResourceStore = new StorageBackedResourceStore(tempStorage);
@@ -99,15 +103,15 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
             SafeAreaOverrideEdges = Edges.None,
             Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this)
             {
-                Children = new Drawable[]
-                {
+                Children =
+                [
                     screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both },
                     new TransferCursorContainer
                     {
                         RelativeSizeAxes = Axes.Both
                     },
                     assemblyInfoWindow = new AssemblyInfoWindow()
-                }
+                ]
             })
         });
 

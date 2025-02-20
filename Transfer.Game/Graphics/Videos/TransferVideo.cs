@@ -18,7 +18,7 @@ using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.Videos;
 
-public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
+public partial class TransferVideo(string filename, bool enableRate = false, bool startAtCurrentTime = true) : Video(filename, startAtCurrentTime), IKeyBindingHandler<GlobalAction>
 {
     /// <summary>
     /// You can do animations when it occurs
@@ -28,19 +28,19 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
     [Resolved]
     private TempStorage tempStorage { get; set; }
 
-    private bool enableRate;
+    private bool enableRate = enableRate;
 
     private BindableFloat bindableRate = new BindableFloat()
     {
         Value = 1.0f
     };
 
-    private string filename;
+    private string filename = filename;
 
     private TransferConfigManager transferConfigManager;
 
     [CanBeNull]
-    private Track audio;
+    protected Track Audio;
 
     [NotNull]
     private IAudioExtract<Track> audioExtract;
@@ -48,24 +48,17 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
     private AudioManager audioManager;
     private bool isMuted = false;
 
-    public TransferVideo(string filename, bool enableRate = false, bool startAtCurrentTime = true)
-        : base(filename, startAtCurrentTime)
-    {
-        this.filename = filename;
-        this.enableRate = enableRate;
-    }
-
     protected override void Update()
     {
         base.Update();
-        if (audio != null) SpySeek(audio.CurrentTime); // May be optimized in the future
+        if (Audio != null) SpySeek(Audio.CurrentTime); // May be optimized in the future
     }
 
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager, AudioManager audioManager)
     {
         Logger.Log(@$"Open file {filename}");
-        Logger.Log($"Open folder {tempStorage.GetFullPath(".")}");
+        Logger.Log($"Open folder {tempStorage.GetFullPath("")}");
         this.audioManager = audioManager;
         audioExtract = new AudioExtract<Track>(transferConfigManager);
         this.transferConfigManager = transferConfigManager;
@@ -74,7 +67,7 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
 
     private void rateChanged(ValueChangedEvent<float> obj)
     {
-        if (audio != null) audio.Tempo.Value = obj.NewValue;
+        if (Audio != null) Audio.Tempo.Value = obj.NewValue;
     }
 
     protected override async void LoadAsyncComplete()
@@ -84,27 +77,27 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
         if (AudioExtractCoreExtension.ItContainsAudio(filename))
         {
             Logger.Log("Video have audio");
-            audio = await getAudio(tempStorage);
+            Audio = await getAudio(tempStorage);
         }
         else Logger.Log("Video have not audio");
 
-        if (audio != null)
+        if (Audio != null)
         {
-            audio.Volume.ValueChanged += value =>
+            Logger.Log("Get from config value for Volume");
+            Audio.Volume.ValueChanged += value =>
             {
                 transferConfigManager.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
             };
         }
 
         bindableRate.ValueChanged += rateChanged;
-        audio?.StartAsync();
     }
 
     private void onVolumeChanged(ValueChangedEvent<double> e)
     {
-        if (audio != null)
+        if (Audio != null)
         {
-            audio.Volume.Value = (float)e.NewValue;
+            Audio.Volume.Value = (float)e.NewValue;
         }
     }
 
@@ -138,19 +131,19 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
             {
                 if (PlaybackPosition == Duration)
                 {
-                    audio?.Restart();
+                    Audio?.Restart();
                     Seek(0);
                     return true;
                 }
 
                 if (isMuted)
                 {
-                    audio?.Start();
+                    Audio?.Start();
                     IsPlaying = true;
                 }
                 else
                 {
-                    audio?.Stop();
+                    Audio?.Stop();
                     IsPlaying = false;
                 }
 
@@ -160,8 +153,8 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
 
             case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
             {
-                if (audio != null) audio.RestartPoint = PlaybackPosition;
-                audio?.Restart();
+                if (Audio != null) Audio.RestartPoint = PlaybackPosition;
+                Audio?.Restart();
                 return true;
             }
 
@@ -169,8 +162,8 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
             {
                 lock (this)
                 {
-                    if (audio != null) audio.RestartPoint = 0;
-                    audio?.Restart();
+                    if (Audio != null) Audio.RestartPoint = 0;
+                    Audio?.Restart();
                     Seek(0);
                 }
 
@@ -190,12 +183,12 @@ public partial class TransferVideo : Video, IKeyBindingHandler<GlobalAction>
 
     protected override bool OnScroll(ScrollEvent e)
     {
-        if (audio != null)
-            audio.Volume.Value += e.ScrollDelta.Y / 10;
+        if (Audio != null)
+            Audio.Volume.Value += e.ScrollDelta.Y / 10;
         return base.OnScroll(e);
     }
 
-    public void SetAudio(Track track) => audio = track;
+    public void SetAudio(Track track) => Audio = track;
 
     private async Task<Track> getAudio(Storage audioStorage)
     {

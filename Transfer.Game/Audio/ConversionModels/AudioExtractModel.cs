@@ -18,6 +18,12 @@ namespace Transfer.Game.Audio.ConversionModels
 
             string pathWithoutExtension = Path.GetFileNameWithoutExtension(video);
             outputPath ??= Path.Combine(Path.GetTempPath(), $"{Hash.GetHashString(pathWithoutExtension.ToLower())}.mp3");
+
+            if (!File.Exists(outputPath))
+            {
+                outputPath = Path.Combine(outputPath, Hash.GetHashString(Path.GetFileNameWithoutExtension(video)).ToLower());
+            }
+
             return await Conversion(video, transferConfig, outputPath, customArguments, "mp3");
         }
     }

@@ -15,12 +15,8 @@ namespace Transfer.Game.Graphics.UI.Containers;
 public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction>
 {
     public TransferVideo Video { get; private set; }
-    private Container mediaOptionsContainer;
-
-    private bool isMuted = false;
 
     private string filename;
-    private string timeCode;
 
     public double DefaultRate { get; private set; }
 
@@ -150,8 +146,7 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     /// Seek video(in ms)
     /// </summary>
     /// <param name="time">ms for seeking</param>
-    [Obsolete("this method is obsolete, please use method from TransferVideo", false)] // Can be deleted
-    public void Seek(double time) => allSeek(time);
+    public void Seek(double time) => Video.Seek(time);
 
     public void SetVideoLoop(bool loop) => Video.Loop = loop;
 

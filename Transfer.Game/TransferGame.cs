@@ -6,7 +6,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Input.Bindings;
-using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -139,36 +138,29 @@ namespace Transfer.Game
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) =>
             dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
-
-
-        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
-        {
-            return false;
-        }
-
-        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
-        {
-
-        }
-
         public Task Import(params string[] paths)
         {
             lock (paths)
             {
                 if (paths.Length == 0) return Task.CompletedTask;
+
                 if (paths.Length == 1)
                     audioExtract.CreateTrackInStorageAsync(System.IO.Path.GetFullPath(paths[0]), tempStorage);
+
                 foreach (string path in paths)
                 {
                     if (path == null) continue;
+
                     if (!File.Exists(Path.GetFullPath(path)))
                     {
                         Logger.Log($"File {Path.GetFileName(Path.GetFullPath(path))} is not exists");
                         continue;
                     }
+
                     Logger.Log(@$"""{Path.GetFileName(path)}"" been importing");
                     audioExtract.CreateTrackInStorageAsync(Path.GetFullPath(path), tempStorage);
                 }
+
                 return Task.CompletedTask;
             }
         }

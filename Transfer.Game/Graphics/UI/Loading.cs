@@ -14,7 +14,6 @@ public partial class Loading : CompositeDrawable
     private Box loadingComponent;
     private Container backgroundContainer;
     private Container loadingContainer;
-    private Container fullComponentContainer;
 
     public Loading()
     {

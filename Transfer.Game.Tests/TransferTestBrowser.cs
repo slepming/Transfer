@@ -1,3 +1,4 @@
+using System.IO;
 using System.Reflection;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -26,7 +27,10 @@ namespace Transfer.Game.Tests
             transferConfigManager = new TransferConfigManager(Host.Storage);
             testDependencies.Cache(transferConfigManager);
             Logger.Log($"Playlist path: {transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath)}");
-            playlistStorage = new PlaylistStorage(new NativeStorage(transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath)));
+            string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath);
+            if (!Path.Exists(pathToPlaylist))
+                Directory.CreateDirectory(pathToPlaylist);
+            playlistStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
             testDependencies.CacheAs(playlistStorage);
         }
 

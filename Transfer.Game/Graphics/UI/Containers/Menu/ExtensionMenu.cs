@@ -13,7 +13,6 @@ namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
 public partial class ExtensionMenu : TransferFocusedOverlayContainer
 {
-    private BasicButton explorerButton, optionsButton;
     private StringButton playlistButton;
     private Container hub;
     private Container playlistContainer;

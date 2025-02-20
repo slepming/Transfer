@@ -1,4 +1,5 @@
 using osu.Framework.Allocation;
+using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -17,7 +18,7 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
 {
     private Box background;
 
-    private TransparentButton closeButton, preferencesMenu;
+    private TransparentButton closeButton;
 
     /// <summary>
     /// Content is used to add the insides of the window, while keeping the parts created by MenuWindow intact.
@@ -50,7 +51,7 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
         base.LoadComplete();
         InternalChildren =
         [
-            new Box
+            background = new Box
             {
                 Alpha = 0.3f,
                 Colour = Colour4.Gray,
@@ -65,13 +66,22 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
                 Masking = true,
                 BorderThickness = 5,
                 BorderColour = Colour4.White,
-                Child = new SpriteText
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Font = new FontUsage(size: 25, family: TransferFonts.FiraCodeNerdFontLight),
-                    Text = HeaderName
-                }
+                Children =
+                [
+                    new SpriteText
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Font = new FontUsage(size: 25, family: TransferFonts.FiraCodeNerdFontLight),
+                        Text = HeaderName
+                    },
+                    closeButton = new TransparentButton()
+                    {
+                        Anchor = Anchor.CentreRight,
+                        Origin = Anchor.CentreRight,
+                        Text = "Close",
+                    }
+                ]
             },
         ];
         AddInternal(WindowContent);

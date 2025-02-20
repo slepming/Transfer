@@ -37,7 +37,7 @@ public partial class ExplorerFillFlowContainer(string path) : FillFlowContainer
     /// Get files and directories in current explorer position
     /// </summary>
     /// <typeparam name="T">Returned object (it should be clickable)</typeparam>
-    /// <returns><see cref="T"></see></returns>
+    /// <returns>T</returns>
     protected T[] GetFilesAndDirectoriesFromCurrentPath<T>(string currentPath) where T : ExplorerButton, new()
     {
         var files = Directory.GetFiles(currentPath);

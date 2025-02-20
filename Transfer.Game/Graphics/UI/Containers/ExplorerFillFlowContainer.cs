@@ -20,8 +20,6 @@ public partial class ExplorerFillFlowContainer : SearchContainer
 
     private List<ExplorerButton> explorerButtons = new List<ExplorerButton>();
 
-
-
     /// <summary>
     /// If file extension not in List then it's skipping
     /// </summary>
@@ -34,23 +32,21 @@ public partial class ExplorerFillFlowContainer : SearchContainer
 
     public Bindable<string> PathChanged => new Bindable<string>();
 
-
     public ExplorerFillFlowContainer()
     {
         AllowNonContiguousMatching = true;
-
     }
-
-
 
     protected override void LoadComplete()
     {
         getContent(start_path);
         base.LoadComplete();
     }
+
     private string[] files(string path)
     {
-        if(path == transferDirectory.Path) return files(start_path);
+        if (path == transferDirectory.Path) return files(start_path);
+
         current_path = path;
         transferDirectory.Path = current_path;
         PathChanged.Value = path;
@@ -60,10 +56,12 @@ public partial class ExplorerFillFlowContainer : SearchContainer
     private void getContent(string path)
     {
         explorerButtons.Clear();
-        foreach(string file in files(path ?? start_path))
+
+        foreach (string file in files(path ?? start_path))
         {
             ExplorerButton explorerButton;
-            if(awaibleExtensions.Contains(Path.GetExtension(file).ToLower())){
+
+            if (awaibleExtensions.Contains(Path.GetExtension(file).ToLower())){
                 explorerButton = new()
                 {
                     Path = file,
@@ -77,9 +75,11 @@ public partial class ExplorerFillFlowContainer : SearchContainer
                     Path = file
                 };
             }
+
             explorerButtons.Add(explorerButton);
             explorerButton.Transition += changeDirectoryExplorer;
         }
+
         Clear();
         foreach (ExplorerButton button in explorerButtons) Add(button);
         Add(new Box
@@ -109,6 +109,7 @@ public partial class ExplorerFillFlowContainer : SearchContainer
                     return;
                 }
             }
+
             if (Directory.Exists(fullPath))
             {
                 getContent(fullPath);
@@ -124,7 +125,7 @@ public partial class ExplorerFillFlowContainer : SearchContainer
 
     public void ExplorerPathChange(string path)
     {
-        if(path != current_path)
+        if (path != current_path)
         {
             getContent(path);
         }
@@ -141,6 +142,7 @@ public partial class ExplorerFillFlowContainer : SearchContainer
                 ExplorerPathChange(Path.GetDirectoryName(current_path));
             }
         }
+
         return base.OnKeyDown(e);
     }
 }

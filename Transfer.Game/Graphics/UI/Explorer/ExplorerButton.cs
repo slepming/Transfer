@@ -13,7 +13,7 @@ namespace Transfer.Game.Graphics.UI.Explorer;
 
 public partial class ExplorerButton : ClickableContainer
 {
-    private new Action<string, bool> action;
+    private Action<string, bool> action;
 
     public new Action<string, bool> Action
     {

@@ -12,7 +12,7 @@ public partial class TransparentButton : ClickableContainer, IHasTooltip
 {
     public string Text { get; set; }
 
-    public Color4 Colour { get; set; } = Color4.White;
+    public new Color4 Colour { get; set; } = Color4.White;
 
     private SpriteText textObject;
 
