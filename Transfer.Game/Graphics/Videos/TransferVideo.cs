@@ -10,7 +10,6 @@ using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
-using Transfer.Game.Audio;
 using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
 using Transfer.Game.Input.Bindings;
@@ -18,35 +17,37 @@ using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.Videos;
 
-public partial class TransferVideo(string filename, bool enableRate = false, bool startAtCurrentTime = true) : Video(filename, startAtCurrentTime), IKeyBindingHandler<GlobalAction>
+public partial class TransferVideo(string path, bool enableRate = false, bool startAtCurrentTime = true) : Video(path, startAtCurrentTime), IKeyBindingHandler<GlobalAction>
 {
     /// <summary>
     /// You can do animations when it occurs
     /// </summary>
     public Action<double> SeekOccurs;
 
+    private string path = path;
+
+    private bool enableRate = enableRate;
+    private bool isMuted = false;
+
     [Resolved]
     private TempStorage tempStorage { get; set; }
 
-    private bool enableRate = enableRate;
+    [NotNull]
+    private AudioExtract<Track> audioExtract;
+
+    private AudioManager audioManager;
 
     private BindableFloat bindableRate = new BindableFloat()
     {
         Value = 1.0f
     };
 
-    private string filename = filename;
-
     private TransferConfigManager transferConfigManager;
 
     [CanBeNull]
     protected Track Audio;
 
-    [NotNull]
-    private IAudioExtract<Track> audioExtract;
-
-    private AudioManager audioManager;
-    private bool isMuted = false;
+    public Action<bool> AudioLoading;
 
     protected override void Update()
     {
@@ -57,7 +58,7 @@ public partial class TransferVideo(string filename, bool enableRate = false, boo
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager, AudioManager audioManager)
     {
-        Logger.Log(@$"Open file {filename}");
+        Logger.Log(@$"Open file {path}");
         Logger.Log($"Open folder {tempStorage.GetFullPath("")}");
         this.audioManager = audioManager;
         audioExtract = new AudioExtract<Track>(transferConfigManager);
@@ -72,25 +73,34 @@ public partial class TransferVideo(string filename, bool enableRate = false, boo
 
     protected override async void LoadAsyncComplete()
     {
-        base.LoadAsyncComplete();
-
-        if (AudioExtractCoreExtension.ItContainsAudio(filename))
+        try
         {
-            Logger.Log("Video have audio");
-            Audio = await getAudio(tempStorage);
-        }
-        else Logger.Log("Video have not audio");
+            base.LoadAsyncComplete();
 
-        if (Audio != null)
-        {
-            Logger.Log("Get from config value for Volume");
-            Audio.Volume.ValueChanged += value =>
+            if (AudioExtractCoreExtension.ItContainsAudio(path))
             {
-                transferConfigManager.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
-            };
-        }
+                Logger.Log("Video have audio");
+                Audio = await getAudio(tempStorage);
+                if (Audio == null) throw new Exception("Audio extraction failed");
+            }
+            else Logger.Log("Video have not audio");
 
-        bindableRate.ValueChanged += rateChanged;
+            if (Audio != null)
+            {
+                Logger.Log("Get from config value for Volume");
+                Audio.Volume.ValueChanged += value =>
+                {
+                    transferConfigManager.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
+                };
+            }
+
+            bindableRate.ValueChanged += rateChanged;
+        }
+        catch (Exception e)
+        {
+            Logger.Error(e, "Audio extraction failed. Try-catch error");
+            throw;
+        }
     }
 
     private void onVolumeChanged(ValueChangedEvent<double> e)
@@ -118,6 +128,13 @@ public partial class TransferVideo(string filename, bool enableRate = false, boo
         SeekOccurs?.Invoke(time);
 
         base.Seek(time);
+    }
+
+    public void Start()
+    {
+        Logger.Log("Video launch", level: LogLevel.Debug);
+        Audio?.Start();
+        IsPlaying = true;
     }
 
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
@@ -192,7 +209,13 @@ public partial class TransferVideo(string filename, bool enableRate = false, boo
 
     private async Task<Track> getAudio(Storage audioStorage)
     {
-        return await audioExtract.CreateaAndGetTrackAsync(filename, audioStorage, audioManager);
+        Logger.Log($"Preparing the conversion. Storage params {{ Path for storage file '{audioStorage.GetFullPath("")}' }} "
+                   + $"{{ Path to temp file: '{path}' }}", LoggingTarget.Runtime, LogLevel.Debug);
+        return await audioExtract.CreateaAndGetTrackAsync(path,
+            audioStorage,
+            audioManager,
+            arguments: "-c copy"
+        );
     }
 
     #endregion

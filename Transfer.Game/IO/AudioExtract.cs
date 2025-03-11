@@ -31,37 +31,45 @@ public class AudioExtract<T> : IAudioExtract<T>
         tempStorage = new NativeStorage(tempFolder);
     }
 
-    public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputPath = null, string arguments = null)
+    public async Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputName = null, string arguments = null)
     {
-        if (path == null) throw new ArgumentNullException(nameof(path));
-        if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
-
-        outputPath ??= getHashName(path, "mp3");
-        var resourceStore = new StorageBackedResourceStore(storage);
-
-        if (storage.Exists(outputPath))
+        if (!File.Exists(path))
         {
-            return getTrackFromStorage(audioManager, resourceStore, outputPath);
+            Logger.Error(new Exception(), $"{path} does not exist - conversion canceled");
+            throw new Exception($"{path} does not exist - conversion canceled");
         }
 
-        if (File.Exists(Path.Combine(tempFolder, outputPath)))
+        if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
+
+        outputName ??= getHashName(path, "mp3");
+        Logger.Log($"The final output file name '{outputName}'", level: LogLevel.Debug);
+        var resourceStore = new StorageBackedResourceStore(storage);
+
+        if (storage.Exists(outputName))
         {
-            return getTrackFromStorage(audioManager, new StorageBackedResourceStore(tempStorage), outputPath);
+            Logger.Log("File existed in local storage, move to getTrackFromStorage", level: LogLevel.Debug);
+            return getTrackFromStorage(audioManager, resourceStore, outputName);
+        }
+
+        if (File.Exists(Path.Combine(tempFolder, outputName)))
+        {
+            Logger.Log("File existed in temp files, move to getTrackFromStorage", level: LogLevel.Debug);
+            return getTrackFromStorage(audioManager, new StorageBackedResourceStore(tempStorage), outputName);
         }
 
         try
         {
-            string pathToFile = await convertFileAsync(path, "mp3", storage.GetFullPath("")) + ".mp3";
-            Logger.Log($"Path to file: {pathToFile}\n output path: {outputPath}");
-            await saveFileToStorageAsync(pathToFile, storage, outputPath);
+            string pathToFile = await convertFileAsync(path, "mp3", storage.GetFullPath(""));
+            Logger.Log($"Path to file: {pathToFile}\n output path: {outputName}");
+            await saveFileToStorageAsync(pathToFile, storage, outputName);
             File.Delete(pathToFile);
 
-            if (!storage.Exists(outputPath))
+            /*if (!storage.Exists(outputPath))
             {
                 throw new FileNotFoundException("Audio not found");
-            }
+            }*/
 
-            return await CreateaAndGetTrackAsync(path, storage, audioManager, outputPath);
+            return getTrackFromStorage(audioManager, resourceStore, outputName) ?? throw new Exception("Failed to get track");
         }
         catch (FFMpegException)
         {
@@ -69,7 +77,7 @@ public class AudioExtract<T> : IAudioExtract<T>
         }
         catch (Exception ex)
         {
-            handleException(ex, outputPath);
+            handleException(ex, outputName);
             throw;
         }
     }
@@ -122,14 +130,8 @@ public class AudioExtract<T> : IAudioExtract<T>
 
     private async Task<string> convertFileAsync(string path, string extension, string outputPath = null, string arguments = null)
     {
-        Logger.Log($"Path is null: {path is null}({path})\n Extension is null: {extension is null}\n Output is null: {outputPath is null}({outputPath})\n Arguments: {arguments is null}");
+        Logger.Log($"Metadata {{ Path to file: {path}; File Extension {extension}; {(outputPath is null ? "Output path equal null" : $"Output path {outputPath}")}; Custom arguments: {arguments ?? "None"}}}");
         outputPath ??= Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.{extension}");
-
-        if (!File.Exists(path))
-        {
-            Logger.Error(new Exception(), $"{path} does not exist - conversion canceled");
-            throw new Exception($"{path} does not exist - conversion canceled");
-        }
 
         string pathToFile = await ConversionBase<AudioExtractModel>.Conversion(path, transferConfigManager1, outputPath, arguments);
 
@@ -138,7 +140,7 @@ public class AudioExtract<T> : IAudioExtract<T>
 
     private async Task saveFileToStorageAsync(string paToFile, Storage storage, string name)
     {
-        Logger.Log($"Path to file is null: {paToFile}\n Name is null: {name}");
+        Logger.Log("Save file to storage");
 
         using (Stream file = new FileStream(paToFile, FileMode.Open))
         {

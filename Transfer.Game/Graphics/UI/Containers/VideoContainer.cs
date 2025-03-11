@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -7,6 +8,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
+using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 
@@ -16,7 +18,9 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
 {
     public TransferVideo Video { get; private set; }
 
-    private string filename;
+    private readonly LoadingOverlay loadingOverlay = new LoadingOverlay();
+
+    private readonly string filename;
 
     public double DefaultRate { get; private set; }
 
@@ -34,6 +38,7 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
         Logger.Log($"Video initialization");
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
+        if (Video == null) Logger.Log("Video equal null. Assigning the values given to me");
         Video ??= new TransferVideo(filename)
         {
             FillMode = FillMode.Fit,
@@ -42,9 +47,23 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
             Origin = Anchor.Centre,
             Loop = false,
         };
-        Add(Video);
-
+        Video.AudioLoading += AudioLoading;
         Video.SeekOccurs += onSeek;
+        Add(Video);
+    }
+
+    private void AudioLoading(bool obj)
+    {
+        if (obj)
+        {
+            loadingOverlay.Show();
+            Logger.Log("Start loading", level: LogLevel.Debug);
+        }
+        else
+        {
+            loadingOverlay.Hide();
+            Logger.Log("Stop loading", level: LogLevel.Debug);
+        }
     }
 
     public double GetDuration() => Video.Duration;
@@ -64,6 +83,8 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
                 RelativeSizeAxes = Axes.Both,
             });
         }
+
+        Video.Start();
 
         base.LoadComplete();
     }
@@ -162,7 +183,7 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     {
     }
 
-    public void UpdateVideo(string path, TransferVideo video = null) => Video = video ?? new TransferVideo(path)
+    public void UpdateVideo(string path, [CanBeNull] TransferVideo video = null) => Video = video ?? new TransferVideo(path)
     {
         FillMode = FillMode.Fit,
         RelativeSizeAxes = Axes.Both,

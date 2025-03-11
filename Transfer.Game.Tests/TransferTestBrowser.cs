@@ -1,14 +1,10 @@
 using System.IO;
-using System.Reflection;
 using osu.Framework.Allocation;
-using osu.Framework.Graphics;
 using osu.Framework.Graphics.Cursor;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Testing;
 using Transfer.Game.Configuration;
-using Transfer.Game.Extensions;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.Testing;

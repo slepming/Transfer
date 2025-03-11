@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Platform;
 
@@ -23,7 +22,7 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
         if (string.IsNullOrEmpty(defaultPlaylistPath) || defaultPlaylistPath == "Playlist") defaultPlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Playlist");
         SetDefault(TransferOptions.AudioBitrate, 128);
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
-        SetDefault(TransferOptions.AudioCodec, AudioCodecs.aac);
+        SetDefault(TransferOptions.AudioCodec, AudioCodecs.libmp3lame);
         SetDefault(TransferOptions.VideoCodec, VideoCodecs.libx265);
         SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
         SetDefault(TransferOptions.SeekValue, 5000);

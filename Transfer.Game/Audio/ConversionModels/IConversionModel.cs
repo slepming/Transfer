@@ -14,6 +14,6 @@ namespace Transfer.Game.Audio.ConversionModels
         /// <param name="customArguments">Custom argements for ffmpeg handling</param>
         /// <param name="conversionValue">Value for conversion</param>
         /// <returns>Path to video</returns>
-        Task<string> HandleConversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, params object[] conversionValue);
+        Task<string> HandleConversion(string video, TransferConfigManager transferConfig, string customArguments = null, params object[] conversionValue);
     }
 }

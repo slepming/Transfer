@@ -6,10 +6,10 @@ namespace Transfer.Game.Audio.ConversionModels;
 
 public class VideoModel : TransferFFmpegCore, IConversionModel
 {
-    public Task<string> HandleConversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, params object[] conversionValue)
+    public Task<string> HandleConversion(string video, TransferConfigManager transferConfig, string customArguments = null, params object[] conversionValue)
     {
         string extension = Path.GetExtension(video);
         customArguments += $"-preset {transferConfig.Get<Presets>(TransferOptions.Preset)} -crf {transferConfig.Get<int>(TransferOptions.ConstantRateFactor)} -profile:v {transferConfig.Get<Profiles>(TransferOptions.Profile)}";
-        return Conversion(video, transferConfig, outputPath, customArguments, extension);
+        return Conversion(video, transferConfig, customArguments, extension);
     }
 }

@@ -3,7 +3,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.UserInterface;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
