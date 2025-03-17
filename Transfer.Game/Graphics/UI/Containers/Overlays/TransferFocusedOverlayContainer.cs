@@ -11,7 +11,8 @@ public abstract partial class TransferFocusedOverlayContainer : FocusedOverlayCo
         get
         {
             if (State.Value == Visibility.Hidden) return false;
-            else return true;
+
+            return true;
         }
     }
 
