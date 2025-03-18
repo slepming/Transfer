@@ -3,6 +3,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Graphics.UI.Containers.Windows;
 
 namespace Transfer.Game.Tests.Visual.UITest.Containers.TestMenuWindow;
 
@@ -31,6 +32,7 @@ public partial class TestSceneMenuWindow : TransferTestScene
     {
         public TestMenuWindow()
         {
+            HeaderName = "TestMenuWindow";
             WindowContent.Add(new Container
             {
                 RelativeSizeAxes = Axes.Both,

@@ -20,21 +20,21 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
         RelativeSizeAxes = Axes.Both;
         Anchor = Anchor.CentreLeft;
         Origin = Anchor.Centre;
-
     }
 
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager)
     {
-        InternalChildren = new Drawable[]
-        {
+        InternalChildren =
+        [
             scrollableConfigContainer = new TransferScrollContainer
             {
                 RelativeSizeAxes = Axes.Both,
                 Masking = true,
-                Children = new Drawable[]
-                {
-                    new SpriteText{
+                Children =
+                [
+                    new SpriteText
+                    {
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopLeft,
                         Text = "Options",
@@ -48,19 +48,20 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                         Anchor = Anchor.Centre,
                         Origin = Anchor.TopLeft,
                         Direction = FillDirection.Vertical,
-                        Position = new Vector2(X, Y+5),
+                        Position = new Vector2(X, Y + 5),
                         Spacing = new Vector2(0, 20),
                         Children =
                         [
-                            new SpriteText{
+                            new SpriteText
+                            {
                                 Text = TransferOptions.AudioBitrate.ToString()
                             }
                         ]
                     }
-                }
+                ]
             }
+        ];
 
-        };
         foreach (var option in Enum.GetValues(typeof(TransferOptions)))
         {
             var configurationValue = transferConfigManager.Get<string>((TransferOptions)option);
@@ -78,8 +79,6 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                 ]
             });
         }
-
-
     }
 
     protected override void PopIn()

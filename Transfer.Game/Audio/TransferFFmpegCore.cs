@@ -18,7 +18,6 @@ public abstract class TransferFFmpegCore
     /// </summary>
     /// <param name="video">Path to video</param>
     /// <param name="transferConfig">Config</param>
-    /// <param name="outputPath">The path to which the file will be written</param>
     /// <param name="customArguments">Here you can enter your arguments to modify in FFmpeg</param>
     /// <param name="outputExtension">Output file extension(Start with '.'). If output path is not null, then output extension it's no use</param>
     /// <returns>Path to audio</returns>

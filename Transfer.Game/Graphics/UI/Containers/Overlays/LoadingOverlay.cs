@@ -26,7 +26,6 @@ public partial class LoadingOverlay : OverlayContainer
 
     public LoadingOverlay(bool blockScrollInput = true)
     {
-        Show();
         BlockScrollInput = blockScrollInput;
         RelativeSizeAxes = Axes.Both;
     }

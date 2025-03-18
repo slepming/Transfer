@@ -9,6 +9,7 @@ using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
+using Transfer.Game.Graphics.UI.Containers.Windows;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 
@@ -35,10 +36,10 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     private void load(TransferConfigManager tcm)
     {
         if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
-        Logger.Log($"Video initialization");
+        Logger.Log($"\u21ba Video initialization");
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
-        if (Video == null) Logger.Log("Video equal null. Assigning the values given to me");
+        if (Video == null) Logger.Log("Constructor Video equal null. Assigning the values given to me");
         Video ??= new TransferVideo(filename)
         {
             FillMode = FillMode.Fit,
@@ -47,12 +48,12 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
             Origin = Anchor.Centre,
             Loop = false,
         };
-        Video.AudioLoading += AudioLoading;
+        Video.AudioLoading += audioLoading;
         Video.SeekOccurs += onSeek;
         Add(Video);
     }
 
-    private void AudioLoading(bool obj)
+    private void audioLoading(bool obj)
     {
         if (obj)
         {
@@ -76,10 +77,10 @@ public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction
     {
         if (Video.IsFaulted)
         {
-            AddInternal(new ExceptionContainer
+            AddInternal(new ErrorWindow()
             {
-                HeaderText = "Error",
-                Text = "Decoder error",
+                Title = "Error",
+                Message = "Decoder error",
                 RelativeSizeAxes = Axes.Both,
             });
         }

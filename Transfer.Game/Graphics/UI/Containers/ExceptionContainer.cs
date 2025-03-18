@@ -102,7 +102,6 @@ public partial class ExceptionContainer : TransferFocusedOverlayContainer
                         Colour = Colour4.White,
                         TextAnchor = Anchor.Centre,
                         Masking = true,
-                        MaskingSmoothness = 0.1f,
                     },
                     exceptionButton = new ExceptionButton
                     {
@@ -176,7 +175,7 @@ public partial class ExceptionContainer : TransferFocusedOverlayContainer
                     {
                         Text = "Close",
                         TextColour = Colour4.White,
-                        BackgroundColour = new Colour4(255,255,255,1),
+                        BackgroundColour = new Colour4(255, 255,255,1),
                         Width = 125,
                         Height = 50,
                         Anchor = Anchor.BottomCentre,

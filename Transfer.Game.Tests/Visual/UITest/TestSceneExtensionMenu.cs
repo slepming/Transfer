@@ -9,7 +9,18 @@ public partial class TestSceneExtensionMenu : TransferTestScene
     protected override void LoadComplete()
     {
         base.LoadComplete();
-        AddStep("Create extension menu", () => extensionMenu = new ExtensionMenu());
+        AddStep("Create extension menu", () =>
+        {
+            if (extensionMenu == null)
+            {
+                extensionMenu = new ExtensionMenu();
+            }
+            else
+            {
+                extensionMenu.Expire();
+                extensionMenu = new ExtensionMenu();
+            }
+        });
         AddAssert("Extension menu is nut null", () => extensionMenu != null);
         AddStep("Adding object on screen", () => Add(extensionMenu));
         AddStep("Change extension menu visible", () =>

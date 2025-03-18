@@ -18,6 +18,10 @@ namespace Transfer.Game.Audio
         /// <returns>Path to video</returns>
         public static Task<string> Conversion(string video, TransferConfigManager transferConfig, string outputPath = null, string customArguments = null, params object[] conversionValue)
         {
+            /*
+             I wrote that sh*t with AI.
+             Then after some time I will rewrite this module completely because of the need for proper operation and remove such crap code.
+            */
             if (typeof(IConversionModel).IsAssignableFrom(typeof(T)))
             {
                 var model = Activator.CreateInstance<T>();

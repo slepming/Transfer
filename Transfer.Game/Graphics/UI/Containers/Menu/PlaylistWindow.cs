@@ -4,43 +4,35 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Localisation;
 using osu.Framework.Platform;
 using osuTK;
+using Transfer.Game.Graphics.UI.Containers.Windows;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
-public partial class PlaylistWindow : Container
+public partial class PlaylistWindow : MenuWindow
 {
     private TransparentButton close;
     private FillFlowContainer mainContainer;
 
-    /// <summary>
-    /// If state false when playlist window in Extension menu
-    /// </summary>
-    public bool State = false;
+    public LocalisableString Title
+    {
+        get => HeaderName;
+        set
+        {
+            if (HeaderName == value) return;
+            HeaderName = value;
+        }
+    }
 
-    protected Storage playlistStorage;
-
-    [Resolved]
-    private TransferGameBase gameBase { get; set; }
+    protected Storage PlaylistStorage;
 
     public PlaylistWindow(Storage playlistStorage)
     {
-        this.playlistStorage = playlistStorage;
-        Masking = true;
-        BorderThickness = 1;
-        BorderColour = Colour4.White;
-        InternalChildren =
+        this.PlaylistStorage = playlistStorage;
+        WindowContent.AddRange(
         [
-            close = new TransparentButton
-            {
-                Width = 30,
-                Height = 30,
-                Text = "X",
-                Anchor = Anchor.TopRight,
-                Origin = Anchor.TopRight,
-                Action = onCloseButton
-            },
             new TransferScrollContainer()
             {
                 Anchor = Anchor.Centre,
@@ -56,18 +48,13 @@ public partial class PlaylistWindow : Container
                         Direction = FillDirection.Vertical
                     }
             }
-        ];
-    }
-
-    private void onCloseButton()
-    {
-        Hide();
+        ]);
     }
 
     [BackgroundDependencyLoader]
     private void load(TextureStore textureStore)
     {
-        loadStorage(playlistStorage, textureStore);
+        loadStorage(PlaylistStorage, textureStore);
     }
 
     private void loadStorage(Storage storage, TextureStore textureStore = null)

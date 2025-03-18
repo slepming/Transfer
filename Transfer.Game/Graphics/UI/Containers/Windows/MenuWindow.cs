@@ -7,7 +7,7 @@ using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
 
-namespace Transfer.Game.Graphics.UI.Containers;
+namespace Transfer.Game.Graphics.UI.Containers.Windows;
 
 /// <summary>
 /// This class creates a window according to the developer's requirements.
@@ -29,7 +29,7 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
         Origin = Anchor.Centre
     };
 
-    protected Container PrefixBar;
+    protected HeaderContainer PrefixBox;
 
     protected LocalisableString HeaderName;
 
@@ -38,6 +38,7 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
         RelativeSizeAxes = Axes.Both;
         Size = new Vector2(1 / 1.2f, 1 / 1.5f);
         Masking = true;
+        MaskingSmoothness = 5;
         BorderColour = Colour4.White;
         BorderThickness = 3;
         Anchor = Anchor.Centre;
@@ -55,32 +56,10 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
                 Colour = Colour4.Gray,
                 RelativeSizeAxes = Axes.Both
             },
-            PrefixBar = new Container
+            PrefixBox = new HeaderContainer()
             {
-                Anchor = Anchor.TopCentre,
-                Origin = Anchor.TopCentre,
-                RelativeSizeAxes = Axes.X,
-                Height = 40,
-                Masking = true,
-                BorderThickness = 5,
-                BorderColour = Colour4.White,
-                Children =
-                [
-                    new SpriteText
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Font = new FontUsage(size: 25, family: TransferFonts.FiraCodeNerdFontLight),
-                        Text = HeaderName
-                    },
-                    closeButton = new TransparentButton()
-                    {
-                        Anchor = Anchor.CentreRight,
-                        Origin = Anchor.CentreRight,
-                        Text = "Close",
-                    }
-                ]
-            },
+                HeaderText = HeaderName,
+            }
         ];
         AddInternal(WindowContent);
     }
