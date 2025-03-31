@@ -43,7 +43,7 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
 
     protected Storage Storage;
     private TempStorage tempStorage;
-    private PlaylistStorage playlistStorage;
+    private PlaylistStorage historyPlaylistsStorage;
 
     protected SafeAreaContainer SafeAreaContainer;
 
@@ -77,11 +77,11 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
 
         transferConfigManager = new TransferConfigManager(Host.Storage);
         dependencies.Cache(transferConfigManager);
-        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.CurrentPlaylistPath);
+        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.HistoryPlaylistStoragePath);
         if (!Path.Exists(pathToPlaylist))
             Directory.CreateDirectory(pathToPlaylist);
-        playlistStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
-        dependencies.Cache(playlistStorage);
+        historyPlaylistsStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
+        dependencies.Cache(historyPlaylistsStorage);
 
         IResourceStore<byte[]> tempResourceStore = new StorageBackedResourceStore(tempStorage);
         dependencies.Cache(tempResourceStore);
@@ -184,5 +184,11 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
 
     public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
     {
+    }
+
+    protected override bool OnExiting()
+    {
+        transferConfigManager.Save();
+        return base.OnExiting();
     }
 }

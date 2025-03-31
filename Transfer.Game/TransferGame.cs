@@ -42,7 +42,7 @@ namespace Transfer.Game
 
         public TransferGame() { }
 
-        protected override void LoadComplete()
+        protected override void LoadAsyncComplete()
         {
             base.LoadComplete();
 
@@ -52,7 +52,7 @@ namespace Transfer.Game
 
             try
             {
-                if (args is { Length: > 0 })
+                if (args.Length > 0)
                 {
                     dependencies.TryGet(out tempResouceStore);
                     dependencies.TryGet(out tempStorage);

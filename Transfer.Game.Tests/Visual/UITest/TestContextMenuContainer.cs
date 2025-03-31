@@ -18,9 +18,9 @@ namespace Transfer.Game.Tests.Visual.UITest
     public partial class TestContextMenuContainer : TransferTestScene
     {
         private TestCursorContainer cursor;
+
         public TestContextMenuContainer()
         {
-
             Add(new TooltipContainer()
             {
                 RelativeSizeAxes = Axes.Both,
@@ -31,7 +31,7 @@ namespace Transfer.Game.Tests.Visual.UITest
                     {
                         new TestToolTipContainer
                         {
-                            Size = new Vector2(100,100),
+                            Size = new Vector2(100, 100),
                             Anchor = Anchor.Centre,
                             Children = new Drawable[]
                             {
@@ -39,7 +39,6 @@ namespace Transfer.Game.Tests.Visual.UITest
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Colour = Colour4.White,
-
                                 },
                             }
                         }
@@ -48,6 +47,7 @@ namespace Transfer.Game.Tests.Visual.UITest
             });
             Add(cursor = new TestCursorContainer{});
         }
+
         private partial class TestToolTipContainer : Container, IHasTooltip, IHasContextMenu
         {
             public LocalisableString TooltipText => "This is a tooltip";

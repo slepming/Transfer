@@ -1,6 +1,7 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
@@ -10,7 +11,7 @@ using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Graphics.UI;
 
-public partial class StringButton : ClickableContainer
+public partial class StringButton : ClickableContainer, IHasTooltip
 {
     private Box background;
     private SpriteText spriteText;
@@ -33,8 +34,11 @@ public partial class StringButton : ClickableContainer
         set => background.Colour = value;
     }
 
-    public StringButton()
+    public LocalisableString TooltipText { get; }
+
+    public StringButton(LocalisableString tooltipText = new LocalisableString())
     {
+        TooltipText = tooltipText;
         Masking = true;
         Colour = Colour4.White;
         InternalChildren =
@@ -48,7 +52,7 @@ public partial class StringButton : ClickableContainer
             spriteText = new SpriteText
             {
                 Colour = Colour4.White,
-                Font = new FontUsage(TransferFonts.FiraCodeNerdFont, size: 15, fixedWidth: true),
+                Font = new FontUsage(TransferFonts.FiraCodeNerdFont, size: 15),
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
             }
@@ -72,4 +76,5 @@ public partial class StringButton : ClickableContainer
     {
         spriteText.Text = text.ToString() ?? "Not loaded text";
     }
+
 }

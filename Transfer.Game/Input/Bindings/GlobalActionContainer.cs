@@ -65,7 +65,8 @@ namespace Transfer.Game.Input.Bindings
             new KeyBinding(InputKey.F2, GlobalAction.WatchingVideoOnCurrentPlaybackRestart),
             new KeyBinding(InputKey.Space, GlobalAction.PauseVideo),
             new KeyBinding(new[] { InputKey.Shift, InputKey.R }, GlobalAction.MoveToInternalExplorer),
-            new KeyBinding(InputKey.F5, GlobalAction.WatchingVideoReset)
+            new KeyBinding(InputKey.F5, GlobalAction.WatchingVideoReset),
+            new KeyBinding(new[] { InputKey.Control, InputKey.S }, GlobalAction.SaveToPlaylist)
         ];
 
         private static IEnumerable<KeyBinding> videoEditorBindings =>
@@ -91,6 +92,7 @@ namespace Transfer.Game.Input.Bindings
         MoveToInternalExplorer,
         ExtensionMenu,
         OpenPlaylist,
+        SaveToPlaylist,
         CreatePlaylist
     }
 

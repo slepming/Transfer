@@ -20,8 +20,6 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
 
     private TransferTextBox searchTextBox;
 
-
-
     public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
     {
         Hide();
@@ -37,44 +35,47 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
 
     protected override void LoadComplete()
     {
-        InternalChildren = [
-                new SpacingText{
-                    Text = "Choice file",
-                    Anchor = Anchor.TopCentre,
-                    Origin = Anchor.TopCentre,
-                    Position = new Vector2(0,9),
-                    Font = new FontUsage(TransferFonts.Oswald,size: 40)
-                },
+        InternalChildren =
+        [
+            new SpacingText
+            {
+                Text = "Choice file",
+                Anchor = Anchor.TopCentre,
+                Origin = Anchor.TopCentre,
+                Position = new Vector2(0,9),
+                Font = new FontUsage(TransferFonts.Oswald, size: 40)
+            },
 
-                new FinalContextMenuContainer{
+            new FinalContextMenuContainer
+            {
+                RelativeSizeAxes = Axes.Both,
+                Child = new TransferScrollContainer
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.Both,
-                    Child = new TransferScrollContainer{
+                    Position = new Vector2(0, 50),
+
+                    Child = explorerFillFlowContainer = new ExplorerFillFlowContainer
+                    {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        RelativeSizeAxes = Axes.Both,
-                        Position = new Vector2(0, 50),
-
-
-                        Child = explorerFillFlowContainer = new ExplorerFillFlowContainer{
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            AutoSizeAxes = Axes.Y,
-                            RelativeSizeAxes = Axes.X,
-                            Spacing = new Vector2(15,15),
-                        }
+                        AutoSizeAxes = Axes.Y,
+                        RelativeSizeAxes = Axes.X,
+                        Spacing = new Vector2(15, 15),
                     }
-                },
-                searchTextBox = new TransferTextBox(true)
-                {
-                    RelativeSizeAxes = Axes.X,
-                    Size = new Vector2(0.2f, 1),
-                    Height = 40,
-                    Tooltip = "Search your file",
-                    PlaceholderText = "Enter",
-                    Anchor = Anchor.TopLeft,
-                    Origin = Anchor.TopLeft,
-                },
-
+                }
+            },
+            searchTextBox = new TransferTextBox(true)
+            {
+                RelativeSizeAxes = Axes.X,
+                Size = new Vector2(0.2f, 1),
+                Height = 40,
+                Tooltip = "Search your file",
+                PlaceholderText = "Enter",
+                Anchor = Anchor.TopLeft,
+                Origin = Anchor.TopLeft,
+            },
         ];
         searchTextBox.Current.ValueChanged += searchInExplorer;
         explorerFillFlowContainer.TransitionPath += onTransitionPath;
@@ -99,6 +100,6 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
 
     protected override void PopOut()
     {
-        this.FadeOut(600,Easing.Out).ScaleTo(0.8f);
+        this.FadeOut(600, Easing.Out).ScaleTo(0.8f);
     }
 }

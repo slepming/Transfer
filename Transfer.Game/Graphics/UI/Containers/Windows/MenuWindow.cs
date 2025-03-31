@@ -1,10 +1,9 @@
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Localisation;
 using osuTK;
-using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Graphics.UI.Containers.Windows;
@@ -21,7 +20,7 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
     /// <summary>
     /// Content is used to add the insides of the window, while keeping the parts created by MenuWindow intact.
     /// </summary>
-    protected Container WindowContent = new Container
+    protected TooltipContainer WindowContent = new TooltipContainer()
     {
         RelativeSizeAxes = Axes.Both,
         Size = new Vector2(1 / 1.1f, 1 / 1.2f),
@@ -62,6 +61,19 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
             }
         ];
         AddInternal(WindowContent);
+    }
+
+    public override void Hide()
+    {
+        foreach (var content in WindowContent.Children)
+        {
+            if (content is TextBox box)
+            {
+                box.Current.Value = string.Empty;
+            }
+        }
+
+        base.Hide();
     }
 
     protected override void PopIn()

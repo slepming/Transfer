@@ -12,7 +12,8 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
 {
     protected override string Filename => @"app.ini";
 
-    public TransferConfigManager(Storage storage, IDictionary<TransferOptions, object> defaultOverrides = null) : base(storage, defaultOverrides)
+    public TransferConfigManager(Storage storage, IDictionary<TransferOptions, object> defaultOverrides = null)
+        : base(storage, defaultOverrides)
     {
     }
 
@@ -32,7 +33,7 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
         SetDefault(TransferOptions.ConstantRateFactor, 23);
         SetDefault(TransferOptions.Profile, Profiles.main);
         SetDefault(TransferOptions.LoopVideo, false);
-        SetDefault(TransferOptions.CurrentPlaylistPath, defaultPlaylistPath);
+        SetDefault(TransferOptions.HistoryPlaylistStoragePath, defaultPlaylistPath);
     }
 }
 
@@ -50,7 +51,7 @@ public enum TransferOptions
     ConstantRateFactor,
     Profile,
     LoopVideo,
-    CurrentPlaylistPath,
+    HistoryPlaylistStoragePath,
     DarkTheme,
 }
 
@@ -83,6 +84,7 @@ public enum AudioCodecs
     libvorbis,
     aac
 }
+
 public enum VideoCodecs
 {
     libx264,

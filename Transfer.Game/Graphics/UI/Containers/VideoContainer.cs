@@ -15,7 +15,7 @@ using Transfer.Game.Input.Bindings;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction>
+public partial class VideoContainer : Container, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo
 {
     public TransferVideo Video { get; private set; }
 

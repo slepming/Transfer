@@ -1,3 +1,4 @@
+using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -6,22 +7,37 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
+using Transfer.Game.Graphics.UI.Containers.Windows;
 using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
 public partial class ExtensionMenu : TransferFocusedOverlayContainer
 {
-    private StringButton playlistButton;
+    private StringButton playlistButton, openPlaylistButton;
 
     private Container hub;
     private PlaylistWindow playlistContainer;
+    private OpenPlaylistWindow openPlaylistWindow;
 
-    public ExtensionMenu()
+    private readonly ICanUpdateVideo updateVideo;
+
+    /// <summary>
+    /// Extension menu for user playlists
+    /// </summary>
+    /// <param name="updateVideo">Object implementing <see cref="ICanUpdateVideo"/></param>
+    public ExtensionMenu(ICanUpdateVideo updateVideo = null)
     {
+        this.updateVideo = updateVideo;
         RelativeSizeAxes = Axes.Both;
         InternalChildren =
         [
+            openPlaylistWindow = new OpenPlaylistWindow
+            {
+                RelativeSizeAxes = Axes.Both,
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+            },
             new Container()
             {
                 RelativeSizeAxes = Axes.Both,
@@ -86,8 +102,25 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
                                             Masking = true,
                                             BorderColour = Colour4.FromHex("#CCCCCC"),
                                             BorderThickness = 2,
+                                            CornerRadius = 2,
                                             Colour = Colour4.White,
-                                        }
+                                            Action = openPlaylistList
+                                        },
+                                        openPlaylistButton = new StringButton
+                                        {
+                                            RelativeSizeAxes = Axes.X,
+                                            Size = new Vector2(1f / 1.1f, 30),
+                                            Text = "Open playlist",
+                                            Anchor = Anchor.Centre,
+                                            Origin = Anchor.Centre,
+                                            BackgroundColour = Colour4.FromHex("#333333"),
+                                            Masking = true,
+                                            BorderColour = Colour4.FromHex("#CCCCCC"),
+                                            BorderThickness = 2,
+                                            CornerRadius = 2,
+                                            Colour = Colour4.White,
+                                            Action = openPlaylistFromPath
+                                        },
                                     ]
                                 }
                             }
@@ -96,8 +129,11 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
                 ]
             }
         ];
+    }
 
-        playlistButton.Action += openPlaylist;
+    private void openPlaylistFromPath()
+    {
+        openPlaylistWindow.Show();
     }
 
     [BackgroundDependencyLoader]
@@ -105,12 +141,18 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
     {
         playlistContainer = new PlaylistWindow(playlistStorage)
         {
-            Title = "PlaylistMenu"
+            Title = "Playlist Menu",
+            SelectedFileAction = selectedFileAction
         };
         Add(playlistContainer);
     }
 
-    private void openPlaylist()
+    private void selectedFileAction(string path)
+    {
+        updateVideo?.UpdateVideo(path);
+    }
+
+    private void openPlaylistList()
     {
         playlistContainer.Show();
     }

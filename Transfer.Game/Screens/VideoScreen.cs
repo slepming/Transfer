@@ -1,6 +1,7 @@
 #nullable disable
 using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -12,15 +13,17 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Framework.Screens;
 using Transfer.Game.Configuration;
+using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
+using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 
 namespace Transfer.Game.Screens;
 
-public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>
+public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo
 {
     private VideoContainer videoContainer;
 
@@ -71,7 +74,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         explorerContainer.FoundVideo += onFoundVideo;
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
         extensionMenu = new ExtensionMenu();
-        AddInternal((explorerContainer ??= []));
+        AddInternal(explorerContainer ??= []);
         AddInternal(extensionMenu = new ExtensionMenu());
     }
 
@@ -143,6 +146,8 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
             });
         }
     }
+
+    public void UpdateVideo(string path, [CanBeNull] TransferVideo video = null) => videoContainer.UpdateVideo(path, video);
 
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
     {

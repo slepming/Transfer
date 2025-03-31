@@ -19,7 +19,6 @@ namespace Transfer.Game.Graphics.UI.Containers
         private ConfirmButton confirmButton;
         private Sprite lightningSprite;
 
-
         public Action ConfirmAction;
 
         public BindableDouble SpeedUpValue = new BindableDouble();
@@ -27,7 +26,8 @@ namespace Transfer.Game.Graphics.UI.Containers
         public EditToolsContainer()
         {
             RelativeSizeAxes = Axes.Both;
-            InternalChildren = [
+            InternalChildren =
+            [
                 speedUpSlider = new SpeedUpSlider(),
                 transferTextBox = new TransferTextBox(true){
                     Width = 40,
@@ -37,8 +37,8 @@ namespace Transfer.Game.Graphics.UI.Containers
                     Origin = Anchor.TopLeft,
                     BackgroundColour = Colour4.Transparent,
                     BorderColour = Colour4.Transparent,
-                    CharacterSize = 20,
-                    Position = new Vector2(50,0)
+                    FontSize = 20,
+                    Position = new Vector2(50, 0)
                 },
                 confirmButton = new ConfirmButton{
                     Width = 80,

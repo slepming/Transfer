@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using osu.Framework.Allocation;
@@ -5,6 +6,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Localisation;
+using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Windows;
@@ -27,6 +29,8 @@ public partial class PlaylistWindow : MenuWindow
     }
 
     protected Storage PlaylistStorage;
+
+    public Action<string> SelectedFileAction;
 
     public PlaylistWindow(Storage playlistStorage)
     {
@@ -65,18 +69,19 @@ public partial class PlaylistWindow : MenuWindow
         {
             if (!TransferGameBase.VIDEO_EXTENSIONS.Contains(Path.GetExtension(file))) continue;
 
-            mainContainer.Add(new PrefixButton
+            mainContainer.Add(new PlaylistButton()
             {
                 Height = 25,
                 RelativeSizeAxes = Axes.X,
-                Text = file,
-                Prefix = textureStore?.Get("video-camera.png"),
-                // Action = onActionExplorerButton
+                Current = file,
+                Action = onActionExplorerButton
             });
         }
     }
 
-    private void onActionExplorerButton(string path, bool isDirectory)
+    private void onActionExplorerButton(string path)
     {
+        Logger.Log($"User selected file {path}", level: LogLevel.Debug);
+        SelectedFileAction?.Invoke(path);
     }
 }
