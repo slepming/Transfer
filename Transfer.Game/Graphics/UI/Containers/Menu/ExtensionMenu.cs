@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using FFmpeg.NET.Services;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -17,8 +20,7 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
     private StringButton playlistButton, openPlaylistButton;
 
     private Container hub;
-    private PlaylistWindow playlistContainer;
-    private OpenPlaylistWindow openPlaylistWindow;
+    private MenuWindow playlistContainer, openPlaylistWindow;
 
     private readonly ICanUpdateVideo updateVideo;
 
@@ -32,12 +34,6 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
         RelativeSizeAxes = Axes.Both;
         InternalChildren =
         [
-            openPlaylistWindow = new OpenPlaylistWindow
-            {
-                RelativeSizeAxes = Axes.Both,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-            },
             new Container()
             {
                 RelativeSizeAxes = Axes.Both,
@@ -144,7 +140,24 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
             Title = "Playlist Menu",
             SelectedFileAction = selectedFileAction
         };
-        Add(playlistContainer);
+        openPlaylistWindow = new OpenPlaylistWindow
+        {
+            RelativeSizeAxes = Axes.Both,
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Title = "Open Playlist",
+        };
+        ((OpenPlaylistWindow)openPlaylistWindow).Playlist.ValueChanged += setPlaylist;
+        AddRange(new List<MenuWindow> { playlistContainer, openPlaylistWindow });
+    }
+
+    private void setPlaylist(ValueChangedEvent<PlaylistStorage> playlistStorage)
+    {
+        playlistContainer = new PlaylistWindow(playlistStorage.NewValue)
+        {
+            Title = "Playlist Menu",
+            SelectedFileAction = selectedFileAction
+        };
     }
 
     private void selectedFileAction(string path)
