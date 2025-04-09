@@ -55,6 +55,9 @@ public partial class OpenPlaylistWindow : MenuWindow
 
     private void onApplyAction()
     {
+        if (string.IsNullOrEmpty(nameTextBox.Current.Value))
+            return;
+
         if (Directory.Exists(nameTextBox.Current.Value))
         {
             Playlist.Value = new PlaylistStorage(new NativeStorage(nameTextBox.Current.Value, null));
