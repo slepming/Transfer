@@ -27,7 +27,7 @@ namespace Transfer.Game
 
         private TempStorage tempStorage = null;
 
-        private StorageBackedResourceStore tempResouceStore = null;
+        private StorageBackedResourceStore tempResourceStore = null;
 
         private ScreenStack screenStack = null;
 
@@ -54,7 +54,7 @@ namespace Transfer.Game
             {
                 if (args.Length > 0)
                 {
-                    dependencies.TryGet(out tempResouceStore);
+                    dependencies.TryGet(out tempResourceStore);
                     dependencies.TryGet(out tempStorage);
 
                     if (dependencies.TryGet(out AudioManager audioManager))
@@ -80,7 +80,7 @@ namespace Transfer.Game
                         allowedPaths.Clear();
                         Scheduler.AddDelayed(async () =>
                         {
-                            if (await audioManager.GetTrackStore(tempResouceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio)
+                            if (await audioManager.GetTrackStore(tempResourceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio)
                                 screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
                             else
                                 screenStack.Push(transferScreen = new VideoScreen(pathToVideo: args[0], audio: null));
