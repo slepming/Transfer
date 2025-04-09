@@ -42,7 +42,7 @@ namespace Transfer.Game
 
         public TransferGame() { }
 
-        protected override void LoadAsyncComplete()
+        protected override void LoadComplete()
         {
             base.LoadComplete();
 
