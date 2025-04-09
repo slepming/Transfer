@@ -23,7 +23,7 @@ namespace Transfer.Game
     {
         private Screen transferScreen;
 
-        private readonly string[] args;
+        private readonly string[] args = [];
 
         private TempStorage tempStorage = null;
 
