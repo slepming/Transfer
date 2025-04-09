@@ -18,8 +18,6 @@ public partial class ExplorerFillFlowContainer : SearchContainer
 
     private TransferDirectory transferDirectory = new TransferDirectory();
 
-    private List<ExplorerButton> explorerButtons = new List<ExplorerButton>();
-
     /// <summary>
     /// If file extension not in List then it's skipping
     /// </summary>
@@ -55,13 +53,14 @@ public partial class ExplorerFillFlowContainer : SearchContainer
 
     private void getContent(string path)
     {
-        explorerButtons.Clear();
+        Clear();
 
         foreach (string file in files(path ?? start_path))
         {
             ExplorerButton explorerButton;
 
-            if (awaibleExtensions.Contains(Path.GetExtension(file).ToLower())){
+            if (awaibleExtensions.Contains(Path.GetExtension(file).ToLower()))
+            {
                 explorerButton = new()
                 {
                     Path = file,
@@ -76,12 +75,10 @@ public partial class ExplorerFillFlowContainer : SearchContainer
                 };
             }
 
-            explorerButtons.Add(explorerButton);
             explorerButton.Transition += changeDirectoryExplorer;
+            Add(explorerButton);
         }
 
-        Clear();
-        foreach (ExplorerButton button in explorerButtons) Add(button);
         Add(new Box
         {
             Colour = Colour4.Transparent,
@@ -114,7 +111,6 @@ public partial class ExplorerFillFlowContainer : SearchContainer
             {
                 getContent(fullPath);
                 TransitionPath?.Invoke(path, false);
-                return;
             }
         }
         catch (DirectoryNotFoundException)
