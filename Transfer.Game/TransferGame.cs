@@ -112,7 +112,7 @@ namespace Transfer.Game
                         lock (dropFiles)
                         {
                             dropFiles.Add(path);
-                            Logger.Log(@$"File ""{System.IO.Path.GetFileName(path)}"" been importing");
+                            Logger.Log(@$"File ""{System.IO.Path.GetFileName(path)}"" was imported");
 
                             dropScheduledDelegate?.Cancel();
                             dropScheduledDelegate = Scheduler.AddDelayed(handleImportFromDrop, 100);
