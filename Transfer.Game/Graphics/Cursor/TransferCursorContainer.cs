@@ -1,3 +1,4 @@
+using System.Linq;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
@@ -5,7 +6,6 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
-using osuTK.Input;
 
 namespace Transfer.Game.Graphics.Cursor
 {
@@ -14,6 +14,7 @@ namespace Transfer.Game.Graphics.Cursor
         public TransferCursorContainer()
         {
         }
+
         protected override Drawable CreateCursor() => new TransferCursor();
     }
 
@@ -29,9 +30,8 @@ namespace Transfer.Game.Graphics.Cursor
 
             Origin = Anchor.Centre;
 
-            InternalChildren = new Drawable[]
-            {
-
+            InternalChildren =
+            [
                 circle = new CircularContainer
                 {
                     Size = new Vector2(8),
@@ -45,40 +45,25 @@ namespace Transfer.Game.Graphics.Cursor
                         RelativeSizeAxes = Axes.Both,
                         Colour = Colour4.GreenYellow
                     }
-                },
-            };
+                }
+            ];
         }
 
         protected override bool OnMouseDown(MouseDownEvent e)
         {
-            switch (e.Button)
-            {
-                case MouseButton.Left:
-                    circle.ScaleTo(1.2f, 200);
-                    break;
-
-                case MouseButton.Right:
-                    circle.ScaleTo(1.2f, 200);
-                    break;
-            }
-
+            updateScaleCursor(e);
             return base.OnMouseDown(e);
         }
 
         protected override void OnMouseUp(MouseUpEvent e)
         {
-            switch (e.Button)
-            {
-                case MouseButton.Left:
-                    circle.ScaleTo(1f, 100);
-                    break;
-
-                case MouseButton.Right:
-                    circle.ScaleTo(1f, 100);
-                    break;
-            }
-
+            updateScaleCursor(e);
             base.OnMouseUp(e);
+        }
+
+        private void updateScaleCursor(MouseButtonEvent e)
+        {
+            circle.ScaleTo(e.CurrentState.Mouse.Buttons.Any() ? 1.2f : 1, 100);
         }
 
         protected override bool OnScroll(ScrollEvent e)
@@ -86,6 +71,5 @@ namespace Transfer.Game.Graphics.Cursor
             circle.MoveTo(circle.Position - e.ScrollDelta * 2).MoveTo(Vector2.Zero, 300, Easing.Out);
             return base.OnScroll(e);
         }
-
     }
 }

@@ -61,8 +61,15 @@ public partial class PlaylistWindow : MenuWindow
         loadStorage(PlaylistStorage, textureStore);
     }
 
+    protected override void Update()
+    {
+        loadStorage(PlaylistStorage);
+        base.Update();
+    }
+
     private void loadStorage(Storage storage, TextureStore textureStore = null)
     {
+        mainContainer.Clear();
         var files = storage.GetFiles("");
 
         foreach (var file in files)

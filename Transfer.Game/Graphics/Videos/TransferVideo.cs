@@ -24,7 +24,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     /// </summary>
     public Action<double> SeekOccurs;
 
-    private string path = path;
+    private readonly string path = path;
 
     private bool enableRate = enableRate;
     private bool isMuted = false;
@@ -37,7 +37,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
     private AudioManager audioManager;
 
-    private BindableFloat bindableRate = new BindableFloat()
+    private readonly BindableFloat bindableRate = new BindableFloat()
     {
         Value = 1.0f
     };

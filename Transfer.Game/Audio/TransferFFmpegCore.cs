@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using FFMpegCore;
 using FFMpegCore.Exceptions;
+using JetBrains.Annotations;
 using osu.Framework.Bindables;
 using osu.Framework.Logging;
 using Transfer.Game.Configuration;
@@ -18,14 +19,18 @@ public abstract class TransferFFmpegCore
     /// </summary>
     /// <param name="video">Path to video</param>
     /// <param name="transferConfig">Config</param>
-    /// <param name="customArguments">Here you can enter your arguments to modify in FFmpeg</param>
+    /// <param name="fileParams">Substitute arguments.</param>
     /// <param name="outputExtension">Output file extension(Start with '.'). If output path is not null, then output extension it's no use</param>
+    /// <param name="customArguments">Custom arguments for editing with FFmpeg</param>
     /// <returns>Path to audio</returns>
-    protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, string customArguments = null, string outputExtension = null)
+    protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, [NotNull] FileParams fileParams, [CanBeNull] string outputExtension = null, params string[] customArguments)
     {
-        string outputPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video));
+        string outputPath = fileParams?.OutputPath ?? Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video));
+        outputPath = Path.Combine(outputPath, fileParams.AudioFileName);
         CONVERSION_STATUS.Value = "Checking output path";
-        CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {customArguments ?? "null"}";
+        CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {fileParams?.ToString() ?? "null"}";
+
+        string arguments = customArguments?.Length > 0 ? string.Join(" ", customArguments) : "";
 
         if (string.IsNullOrEmpty(outputPath))
         {
@@ -47,14 +52,14 @@ public abstract class TransferFFmpegCore
             await FFMpegArguments
                   .FromFileInput(video)
                   .OutputToFile(outputPath, false, options => options
-                                                              .WithAudioBitrate(transferConfig.Get<int>(TransferOptions.AudioBitrate))
-                                                              .WithAudioCodec(FFMpeg.GetCodec(transferConfig.Get<AudioCodecs>(TransferOptions.AudioCodec).ToString()))
+                                                              .WithAudioBitrate(fileParams.Bitrate)
+                                                              .WithAudioCodec(FFMpeg.GetCodec(fileParams?.AudioCodec.ToString()))
                                                               .WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
-                                                              .ForceFormat(outputExtension)
                                                               .WithCustomArgument(
                                                                   $"-threads {transferConfig.Get<int>(TransferOptions.Threads)} " +
-                                                                  "-max_muxing_queue_size 2048 ")
-                                                              .WithCustomArgument(customArguments ?? "")
+                                                                  "-max_muxing_queue_size 4196 " +
+                                                                  $"{FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, fileParams?.Rate)}")
+                                                              .WithCustomArgument(arguments)
                                                               .ForceFormat("mp3")
                                                               .WithFastStart())
                   .ProcessAsynchronously();

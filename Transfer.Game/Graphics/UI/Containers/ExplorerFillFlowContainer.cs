@@ -87,7 +87,7 @@ public partial class ExplorerFillFlowContainer : SearchContainer
         });
     }
 
-    private void changeDirectoryExplorer(string path, bool isFile)
+    private void changeDirectoryExplorer(string path)
     {
         try
         {
@@ -97,7 +97,7 @@ public partial class ExplorerFillFlowContainer : SearchContainer
             {
                 if (awaibleExtensions.Contains(Path.GetExtension(fullPath)))
                 {
-                    TransitionPath?.Invoke(fullPath, true);
+                    TransitionPath?.Invoke(fullPath);
                     return;
                 }
                 else
@@ -110,12 +110,12 @@ public partial class ExplorerFillFlowContainer : SearchContainer
             if (Directory.Exists(fullPath))
             {
                 getContent(fullPath);
-                TransitionPath?.Invoke(path, false);
+                TransitionPath?.Invoke(path);
             }
         }
         catch (DirectoryNotFoundException)
         {
-            TransitionPath?.Invoke(path, true);
+            TransitionPath?.Invoke(path);
         }
     }
 

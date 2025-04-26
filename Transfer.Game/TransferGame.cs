@@ -78,7 +78,7 @@ namespace Transfer.Game
                             Import(allowedPaths.ToArray());
 
                         allowedPaths.Clear();
-                        Scheduler.AddDelayed(async () =>
+                        Scheduler.AddDelayed(async void () =>
                         {
                             if (await audioManager.GetTrackStore(tempResourceStore).GetAsync($"{Hash.GetHashString(Path.GetFileNameWithoutExtension(args[0]))}.mp3") is Track audio)
                                 screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));

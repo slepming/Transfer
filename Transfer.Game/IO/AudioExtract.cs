@@ -18,14 +18,14 @@ namespace Transfer.Game.IO;
 public class AudioExtract<T> : IAudioExtract<T>
     where T : Track
 {
-    private readonly TransferConfigManager transferConfigManager1;
+    private readonly TransferConfigManager transferConfigManager;
 
     private static readonly string tempFolder = Path.Combine(Path.GetTempPath(), "Transfer");
     private readonly Storage tempStorage;
 
     public AudioExtract(TransferConfigManager transferConfigManager)
     {
-        transferConfigManager1 = transferConfigManager ?? throw new ArgumentNullException(nameof(transferConfigManager));
+        this.transferConfigManager = transferConfigManager ?? throw new ArgumentNullException(nameof(transferConfigManager));
         if (!Directory.Exists(tempFolder))
             Directory.CreateDirectory(tempFolder);
         tempStorage = new NativeStorage(tempFolder);
@@ -60,7 +60,7 @@ public class AudioExtract<T> : IAudioExtract<T>
         try
         {
             string pathToFile = await convertFileAsync(path, "mp3", storage.GetFullPath(""));
-            Logger.Log($"Path to file: {pathToFile}\n output path: {outputName}");
+            Logger.Log($"Path to file: {pathToFile}\n output path: {storage.GetFullPath("")}");
             await saveFileToStorageAsync(pathToFile, storage, outputName);
             File.Delete(pathToFile);
 
@@ -130,19 +130,25 @@ public class AudioExtract<T> : IAudioExtract<T>
 
     private async Task<string> convertFileAsync(string path, string extension, string outputPath = null, string arguments = null)
     {
-        Logger.Log($"Metadata {{ Path to file: {path}; File Extension {extension}; {(outputPath is null ? "Output path equal null" : $"Output path {outputPath}")}; Custom arguments: {arguments ?? "None"}}}");
-        outputPath ??= Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.{extension}");
+        outputPath ??= Path.Combine(Path.GetTempPath());
 
-        string pathToFile = await ConversionBase<AudioExtractModel>.Conversion(path, transferConfigManager1, outputPath, arguments);
+        string pathToFile = await ConversionBase.Conversion<AudioExtractModel>(path,
+            transferConfigManager,
+            new FileParamsBuilder()
+                .SetPath(outputPath)
+                .SetBitrate(transferConfigManager.Get<int>(TransferOptions.AudioBitrate))
+                .SetAudioCodec(AudioCodecs.libmp3lame)
+                .SetFileName(Path.GetFileNameWithoutExtension(path))
+                .SetExtension(extension), arguments);
 
         return pathToFile;
     }
 
-    private async Task saveFileToStorageAsync(string paToFile, Storage storage, string name)
+    private async Task saveFileToStorageAsync(string pathToFile, Storage storage, string name)
     {
         Logger.Log("Save file to storage");
 
-        using (Stream file = new FileStream(paToFile, FileMode.Open))
+        using (Stream file = new FileStream(pathToFile, FileMode.Open))
         {
             await saveStreamToStorageAsync(file, storage, name);
         }

@@ -64,7 +64,7 @@ public partial class EditScreen : TransferScreen
             if (pathToFile == null)
             {
                 explorerContainer.Show();
-                explorerContainer.FoundVideo += (string path, bool isFile) =>
+                explorerContainer.FoundVideo += (string path) =>
                 {
                     pathToFile = path;
                 };
@@ -211,7 +211,7 @@ public partial class EditScreen : TransferScreen
 
         initializeLoadingOverlay();
 
-        await ConversionBase<SpeedUpModel>.Conversion(pathToFile, transferConfigManager, path, arguments);
+        await ConversionBase.Conversion<BasicModel>(pathToFile, transferConfigManager, new FileParamsBuilder().SetPath(path), arguments); // Don't forget set Bitrate, Codec from config
 
         ClearInternal();
 
@@ -220,7 +220,7 @@ public partial class EditScreen : TransferScreen
 
     private string getFileName(string name, string extension)
     {
-        string fileName = name  + "_modified" + $"_{DateTime.Now.ToString("H/m/ss")}" + Path.GetExtension(pathToFile);
+        string fileName = name + "_modified" + $"_{DateTime.Now.ToString("H/m/ss")}" + Path.GetExtension(pathToFile);
         string path = Path.Combine(transferConfigManager.Get<string>(TransferOptions.OutputPath), fileName);
         return path;
     }

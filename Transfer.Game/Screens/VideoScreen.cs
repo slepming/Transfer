@@ -40,7 +40,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     private FrameworkConfigManager frameworkConfigManager { get; set; }
 
     [Resolved]
-    private Storage tempStorage { get; set; }
+    private TempStorage tempStorage { get; set; }
 
     protected IAudioExtract<Track> AudioExtract { get; set; }
 
@@ -116,20 +116,17 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         }
     }
 
-    private async void onFoundVideo(string path, bool isFile)
+    private async void onFoundVideo(string path)
     {
         try
         {
-            if (!isFile) return;
-
             LoadingOverlay loading;
-            Task<Track> trackTask = AudioExtract.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
             ClearInternal();
             AddInternal(loading = new LoadingOverlay()
             {
                 Header = "Uploading a video"
             });
-            Track track = await trackTask ?? null;
+            var track = await AudioExtract.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
             loading.Expire();
 
             this.Push(new VideoScreen(track, path));

@@ -14,7 +14,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
     protected override bool StartHidden { get; }
     protected override bool BlockPositionalInput { get; }
 
-    private ExplorerFillFlowContainer explorerFillFlowContainer;
+    private Transfer.Game.Graphics.UIv2.Containers.ExplorerFillFlowContainer explorerFillFlowContainer;
 
     public event TransitionEvent FoundVideo;
 
@@ -42,7 +42,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                 Text = "Choice file",
                 Anchor = Anchor.TopCentre,
                 Origin = Anchor.TopCentre,
-                Position = new Vector2(0,9),
+                Position = new Vector2(0, 9),
                 Font = new FontUsage(TransferFonts.Oswald, size: 40)
             },
 
@@ -56,12 +56,12 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                     RelativeSizeAxes = Axes.Both,
                     Position = new Vector2(0, 50),
 
-                    Child = explorerFillFlowContainer = new ExplorerFillFlowContainer
+                    Child = explorerFillFlowContainer = new UIv2.Containers.ExplorerFillFlowContainer
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        AutoSizeAxes = Axes.Y,
                         RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
                         Spacing = new Vector2(15, 15),
                     }
                 }
@@ -78,14 +78,14 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
             },
         ];
         searchTextBox.Current.ValueChanged += searchInExplorer;
-        explorerFillFlowContainer.TransitionPath += onTransitionPath;
+        explorerFillFlowContainer.Action += onTransitionPath;
         base.LoadComplete();
     }
 
-    private void onTransitionPath(string path, bool isFile)
+    private void onTransitionPath(string path)
     {
         searchTextBox.Text = "";
-        FoundVideo?.Invoke(path, isFile);
+        FoundVideo?.Invoke(path);
     }
 
     private void searchInExplorer(ValueChangedEvent<string> text)

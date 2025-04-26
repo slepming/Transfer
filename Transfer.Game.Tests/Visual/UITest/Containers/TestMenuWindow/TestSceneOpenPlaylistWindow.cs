@@ -1,4 +1,4 @@
-using osu.Framework.Allocation;
+using NUnit.Framework;
 using Transfer.Game.Graphics.UI.Containers.Windows;
 
 namespace Transfer.Game.Tests.Visual.UITest.Containers.TestMenuWindow;
@@ -7,8 +7,8 @@ public partial class TestSceneOpenPlaylistWindow : TransferTestScene
 {
     private OpenPlaylistWindow openPlaylistWindow;
 
-    [BackgroundDependencyLoader]
-    private void load()
+    [Test]
+    public void CreatePlaylistWindow()
     {
         Add(openPlaylistWindow = new OpenPlaylistWindow()
         {

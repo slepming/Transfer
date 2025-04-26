@@ -7,16 +7,13 @@ namespace Transfer.Game.Audio.ConversionModels
 {
     public sealed class AudioExtractModel : TransferFFmpegCore, IConversionModel
     {
-        public async Task<string> HandleConversion(string video, TransferConfigManager transferConfig, string customArguments = null, params object[] conversionValue)
+        public async Task<string> HandleConversion(string video, TransferConfigManager transferConfig, IFileParamsBuilder fileParams = null, params string[] customArugments)
         {
             if (string.IsNullOrEmpty(video))
-            {
                 throw new ArgumentNullException(nameof(video));
-            }
 
             string pathWithoutExtension = Path.GetFileNameWithoutExtension(video);
-
-            return await Conversion(video, transferConfig, customArguments, "mp3");
+            return await Conversion(video, transferConfig, fileParams?.Build(), pathWithoutExtension, customArguments: customArugments);
         }
     }
 }

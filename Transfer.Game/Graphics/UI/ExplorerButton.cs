@@ -18,7 +18,7 @@ using Transfer.Game.Screens;
 
 namespace Transfer.Game.Graphics.UI;
 
-public delegate void TransitionEvent(string path, bool isFile);
+public delegate void TransitionEvent(string path);
 public partial class ExplorerButton : ClickableContainer, IHasContextMenu, IFilterable
 {
     /// <summary>
@@ -94,7 +94,7 @@ public partial class ExplorerButton : ClickableContainer, IHasContextMenu, IFilt
     private void pathTransition()
     {
         if (path == null) return;
-        Transition?.Invoke(path, false);
+        Transition?.Invoke(path);
 
     }
     private void moveToEditScreen()

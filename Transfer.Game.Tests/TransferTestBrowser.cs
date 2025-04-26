@@ -23,11 +23,12 @@ namespace Transfer.Game.Tests
             transferConfigManager = new TransferConfigManager(Host.Storage);
             testDependencies.Cache(transferConfigManager);
             Logger.Log($"Playlist path: {transferConfigManager.Get<string>(TransferOptions.HistoryPlaylistStoragePath)}");
-            string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.HistoryPlaylistStoragePath);
+            string pathToPlaylist = Host.Storage.GetFullPath("TestPlaylist", true);
             if (!Path.Exists(pathToPlaylist))
                 Directory.CreateDirectory(pathToPlaylist);
             playlistStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
             testDependencies.CacheAs(playlistStorage);
+            testDependencies.CacheAs(Resources);
         }
 
         protected override void LoadComplete()

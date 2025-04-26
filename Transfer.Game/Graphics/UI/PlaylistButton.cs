@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -68,12 +67,24 @@ public partial class PlaylistButton : ClickableContainer
     [BackgroundDependencyLoader]
     private void load()
     {
-        text.Text = Path.GetDirectoryName(current);
+        text.Text = current;
     }
 
     protected override bool OnClick(ClickEvent e)
     {
         Action?.Invoke(current);
         return base.OnClick(e);
+    }
+
+    public override void Show()
+    {
+        this.FadeIn(300, Easing.OutQuint);
+        base.Show();
+    }
+
+    public override void Hide()
+    {
+        this.FadeOut(300, Easing.OutQuint);
+        base.Hide();
     }
 }

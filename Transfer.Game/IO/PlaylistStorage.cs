@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using osu.Framework.Logging;
@@ -40,7 +42,16 @@ public class PlaylistStorage : WrappedStorage
 
     private void saveDataFromPathToLink(string path)
     {
-        var info = File.CreateSymbolicLink(path, UnderlyingStorage.GetFullPath(""));
+        if (UnderlyingStorage.Exists(Path.GetFileName(path)))
+        {
+            UnderlyingStorage.Delete(Path.GetFileName(path));
+        }
+
+        string targetLinkPath = Path.Combine(UnderlyingStorage.GetFullPath(""), Path.GetFileName(path));
+        string fileForLinkPath = path;
+
+        Logger.Log($"Create symbolic link from {fileForLinkPath} to {targetLinkPath}", level: LogLevel.Debug);
+        var info = File.CreateSymbolicLink(targetLinkPath, fileForLinkPath);
     }
 
     public void SaveDataFromPathToLink(string path) => saveDataFromPathToLink(path);
@@ -62,5 +73,20 @@ public class PlaylistStorage : WrappedStorage
     /// Delete file from storage
     /// </summary>
     /// <param name="fileName">File name if your playlist is directories use path to file</param>
-    public void DeleteData(string fileName) => deleteData(fileName);
+    public override void Delete(string fileName) => deleteData(fileName);
+
+    private void deleteAllData(string path = "", string pattern = "*")
+    {
+        IEnumerable<string> files = UnderlyingStorage.GetFiles(path, pattern);
+
+        foreach (string file in files)
+        {
+            base.Delete(file);
+        }
+    }
+
+    public void DeleteAll(string path = "", string pattern = "*")
+    {
+        deleteAllData(path, pattern);
+    }
 }
