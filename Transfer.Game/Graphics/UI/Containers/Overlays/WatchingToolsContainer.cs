@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using osuTK.Graphics;
 using Transfer.Game.Configuration;
+using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers.Overlays;
@@ -29,6 +30,8 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
 
     private SpriteButton backButton, nextButton, nextSeekButton, backSeekButton, stopButton;
     private SpriteButton repeatButton, settingsButton;
+
+    private ExtensionMenu extensionMenu = new ExtensionMenu();
 
     [Resolved]
     private TransferConfigManager configManager { get; set; }
@@ -208,7 +211,8 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
 
     private void onOpenSettings()
     {
-        throw new System.NotImplementedException();
+        if (extensionMenu.Visible) extensionMenu.Hide();
+        else extensionMenu.Show();
     }
 
     private void onActivateRepeat()
@@ -240,4 +244,5 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
 
     protected override void PopOut()
     {
-    } }
+    }
+}
