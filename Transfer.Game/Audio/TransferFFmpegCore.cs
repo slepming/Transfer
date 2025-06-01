@@ -20,13 +20,12 @@ public abstract class TransferFFmpegCore
     /// <param name="video">Path to video</param>
     /// <param name="transferConfig">Config</param>
     /// <param name="fileParams">Substitute arguments.</param>
-    /// <param name="outputExtension">Output file extension(Start with '.'). If output path is not null, then output extension it's no use</param>
     /// <param name="customArguments">Custom arguments for editing with FFmpeg</param>
     /// <returns>Path to audio</returns>
-    protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, [NotNull] FileParams fileParams, [CanBeNull] string outputExtension = null, params string[] customArguments)
+    protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, [NotNull] FileParams fileParams, params string[] customArguments)
     {
         string outputPath = fileParams?.OutputPath ?? Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video));
-        outputPath = Path.Combine(outputPath, fileParams.AudioFileName);
+        outputPath = Path.Combine(outputPath, fileParams.AudioFileName + fileParams.FileExtension);
         CONVERSION_STATUS.Value = "Checking output path";
         CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {fileParams?.ToString() ?? "null"}";
 
@@ -60,7 +59,6 @@ public abstract class TransferFFmpegCore
                                                                   "-max_muxing_queue_size 4196 " +
                                                                   $"{FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, fileParams?.Rate)}")
                                                               .WithCustomArgument(arguments)
-                                                              .ForceFormat("mp3")
                                                               .WithFastStart())
                   .ProcessAsynchronously();
             DateTime endTime = DateTime.Now;

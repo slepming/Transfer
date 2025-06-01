@@ -1,25 +1,25 @@
 using NUnit.Framework;
-using Transfer.Game.Graphics.UI.Containers.Windows;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 namespace Transfer.Game.Tests.Visual.UITest.Containers.TestMenuWindow;
 
 public partial class TestSceneOpenPlaylistWindow : TransferTestScene
 {
-    private OpenPlaylistWindow openPlaylistWindow;
+    private OpenPlaylistMenu openPlaylistMenu;
 
     [Test]
     public void CreatePlaylistWindow()
     {
-        Add(openPlaylistWindow = new OpenPlaylistWindow()
+        Add(openPlaylistMenu = new OpenPlaylistMenu()
         {
             Title = "Open Playlist/Create Playlist"
         });
         AddStep("Change visible", () =>
         {
-            if (openPlaylistWindow.Visible)
-                openPlaylistWindow.Hide();
+            if (openPlaylistMenu.Visible)
+                openPlaylistMenu.Hide();
             else
-                openPlaylistWindow.Show();
+                openPlaylistMenu.Show();
         });
     }
 }

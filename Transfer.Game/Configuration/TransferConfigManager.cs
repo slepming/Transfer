@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Platform;
 
@@ -16,6 +19,10 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
         : base(storage, defaultOverrides)
     {
     }
+
+    public IDictionary<TransferOptions, IBindable> GetCurrentConfiguration() => ConfigStore
+                                                                                .Where(kvp => !CheckLookupContainsPrivateInformation(kvp.Key))
+                                                                                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
     protected override void InitialiseDefaults()
     {
@@ -77,6 +84,7 @@ public enum Presets
 
 public enum AudioCodecs
 {
+    [Description("MP3")]
     libmp3lame,
     eac3,
     ac3,
@@ -87,8 +95,12 @@ public enum AudioCodecs
 
 public enum VideoCodecs
 {
+    [Description("X264")]
     libx264,
+
+    [Description("X265")]
     libx265,
+
     libvpx,
     libtheora,
     png,

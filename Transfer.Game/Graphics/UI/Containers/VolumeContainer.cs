@@ -2,9 +2,8 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK.Graphics;
-using Transfer.Game.Graphics.UI;
 
-namespace Transfer.Game.UserInterface.Containers
+namespace Transfer.Game.Graphics.UI.Containers
 {
     public partial class VolumeContainer : Container
     {

@@ -6,9 +6,9 @@ using osu.Framework.Localisation;
 using osu.Framework.Logging;
 using osuTK;
 
-namespace Transfer.Game.Graphics.UI.Containers.Windows;
+namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
-public partial class QuestionWindow : MenuWindow
+public partial class QuestionDialog : TransferDialog
 {
     public LocalisableString QuestionText;
     public StringButton Ok, Cancel;
@@ -16,7 +16,7 @@ public partial class QuestionWindow : MenuWindow
 
     public Action<bool> Answer;
 
-    public QuestionWindow()
+    public QuestionDialog()
     {
         Size = new Vector2(1 / 2f, 1 / 4f);
     }

@@ -9,11 +9,11 @@ using osu.Framework.Localisation;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osuTK;
-using Transfer.Game.Graphics.UI.Containers.Windows;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
-public partial class PlaylistWindow : MenuWindow
+public partial class PlaylistMenu : TransferDialog
 {
     private TransparentButton close;
     private FillFlowContainer mainContainer;
@@ -32,7 +32,7 @@ public partial class PlaylistWindow : MenuWindow
 
     public Action<string> SelectedFileAction;
 
-    public PlaylistWindow(Storage playlistStorage)
+    public PlaylistMenu(Storage playlistStorage)
     {
         this.PlaylistStorage = playlistStorage;
         WindowContent.AddRange(

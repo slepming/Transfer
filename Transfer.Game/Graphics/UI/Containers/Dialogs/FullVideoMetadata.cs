@@ -3,9 +3,9 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using Transfer.Game.Audio.Extensions;
 
-namespace Transfer.Game.Graphics.UI.Containers.Windows;
+namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
-public partial class FullVideoMetadata([NotNull] string path) : MenuWindow
+public partial class FullVideoMetadata([NotNull] string path) : TransferDialog
 {
     private string videoPath = path ?? string.Empty;
 

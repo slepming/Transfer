@@ -16,7 +16,7 @@ namespace Transfer.Game.IO
         /// <param name="outputName"></param>
         /// <param name="arguments">Arguments for video editing in FFMpeg</param>
         /// <returns>Track</returns>
-        public Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputName = null,string arguments = null);
+        public Task<T> CreateaAndGetTrackAsync(string path, Storage storage, AudioManager audioManager, string outputName = null, string arguments = null);
 
         /// <summary>
         /// Extract audio and puts it is in the temp directory

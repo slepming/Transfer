@@ -9,7 +9,6 @@ using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
-using Transfer.Game.UserInterface;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 

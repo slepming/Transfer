@@ -1,6 +1,5 @@
 #nullable disable
 using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
@@ -10,7 +9,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
-using osu.Framework.Platform;
 using osu.Framework.Screens;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI;
@@ -73,9 +71,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         AudioExtract = new AudioExtract<Track>(transferConfigManager);
         explorerContainer.FoundVideo += onFoundVideo;
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
-        extensionMenu = new ExtensionMenu();
-        AddInternal(explorerContainer ??= []);
-        AddInternal(extensionMenu = new ExtensionMenu());
+        AddRangeInternal([explorerContainer ??= [], extensionMenu ??= []]);
     }
 
     protected override void LoadComplete()
@@ -154,7 +150,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         switch (e.Action)
         {
             case GlobalAction.OpenEditor:
-
                 return true;
 
             case GlobalAction.Explorer:

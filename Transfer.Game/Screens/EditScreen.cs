@@ -161,7 +161,7 @@ public partial class EditScreen : TransferScreen
 
     private void onSpeedVideoChange(ValueChangedEvent<double> e)
     {
-        videoContainer.Video.Rate((float)e.NewValue);
+        videoContainer.Rate((float)e.NewValue);
         commitAccelerationTextBox(e.NewValue);
     }
 
@@ -173,7 +173,6 @@ public partial class EditScreen : TransferScreen
     private void commitAccelerationTextBox(double sender)
     {
         float factor = (float)sender;
-
     }
 
     protected override void Update()
@@ -191,7 +190,6 @@ public partial class EditScreen : TransferScreen
     {
         base.LoadComplete();
     }
-
 
     private async void confirmVideoEditingButtonAction()
     {

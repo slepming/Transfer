@@ -1,19 +1,19 @@
 using osu.Framework.Allocation;
-using Transfer.Game.Graphics.UI.Containers.Windows;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 namespace Transfer.Game.Tests.Visual.UITest.Containers.TestMenuWindow;
 
 public partial class TestSceneQuestionWindow : TransferTestScene
 {
-    private QuestionWindow testQuestionWindow;
+    private QuestionDialog testQuestionDialog;
 
     public TestSceneQuestionWindow()
     {
-        Add(testQuestionWindow = new QuestionWindow()
+        Add(testQuestionDialog = new QuestionDialog()
         {
             QuestionText = "Can I use the ```ls``` command in Linux to view the contents of a directory?"
         });
-        testQuestionWindow.Answer += answer;
+        testQuestionDialog.Answer += answer;
     }
 
     private void answer(bool obj)
@@ -25,10 +25,10 @@ public partial class TestSceneQuestionWindow : TransferTestScene
     {
         AddStep("Change visible menu", () =>
         {
-            if (testQuestionWindow.Visible)
-                testQuestionWindow.Hide();
+            if (testQuestionDialog.Visible)
+                testQuestionDialog.Hide();
             else
-                testQuestionWindow.Show();
+                testQuestionDialog.Show();
         });
     }
 }

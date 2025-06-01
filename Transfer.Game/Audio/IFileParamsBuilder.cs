@@ -24,7 +24,5 @@ public interface IFileParamsBuilder
     /// <returns></returns>
     IFileParamsBuilder SetFileName(string fileName);
 
-    IFileParamsBuilder SetExtension(string extension);
-
     FileParams Build();
 }

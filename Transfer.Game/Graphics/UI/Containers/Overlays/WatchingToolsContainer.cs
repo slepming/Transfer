@@ -8,7 +8,6 @@ using osuTK;
 using osuTK.Graphics;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers.Menu;
-using Transfer.Game.UserInterface.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers.Overlays;
 
@@ -28,10 +27,12 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
     private Container videoBox;
     private Container toolsBox;
 
-    private SpriteButton backButton, nextButton, nextSeekButton, backSeekButton, stopButton;
+    private SpriteButton negativeSpeed, doubleSpeed, nextSeekButton, backSeekButton, stopButton;
     private SpriteButton repeatButton, settingsButton;
 
     private ExtensionMenu extensionMenu = new ExtensionMenu();
+
+    protected override bool StartHidden => false;
 
     [Resolved]
     private TransferConfigManager configManager { get; set; }
@@ -45,8 +46,6 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
     /// This seek space is needed to indicate the gap between transitions from one point in the video timeline to another, as requested by the user. This functionality already exists in VideoContainer; they are the same thing. I just don't want to rewrite the hotkeys for this container
     /// </summary>
     private int seekSpace;
-
-    public WatchingToolsContainer() => Show();
 
     [BackgroundDependencyLoader]
     private void load()
@@ -119,7 +118,7 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
                                 Size = new Vector2(Size.X / 3, Size.Y),
                                 Children =
                                 [
-                                    nextButton = new SpriteButton
+                                    doubleSpeed = new SpriteButton
                                     {
                                         TextureName = "next",
                                         Anchor = Anchor.CentreRight,
@@ -127,7 +126,7 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
                                         Margin = new MarginPadding(50),
                                         Size = new Vector2(50, 50)
                                     },
-                                    backButton = new SpriteButton
+                                    negativeSpeed = new SpriteButton
                                     {
                                         TextureName = "back",
                                         Anchor = Anchor.CentreLeft,
@@ -177,10 +176,10 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
         ];
 
         changeTextureRepeatButton(configManager.Get<bool>(TransferOptions.LoopVideo));
-        nextButton.Action += onNextVideoClick;
+        doubleSpeed.Action += onDoubleSpeedClick;
         nextSeekButton.Action += positiveSeek;
         stopButton.Action += onClickPlayButton;
-        backButton.Action += onBackVideoClick;
+        negativeSpeed.Action += onNegativeSpeedClick;
         backSeekButton.Action += negativeSeek;
 
         settingsButton.Action += onOpenSettings;
@@ -199,14 +198,14 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
         Video.Seek(seekSpace);
     }
 
-    private void onBackVideoClick()
+    private void onNegativeSpeedClick()
     {
-        throw new System.NotImplementedException();
+        Video.Rate(0.5f);
     }
 
-    private void onNextVideoClick()
+    private void onDoubleSpeedClick()
     {
-        throw new System.NotImplementedException();
+        Video.Rate(2);
     }
 
     private void onOpenSettings()
@@ -227,7 +226,8 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
 
     private void onClickPlayButton()
     {
-        throw new System.NotImplementedException();
+        Video.Pause();
+        stopButton.TextureName = Video.VideoIsPaused ? "pause" : "play";
     }
 
     private long duration;

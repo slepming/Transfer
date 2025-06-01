@@ -7,9 +7,9 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.IO;
 
-namespace Transfer.Game.Graphics.UI.Containers.Windows;
+namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
-public partial class OpenPlaylistWindow : MenuWindow
+public partial class OpenPlaylistMenu : TransferDialog
 {
     private TransferTextBox nameTextBox;
     private StringButton applyButton;

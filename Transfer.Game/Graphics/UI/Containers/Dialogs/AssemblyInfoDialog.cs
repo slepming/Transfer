@@ -2,14 +2,14 @@ using System.Reflection;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
-namespace Transfer.Game.Graphics.UI.Containers.Windows;
+namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
-public partial class AssemblyInfoWindow : MenuWindow
+public partial class AssemblyInfoDialog : TransferDialog
 {
     private Assembly assembly = Assembly.GetExecutingAssembly();
     private TextFlowContainer textFlowContainer;
 
-    public AssemblyInfoWindow()
+    public AssemblyInfoDialog()
     {
         HeaderName = "Assembly Info";
         WindowContent.AddRange([

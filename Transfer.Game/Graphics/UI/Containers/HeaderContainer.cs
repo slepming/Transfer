@@ -1,6 +1,5 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Localisation;
@@ -8,7 +7,7 @@ using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class HeaderContainer : Container
+public partial class HeaderContainer : TransferContainer
 {
     private LocalisableString headerText;
     private TransparentButton closeButton;

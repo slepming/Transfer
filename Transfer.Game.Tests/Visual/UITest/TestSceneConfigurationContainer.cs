@@ -14,7 +14,6 @@ public partial class TestSceneConfigurationContainer : TransferTestScene
     [BackgroundDependencyLoader]
     private void load()
     {
-        AddUntilStep("Is visible", () => configuration.Visible);
         AddStep("Show configuration", () =>
         {
             configuration.Expire();

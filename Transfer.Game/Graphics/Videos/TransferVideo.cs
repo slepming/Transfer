@@ -17,7 +17,7 @@ using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.Videos;
 
-public partial class TransferVideo(string path, bool enableRate = false, bool startAtCurrentTime = true) : Video(path, startAtCurrentTime), IKeyBindingHandler<GlobalAction>
+public partial class TransferVideo(string path, bool enableRate = false, bool startAtCurrentTime = true) : Video(path, startAtCurrentTime), IKeyBindingHandler<GlobalAction>, IVideoController
 {
     /// <summary>
     /// You can do animations when it occurs
@@ -28,6 +28,8 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
     private bool enableRate = enableRate;
     private bool isMuted = false;
+
+    public bool IsPaused { get; private set; }
 
     [Resolved]
     private TempStorage tempStorage { get; set; }
@@ -136,6 +138,32 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         IsPlaying = true;
     }
 
+    public void Pause()
+    {
+        Logger.Log("Video has been paused!", level: LogLevel.Debug);
+
+        if (PlaybackPosition == Duration)
+        {
+            Audio?.Restart();
+            Seek(0);
+            return;
+        }
+
+        if (isMuted)
+        {
+            Audio?.Start();
+            IsPlaying = true;
+        }
+        else
+        {
+            Audio?.Stop();
+            IsPlaying = false;
+        }
+
+        isMuted = !isMuted;
+        IsPaused = !IsPaused;
+    }
+
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
     {
         if (e.Repeat)
@@ -145,25 +173,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         {
             case GlobalAction.PauseVideo:
             {
-                if (PlaybackPosition == Duration)
-                {
-                    Audio?.Restart();
-                    Seek(0);
-                    return true;
-                }
-
-                if (isMuted)
-                {
-                    Audio?.Start();
-                    IsPlaying = true;
-                }
-                else
-                {
-                    Audio?.Stop();
-                    IsPlaying = false;
-                }
-
-                isMuted = !isMuted;
+                Pause();
                 return true;
             }
 
@@ -193,6 +203,18 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
     public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
     {
+        // switch (e.Action)
+        // {
+        //     case GlobalAction.KeyShortSpeedVideo:
+        //     {
+        //         if (bindableRate.Value != 1)
+        //         {
+        //             Rate(1);
+        //         }
+        //
+        //         break;
+        //     }
+        // }
     }
 
     #region audio

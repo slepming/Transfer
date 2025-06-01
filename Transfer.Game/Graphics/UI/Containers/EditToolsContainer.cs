@@ -1,4 +1,3 @@
-using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics;
 using osu.Framework.Bindables;
@@ -12,7 +11,7 @@ using osu.Framework.Logging;
 
 namespace Transfer.Game.Graphics.UI.Containers
 {
-    public partial class EditToolsContainer : Container
+    public partial class EditToolsContainer : TransferContainer
     {
         private SpeedUpSlider speedUpSlider;
         private TransferTextBox transferTextBox;
@@ -29,10 +28,10 @@ namespace Transfer.Game.Graphics.UI.Containers
             InternalChildren =
             [
                 speedUpSlider = new SpeedUpSlider(),
-                transferTextBox = new TransferTextBox(true){
+                transferTextBox = new NumberBox(true)
+                {
                     Width = 40,
                     Height = 43,
-                    OnlyNumbers = true,
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopLeft,
                     BackgroundColour = Colour4.Transparent,
@@ -40,12 +39,13 @@ namespace Transfer.Game.Graphics.UI.Containers
                     FontSize = 20,
                     Position = new Vector2(50, 0)
                 },
-                confirmButton = new ConfirmButton{
+                confirmButton = new ConfirmButton
+                {
                     Width = 80,
                     Height = 20,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
-                    Position = new Vector2(0,-5),
+                    Position = new Vector2(0, -5),
                 }
             ];
             confirmButton.Enabled.Value = true;
@@ -54,13 +54,13 @@ namespace Transfer.Game.Graphics.UI.Containers
             transferTextBox.OnCommit += textBoxCommit;
         }
 
-
         [BackgroundDependencyLoader]
         private void load(TextureStore textureStore)
         {
             Texture lightning = textureStore.Get("Lightning");
-            if(lightning == null) Logger.Log("Lightning is null");
-            AddInternal(lightningSprite = new Sprite{
+            if (lightning == null) Logger.Log("Lightning is null");
+            AddInternal(lightningSprite = new Sprite
+            {
                 Texture = lightning,
                 Anchor = Anchor.CentreLeft,
                 Origin = Anchor.CentreLeft,
@@ -68,7 +68,6 @@ namespace Transfer.Game.Graphics.UI.Containers
                 Height = 50
             });
         }
-
 
         private void onFinishEdition()
         {
@@ -78,15 +77,13 @@ namespace Transfer.Game.Graphics.UI.Containers
 
         private void textBoxCommit(TextBox sender, bool newText)
         {
-            if(newText) speedUpSlider.Current.Value = Convert.ToDouble(sender.Text, CultureInfo.InvariantCulture);
+            if (newText) speedUpSlider.Current.Value = Convert.ToDouble(sender.Text, CultureInfo.InvariantCulture);
         }
-
 
         private void speedUpValueChanged(ValueChangedEvent<double> e)
         {
             SpeedUpValue.Value = e.NewValue;
             transferTextBox.Text = Math.Round(e.NewValue, 2).ToString(CultureInfo.InvariantCulture);
         }
-
     }
 }

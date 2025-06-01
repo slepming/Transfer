@@ -17,7 +17,7 @@ public partial class TestPlaylist : TransferTestScene
     [Resolved]
     private ResourceStore<byte[]> resources { get; set; }
 
-    private PlaylistWindow playlistWindow;
+    private PlaylistMenu playlistMenu;
 
     private string currentFileName;
     private readonly string standartPath = Path.Combine(Path.GetTempPath(), "TestVideo");
@@ -25,7 +25,7 @@ public partial class TestPlaylist : TransferTestScene
     [BackgroundDependencyLoader]
     private void load()
     {
-        playlistWindow = new PlaylistWindow(playlist)
+        playlistMenu = new PlaylistMenu(playlist)
         {
             Title = "TestPlaylist",
         };
@@ -36,7 +36,7 @@ public partial class TestPlaylist : TransferTestScene
     {
         AddStep("Initialization window", () =>
         {
-            Add(playlistWindow);
+            Add(playlistMenu);
         });
     }
 
@@ -64,12 +64,12 @@ public partial class TestPlaylist : TransferTestScene
     {
         AddStep("Open or close playlist list window (auto)", () =>
         {
-            if (playlistWindow.Visible)
-                playlistWindow.Hide();
+            if (playlistMenu.Visible)
+                playlistMenu.Hide();
             else
-                playlistWindow.Show();
+                playlistMenu.Show();
         });
-        AddStep("Open playlist list window", () => playlistWindow.Show());
-        AddStep("Close playlist list window", () => playlistWindow.Hide());
+        AddStep("Open playlist list window", () => playlistMenu.Show());
+        AddStep("Close playlist list window", () => playlistMenu.Hide());
     }
 }

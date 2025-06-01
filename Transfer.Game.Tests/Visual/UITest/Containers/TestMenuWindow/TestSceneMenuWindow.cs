@@ -2,17 +2,17 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using Transfer.Game.Graphics.UI.Containers.Windows;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 namespace Transfer.Game.Tests.Visual.UITest.Containers.TestMenuWindow;
 
 public partial class TestSceneMenuWindow : TransferTestScene
 {
-    private MenuWindow testMenuWindow;
+    private TransferDialog testTransferDialog;
 
     public TestSceneMenuWindow()
     {
-        Add(testMenuWindow = new TestMenuWindow());
+        Add(testTransferDialog = new TestTransferDialog());
     }
 
     [BackgroundDependencyLoader]
@@ -20,16 +20,16 @@ public partial class TestSceneMenuWindow : TransferTestScene
     {
         AddStep("Change visible menu", () =>
         {
-            if (testMenuWindow.Visible)
-                testMenuWindow.Hide();
+            if (testTransferDialog.Visible)
+                testTransferDialog.Hide();
             else
-                testMenuWindow.Show();
+                testTransferDialog.Show();
         });
     }
 
-    internal partial class TestMenuWindow : MenuWindow
+    internal partial class TestTransferDialog : TransferDialog
     {
-        public TestMenuWindow()
+        public TestTransferDialog()
         {
             HeaderName = "TestMenuWindow";
             WindowContent.Add(new Container

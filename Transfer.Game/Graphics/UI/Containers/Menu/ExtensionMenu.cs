@@ -7,8 +7,8 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Extensions;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
-using Transfer.Game.Graphics.UI.Containers.Windows;
 using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
@@ -18,7 +18,7 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
     private StringButton playlistButton, openPlaylistButton;
 
     private Container hub;
-    private MenuWindow playlistContainer, openPlaylistWindow;
+    private TransferDialog playlistContainer, openPlaylistWindow;
 
     private readonly ICanUpdateVideo updateVideo;
 
@@ -133,25 +133,25 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
     [BackgroundDependencyLoader]
     private void load(PlaylistStorage playlistStorage)
     {
-        playlistContainer = new PlaylistWindow(playlistStorage)
+        playlistContainer = new PlaylistMenu(playlistStorage)
         {
             Title = "Playlist Menu",
             SelectedFileAction = selectedFileAction
         };
-        openPlaylistWindow = new OpenPlaylistWindow
+        openPlaylistWindow = new OpenPlaylistMenu
         {
             RelativeSizeAxes = Axes.Both,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
             Title = "Open Playlist",
         };
-        ((OpenPlaylistWindow)openPlaylistWindow).Playlist.ValueChanged += setPlaylist;
-        AddRange(new List<MenuWindow> { playlistContainer, openPlaylistWindow });
+        ((OpenPlaylistMenu)openPlaylistWindow).Playlist.ValueChanged += setPlaylist;
+        AddRange(new List<TransferDialog> { playlistContainer, openPlaylistWindow });
     }
 
     private void setPlaylist(ValueChangedEvent<PlaylistStorage> playlistStorage)
     {
-        playlistContainer = new PlaylistWindow(playlistStorage.NewValue)
+        playlistContainer = new PlaylistMenu(playlistStorage.NewValue)
         {
             Title = "Playlist Menu",
             SelectedFileAction = selectedFileAction

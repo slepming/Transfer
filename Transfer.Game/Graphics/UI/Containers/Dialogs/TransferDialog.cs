@@ -6,12 +6,12 @@ using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
 
-namespace Transfer.Game.Graphics.UI.Containers.Windows;
+namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 /// <summary>
 /// This class creates a window according to the developer's requirements.
 /// </summary>
-public abstract partial class MenuWindow : TransferFocusedOverlayContainer
+public abstract partial class TransferDialog : TransferFocusedOverlayContainer
 {
     private Box background;
 
@@ -32,7 +32,7 @@ public abstract partial class MenuWindow : TransferFocusedOverlayContainer
 
     protected LocalisableString HeaderName;
 
-    protected MenuWindow()
+    protected TransferDialog()
     {
         RelativeSizeAxes = Axes.Both;
         Size = new Vector2(1 / 1.2f, 1 / 1.5f);

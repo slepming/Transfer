@@ -18,7 +18,7 @@ using osuTK;
 using Transfer.Game.Audio;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
-using Transfer.Game.Graphics.UI.Containers.Windows;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 
@@ -56,7 +56,7 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
 
     private int allowableExceptions;
 
-    private AssemblyInfoWindow assemblyInfoWindow;
+    private AssemblyInfoDialog assemblyInfoDialog;
 
     protected TransferGameBase()
     {
@@ -108,7 +108,7 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
                     {
                         RelativeSizeAxes = Axes.Both
                     },
-                    assemblyInfoWindow = new AssemblyInfoWindow()
+                    assemblyInfoDialog = new AssemblyInfoDialog()
                 ]
             })
         });
@@ -175,7 +175,7 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
         switch (e.Action)
         {
             case GlobalAction.OpenAssemblyVersion:
-                assemblyInfoWindow.Show();
+                assemblyInfoDialog.Show();
                 return true;
         }
 

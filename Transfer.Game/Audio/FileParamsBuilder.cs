@@ -43,12 +43,6 @@ public class FileParamsBuilder : IFileParamsBuilder
         return this;
     }
 
-    public IFileParamsBuilder SetExtension(string extension)
-    {
-        fileParams.FileExtension = extension;
-        return this;
-    }
-
     public FileParams Build()
     {
         return fileParams;

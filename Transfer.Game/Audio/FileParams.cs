@@ -37,13 +37,25 @@ public class FileParams
         }
         set
         {
-            if (audioFileName == value) return;
+            if (audioFileName != null && audioFileName == value) return;
 
             audioFileName = value;
         }
     }
 
-    public string FileExtension { get; set; }
+    public string FileExtension => initializeExtension(AudioCodec);
+
+    private string initializeExtension(AudioCodecs audioCodec)
+    {
+        switch (audioCodec)
+        {
+            case AudioCodecs.aac: return @".aac";
+
+            case AudioCodecs.libmp3lame: return @".mp3";
+
+            default: return @".aac";
+        }
+    }
 
     public override string ToString()
     {

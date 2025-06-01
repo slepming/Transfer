@@ -1,8 +1,8 @@
-using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
@@ -38,7 +38,7 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopLeft,
                         Text = "Options",
-                        Position = new Vector2(40, Y),
+                        Position = new Vector2(40, 0),
                         Font = new FontUsage(TransferFonts.FiraCodeNerdFontLight, size: 50, fixedWidth: true)
                     },
                     appSettings = new FillFlowContainer
@@ -46,35 +46,40 @@ public partial class ConfigurationContainer : TransferFocusedOverlayContainer
                         RelativeSizeAxes = Axes.X,
                         AutoSizeAxes = Axes.Y,
                         Anchor = Anchor.Centre,
-                        Origin = Anchor.TopLeft,
+                        Origin = Anchor.BottomLeft,
                         Direction = FillDirection.Vertical,
-                        Position = new Vector2(X, Y + 5),
-                        Spacing = new Vector2(0, 20),
-                        Children =
-                        [
-                            new SpriteText
-                            {
-                                Text = TransferOptions.AudioBitrate.ToString()
-                            }
-                        ]
+                        Margin = new MarginPadding() { Vertical = 50 },
+                        Spacing = new Vector2(0, 10),
                     }
                 ]
             }
         ];
 
-        foreach (var option in Enum.GetValues(typeof(TransferOptions)))
+        var configuration = transferConfigManager.GetCurrentConfiguration();
+
+        foreach (var option in configuration)
         {
-            var configurationValue = transferConfigManager.Get<string>((TransferOptions)option);
+            Logger.Log($"Option {option.Key} Value {option.Value}");
             appSettings.Add(new Container
             {
                 AutoSizeAxes = Axes.Y,
                 Children =
                 [
-                    new SpriteText
+                    new FillFlowContainer()
                     {
-                        Text = option.ToString(),
-                        Position = new Vector2(40, 0),
-                        Font = new FontUsage(TransferFonts.FiraCodeNerdFontLight, size: 30)
+                        RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
+                        Direction = FillDirection.Vertical,
+                        Spacing = new Vector2(0, 10),
+                        Children =
+                        [
+                            new SpriteText
+                            {
+                                Text = option.Key.ToString(),
+                                Position = new Vector2(40, 0),
+                                Font = new FontUsage(TransferFonts.FiraCodeNerdFontLight, size: 30)
+                            },
+                        ]
                     }
                 ]
             });

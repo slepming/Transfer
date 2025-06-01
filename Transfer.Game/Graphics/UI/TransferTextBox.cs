@@ -38,7 +38,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
     /// <summary>
     /// Restricted chars
     /// </summary>
-    public bool OnlyNumbers { get; set; } = false;
+    public virtual bool OnlyNumbers => false;
 
     public string Font { get; set; } = TransferFonts.Oswald;
 

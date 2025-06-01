@@ -20,7 +20,7 @@ public class AudioExtract<T> : IAudioExtract<T>
 {
     private readonly TransferConfigManager transferConfigManager;
 
-    private static readonly string tempFolder = Path.Combine(Path.GetTempPath(), "Transfer");
+    private string tempFolder => Path.Combine(Path.GetTempPath(), "Transfer");
     private readonly Storage tempStorage;
 
     public AudioExtract(TransferConfigManager transferConfigManager)
@@ -59,7 +59,7 @@ public class AudioExtract<T> : IAudioExtract<T>
 
         try
         {
-            string pathToFile = await convertFileAsync(path, "mp3", storage.GetFullPath(""));
+            string pathToFile = await convertFileAsync(path);
             Logger.Log($"Path to file: {pathToFile}\n output path: {storage.GetFullPath("")}");
             await saveFileToStorageAsync(pathToFile, storage, outputName);
             File.Delete(pathToFile);
@@ -101,7 +101,7 @@ public class AudioExtract<T> : IAudioExtract<T>
 
         try
         {
-            string pathToAudio = await convertFileAsync(Path.GetFileNameWithoutExtension(path), "mp3");
+            string pathToAudio = await convertFileAsync(Path.GetFileNameWithoutExtension(path));
             await saveFileToStorageAsync(pathToAudio, storage, audioName);
             await saveFileToStorageAsync(pathToAudio, storage, videoName);
             File.Delete(pathToAudio);
@@ -128,18 +128,17 @@ public class AudioExtract<T> : IAudioExtract<T>
         return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
     }
 
-    private async Task<string> convertFileAsync(string path, string extension, string outputPath = null, string arguments = null)
+    private async Task<string> convertFileAsync(string path, string outputPath = null, string arguments = null)
     {
-        outputPath ??= Path.Combine(Path.GetTempPath());
+        outputPath ??= tempFolder;
 
         string pathToFile = await ConversionBase.Conversion<AudioExtractModel>(path,
             transferConfigManager,
             new FileParamsBuilder()
                 .SetPath(outputPath)
                 .SetBitrate(transferConfigManager.Get<int>(TransferOptions.AudioBitrate))
-                .SetAudioCodec(AudioCodecs.libmp3lame)
-                .SetFileName(Path.GetFileNameWithoutExtension(path))
-                .SetExtension(extension), arguments);
+                .SetAudioCodec(transferConfigManager.Get<AudioCodecs>(TransferOptions.AudioCodec))
+                .SetFileName(Path.GetFileNameWithoutExtension(path)), arguments);
 
         return pathToFile;
     }

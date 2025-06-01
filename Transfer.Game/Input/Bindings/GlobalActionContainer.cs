@@ -10,7 +10,7 @@ namespace Transfer.Game.Input.Bindings
 {
     public partial class GlobalActionContainer : KeyBindingContainer<GlobalAction>, IHandleGlobalKeyboardInput, IKeyBindingHandler<GlobalAction>
     {
-        private IKeyBindingHandler<GlobalAction>? handler;
+        private readonly IKeyBindingHandler<GlobalAction>? handler;
 
         public GlobalActionContainer(TransferGameBase? game)
             : base(matchingMode: KeyCombinationMatchingMode.Modifiers)
@@ -56,7 +56,7 @@ namespace Transfer.Game.Input.Bindings
             new KeyBinding(InputKey.F5, GlobalAction.TakeScreenshot),
             new KeyBinding(new[] { InputKey.Control, InputKey.M }, GlobalAction.ExtensionMenu),
             new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.C }, GlobalAction.CreatePlaylist),
-            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.O }, GlobalAction.OpenPlaylist),
+            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.O }, GlobalAction.OpenPlaylistMenu),
             new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.A }, GlobalAction.OpenAssemblyVersion)
         ];
 
@@ -66,7 +66,8 @@ namespace Transfer.Game.Input.Bindings
             new KeyBinding(InputKey.Space, GlobalAction.PauseVideo),
             new KeyBinding(new[] { InputKey.Shift, InputKey.R }, GlobalAction.MoveToInternalExplorer),
             new KeyBinding(InputKey.F5, GlobalAction.WatchingVideoReset),
-            new KeyBinding(new[] { InputKey.Control, InputKey.S }, GlobalAction.SaveToPlaylist)
+            new KeyBinding(new[] { InputKey.Control, InputKey.S }, GlobalAction.SaveToPlaylist),
+            new KeyBinding(InputKey.Space, GlobalAction.KeyShortSpeedVideo)
         ];
 
         private static IEnumerable<KeyBinding> videoEditorBindings =>
@@ -91,9 +92,10 @@ namespace Transfer.Game.Input.Bindings
         PauseVideo,
         MoveToInternalExplorer,
         ExtensionMenu,
-        OpenPlaylist,
+        OpenPlaylistMenu,
         SaveToPlaylist,
-        CreatePlaylist
+        CreatePlaylist,
+        KeyShortSpeedVideo,
     }
 
     public enum GlobalActionCategory
