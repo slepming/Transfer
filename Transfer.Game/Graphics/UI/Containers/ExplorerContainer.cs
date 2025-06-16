@@ -61,6 +61,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         RelativeSizeAxes = Axes.X,
+                        Size = new Vector2(0.25f, 0),
                         AutoSizeAxes = Axes.Y,
                         Spacing = new Vector2(15, 15),
                     }

@@ -10,6 +10,7 @@ using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.Audio;
 using Transfer.Game.Audio.ConversionModels;
+using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 
@@ -39,13 +40,16 @@ public class AudioExtract<T> : IAudioExtract<T>
             throw new Exception($"{path} does not exist - conversion canceled");
         }
 
+        if (!AudioExtractCoreExtension.ItContainsAudio(path))
+            return null;
+
         if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
 
         outputName ??= getHashName(path, "mp3");
         Logger.Log($"The final output file name '{outputName}'", level: LogLevel.Debug);
         var resourceStore = new StorageBackedResourceStore(storage);
 
-        if (storage.Exists(outputName))
+        if (storage.Exists(outputName) && AudioExtractCoreExtension.Analyse(storage.GetFullPath(outputName)).Duration == AudioExtractCoreExtension.Analyse(path).Duration)
         {
             Logger.Log("File existed in local storage, move to getTrackFromStorage", level: LogLevel.Debug);
             return getTrackFromStorage(audioManager, resourceStore, outputName);

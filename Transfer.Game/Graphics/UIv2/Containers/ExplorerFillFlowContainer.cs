@@ -30,13 +30,15 @@ public partial class ExplorerFillFlowContainer : SearchContainer
         updateContainer(currentPath);
     }
 
-    private string updateContainer(string path)
+    private bool updateContainer(string path)
     {
-        if (!Directory.Exists(path)) return path;
+        if (!Directory.Exists(path)) return true;
 
         currentPath = path;
 
-        IEnumerable<ExplorerButton> buttons = createRenderObjectsFromAllowedExtensions<ExplorerButton>(Directory.GetFiles(path).Concat(Directory.GetDirectories(path)), TransferGameBase.VIDEO_EXTENSIONS.ToList());
+        IEnumerable<ExplorerButton> buttons = createRenderObjectsFromAllowedExtensions<ExplorerButton>(Directory.GetFiles(path)
+                                                                                                                .Concat(Directory.GetDirectories(path)), TransferGameBase.VIDEO_EXTENSIONS.ToList())
+            .OrderByDescending(button => Directory.Exists(Path.GetFullPath(button.Text.ToString())));
         Clear();
 
         foreach (ExplorerButton button in buttons)
@@ -45,12 +47,12 @@ public partial class ExplorerFillFlowContainer : SearchContainer
             Add(button);
         }
 
-        return null;
+        return false;
     }
 
     private void onButtonAction(string path)
     {
-        if (updateContainer(path) != null) Action?.Invoke(path);
+        if (updateContainer(path)) Action?.Invoke(path);
     }
 
     private IEnumerable<T> createRenderObjectsFromAllowedExtensions<T>(IEnumerable<string> array, List<string> fileAllowedExtensions) where T : IHasText, new()

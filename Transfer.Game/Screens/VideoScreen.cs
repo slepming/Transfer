@@ -163,9 +163,10 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                 else
                     extensionMenu.Hide();
                 return true;
-        }
 
-        return false;
+            default:
+                return false;
+        }
     }
 
     /// <summary>

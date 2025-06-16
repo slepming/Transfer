@@ -2,6 +2,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
@@ -25,7 +26,8 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
         RelativeSizeAxes = Axes.Both,
         Size = new Vector2(1 / 1.1f, 1 / 1.2f),
         Anchor = Anchor.Centre,
-        Origin = Anchor.Centre
+        Origin = Anchor.Centre,
+        Padding = new MarginPadding() { Top = 40 },
     };
 
     protected HeaderContainer PrefixBox;
@@ -74,6 +76,11 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
         }
 
         base.Hide();
+    }
+
+    protected override void OnDrag(DragEvent e)
+    {
+        Position = e.ScreenSpaceMousePosition;
     }
 
     protected override void PopIn()

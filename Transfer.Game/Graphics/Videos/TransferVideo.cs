@@ -6,18 +6,16 @@ using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics.Video;
-using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
-using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.Videos;
 
-public partial class TransferVideo(string path, bool enableRate = false, bool startAtCurrentTime = true) : Video(path, startAtCurrentTime), IKeyBindingHandler<GlobalAction>, IVideoController
+public partial class TransferVideo(string path, bool enableRate = false, bool startAtCurrentTime = true) : Video(path, startAtCurrentTime), IVideoController
 {
     /// <summary>
     /// You can do animations when it occurs
@@ -138,7 +136,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         IsPlaying = true;
     }
 
-    public void Pause()
+    public bool Pause()
     {
         Logger.Log("Video has been paused!", level: LogLevel.Debug);
 
@@ -146,7 +144,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         {
             Audio?.Restart();
             Seek(0);
-            return;
+            return true;
         }
 
         if (isMuted)
@@ -162,59 +160,26 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
         isMuted = !isMuted;
         IsPaused = !IsPaused;
+        return true;
     }
 
-    public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+    public bool RestartAudio()
     {
-        if (e.Repeat)
-            return false;
+        if (Audio != null) Audio.RestartPoint = PlaybackPosition;
+        Audio?.Restart();
+        return true;
+    }
 
-        switch (e.Action)
+    public bool Reset()
+    {
+        lock (this)
         {
-            case GlobalAction.PauseVideo:
-            {
-                Pause();
-                return true;
-            }
-
-            case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
-            {
-                if (Audio != null) Audio.RestartPoint = PlaybackPosition;
-                Audio?.Restart();
-                return true;
-            }
-
-            case GlobalAction.WatchingVideoReset:
-            {
-                lock (this)
-                {
-                    if (Audio != null) Audio.RestartPoint = 0;
-                    Audio?.Restart();
-                    Seek(0);
-                }
-
-                return true;
-            }
-
-            default:
-                return false;
+            if (Audio != null) Audio.RestartPoint = 0;
+            Audio?.Restart();
+            Seek(0);
         }
-    }
 
-    public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
-    {
-        // switch (e.Action)
-        // {
-        //     case GlobalAction.KeyShortSpeedVideo:
-        //     {
-        //         if (bindableRate.Value != 1)
-        //         {
-        //             Rate(1);
-        //         }
-        //
-        //         break;
-        //     }
-        // }
+        return true;
     }
 
     #region audio

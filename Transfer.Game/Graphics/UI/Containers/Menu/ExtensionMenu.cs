@@ -17,7 +17,7 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
 {
     private StringButton playlistButton, openPlaylistButton;
 
-    private Container hub;
+    private TransferContainer innerHub, menuHub;
     private TransferDialog playlistContainer, openPlaylistWindow;
 
     private readonly ICanUpdateVideo updateVideo;
@@ -32,7 +32,7 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
         RelativeSizeAxes = Axes.Both;
         InternalChildren =
         [
-            new Container()
+            menuHub = new TransferContainer()
             {
                 RelativeSizeAxes = Axes.Both,
                 Size = new Vector2(0.25f, 1),
@@ -48,7 +48,7 @@ public partial class ExtensionMenu : TransferFocusedOverlayContainer
                         RelativeSizeAxes = Axes.Both,
                         Alpha = 1
                     },
-                    hub = new Container
+                    innerHub = new TransferContainer
                     {
                         RelativeSizeAxes = Axes.Both,
                         Children =

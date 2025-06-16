@@ -20,10 +20,9 @@ public partial class ExplorerButton : ClickableContainer, IHasText
     {
         Anchor = Anchor.Centre;
         Origin = Anchor.Centre;
+        BorderColour = Colour4.White;
+        BorderThickness = 1.5f;
         Masking = true;
-        BorderColour = Colour4.White.Opacity(0.5f);
-        BorderThickness = 2;
-        CornerRadius = 2;
         Width = 200;
         Height = 50;
     }
@@ -38,14 +37,25 @@ public partial class ExplorerButton : ClickableContainer, IHasText
                 RelativeSizeAxes = Axes.Both,
                 Colour = Colour4.Black.Opacity(0.3f),
             },
-            new TextFlowContainer()
+            new SpriteText()
             {
-                Text = Path.GetFileNameWithoutExtension(Text.ToString()),
+                Text = getTreeText(Text),
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both
             },
         ];
+    }
+
+    private string getTreeText(LocalisableString text)
+    {
+        if (string.IsNullOrEmpty(Path.GetFileNameWithoutExtension(text.ToString()))) return "";
+
+        string normalizedPath = Path.GetFullPath(text.ToString());
+
+        string[] parts = normalizedPath.Split(Path.DirectorySeparatorChar);
+
+        return new string(' ', parts.Length - 2) + Path.GetFileNameWithoutExtension(normalizedPath);
     }
 
     protected override bool OnClick(ClickEvent e)

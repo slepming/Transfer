@@ -13,9 +13,9 @@ namespace Transfer.Game.Graphics.UI.Containers
 {
     public partial class EditToolsContainer : TransferContainer
     {
-        private SpeedUpSlider speedUpSlider;
-        private TransferTextBox transferTextBox;
-        private ConfirmButton confirmButton;
+        private readonly SpeedUpSlider speedUpSlider;
+        private readonly TransferTextBox transferTextBox;
+        private readonly ConfirmButton confirmButton;
         private Sprite lightningSprite;
 
         public Action ConfirmAction;

@@ -4,7 +4,7 @@ namespace Transfer.Game.Graphics.Videos;
 
 public interface IVideoController
 {
-    void Pause();
+    bool Pause();
     void Rate(float rate);
     double GetMaxLengthVideo();
     void SpySeek(double time);

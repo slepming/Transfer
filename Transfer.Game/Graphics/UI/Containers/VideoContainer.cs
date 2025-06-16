@@ -180,9 +180,9 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
         video.Rate(rate);
     }
 
-    public void Pause()
+    public bool Pause()
     {
-        video.Pause();
+        return video.Pause();
     }
 
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
@@ -190,7 +190,26 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
         if (e.Repeat)
             return false;
 
-        return true;
+        switch (e.Action)
+        {
+            case GlobalAction.PauseVideo:
+            {
+                return Pause();
+            }
+
+            case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
+            {
+                return video.RestartAudio();
+            }
+
+            case GlobalAction.WatchingVideoReset:
+            {
+                return video.Reset();
+            }
+
+            default:
+                return false;
+        }
     }
 
     public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
