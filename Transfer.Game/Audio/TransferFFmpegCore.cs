@@ -27,7 +27,7 @@ public abstract class TransferFFmpegCore
         string outputPath = fileParams?.OutputPath ?? Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video));
         outputPath = Path.Combine(outputPath, fileParams.AudioFileName);
         CONVERSION_STATUS.Value = "Checking output path";
-        CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {fileParams?.ToString() ?? "null"}";
+        CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: [{fileParams?.ToString() ?? " "}]";
 
         string arguments = customArguments?.Length > 0 ? string.Join(" ", customArguments) : "";
 
@@ -64,7 +64,7 @@ public abstract class TransferFFmpegCore
             DateTime endTime = DateTime.Now;
             CONVERSION_STATUS.Value = "Conversion completed";
             var fileSize = new FileInfo(outputPath).Length;
-            Logger.Log($"Conversion completed successfully. Output: {outputPath}, Time: {endTime - startTime}; File size: {fileSize}");
+            Logger.Log($"Conversion completed successfully. Output: {outputPath}, Time for creating: {endTime - startTime}; File size: {fileSize}");
 
             if (!File.Exists(outputPath) || fileSize == 0)
             {

@@ -1,7 +1,8 @@
 using osu.Framework.Allocation;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
+using Transfer.Game.Tests.Visual;
 
-namespace Transfer.Game.Tests.Visual.UITest.Containers.TestMenuWindow;
+namespace Transfer.Game.Tests.UI.Containers.TestMenuWindow;
 
 public partial class TestSceneQuestionWindow : TransferTestScene
 {

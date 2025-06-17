@@ -1,6 +1,7 @@
 using Transfer.Game.Graphics.UI.Containers.Menu;
+using Transfer.Game.Tests.Visual;
 
-namespace Transfer.Game.Tests.Visual.UITest;
+namespace Transfer.Game.Tests.UI;
 
 public partial class TestSceneExtensionMenu : TransferTestScene
 {
