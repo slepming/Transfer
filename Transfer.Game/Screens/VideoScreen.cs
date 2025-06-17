@@ -42,6 +42,8 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     protected IAudioExtract<Track> AudioExtract { get; set; }
 
+    private LoadingOverlay loadingOverlay = new LoadingOverlay() { Header = "Loading..." };
+
     private int seek;
 
     private string videoPath { get; set; }
@@ -116,14 +118,10 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     {
         try
         {
-            LoadingOverlay loading;
             ClearInternal();
-            AddInternal(loading = new LoadingOverlay()
-            {
-                Header = "Uploading a video"
-            });
+            loadingOverlay.Show();
             var track = await AudioExtract.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
-            loading.Expire();
+            loadingOverlay.Hide();
 
             this.Push(new VideoScreen(track, path));
         }

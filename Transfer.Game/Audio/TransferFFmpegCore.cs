@@ -25,7 +25,7 @@ public abstract class TransferFFmpegCore
     protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, [NotNull] FileParams fileParams, params string[] customArguments)
     {
         string outputPath = fileParams?.OutputPath ?? Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video));
-        outputPath = Path.Combine(outputPath, fileParams.AudioFileName + fileParams.FileExtension);
+        outputPath = Path.Combine(outputPath, fileParams.AudioFileName);
         CONVERSION_STATUS.Value = "Checking output path";
         CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: {fileParams?.ToString() ?? "null"}";
 

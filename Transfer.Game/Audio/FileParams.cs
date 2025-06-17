@@ -1,5 +1,8 @@
 using System;
+using System.IO;
+using osu.Framework.Graphics.Lines;
 using Transfer.Game.Configuration;
+using Path = System.IO.Path;
 
 namespace Transfer.Game.Audio;
 
@@ -39,7 +42,7 @@ public class FileParams
         {
             if (audioFileName != null && audioFileName == value) return;
 
-            audioFileName = value;
+            audioFileName = Path.GetFileNameWithoutExtension(value);
         }
     }
 
@@ -59,6 +62,6 @@ public class FileParams
 
     public override string ToString()
     {
-        return $"Rate: {Rate}, Bitrate: {Bitrate}, OutputPath: {OutputPath}, AudioCodec: {AudioCodec}";
+        return $"Rate: {Rate}, Bitrate: {Bitrate}, OutputPath: {OutputPath}, AudioCodec: {AudioCodec}, File name: {audioFileName}, File extension: {FileExtension}";
     }
 }

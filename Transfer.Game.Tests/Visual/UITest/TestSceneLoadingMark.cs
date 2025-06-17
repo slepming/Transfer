@@ -4,9 +4,12 @@ namespace Transfer.Game.Tests.Visual.UITest
 {
     public partial class TestSceneLoadingMark : TransferTestScene
     {
+        private LoadingOverlay loadingOverlay;
+
         public TestSceneLoadingMark()
         {
-            Add(new LoadingOverlay());
+            Add(loadingOverlay = new LoadingOverlay());
+            loadingOverlay.Show();
         }
     }
 }
