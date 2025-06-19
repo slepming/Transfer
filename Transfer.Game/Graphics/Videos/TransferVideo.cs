@@ -59,7 +59,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager, AudioManager audioManager)
     {
-        Logger.Log($"\ud83d\udcc2 Open output folder {tempStorage.GetFullPath("")}");
+        Logger.Log($"\ud83d\udcc2 Open output folder {tempStorage.GetFullPath("")}", level: LogLevel.Debug);
         this.audioManager = audioManager;
         audioExtract = new AudioExtract<Track>(transferConfigManager);
         this.transferConfigManager = transferConfigManager;
@@ -79,7 +79,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         {
             if (AudioExtractCoreExtension.ItContainsAudio(path))
             {
-                Logger.Log("\ud83c\udfa7 Video have audio");
+                Logger.Log("\ud83c\udfa7 Video have audio", level: LogLevel.Debug);
                 Audio = await getAudio(tempStorage);
                 if (Audio == null) throw new Exception("Audio extraction failed");
             }

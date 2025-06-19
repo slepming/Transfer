@@ -53,7 +53,10 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
         });
         AddStep("Adding container on screen.", () =>
         {
-            videoContainer = new VideoContainer(tempFilePath);
+            videoContainer = new VideoContainer(tempFilePath)
+            {
+                RelativeSizeAxes = Axes.Both,
+            };
             Add(new WatchingToolsContainer()
             {
                 RelativeSizeAxes = Axes.Both,

@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -11,7 +12,7 @@ using Transfer.Game.Graphics.UI.Containers.Menu;
 
 namespace Transfer.Game.Graphics.UI.Containers.Overlays;
 
-public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
+public partial class WatchingToolsContainer : Container
 {
     public VolumeContainer VolumeContainer;
     public VideoPlaybackContainer PlaybackContainer;
@@ -31,8 +32,6 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
     private SpriteButton repeatButton, settingsButton;
 
     private ExtensionMenu extensionMenu = new ExtensionMenu();
-
-    protected override bool StartHidden => false;
 
     [Resolved]
     private TransferConfigManager configManager { get; set; }
@@ -56,6 +55,8 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
     protected override void LoadComplete()
     {
         base.LoadComplete();
+        if (Video is null) throw new Exception("Video is null");
+
         InternalChildren =
         [
             background = new Box
@@ -67,7 +68,7 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
             videoBox = new Container
             {
                 RelativeSizeAxes = Axes.Both,
-                Child = Video,
+                Child = Video, // where are u
                 Depth = 2,
             },
             toolsBox = new Container
@@ -236,13 +237,5 @@ public partial class WatchingToolsContainer : TransferFocusedOverlayContainer
     {
         PlaybackContainer.SetMaxSliderValue(value);
         duration = (long)value;
-    }
-
-    protected override void PopIn()
-    {
-    }
-
-    protected override void PopOut()
-    {
     }
 }
