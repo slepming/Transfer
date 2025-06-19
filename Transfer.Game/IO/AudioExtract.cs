@@ -64,7 +64,7 @@ public class AudioExtract<T> : IAudioExtract<T>
         try
         {
             string pathToFile = await convertFileAsync(path);
-            Logger.Log($"Path to file: {pathToFile}\n output path: {storage.GetFullPath("")}");
+            Logger.Log($"Path to file: {pathToFile}\n Output path: {storage.GetFullPath("")}");
             await saveFileToStorageAsync(pathToFile, storage, outputName);
             File.Delete(pathToFile);
 
