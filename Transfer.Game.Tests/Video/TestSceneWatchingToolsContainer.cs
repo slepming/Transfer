@@ -51,10 +51,14 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
             tempFilePath = Path.Combine(Path.GetTempPath(), "test_video.mp4");
             File.WriteAllBytes(tempFilePath, videoInByteArray);
         });
-        AddStep("Adding container on screen.", () => Add(new WatchingToolsContainer()
+        AddStep("Adding container on screen.", () =>
         {
-            RelativeSizeAxes = Axes.Both,
-            Video = videoContainer
-        }));
+            videoContainer = new VideoContainer(tempFilePath);
+            Add(new WatchingToolsContainer()
+            {
+                RelativeSizeAxes = Axes.Both,
+                Video = videoContainer
+            });
+        });
     }
 }
