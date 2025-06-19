@@ -26,8 +26,7 @@ public abstract class TransferFFmpegCore
     {
         string outputPath = fileParams?.OutputPath ?? Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video));
         outputPath = Path.Combine(outputPath, fileParams.AudioFileName);
-        CONVERSION_STATUS.Value = "Checking output path";
-        CONVERSION_STATUS.Value = $"Start of conversion. Input: {video}, Output: {outputPath}, Arguments: [{fileParams?.ToString() ?? " "}]";
+        CONVERSION_STATUS.Value = $"Handle data. Input: {video}, Output: {outputPath}, Arguments: [{fileParams?.ToString() ?? " "}]";
 
         string arguments = customArguments?.Length > 0 ? string.Join(" ", customArguments) : "";
 
@@ -45,8 +44,7 @@ public abstract class TransferFFmpegCore
 
         try
         {
-            CONVERSION_STATUS.Value = "Start conversion";
-            Logger.Log($"Conversion started at {outputPath}");
+            CONVERSION_STATUS.Value = $"Conversion started at {outputPath}";
             DateTime startTime = DateTime.Now;
             await FFMpegArguments
                   .FromFileInput(video)

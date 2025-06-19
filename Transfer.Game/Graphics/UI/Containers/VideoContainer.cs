@@ -76,6 +76,8 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     protected override void LoadComplete()
     {
+        base.LoadComplete();
+
         if (video.IsFaulted)
         {
             AddInternal(new ErrorDialog()
@@ -84,11 +86,8 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
                 Message = "Decoder error",
                 RelativeSizeAxes = Axes.Both,
             });
+            return;
         }
-
-        video.Start();
-
-        base.LoadComplete();
     }
 
     protected override bool OnKeyDown(KeyDownEvent e)

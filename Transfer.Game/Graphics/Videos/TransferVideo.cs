@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
@@ -70,12 +71,12 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         if (Audio != null) Audio.Tempo.Value = obj.NewValue;
     }
 
-    protected override async void LoadAsyncComplete()
+    protected override async void LoadComplete()
     {
+        base.LoadComplete();
+
         try
         {
-            base.LoadAsyncComplete();
-
             if (AudioExtractCoreExtension.ItContainsAudio(path))
             {
                 Logger.Log("\ud83c\udfa7 Video have audio");
@@ -100,6 +101,8 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
             Logger.Error(e, "Audio extraction failed. Try-catch error");
             throw;
         }
+
+        Start();
     }
 
     private void onVolumeChanged(ValueChangedEvent<double> e)
@@ -131,7 +134,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
     public void Start()
     {
-        Logger.Log("Video launch", level: LogLevel.Debug);
+        Logger.Log("Video started", level: LogLevel.Debug);
         Audio?.Start();
         IsPlaying = true;
     }
