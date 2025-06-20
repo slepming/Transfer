@@ -24,6 +24,7 @@ namespace Transfer.Game;
 
 public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalAction>, ICanAcceptFile
 {
+    public const int DIALOGS_DEPTH = 3000;
     private Screen transferScreen;
 
     private readonly string[] args = [];
@@ -54,7 +55,16 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
     {
         base.LoadComplete();
 
-        AddRange([assemblyInfoDialog = new AssemblyInfoDialog(), playlistMenu = new PlaylistMenu(historyPlaylistsStorage)]);
+        AddRange([
+            assemblyInfoDialog = new AssemblyInfoDialog()
+            {
+                Depth = DIALOGS_DEPTH
+            },
+            playlistMenu = new PlaylistMenu(historyPlaylistsStorage)
+            {
+                Depth = DIALOGS_DEPTH
+            }
+        ]);
 
         dependencies.CacheAs(playlistMenu);
 

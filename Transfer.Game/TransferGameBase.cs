@@ -44,7 +44,7 @@ public partial class TransferGameBase : osu.Framework.Game
 
     protected SafeAreaContainer SafeAreaContainer;
 
-    private GlobalActionContainer globalBindings;
+    protected GlobalActionContainer GlobalBindings;
 
     private ScreenStack screenStack;
     private TransferConfigManager transferConfigManager;
@@ -94,7 +94,7 @@ public partial class TransferGameBase : osu.Framework.Game
         {
             RelativeSizeAxes = Axes.Both,
             SafeAreaOverrideEdges = Edges.None,
-            Child = CreateScalingContainer().WithChild(globalBindings = new GlobalActionContainer(this)
+            Child = CreateScalingContainer().WithChild(GlobalBindings = new GlobalActionContainer(this)
             {
                 Children =
                 [
@@ -108,7 +108,7 @@ public partial class TransferGameBase : osu.Framework.Game
         });
 
         dependencies.Cache(screenStack);
-        dependencies.Cache(globalBindings);
+        dependencies.Cache(GlobalBindings);
     }
 
     protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();

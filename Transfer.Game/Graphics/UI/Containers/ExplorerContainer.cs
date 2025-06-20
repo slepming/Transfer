@@ -5,12 +5,13 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.Cursor;
+using Transfer.Game.Graphics.UIv2.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class ExplorerContainer : VisibilityContainer
 {
-    private Transfer.Game.Graphics.UIv2.Containers.ExplorerFillFlowContainer explorerFillFlowContainer;
+    private ExplorerFillFlowContainer explorerFillFlowContainer;
 
     public event TransitionEvent FoundVideo;
 

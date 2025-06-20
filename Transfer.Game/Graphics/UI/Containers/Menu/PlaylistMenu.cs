@@ -24,6 +24,7 @@ public partial class PlaylistMenu : TransferDialog
         set
         {
             if (HeaderName == value) return;
+
             HeaderName = value;
         }
     }
