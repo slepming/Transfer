@@ -1,32 +1,25 @@
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.Cursor;
-using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class ExplorerContainer : TransferFocusedOverlayContainer
+public partial class ExplorerContainer : VisibilityContainer
 {
-    protected override bool BlockScrollInput { get; }
-    protected override bool StartHidden { get; }
-    protected override bool BlockPositionalInput { get; }
-
     private Transfer.Game.Graphics.UIv2.Containers.ExplorerFillFlowContainer explorerFillFlowContainer;
 
     public event TransitionEvent FoundVideo;
 
     private TransferTextBox searchTextBox;
 
-    public ExplorerContainer(bool blockScrollInput = true, bool startHidden = true, bool blockPositionalInput = true)
+    public ExplorerContainer()
     {
         Hide();
         Masking = true;
-        BlockScrollInput = blockScrollInput;
-        StartHidden = startHidden;
-        BlockPositionalInput = blockPositionalInput;
         RelativeSizeAxes = Axes.Both;
         Origin = Anchor.Centre;
         Anchor = Anchor.Centre;
@@ -39,7 +32,7 @@ public partial class ExplorerContainer : TransferFocusedOverlayContainer
         [
             new SpacingText
             {
-                Text = "Choice file",
+                Text = "Select file",
                 Anchor = Anchor.TopCentre,
                 Origin = Anchor.TopCentre,
                 Position = new Vector2(0, 9),

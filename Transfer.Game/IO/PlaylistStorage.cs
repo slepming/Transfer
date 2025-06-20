@@ -42,9 +42,7 @@ public class PlaylistStorage : WrappedStorage
     private void saveDataFromPathToLink(string path)
     {
         if (UnderlyingStorage.Exists(Path.GetFileName(path)))
-        {
             UnderlyingStorage.Delete(Path.GetFileName(path));
-        }
 
         string targetLinkPath = Path.Combine(UnderlyingStorage.GetFullPath(""), Path.GetFileName(path));
         string fileForLinkPath = path;

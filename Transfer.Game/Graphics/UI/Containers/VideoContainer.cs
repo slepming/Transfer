@@ -8,19 +8,27 @@ using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
+using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
+using Transfer.Game.IO;
+using Transfer.Game.Playlists;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class VideoContainer : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo
+public partial class VideoContainer : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
 {
     private TransferVideo video;
 
     private readonly LoadingOverlay loadingOverlay = new LoadingOverlay();
 
     private readonly string filename;
+
+    [Resolved]
+    private PlaylistStorage playlistStorage { get; set; }
+
+    private PlaylistMenu playlistMenu;
 
     public double DefaultRate { get; private set; }
 
@@ -49,6 +57,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             Origin = Anchor.Centre,
             Loop = false,
         };
+        SaveFileToPlaylist(filename);
         video.AudioLoading += audioLoading;
         video.SeekOccurs += onSeek;
         Add(video);
@@ -228,5 +237,10 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     {
         video.Expire();
         base.Dispose(isDisposing);
+    }
+
+    public void SaveFileToPlaylist(string pathToFile)
+    {
+        playlistStorage.SaveDataFromPathToLink(pathToFile);
     }
 }

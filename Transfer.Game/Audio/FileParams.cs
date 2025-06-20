@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using osu.Framework.Graphics.Lines;
 using Transfer.Game.Configuration;
 using Path = System.IO.Path;
 

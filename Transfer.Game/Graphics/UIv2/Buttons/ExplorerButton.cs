@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
+using osu.Framework.Logging;
 
 namespace Transfer.Game.Graphics.UIv2.Buttons;
 
@@ -20,8 +21,6 @@ public partial class ExplorerButton : ClickableContainer, IHasText
     {
         Anchor = Anchor.Centre;
         Origin = Anchor.Centre;
-        BorderColour = Colour4.White;
-        BorderThickness = 1.5f;
         Masking = true;
         Width = 200;
         Height = 50;
@@ -49,13 +48,13 @@ public partial class ExplorerButton : ClickableContainer, IHasText
 
     private string getTreeText(LocalisableString text)
     {
-        if (string.IsNullOrEmpty(Path.GetFileNameWithoutExtension(text.ToString()))) return "";
+        if (string.IsNullOrEmpty(Path.GetFileName(text.ToString()))) return "Undefined";
 
         string normalizedPath = Path.GetFullPath(text.ToString());
 
         string[] parts = normalizedPath.Split(Path.DirectorySeparatorChar);
 
-        return new string(' ', parts.Length - 2) + Path.GetFileNameWithoutExtension(normalizedPath);
+        return new string(' ', parts.Length - 2) + Path.GetFileName(normalizedPath);
     }
 
     protected override bool OnClick(ClickEvent e)

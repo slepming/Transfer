@@ -8,8 +8,6 @@ using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Rendering;
-using osu.Framework.Input.Bindings;
-using osu.Framework.Input.Events;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -18,14 +16,13 @@ using osuTK;
 using Transfer.Game.Audio;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.Cursor;
-using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 
 namespace Transfer.Game;
 
 [Cached]
-public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<GlobalAction>
+public partial class TransferGameBase : osu.Framework.Game
 {
     public static readonly string[] VIDEO_EXTENSIONS = [".mp4", ".webm"];
 #if DEBUG
@@ -55,8 +52,6 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
     private DependencyContainer dependencies;
 
     private int allowableExceptions;
-
-    private AssemblyInfoDialog assemblyInfoDialog;
 
     protected TransferGameBase()
     {
@@ -108,7 +103,6 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
                     {
                         RelativeSizeAxes = Axes.Both
                     },
-                    assemblyInfoDialog = new AssemblyInfoDialog()
                 ]
             })
         });
@@ -165,25 +159,6 @@ public partial class TransferGameBase : osu.Framework.Game, IKeyBindingHandler<G
     {
         base.Dispose(isDisposing);
         fontStore.Dispose();
-    }
-
-    public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
-    {
-        if (e.Repeat)
-            return false;
-
-        switch (e.Action)
-        {
-            case GlobalAction.OpenAssemblyVersion:
-                assemblyInfoDialog.Show();
-                return true;
-        }
-
-        return false;
-    }
-
-    public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
-    {
     }
 
     protected override bool OnExiting()

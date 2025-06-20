@@ -56,8 +56,8 @@ namespace Transfer.Game.Input.Bindings
             new KeyBinding(InputKey.F5, GlobalAction.TakeScreenshot),
             new KeyBinding(new[] { InputKey.Control, InputKey.M }, GlobalAction.ExtensionMenu),
             new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.C }, GlobalAction.CreatePlaylist),
-            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.O }, GlobalAction.OpenPlaylistMenu),
-            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.A }, GlobalAction.OpenAssemblyVersion)
+            new KeyBinding(new[] { InputKey.Control, InputKey.Shift, InputKey.A }, GlobalAction.OpenAssemblyVersion),
+            new KeyBinding(new[] { InputKey.Control, InputKey.P }, GlobalAction.OpenPlaylistMenu)
         ];
 
         private static IEnumerable<KeyBinding> watchingBindings =>

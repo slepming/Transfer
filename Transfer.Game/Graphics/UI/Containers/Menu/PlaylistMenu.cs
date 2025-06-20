@@ -16,7 +16,7 @@ namespace Transfer.Game.Graphics.UI.Containers.Menu;
 public partial class PlaylistMenu : TransferDialog
 {
     private TransparentButton close;
-    private FillFlowContainer mainContainer;
+    private readonly FillFlowContainer mainContainer;
 
     public LocalisableString Title
     {
