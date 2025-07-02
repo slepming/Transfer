@@ -5,5 +5,6 @@ namespace Transfer.Game.Graphics.UI;
 
 public interface ICanUpdateVideo
 {
-    void UpdateVideo(string path, [NotNull] TransferVideo video = null);
+    void UpdateVideo(string path);
+    void UpdateVideo([NotNull] TransferVideo video = null);
 }

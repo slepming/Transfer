@@ -6,6 +6,7 @@ using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
+using Vulkan.Xlib;
 
 namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
@@ -85,11 +86,11 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
 
     protected override void PopIn()
     {
-        this.ScaleTo(1, 600, Easing.Out);
+        this.ScaleTo(0, 200, Easing.OutExpo);
     }
 
     protected override void PopOut()
     {
-        this.ScaleTo(0, 200, Easing.OutExpo);
+        this.ScaleTo(1, 600, Easing.Out);
     }
 }

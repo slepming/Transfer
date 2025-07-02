@@ -1,6 +1,5 @@
 #nullable disable
 using System;
-using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -82,12 +81,12 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         {
             Title = "Cache Playlist",
         };
-        AddRangeInternal([explorerContainer ??= [], extensionMenu ??= [], cachePlaylist]);
     }
 
     protected override void LoadComplete()
     {
         base.LoadComplete();
+        AddRangeInternal([explorerContainer ??= [], extensionMenu ??= [], cachePlaylist]);
 
         if (string.IsNullOrEmpty(VideoPath))
         {
@@ -123,31 +122,18 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         }
     }
 
-    private async void onFoundVideo(string path)
+    private void onFoundVideo(string path)
     {
         try
         {
-            ClearInternal();
-            loadingOverlay.Show();
-            var track = await AudioExtract.CreateaAndGetTrackAsync(path, tempStorage, audioManager: audioManager);
-            loadingOverlay.Hide();
-
-            this.Push(new VideoScreen(track, path));
+            this.UpdateVideo(path);
         }
         catch (Exception ex)
         {
             Logger.Error(ex, "Unhandled exception: ");
-            ClearInternal();
-            AddInternal(new ExceptionContainer
-            {
-                HeaderText = "Fatal error",
-                Text = ex.Message,
-                RelativeSizeAxes = Axes.Both
-            });
+            Exception(ex);
         }
     }
-
-    public void UpdateVideo(string path, [CanBeNull] TransferVideo video = null) => videoContainer.UpdateVideo(path, video);
 
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
     {
@@ -191,5 +177,15 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
     {
+    }
+
+    public void UpdateVideo(string path)
+    {
+        videoContainer.UpdateVideo(path);
+    }
+
+    public void UpdateVideo(TransferVideo video)
+    {
+        videoContainer.UpdateVideo(video);
     }
 }

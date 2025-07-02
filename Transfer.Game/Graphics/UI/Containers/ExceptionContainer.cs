@@ -44,7 +44,8 @@ public partial class ExceptionContainer : TransferFocusedOverlayContainer
     public string HeaderText
     {
         get => headerText;
-        set {
+        set
+        {
             if(value == headerText) return;
             headerText = value;
         }
@@ -66,8 +67,6 @@ public partial class ExceptionContainer : TransferFocusedOverlayContainer
         Colour = Colour4.White;
         Anchor = Anchor.TopCentre;
         Origin = Anchor.TopCentre;
-        Width = 1f;
-        Height = 0.2f;
         Scale = new Vector2(1, 1);
 
         InternalChildren =
