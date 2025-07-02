@@ -40,6 +40,11 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     [Resolved]
     private TempStorage tempStorage { get; set; }
 
+    [Resolved]
+    private PlaylistStorage playlistStorage { get; set; }
+
+    private PlaylistMenu cachePlaylist { get; set; }
+
     protected IAudioExtract<Track> AudioExtract { get; set; }
 
     private LoadingOverlay loadingOverlay = new LoadingOverlay() { Header = "Loading..." };
@@ -73,7 +78,11 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         AudioExtract = new AudioExtract<Track>(transferConfigManager);
         explorerContainer.FoundVideo += onFoundVideo;
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
-        AddRangeInternal([explorerContainer ??= [], extensionMenu ??= []]);
+        cachePlaylist = new PlaylistMenu(playlistStorage)
+        {
+            Title = "Cache Playlist",
+        };
+        AddRangeInternal([explorerContainer ??= [], extensionMenu ??= [], cachePlaylist]);
     }
 
     protected override void LoadComplete()
@@ -160,6 +169,10 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                     extensionMenu.Show();
                 else
                     extensionMenu.Hide();
+                return true;
+
+            case GlobalAction.OpenPlaylistMenu:
+                cachePlaylist.Show();
                 return true;
 
             default:

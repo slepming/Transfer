@@ -9,7 +9,7 @@ using Transfer.Game.Tests.Visual;
 namespace Transfer.Game.Tests.IO;
 
 [TestFixture]
-public partial class TestPlaylist : TransferTestScene
+public partial class TestScenePlaylist : TransferTestScene
 {
     [Resolved]
     private PlaylistStorage playlist { get; set; }

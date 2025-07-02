@@ -49,12 +49,6 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
     public Action<bool> AudioLoading;
 
-    protected override void Update()
-    {
-        base.Update();
-        if (Audio != null) SpySeek(Audio.CurrentTime); // May be optimized in the future
-    }
-
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager, AudioManager audioManager)
     {
@@ -104,6 +98,12 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         Start();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (Audio != null) SpySeek(Audio.CurrentTime); // May be optimized in the future
+    }
+
     private void onVolumeChanged(ValueChangedEvent<double> e)
     {
         if (Audio != null)
@@ -128,6 +128,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     {
         SeekOccurs?.Invoke(time);
 
+        Audio?.Seek(time);
         base.Seek(time);
     }
 

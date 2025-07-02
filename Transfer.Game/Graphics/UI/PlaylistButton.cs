@@ -13,6 +13,9 @@ public partial class PlaylistButton : ClickableContainer
 {
     private string current = string.Empty;
 
+    /// <summary>
+    /// Text for button
+    /// </summary>
     public string Current
     {
         get => current;
