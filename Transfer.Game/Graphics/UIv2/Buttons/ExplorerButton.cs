@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -10,11 +11,26 @@ using osu.Framework.Localisation;
 
 namespace Transfer.Game.Graphics.UIv2.Buttons;
 
-public partial class ExplorerButton : ClickableContainer, IHasText
+public partial class ExplorerButton : ClickableContainer, IHasText, IFilterable
 {
     public LocalisableString Text { get; set; }
 
     public new Action<string> Action { get; set; }
+
+    public IEnumerable<LocalisableString> FilterTerms
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(Text.ToString())) yield return Path.GetFileName(Text.ToString());
+        }
+    }
+
+    public bool MatchingFilter
+    {
+        set => this.FadeTo(value ? 1 : 0);
+    }
+
+    public bool FilteringActive { get; set; }
 
     public ExplorerButton()
     {
@@ -61,4 +77,5 @@ public partial class ExplorerButton : ClickableContainer, IHasText
         Action?.Invoke(Text.ToString());
         return base.OnClick(e);
     }
+
 }
