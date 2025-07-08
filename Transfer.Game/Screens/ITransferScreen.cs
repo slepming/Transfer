@@ -4,6 +4,5 @@ namespace Transfer.Game.Screens
 {
     public interface ITransferScreen : IScreen
     {
-
     }
 }

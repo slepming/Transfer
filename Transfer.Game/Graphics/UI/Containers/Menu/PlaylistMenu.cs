@@ -7,9 +7,9 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Localisation;
 using osu.Framework.Logging;
-using osu.Framework.Platform;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
+using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
@@ -23,18 +23,23 @@ public partial class PlaylistMenu : TransferDialog
         get => HeaderName;
         set
         {
-            if (HeaderName == value) return;
+            if (HeaderName.Equals(value)) return;
 
             HeaderName = value;
         }
     }
 
-    protected Storage PlaylistStorage;
+    protected PlaylistStorage PlaylistStorage;
 
     public Action<string> SelectedFileAction;
 
-    public PlaylistMenu(Storage playlistStorage)
+    public PlaylistMenu(PlaylistStorage playlistStorage)
     {
+        if (playlistStorage == null)
+        {
+            throw new ArgumentNullException(nameof(playlistStorage));
+        }
+
         this.PlaylistStorage = playlistStorage;
         WindowContent.AddRange(
         [
@@ -68,7 +73,7 @@ public partial class PlaylistMenu : TransferDialog
         base.Update();
     }
 
-    private void loadStorage(Storage storage, TextureStore textureStore = null)
+    private void loadStorage(PlaylistStorage storage, TextureStore textureStore = null)
     {
         mainContainer.Clear();
         var files = storage.GetFiles("");

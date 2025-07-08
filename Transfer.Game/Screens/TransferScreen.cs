@@ -16,7 +16,8 @@ namespace Transfer.Game.Screens
         protected bool CursorVisible = true;
 
         protected Bindable<string> NotifyError = new Bindable<string>();
-        public TransferScreen(){
+
+        protected TransferScreen(){
             Logger.Log($"Initialization {Description}");
             NotifyError.ValueChanged += onNotifyError;
         }
@@ -26,46 +27,41 @@ namespace Transfer.Game.Screens
             OnNotifyError(e.NewValue);
         }
 
-
         public virtual void CursorHide()
         {
             CursorVisible = !CursorVisible;
         }
 
-
-
         protected virtual void OnExit() => this.Exit();
-
 
         public override void OnEntering(ScreenTransitionEvent e)
         {
             this.FadeInFromZero(1000, Easing.Out);
             base.OnEntering(e);
-
         }
-
 
         public override bool OnExiting(ScreenExitEvent e)
         {
-
-            this.FadeIn(1000,Easing.InOutQuad).ScaleTo(0.1f,2000,Easing.In);
+            this.FadeIn(1000, Easing.InOutQuad).ScaleTo(0.1f,2000,Easing.In);
             return base.OnExiting(e);
         }
-        protected void Exception(TransferException transferException)
+
+        protected void Exception(TransferException transferException) // WHY I DON't USE IT?????!!!
         {
-            AddInternal(new ExceptionContainer{
-                HeaderText = transferException.InnerException.Message,
-                Text = transferException.Message,
-                AutoSizeAxes = Axes.X,
-                Height = 50,
-            });
+            if (transferException.InnerException != null)
+            {
+                AddInternal(new ExceptionContainer
+                {
+                    HeaderText = transferException.InnerException.Message,
+                    Text = transferException.Message,
+                    AutoSizeAxes = Axes.X,
+                    Height = 50,
+                });
+            }
         }
 
         protected virtual void OnNotifyError(string text)
         {
-
         }
-
-
     }
 }

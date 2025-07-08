@@ -21,7 +21,6 @@ public partial class ExplorerFillFlowContainer : SearchContainer
     public ExplorerFillFlowContainer()
     {
         AllowNonContiguousMatching = true;
-        LayoutEasing = Easing.InOutElastic;
     }
 
     [BackgroundDependencyLoader]

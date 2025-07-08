@@ -38,7 +38,6 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
     private IAudioExtract<Track> audioExtract;
     private DependencyContainer dependencies;
     private TransferConfigManager transferConfigManager;
-    private PlaylistMenu playlistMenu;
     private AssemblyInfoDialog assemblyInfoDialog;
 
     [Resolved]
@@ -51,22 +50,20 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
 
     public TransferGame() { }
 
-    protected override void LoadComplete()
+    [BackgroundDependencyLoader]
+    private void load()
     {
-        base.LoadComplete();
-
         AddRange([
             assemblyInfoDialog = new AssemblyInfoDialog()
             {
                 Depth = DIALOGS_DEPTH
             },
-            playlistMenu = new PlaylistMenu(historyPlaylistsStorage)
-            {
-                Depth = DIALOGS_DEPTH
-            }
         ]);
+    }
 
-        dependencies.CacheAs(playlistMenu);
+    protected override void LoadComplete()
+    {
+        base.LoadComplete();
 
         dependencies.TryGet(out screenStack);
         dependencies.TryGet(out transferConfigManager);
@@ -196,10 +193,6 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
         {
             case GlobalAction.OpenAssemblyVersion:
                 assemblyInfoDialog.Show();
-                return true;
-
-            case GlobalAction.OpenPlaylistMenu:
-                playlistMenu.Show();
                 return true;
         }
 

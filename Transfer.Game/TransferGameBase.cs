@@ -164,7 +164,7 @@ public partial class TransferGameBase : osu.Framework.Game
     {
         base.Dispose(isDisposing);
         fontStore.Dispose();
-        TransferFFmpegCore.CONVERSION_STATUS.Value -= loggerFFmpeg;
+        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged -= loggerFFmpeg;
     }
 
     protected override bool OnExiting()

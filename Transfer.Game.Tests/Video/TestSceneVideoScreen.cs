@@ -23,9 +23,9 @@ namespace Transfer.Game.Tests.Video
             videoTestBytes = resource;
         }
 
-        protected override void LoadComplete()
+        [Test]
+        public void TestLoadVideoScreen()
         {
-            base.LoadComplete();
             AddAssert("Video", () => videoTestBytes != null, "Video store added");
             AddStep("Check bytes", () =>
             {
