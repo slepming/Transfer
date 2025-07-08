@@ -64,7 +64,7 @@ public partial class TransferGameBase : osu.Framework.Game
     [BackgroundDependencyLoader]
     private void load(FrameworkConfigManager config, IRenderer renderer)
     {
-        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += (ValueChangedEvent<string> value) => Logger.Log(value.NewValue);
+        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += loggerFFmpeg;
         Host.Window.Title = HOST_NAME;
         tempStorage = new TempStorage(Storage.GetStorageForDirectory(@"./Temp/"));
         dependencies.CacheAs(tempStorage);
@@ -109,6 +109,11 @@ public partial class TransferGameBase : osu.Framework.Game
 
         dependencies.Cache(screenStack);
         dependencies.Cache(GlobalBindings);
+    }
+
+    private void loggerFFmpeg(ValueChangedEvent<string> obj)
+    {
+        Logger.Log(obj.NewValue);
     }
 
     protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();
@@ -159,6 +164,7 @@ public partial class TransferGameBase : osu.Framework.Game
     {
         base.Dispose(isDisposing);
         fontStore.Dispose();
+        TransferFFmpegCore.CONVERSION_STATUS.Value -= loggerFFmpeg;
     }
 
     protected override bool OnExiting()
