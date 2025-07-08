@@ -86,11 +86,11 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
 
     protected override void PopIn()
     {
-        this.ScaleTo(0, 200, Easing.OutExpo);
+        this.ScaleTo(1, 200, Easing.OutExpo);
     }
 
     protected override void PopOut()
     {
-        this.ScaleTo(1, 600, Easing.Out);
+        this.ScaleTo(0, 600, Easing.Out);
     }
 }
