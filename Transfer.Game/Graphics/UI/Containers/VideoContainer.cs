@@ -1,5 +1,4 @@
 using System;
-using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
@@ -224,15 +223,6 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     {
     }
 
-    public void UpdateVideo(string path, [CanBeNull] TransferVideo video = null) => this.video = video ?? new TransferVideo(path)
-    {
-        FillMode = FillMode.Fit,
-        RelativeSizeAxes = Axes.Both,
-        Anchor = Anchor.Centre,
-        Origin = Anchor.Centre,
-        Loop = false,
-    };
-
     protected override void Dispose(bool isDisposing)
     {
         video.Expire();
@@ -242,5 +232,15 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     public void SaveFileToPlaylist(string pathToFile)
     {
         playlistStorage.SaveDataFromPathToLink(pathToFile);
+    }
+
+    public void UpdateVideo(string path)
+    {
+        this.video = new TransferVideo(path);
+    }
+
+    public void UpdateVideo(TransferVideo video = null)
+    {
+        this.video = video;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using osu.Framework.Screens;
 using osu.Framework.Graphics;
 using osu.Framework.Logging;
@@ -5,6 +6,7 @@ using osu.Framework.Bindables;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 namespace Transfer.Game.Screens
 {
@@ -17,7 +19,9 @@ namespace Transfer.Game.Screens
 
         protected Bindable<string> NotifyError = new Bindable<string>();
 
-        protected TransferScreen(){
+        // ReSharper disable once PublicConstructorInAbstractClass
+        public TransferScreen()
+        {
             Logger.Log($"Initialization {Description}");
             NotifyError.ValueChanged += onNotifyError;
         }
@@ -46,18 +50,14 @@ namespace Transfer.Game.Screens
             return base.OnExiting(e);
         }
 
-        protected void Exception(TransferException transferException) // WHY I DON't USE IT?????!!!
+        protected void Exception(Exception transferException) // WHY I DON't USE IT?????!!!
         {
-            if (transferException.InnerException != null)
+            AddInternal(new ErrorDialog()
             {
-                AddInternal(new ExceptionContainer
-                {
-                    HeaderText = transferException.InnerException.Message,
-                    Text = transferException.Message,
-                    AutoSizeAxes = Axes.X,
-                    Height = 50,
-                });
-            }
+                Title = Title,
+                Message = transferException.Message,
+                Depth = 1000
+            });
         }
 
         protected virtual void OnNotifyError(string text)

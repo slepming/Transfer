@@ -13,6 +13,12 @@ using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
 
+/// <summary>
+/// Menu for playlists. Shows a list of videos added to PlaylistStorage.
+/// </summary>
+/// <remarks>
+/// Use this only after load. For example in LoadComplete.
+/// </remarks>
 public partial class PlaylistMenu : TransferDialog
 {
     private TransparentButton close;
