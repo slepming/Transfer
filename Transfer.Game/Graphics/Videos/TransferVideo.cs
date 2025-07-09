@@ -208,4 +208,10 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     }
 
     #endregion
+
+    protected override void Dispose(bool isDisposing)
+    {
+        Audio?.Dispose();
+        base.Dispose(isDisposing);
+    }
 }

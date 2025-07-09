@@ -56,7 +56,8 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             Origin = Anchor.Centre,
             Loop = false,
         };
-        SaveFileToPlaylist(filename);
+        if (filename != null)
+            SaveFileToPlaylist(filename);
         video.AudioLoading += audioLoading;
         video.SeekOccurs += onSeek;
         Add(video);
@@ -231,12 +232,24 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     public void SaveFileToPlaylist(string pathToFile)
     {
-        playlistStorage.SaveDataFromPathToLink(pathToFile);
+        playlistStorage?.SaveDataFromPathToLink(pathToFile);
     }
 
     public void UpdateVideo(string path)
     {
-        this.video = new TransferVideo(path);
+        if (string.IsNullOrEmpty(path)) throw new NullReferenceException("Path to video is null.");
+
+        video?.Dispose();
+
+        this.video = new TransferVideo(path)
+        {
+            FillMode = FillMode.Fit,
+            RelativeSizeAxes = Axes.Both,
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Loop = false,
+        };
+        SaveFileToPlaylist(path);
     }
 
     public void UpdateVideo(TransferVideo video = null)

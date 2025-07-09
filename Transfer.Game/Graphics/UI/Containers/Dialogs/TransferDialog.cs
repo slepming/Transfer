@@ -37,6 +37,7 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
 
     protected TransferDialog()
     {
+        Depth = TransferGame.DIALOGS_DEPTH;
         RelativeSizeAxes = Axes.Both;
         Size = new Vector2(1 / 1.2f, 1 / 1.5f);
         Masking = true;
@@ -86,11 +87,11 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
 
     protected override void PopIn()
     {
-        this.ScaleTo(1, 200, Easing.OutExpo);
+        this.ScaleTo(1, 200, Easing.Out);
     }
 
     protected override void PopOut()
     {
-        this.ScaleTo(0, 600, Easing.Out);
+        this.ScaleTo(0, 300, Easing.In);
     }
 }

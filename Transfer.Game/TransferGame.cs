@@ -24,7 +24,7 @@ namespace Transfer.Game;
 
 public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalAction>, ICanAcceptFile
 {
-    public const int DIALOGS_DEPTH = 3000;
+    public const int DIALOGS_DEPTH = -1;
     private Screen transferScreen;
 
     private readonly string[] args = [];

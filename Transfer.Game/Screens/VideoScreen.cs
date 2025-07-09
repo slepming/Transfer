@@ -126,7 +126,17 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     {
         try
         {
-            this.UpdateVideo(path);
+            videoContainer = new VideoContainer(videoPath)
+            {
+                RelativeSizeAxes = Axes.Both,
+                SeekSpace = seek
+            };
+
+            InternalChild = toolsContainer = new WatchingToolsContainer
+            {
+                RelativeSizeAxes = Axes.Both,
+                Video = videoContainer,
+            };
         }
         catch (Exception ex)
         {
@@ -182,6 +192,11 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     public void UpdateVideo(string path)
     {
         videoContainer.UpdateVideo(path);
+        InternalChild = toolsContainer = new WatchingToolsContainer
+        {
+            RelativeSizeAxes = Axes.Both,
+            Video = videoContainer,
+        };
     }
 
     public void UpdateVideo(TransferVideo video)
