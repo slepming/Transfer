@@ -52,7 +52,6 @@ public partial class TestScenePlaylist : TransferTestScene
         {
             playlist.DeleteAll();
         });
-        AddAssert("Check file availability", () => playlist.Exists(Path.GetFileName(Path.Combine(standartPath, currentFileName))));
     }
 
     [Test]

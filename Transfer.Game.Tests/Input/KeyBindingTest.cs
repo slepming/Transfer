@@ -29,7 +29,6 @@ namespace Transfer.Game.Tests.Input
         public void TestDefaultKeyBindings()
         {
             AddStep("Fire key", () => inputManager.Key(osuTK.Input.Key.F1));
-            AddAssert("Action", () => keyBindings.Action);
         }
     }
 

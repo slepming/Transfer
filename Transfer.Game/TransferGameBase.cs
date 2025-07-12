@@ -64,7 +64,6 @@ public partial class TransferGameBase : osu.Framework.Game
     [BackgroundDependencyLoader]
     private void load(FrameworkConfigManager config, IRenderer renderer)
     {
-        Logger.Log("Load GameBase");
         TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += loggerFFmpeg;
 
         if (Host.Window != null)

@@ -1,4 +1,4 @@
-using NUnit.Framework;
+using osu.Framework.Testing;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Tests.Visual;
 
@@ -8,7 +8,12 @@ public partial class TestSceneOpenPlaylistWindow : TransferTestScene
 {
     private OpenPlaylistMenu openPlaylistMenu;
 
-    [Test]
+    [SetUpSteps]
+    public void SetUpSteps()
+    {
+        CreatePlaylistWindow();
+    }
+
     public void CreatePlaylistWindow()
     {
         Add(openPlaylistMenu = new OpenPlaylistMenu()
