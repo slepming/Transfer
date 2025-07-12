@@ -1,10 +1,8 @@
 using System.IO;
 using NUnit.Framework;
-using osu.Framework.Allocation;
 using osu.Framework.Logging;
 using osu.Framework.Screens;
 using Transfer.Game.Screens;
-using Transfer.Game.Testing;
 using Transfer.Game.Tests.Visual;
 
 namespace Transfer.Game.Tests.Video
@@ -17,10 +15,14 @@ namespace Transfer.Game.Tests.Video
 
         private byte[] targetVideo;
 
-        [BackgroundDependencyLoader]
-        private void load(VideoTestingByte resource)
+        protected override void LoadComplete()
         {
-            videoTestBytes = resource;
+            base.LoadComplete();
+
+            if (Resources != null)
+            {
+                videoTestBytes = new VideoTestingByte(Resources.Get(@"Videos/SampleVideoWithAudio.mp4"));
+            }
         }
 
         [Test]

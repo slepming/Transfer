@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <StartupObject>Transfer.Game.Tests.VisualTestRunner</StartupObject>
+  </PropertyGroup>
+  <ItemGroup Label="Project References">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)Transfer.Game\Transfer.Game.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Transfer.Game\Tests\VisualTestRunner.cs">
+      <Link>VisualTestRunner.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <PropertyGroup>
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+</Project>

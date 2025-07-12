@@ -1,7 +1,6 @@
 using System.IO;
 using NUnit.Framework;
 using osu.Framework.Allocation;
-using osu.Framework.IO.Stores;
 using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.IO;
 using Transfer.Game.Tests.Visual;
@@ -13,9 +12,6 @@ public partial class TestScenePlaylist : TransferTestScene
 {
     [Resolved]
     private PlaylistStorage playlist { get; set; }
-
-    [Resolved]
-    private ResourceStore<byte[]> resources { get; set; }
 
     private PlaylistMenu playlistMenu;
 

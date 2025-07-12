@@ -15,7 +15,6 @@ using osu.Framework.Threading;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
-using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
 using Transfer.Game.Screens;

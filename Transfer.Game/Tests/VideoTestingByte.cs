@@ -1,4 +1,4 @@
-﻿namespace Transfer.Game.Testing
+﻿namespace Transfer.Game.Tests
 {
     /// <summary>
     /// Designed to easily manipulate data in Transfer.Tests without conflicts directly from dependencies.

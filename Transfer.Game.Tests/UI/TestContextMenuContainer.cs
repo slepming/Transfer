@@ -28,25 +28,25 @@ namespace Transfer.Game.Tests.UI
                 Child = new FinalContextMenuContainer
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Children = new Drawable[]
-                    {
+                    Children =
+                    [
                         new TestToolTipContainer
                         {
                             Size = new Vector2(100, 100),
                             Anchor = Anchor.Centre,
-                            Children = new Drawable[]
-                            {
+                            Children =
+                            [
                                 new Box
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Colour = Colour4.White,
-                                },
-                            }
+                                }
+                            ]
                         }
-                    }
+                    ]
                 }
             });
-            Add(cursor = new TestCursorContainer{});
+            Add(cursor = new TestCursorContainer());
         }
 
         private partial class TestToolTipContainer : Container, IHasTooltip, IHasContextMenu

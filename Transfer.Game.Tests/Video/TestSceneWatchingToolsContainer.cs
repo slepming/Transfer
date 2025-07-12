@@ -6,7 +6,6 @@ using osu.Framework.Logging;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
-using Transfer.Game.Testing;
 using Transfer.Game.Tests.Visual;
 
 namespace Transfer.Game.Tests.Video;
@@ -21,10 +20,19 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
     private int seekSpace;
 
     [BackgroundDependencyLoader]
-    private void load(VideoTestingByte resource, TransferConfigManager configManager)
+    private void load(TransferConfigManager configManager)
     {
-        videoTestBytes = resource;
         seekSpace = configManager.Get<int>(TransferOptions.SeekValue);
+    }
+
+    protected override void LoadComplete()
+    {
+        base.LoadComplete();
+
+        if (Resources != null)
+        {
+            videoTestBytes = new VideoTestingByte(Resources.Get(@"Videos/SampleVideoWithAudio.mp4"));
+        }
     }
 
     [Test]

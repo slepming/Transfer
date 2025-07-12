@@ -4,7 +4,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Logging;
 using osu.Framework.Screens;
 using Transfer.Game.Screens;
-using Transfer.Game.Testing;
 
 namespace Transfer.Game.Tests.Visual
 {
@@ -13,7 +12,6 @@ namespace Transfer.Game.Tests.Visual
         private VideoTestingByte videoTestBytes;
         private byte[] targetVideo;
         private string tempFilePath;
-
 
         [BackgroundDependencyLoader]
         private void load(VideoTestingByte videoBytes)

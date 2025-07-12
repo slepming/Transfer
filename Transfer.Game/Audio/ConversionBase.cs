@@ -4,7 +4,7 @@ using Transfer.Game.Configuration;
 
 namespace Transfer.Game.Audio;
 
-public static class ConversionBase
+internal static class ConversionBase
 {
     /// <summary>
     /// This was created to make it easier to work with the project. You can use ready-made elements or refer to the <see cref="BasicModel">basic model</see> where you have the possibility to specify your own parameters.

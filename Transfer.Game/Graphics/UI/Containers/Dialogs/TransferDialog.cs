@@ -6,7 +6,6 @@ using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
-using Vulkan.Xlib;
 
 namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 

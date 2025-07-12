@@ -57,15 +57,21 @@ public partial class TransferGameBase : osu.Framework.Game
     {
         base.Content.Add(Content = new DrawSizePreservingFillContainer
         {
-            TargetDrawSize = new Vector2(1024, 720)
+            TargetDrawSize = new Vector2(1920, 1080)
         });
     }
 
     [BackgroundDependencyLoader]
     private void load(FrameworkConfigManager config, IRenderer renderer)
     {
+        Logger.Log("Load GameBase");
         TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += loggerFFmpeg;
-        Host.Window.Title = HOST_NAME;
+
+        if (Host.Window != null)
+        {
+            Host.Window.Title = HOST_NAME;
+        }
+
         tempStorage = new TempStorage(Storage.GetStorageForDirectory(@"./Temp/"));
         dependencies.CacheAs(tempStorage);
         Resources.AddStore(new DllResourceStore(@"Transfer.Resources.dll"));
@@ -88,7 +94,7 @@ public partial class TransferGameBase : osu.Framework.Game
         InitialiseFonts();
         InitialiseConfig(config);
 
-        Host.Window.CursorState = CursorState.Hidden;
+        if (Host.Window != null) Host.Window.CursorState = CursorState.Hidden;
 
         base.Content.Add(SafeAreaContainer = new SafeAreaContainer
         {

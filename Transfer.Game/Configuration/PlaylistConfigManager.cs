@@ -4,14 +4,9 @@ using osu.Framework.Platform;
 
 namespace Transfer.Game.Configuration;
 
-public class PlaylistConfigManager : IniConfigManager<PlaylistConfiguration>
+internal class PlaylistConfigManager(Storage storage, IDictionary<PlaylistConfiguration, object> defaultOverrides = null) : IniConfigManager<PlaylistConfiguration>(storage, defaultOverrides)
 {
     protected override string Filename => @"playlists.ini";
-
-    public PlaylistConfigManager(Storage storage, IDictionary<PlaylistConfiguration, object> defaultOverrides = null)
-        : base(storage, defaultOverrides)
-    {
-    }
 
     protected override void InitialiseDefaults()
     {
