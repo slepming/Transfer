@@ -12,7 +12,7 @@ jobs:
       matrix:
         configuration: [Release]
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       Solution_Name: Transfer.sln # Replace with your solution name, i.e. MyWpfApp.sln.
@@ -65,12 +65,19 @@ jobs:
           Configuration: ${{ matrix.configuration }}
 
       - name: Publish Transfer.Desktop
-        run: dotnet publish Transfer.Desktop/Transfer.Desktop.csproj -c $env:Configuration -r linux-x64 --self-contained -o ./publish/Transfer.Desktop
+        run: dotnet publish $env:Solution_Name -c $env:Configuration -r win-x64 --self-contained -o ./publish
         env:
           Configuration: ${{ matrix.configuration }}
 
       - name: Zip the publish folder
         run: Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
+
+      - name: Generate release log
+        id: changelog
+        run: |
+          Echo "## Change log" > changes.txt
+          git log -1 --pretty=format:"- %s" >> changes.txt
+          cat chages.txt >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
@@ -80,6 +87,7 @@ jobs:
         with:
           tag_name: v1.0.${{ github.run_number }}
           release_name: Release v1.0.${{ github.run_number }}
+          body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
 
