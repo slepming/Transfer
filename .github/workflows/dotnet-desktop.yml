@@ -51,7 +51,7 @@ jobs:
       - name: Zip the publish folder
         run: |
           mkdir -p ./artifact
-          tar -czf ./artifact/Transfer.tar.gz -C ./publish/*
+          tar -czf ./artifact/Transfer.tar.gz -C ./publish/
 
       - name: Generate release log
         id: changelog
