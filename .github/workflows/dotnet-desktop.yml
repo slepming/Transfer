@@ -15,9 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      Solution_Name: Transfer.sln # Replace with your solution name, i.e. MyWpfApp.sln.
-      Release_Name: Trasfer.Desktop/Transfer.Desktop.csproj
-      Test_Project_Path: Transfer.Game.Tests/Transfer.Game.Tests.csproj # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+      Solution_Name: Transfer.sln
+      Release_Name: Transfer.Desktop/Transfer.Desktop.csproj
+      Test_Project_Path: Transfer.Game.Tests/Transfer.Game.Tests.csproj
 
     steps:
       - name: Checkout
@@ -39,12 +39,12 @@ jobs:
         continue-on-error: true
 
       - name: Build the application
-        run: dotnet build $env:Release_Name -c $env:Configuration
+        run: dotnet build $Release_Name -c $Configuration
         env:
           Configuration: ${{ matrix.configuration }}
 
       - name: Publish Transfer.Desktop
-        run: dotnet publish $env:Solution_Name -c $env:Configuration -r linux-x64 --self-contained -o ./publish
+        run: dotnet publish $Release_Name -c $Configuration -r linux-x64 --self-contained -o ./publish
         env:
           Configuration: ${{ matrix.configuration }}
 
@@ -54,9 +54,10 @@ jobs:
       - name: Generate release log
         id: changelog
         run: |
-          echo "## Change log" > changes
-          git log -1 --pretty=format:"- %s" >> changes
-          cat changes >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "## Change log" >> $GITHUB_OUTPUT
+          git log -1 --pretty=format:"- %s" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
