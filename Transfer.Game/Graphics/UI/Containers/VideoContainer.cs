@@ -45,6 +45,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     {
         if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
         Logger.Log($"\u21ba Video initialization", level: LogLevel.Debug);
+        RelativeSizeAxes = Axes.Both;
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
         if (video == null) Logger.Log("Constructor Video equal null. Assigning the values given to me", level: LogLevel.Debug);

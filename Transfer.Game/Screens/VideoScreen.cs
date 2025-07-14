@@ -5,6 +5,7 @@ using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
@@ -12,6 +13,7 @@ using osu.Framework.Screens;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Graphics.Videos;
@@ -24,7 +26,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 {
     private VideoContainer videoContainer;
 
-    private ExplorerContainer explorerContainer { get; set; } = new ExplorerContainer();
+    private FileSelectorDialog explorerContainer { get; set; }
 
     private WatchingToolsContainer toolsContainer;
 
@@ -75,18 +77,17 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     private void load(TransferConfigManager transferConfigManager)
     {
         AudioExtract = new AudioExtract<Track>(transferConfigManager);
-        explorerContainer.FoundVideo += onFoundVideo;
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
         cachePlaylist = new PlaylistMenu(playlistStorage)
         {
             Title = "Cache Playlist",
         };
+        AddRangeInternal([explorerContainer ??= new FileSelectorDialog(this), extensionMenu ??= [], cachePlaylist]);
     }
 
     protected override void LoadComplete()
     {
         base.LoadComplete();
-        AddRangeInternal([explorerContainer ??= [], extensionMenu ??= [], cachePlaylist]);
 
         if (string.IsNullOrEmpty(VideoPath))
         {
@@ -119,29 +120,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                 Text = ex.Message,
                 RelativeSizeAxes = Axes.Both,
             });
-        }
-    }
-
-    private void onFoundVideo(string path)
-    {
-        try
-        {
-            videoContainer = new VideoContainer(videoPath)
-            {
-                RelativeSizeAxes = Axes.Both,
-                SeekSpace = seek
-            };
-
-            InternalChild = toolsContainer = new WatchingToolsContainer
-            {
-                RelativeSizeAxes = Axes.Both,
-                Video = videoContainer,
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.Error(ex, "Unhandled exception: ");
-            Exception(ex);
         }
     }
 
@@ -182,7 +160,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     private void releaseResources()
     {
         videoContainer?.Dispose();
-        explorerContainer?.Dispose();
     }
 
     public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
@@ -191,6 +168,8 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     public void UpdateVideo(string path)
     {
+        videoContainer = new VideoContainer(path);
+
         videoContainer.UpdateVideo(path);
         InternalChild = toolsContainer = new WatchingToolsContainer
         {
