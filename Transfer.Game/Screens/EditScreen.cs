@@ -20,16 +20,18 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using Transfer.Game.Extensions;
 using Transfer.Game.Audio.ConversionModels;
+using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
+using Transfer.Game.Graphics.Videos;
 
 namespace Transfer.Game.Screens;
 
-public partial class EditScreen : TransferScreen
+public partial class EditScreen : TransferScreen, ICanUpdateVideo
 {
-    private string pathToFile = string.Empty;
+    private readonly string pathToFile = string.Empty;
     private string fileName = string.Empty;
     private SpriteText timeCode;
-    private Dictionary<VideoEditingFunction, string> ffmpegFunctions = new Dictionary<VideoEditingFunction,string>();
+    private readonly Dictionary<VideoEditingFunction, string> ffmpegFunctions = new();
     private StringButton confirmButton;
 
     private EditToolsContainer editToolsContainer;
@@ -38,11 +40,11 @@ public partial class EditScreen : TransferScreen
 
     private AudioExtract<Track> audioExtract;
 
-    private ExplorerContainer explorerContainer = new();
+    private FileSelectorDialog explorerContainer;
 
     private Container toolsContainer, videoWithBackgroundContainer;
 
-    private float windowScalingFactorX = 1.05f;
+    private const float window_scaling_factor_x = 1.05f;
 
     [Resolved]
     private Storage audioTempStorage { get; set; }
@@ -58,16 +60,13 @@ public partial class EditScreen : TransferScreen
     private void load(AudioManager audioManager)
     {
         audioExtract = new AudioExtract<Track>(transferConfigManager);
+        explorerContainer = new(this);
 
         if (videoContainer == null)
         {
             if (pathToFile == null)
             {
                 explorerContainer.Show();
-                explorerContainer.FoundVideo += (string path) =>
-                {
-                    pathToFile = path;
-                };
             }
 
             videoContainer = new VideoContainer(pathToFile)
@@ -80,22 +79,26 @@ public partial class EditScreen : TransferScreen
             };
         }
 
-        videoWithBackgroundContainer = new Container{
+        videoWithBackgroundContainer = new Container
+        {
             RelativeSizeAxes = Axes.Both,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
             Position = new Vector2(0, -40),
-            Size = new Vector2(Size.X/windowScalingFactorX, Size.Y/1.2f),
+            Size = new Vector2(Size.X / window_scaling_factor_x, Size.Y / 1.2f),
             Masking = true,
             CornerRadius = 10,
-            Children = [
-                new Box{
+            Children =
+            [
+                new Box
+                {
                     RelativeSizeAxes = Axes.Both,
                     Colour = Colour4.FromHex("#0a0a2e"),
                     Depth = 5
                 },
                 videoContainer,
-                timeCode = new SpriteText{
+                timeCode = new SpriteText
+                {
                     Text = "",
                     Font = new FontUsage(TransferFonts.FiraCodeNerdFont),
                     Anchor = Anchor.BottomCentre,
@@ -105,22 +108,26 @@ public partial class EditScreen : TransferScreen
             ]
         };
 
-        toolsContainer = new Container(){
+        toolsContainer = new Container
+        {
             Anchor = Anchor.BottomCentre,
             Origin = Anchor.Centre,
             RelativeSizeAxes = Axes.Both,
-            Size = new Vector2(Size.X/windowScalingFactorX, Size.Y/12),
+            Size = new Vector2(Size.X / window_scaling_factor_x, Size.Y / 12),
             Position = new Vector2(0, -50),
             Masking = true,
             CornerRadius = 10,
-            Children = [
-                new Box{
+            Children =
+            [
+                new Box
+                {
                     RelativeSizeAxes = Axes.Both,
                     Alpha = 1,
                     Colour = Colour4.FromHex("#052266"),
                     Depth = 5,
                 },
-                editToolsContainer = new EditToolsContainer(){
+                editToolsContainer = new EditToolsContainer
+                {
                     Depth = 2,
                 }
             ]
@@ -128,13 +135,13 @@ public partial class EditScreen : TransferScreen
         editToolsContainer.SpeedUpValue.ValueChanged += onSpeedVideoChange;
         editToolsContainer.ConfirmAction += confirmVideoEditingButtonAction;
 
-        confirmButton = new StringButton{
+        confirmButton = new StringButton
+        {
             Text = "Confirm",
             Width = 100,
             Height = 50,
             Anchor = Anchor.BottomCentre,
             Origin = Anchor.BottomCentre,
-
         };
         confirmButton.Action += confirmVideoEditingButtonAction;
 
@@ -146,15 +153,13 @@ public partial class EditScreen : TransferScreen
             Depth = 0
         };
 
-
-
-        Scheduler.AddDelayed(() => {
-            InternalChildren = [
-
+        Scheduler.AddDelayed(() =>
+        {
+            InternalChildren =
+            [
                 background,
                 toolsContainer,
                 videoWithBackgroundContainer
-
             ];
         }, 500);
     }
@@ -178,7 +183,7 @@ public partial class EditScreen : TransferScreen
     protected override void Update()
     {
         base.Update();
-        if(timeCode != null && videoContainer != null) timeCode.Text = videoContainer.GetTimecode();
+        if (timeCode != null && videoContainer != null) timeCode.Text = videoContainer.GetTimecode();
     }
 
     protected override void OnNotifyError(string text)
@@ -195,7 +200,7 @@ public partial class EditScreen : TransferScreen
     {
         string arguments = string.Join(" ", ffmpegFunctions.Values) ?? null;
 
-        if(string.IsNullOrEmpty(arguments)) return;
+        if (string.IsNullOrEmpty(arguments)) return;
 
         string path;
         if (string.IsNullOrEmpty(Path.GetExtension(fileName)) || Path.GetExtension(fileName) == "mp4")
@@ -223,12 +228,10 @@ public partial class EditScreen : TransferScreen
         return path;
     }
 
-
     private void initializeLoadingOverlay()
     {
         ClearInternal();
-        LoadingOverlay loadingStatus;
-        InternalChild = loadingStatus  = new LoadingOverlay()
+        InternalChild = new LoadingOverlay()
         {
             Header = "Asking FFmpeg for help..."
         };
@@ -238,5 +241,15 @@ public partial class EditScreen : TransferScreen
     {
         videoContainer.Expire();
         return base.OnExiting(e);
+    }
+
+    public void UpdateVideo(string path)
+    {
+        videoContainer.UpdateVideo(path);
+    }
+
+    public void UpdateVideo(TransferVideo video = null)
+    {
+        throw new NotImplementedException();
     }
 }
