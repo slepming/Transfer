@@ -53,7 +53,7 @@ jobs:
         continue-on-error: true
 
       - name: Build the application
-        run: msbuild $env:Release_Name -c:Configuration=$env:Configuration
+        run: dotnet build $env:Release_Name -c $env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
 
@@ -63,7 +63,7 @@ jobs:
           Configuration: ${{ matrix.configuration }}
 
       - name: Zip the publish folder
-        run: Compress-Archive -Path ./publish/* -DestinationPath ./publish/Transfer.zip
+        run: tar -czf ./publish/Transfer.tar.gz -C ./publish .
 
       - name: Generate release log
         id: changelog
