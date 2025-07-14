@@ -68,9 +68,9 @@ jobs:
       - name: Generate release log
         id: changelog
         run: |
-          Echo "## Change log" > changes.txt
-          git log -1 --pretty=format:"- %s" >> changes.txt
-          cat chages.txt >> $GITHUB_OUTPUT
+          echo "## Change log" > changes
+          git log -1 --pretty=format:"- %s" >> changes
+          cat changes >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
@@ -90,6 +90,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./publish/Transfer.zip
-          asset_name: Transfer.zip
-          asset_content_type: application/zip
+          asset_path: ./publish/Transfer.tar.gz
+          asset_name: Transfer.tar.gz
+          asset_content_type: application/gzip
