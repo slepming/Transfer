@@ -49,7 +49,9 @@ jobs:
           Configuration: ${{ matrix.configuration }}
 
       - name: Zip the publish folder
-        run: tar -czf ./publish/Transfer.tar.gz -C ./publish .
+        run: |
+          mkdir -p ./artifact
+          tar -czf ./artifact/Transfer.tar.gz -C ./publish .
 
       - name: Generate release log
         id: changelog
@@ -77,6 +79,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./publish/Transfer.tar.gz
+          asset_path: ./artifact/Transfer.tar.gz
           asset_name: Transfer.tar.gz
           asset_content_type: application/gzip
