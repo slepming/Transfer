@@ -59,7 +59,6 @@ jobs:
       - name: Generate release log
         id: changelog
         run: |
-          echo "changelog<<$EOF" >> $GITHUB_OUTPUT
           echo "## Change log" >> $GITHUB_OUTPUT
           git log -1 --pretty=format:"- %s" >> $GITHUB_OUTPUT
           echo "$EOF" >> $GITHUB_OUTPUT
