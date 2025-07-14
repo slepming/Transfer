@@ -17,6 +17,7 @@ public partial class FileSelectorDialog(ICanUpdateVideo screen) : TransferDialog
         {
             RelativeSizeAxes = Axes.Both
         });
+        HeaderName = "File selector";
     }
 
     protected override void LoadComplete()

@@ -58,7 +58,7 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
                 Colour = Colour4.Gray,
                 RelativeSizeAxes = Axes.Both
             },
-            PrefixBox = new HeaderContainer()
+            PrefixBox ??= new()
             {
                 HeaderText = HeaderName,
             }
