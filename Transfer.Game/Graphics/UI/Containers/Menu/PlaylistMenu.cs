@@ -1,14 +1,17 @@
 using System;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Localisation;
 using osu.Framework.Logging;
+using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
+using Transfer.Game.Graphics.UIv2;
 using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;
@@ -23,6 +26,7 @@ public partial class PlaylistMenu : TransferDialog
 {
     private TransparentButton close;
     private readonly FillFlowContainer mainContainer;
+    private TransferFileSelector fileSelector;
 
     public LocalisableString Title
     {
@@ -37,14 +41,19 @@ public partial class PlaylistMenu : TransferDialog
 
     protected PlaylistStorage PlaylistStorage;
 
+    [CanBeNull]
+    protected ICanUpdateVideo Screen;
+
     public Action<string> SelectedFileAction;
 
-    public PlaylistMenu(PlaylistStorage playlistStorage)
+    public PlaylistMenu(PlaylistStorage playlistStorage, ICanUpdateVideo screen = null)
     {
         if (playlistStorage == null)
         {
             throw new ArgumentNullException(nameof(playlistStorage));
         }
+
+        Screen = screen;
 
         this.PlaylistStorage = playlistStorage;
         WindowContent.AddRange(
@@ -70,15 +79,27 @@ public partial class PlaylistMenu : TransferDialog
     [BackgroundDependencyLoader]
     private void load(TextureStore textureStore)
     {
-        loadStorage(PlaylistStorage, textureStore);
+        if (Screen == null)
+            loadStorage(PlaylistStorage, textureStore);
+        else
+            loadStorage(PlaylistStorage, Screen);
     }
 
-    protected override void Update()
+    private void loadStorage(PlaylistStorage storage, ICanUpdateVideo screen)
     {
-        loadStorage(PlaylistStorage);
-        base.Update();
+        WindowContent.Clear();
+        WindowContent.Add(fileSelector = new TransferFileSelector(storage.GetFullPath(""))
+        {
+            RelativeSizeAxes = Axes.Both
+        });
+        fileSelector.CurrentFile.BindValueChanged(f =>
+        {
+            if (f.NewValue.Exists)
+                screen.UpdateVideo(File.ResolveLinkTarget(f.NewValue.FullName, true)?.FullName);
+        });
     }
 
+    [Obsolete]
     private void loadStorage(PlaylistStorage storage, TextureStore textureStore = null)
     {
         mainContainer.Clear();

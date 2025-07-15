@@ -77,7 +77,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     {
         AudioExtract = new AudioExtract<Track>(transferConfigManager);
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
-        cachePlaylist = new PlaylistMenu(playlistStorage)
+        cachePlaylist = new PlaylistMenu(playlistStorage, this)
         {
             Title = "Cache Playlist",
         };
