@@ -1,6 +1,52 @@
+using osu.Framework.Allocation;
+using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Localisation;
+using osuTK;
+
 namespace Transfer.Game.Graphics.UI;
 
-public class IconButton
+public abstract partial class IconButton(LocalisableString buttonText) : ClickableContainer
 {
-    
+    protected const float FONT_SIZE = 24;
+    protected abstract IconUsage? Icon { get; }
+
+    protected FillFlowContainer Flow;
+
+    private LocalisableString buttonText = buttonText;
+
+    protected virtual SpriteText CreateSpriteText() => new SpriteText();
+
+    [BackgroundDependencyLoader]
+    private void load()
+    {
+        AutoSizeAxes = Axes.Both;
+
+        InternalChild = Flow = new FillFlowContainer()
+        {
+            AutoSizeAxes = Axes.Both,
+            Margin = new MarginPadding { Vertical = 2, Horizontal = 5 },
+            Direction = FillDirection.Horizontal,
+            Spacing = new Vector2(5)
+        };
+
+        if (Icon != null)
+        {
+            Flow.Add(new SpriteIcon()
+            {
+                Anchor = Anchor.CentreLeft,
+                Origin = Anchor.CentreLeft,
+                Icon = Icon.Value,
+                Size = new Vector2(FONT_SIZE)
+            });
+        }
+
+        Flow.Add(CreateSpriteText().With(text =>
+        {
+            text.Anchor = Anchor.CentreLeft;
+            text.Origin = Anchor.CentreLeft;
+            text.Text = buttonText;
+        }));
+    }
 }

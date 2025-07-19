@@ -1,5 +1,4 @@
 using System;
-using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -8,7 +7,6 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using osuTK.Graphics;
 using Transfer.Game.Configuration;
-using Transfer.Game.Graphics.UI.Containers.Menu;
 
 namespace Transfer.Game.Graphics.UI.Containers.Overlays;
 
@@ -16,8 +14,6 @@ public partial class WatchingToolsContainer : Container
 {
     public VolumeContainer VolumeContainer;
     public VideoPlaybackContainer PlaybackContainer;
-
-    private readonly SpriteText currentTimecodeText;
 
     public Color4 BackgroundColour
     {
@@ -28,15 +24,12 @@ public partial class WatchingToolsContainer : Container
     private Container videoBox;
     private Container toolsBox;
 
-    private SpriteButton negativeSpeed, doubleSpeed, nextSeekButton, backSeekButton, stopButton;
-    private SpriteButton repeatButton, settingsButton;
-
-    private ExtensionMenu extensionMenu = new ExtensionMenu();
+    private ToolsButton negativeSpeed, doubleSpeed, nextSeekButton, backSeekButton, stopButton;
+    private ToolsButton repeatButton, settingsButton;
 
     [Resolved]
     private TransferConfigManager configManager { get; set; }
 
-    [NotNull]
     public VideoContainer Video;
 
     private string timecode = string.Empty;
@@ -96,94 +89,72 @@ public partial class WatchingToolsContainer : Container
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre,
                     },
-                    new TransferContainer
+                    new TransferContainer()
                     {
+                        RelativeSizeAxes = Axes.Both,
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        RelativeSizeAxes = Axes.Both,
-                        Children =
-                        [
-                            settingsButton = new SpriteButton
+                        Child =
+                            new FillFlowContainer()
                             {
-                                TextureName = "settings",
-                                Anchor = Anchor.CentreLeft,
-                                Origin = Anchor.CentreLeft,
-                                Margin = new MarginPadding(5),
-                                Size = new Vector2(25, 25),
-                            },
-                            new TransferContainer
-                            {
-                                RelativeSizeAxes = Axes.Both,
+                                AutoSizeAxes = Axes.Both,
                                 Anchor = Anchor.Centre,
                                 Origin = Anchor.Centre,
-                                Size = new Vector2(Size.X / 3, Size.Y),
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(435),
                                 Children =
                                 [
-                                    doubleSpeed = new SpriteButton
+                                    settingsButton = new ToolsButton(FontAwesome.Solid.Spinner)
                                     {
-                                        TextureName = "next",
-                                        Anchor = Anchor.CentreRight,
-                                        Origin = Anchor.Centre,
-                                        Margin = new MarginPadding(50),
-                                        Size = new Vector2(50, 50)
+                                        Size = new Vector2(25, 25),
                                     },
-                                    negativeSpeed = new SpriteButton
+                                    new FillFlowContainer()
                                     {
-                                        TextureName = "back",
-                                        Anchor = Anchor.CentreLeft,
-                                        Origin = Anchor.Centre,
-                                        Margin = new MarginPadding(50),
-                                        Size = new Vector2(50, 50)
+                                        AutoSizeAxes = Axes.Both,
+                                        Direction = FillDirection.Horizontal,
+                                        Spacing = new Vector2(50),
+                                        Children =
+                                        [
+                                            negativeSpeed = new ToolsButton(FontAwesome.Solid.LongArrowAltLeft)
+                                            {
+                                                Size = new Vector2(50, 50)
+                                            },
+                                            backSeekButton = new ToolsButton(FontAwesome.Solid.ArrowLeft)
+                                            {
+                                                Size = new Vector2(50, 50)
+                                            },
+                                            stopButton = new ToolsButton(FontAwesome.Solid.Play)
+                                            {
+                                                Size = new Vector2(50, 50)
+                                            },
+                                            nextSeekButton = new ToolsButton(FontAwesome.Solid.ArrowRight)
+                                            {
+                                                Size = new Vector2(50, 50)
+                                            },
+                                            doubleSpeed = new ToolsButton(FontAwesome.Solid.LongArrowAltRight)
+                                            {
+                                                Size = new Vector2(50, 50)
+                                            },
+                                        ],
                                     },
-                                    nextSeekButton = new SpriteButton
+                                    repeatButton = new ToolsButton(FontAwesome.Regular.Circle, "Repeat")
                                     {
-                                        TextureName = "nextSeek",
-                                        Anchor = Anchor.Centre,
-                                        Origin = Anchor.CentreLeft,
-                                        // Position = new Vector2(50, 0),
-                                        Margin = new MarginPadding(50),
-                                        Size = new Vector2(50, 50)
+                                        Size = new Vector2(50, 50),
                                     },
-                                    backSeekButton = new SpriteButton
-                                    {
-                                        TextureName = "backSeek",
-                                        Anchor = Anchor.Centre,
-                                        Origin = Anchor.CentreRight,
-                                        // Position = new Vector2(-50, 0),
-                                        Margin = new MarginPadding(50),
-                                        Size = new Vector2(50, 50)
-                                    },
-                                    stopButton = new SpriteButton
-                                    {
-                                        TextureName = "play",
-                                        Anchor = Anchor.Centre,
-                                        Origin = Anchor.Centre,
-                                        Size = new Vector2(50, 50)
-                                    }
-                                ],
-                            },
-                            repeatButton = new SpriteButton
-                            {
-                                TextureName = "repeatBlack",
-                                Anchor = Anchor.CentreRight,
-                                Origin = Anchor.CentreRight,
-                                Margin = new MarginPadding(5),
-                                Size = new Vector2(50, 50),
-                            },
-                        ]
+                                ]
+                            }
                     }
                 ]
             }
         ];
 
-        changeTextureRepeatButton(configManager.Get<bool>(TransferOptions.LoopVideo));
         doubleSpeed.Action += onDoubleSpeedClick;
         nextSeekButton.Action += positiveSeek;
         stopButton.Action += onClickPlayButton;
         negativeSpeed.Action += onNegativeSpeedClick;
         backSeekButton.Action += negativeSeek;
 
-        settingsButton.Action += onOpenSettings;
+        // settingsButton.Action += onOpenSettings;
         repeatButton.Action += onActivateRepeat;
 
         SetMaxPlaybackValue(Video.GetDuration());
@@ -209,26 +180,16 @@ public partial class WatchingToolsContainer : Container
         Video.Rate(2);
     }
 
-    private void onOpenSettings()
-    {
-        if (extensionMenu.Visible) extensionMenu.Hide();
-        else extensionMenu.Show();
-    }
-
     private void onActivateRepeat()
     {
         bool videoLoopFromConfig = configManager.Get<bool>(TransferOptions.LoopVideo);
         configManager.SetValue(TransferOptions.LoopVideo, !videoLoopFromConfig);
         Video.SetVideoLoop(videoLoopFromConfig);
-        changeTextureRepeatButton(videoLoopFromConfig);
     }
-
-    private void changeTextureRepeatButton(bool value) => repeatButton.TextureName = value ? "repeatWhite" : "repeatBlack";
 
     private void onClickPlayButton()
     {
         Video.Pause();
-        stopButton.TextureName = Video.VideoIsPaused ? "pause" : "play";
     }
 
     private long duration;
