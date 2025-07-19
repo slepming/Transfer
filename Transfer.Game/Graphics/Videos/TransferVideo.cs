@@ -185,6 +185,11 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         return true;
     }
 
+    public void RemoveAudio()
+    {
+        Audio?.Dispose();
+    }
+
     #region audio
 
     protected override bool OnScroll(ScrollEvent e)

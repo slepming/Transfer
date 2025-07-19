@@ -64,7 +64,7 @@ public partial class TransferGameBase : osu.Framework.Game
     [BackgroundDependencyLoader]
     private void load(FrameworkConfigManager config, IRenderer renderer)
     {
-        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged += loggerFFmpeg;
+        TransferFFmpegCore.CONVERSION_STATUS.BindValueChanged(loggerFFmpeg);
 
         if (Host.Window != null)
         {
@@ -77,7 +77,7 @@ public partial class TransferGameBase : osu.Framework.Game
 
         transferConfigManager = new TransferConfigManager(Host.Storage);
         dependencies.Cache(transferConfigManager);
-        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.HistoryPlaylistStoragePath);
+        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.CachePlaylistStoragePath);
         if (!Path.Exists(pathToPlaylist))
             Directory.CreateDirectory(pathToPlaylist);
         historyPlaylistsStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
@@ -118,7 +118,7 @@ public partial class TransferGameBase : osu.Framework.Game
 
     private void loggerFFmpeg(ValueChangedEvent<string> obj)
     {
-        Logger.Log(obj.NewValue);
+        Logger.Log(obj.NewValue, level: LogLevel.Debug);
     }
 
     protected DrawSizePreservingFillContainer CreateScalingContainer() => new DrawSizePreservingFillContainer();
@@ -169,7 +169,6 @@ public partial class TransferGameBase : osu.Framework.Game
     {
         base.Dispose(isDisposing);
         fontStore.Dispose();
-        TransferFFmpegCore.CONVERSION_STATUS.ValueChanged -= loggerFFmpeg;
     }
 
     protected override bool OnExiting()

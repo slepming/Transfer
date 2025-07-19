@@ -68,7 +68,7 @@ public partial class WatchingToolsContainer : Container
             videoBox = new Container
             {
                 RelativeSizeAxes = Axes.Both,
-                Child = Video, // where are u
+                Child = Video,
                 Depth = 2,
             },
             toolsBox = new Container

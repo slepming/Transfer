@@ -8,7 +8,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Localisation;
 using osu.Framework.Logging;
-using osu.Framework.Screens;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Graphics.UIv2;

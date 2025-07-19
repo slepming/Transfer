@@ -11,14 +11,9 @@ using osu.Framework.Platform;
 
 namespace Transfer.Game.Configuration;
 
-public class TransferConfigManager : IniConfigManager<TransferOptions>
+public class TransferConfigManager(Storage storage, IDictionary<TransferOptions, object> defaultOverrides = null) : IniConfigManager<TransferOptions>(storage, defaultOverrides)
 {
     protected override string Filename => @"app.ini";
-
-    public TransferConfigManager(Storage storage, IDictionary<TransferOptions, object> defaultOverrides = null)
-        : base(storage, defaultOverrides)
-    {
-    }
 
     public IDictionary<TransferOptions, IBindable> GetCurrentConfiguration() => ConfigStore
                                                                                 .Where(kvp => !CheckLookupContainsPrivateInformation(kvp.Key))
@@ -26,8 +21,8 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
 
     protected override void InitialiseDefaults()
     {
-        string defaultPlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Playlist");
-        if (string.IsNullOrEmpty(defaultPlaylistPath) || defaultPlaylistPath == "Playlist") defaultPlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Playlist");
+        string cachePlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Playlist");
+        if (string.IsNullOrEmpty(cachePlaylistPath) || cachePlaylistPath == "Playlist") cachePlaylistPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Playlist");
         SetDefault(TransferOptions.AudioBitrate, 128);
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
         SetDefault(TransferOptions.AudioCodec, AudioCodecs.libmp3lame);
@@ -40,7 +35,8 @@ public class TransferConfigManager : IniConfigManager<TransferOptions>
         SetDefault(TransferOptions.ConstantRateFactor, 23);
         SetDefault(TransferOptions.Profile, Profiles.main);
         SetDefault(TransferOptions.LoopVideo, false);
-        SetDefault(TransferOptions.HistoryPlaylistStoragePath, defaultPlaylistPath);
+        SetDefault(TransferOptions.CachePlaylistStoragePath, cachePlaylistPath);
+        SetDefault(TransferOptions.CustomPlaylistStoragePath, string.Empty);
     }
 }
 
@@ -58,7 +54,8 @@ public enum TransferOptions
     ConstantRateFactor,
     Profile,
     LoopVideo,
-    HistoryPlaylistStoragePath,
+    CachePlaylistStoragePath,
+    CustomPlaylistStoragePath,
     DarkTheme,
 }
 

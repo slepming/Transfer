@@ -44,7 +44,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     private void load(TransferConfigManager tcm)
     {
         if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
-        Logger.Log($"\u21ba Video initialization", level: LogLevel.Debug);
+        Logger.Log("\u21ba Video initialization", level: LogLevel.Debug);
         RelativeSizeAxes = Axes.Both;
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
@@ -61,7 +61,6 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             SaveFileToPlaylist(filename);
         video.AudioLoading += audioLoading;
         video.SeekOccurs += onSeek;
-        Add(video);
     }
 
     private void audioLoading(bool obj)
@@ -98,6 +97,8 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             });
             return;
         }
+
+        InternalChild = video;
     }
 
     protected override bool OnKeyDown(KeyDownEvent e)
@@ -225,12 +226,6 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     {
     }
 
-    protected override void Dispose(bool isDisposing)
-    {
-        video.Expire();
-        base.Dispose(isDisposing);
-    }
-
     public void SaveFileToPlaylist(string pathToFile)
     {
         playlistStorage?.SaveDataFromPathToLink(pathToFile);
@@ -240,9 +235,9 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     {
         if (string.IsNullOrEmpty(path)) throw new NullReferenceException("Path to video is null.");
 
-        video?.Dispose();
+        video?.RemoveAudio();
 
-        this.video = new TransferVideo(path)
+        video = new TransferVideo(path)
         {
             FillMode = FillMode.Fit,
             RelativeSizeAxes = Axes.Both,
@@ -251,10 +246,12 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             Loop = false,
         };
         SaveFileToPlaylist(path);
+        Logger.Log("\u2705 Video update confirm");
     }
 
     public void UpdateVideo(TransferVideo video = null)
     {
+        this.video?.RemoveAudio();
         this.video = video;
     }
 }

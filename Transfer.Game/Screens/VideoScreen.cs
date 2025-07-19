@@ -8,7 +8,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
-using osu.Framework.Screens;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;
@@ -25,11 +24,11 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 {
     private VideoContainer videoContainer;
 
-    private FileSelectorDialog explorerContainer { get; set; }
+    public FileSelectorDialog FileSelector { get; private set; }
 
     private WatchingToolsContainer toolsContainer;
 
-    private ExtensionMenu extensionMenu;
+    private readonly ExtensionMenu extensionMenu = new();
 
     [Resolved]
     private AudioManager audioManager { get; set; }
@@ -47,7 +46,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     protected IAudioExtract<Track> AudioExtract { get; set; }
 
-    private LoadingOverlay loadingOverlay = new LoadingOverlay() { Header = "Loading..." };
+    private LoadingOverlay loadingOverlay = new() { Header = "Loading..." };
 
     private int seek;
 
@@ -81,7 +80,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         {
             Title = "Cache Playlist",
         };
-        AddRangeInternal([explorerContainer ??= new FileSelectorDialog(this), extensionMenu ??= [], cachePlaylist]);
+        AddRangeInternal([FileSelector ??= new FileSelectorDialog(this), extensionMenu, cachePlaylist]);
     }
 
     protected override void LoadComplete()
@@ -92,7 +91,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         {
             const string nullable = "Video null";
             Logger.Log(nullable);
-            explorerContainer.Show();
+            FileSelector.Show();
             return;
         }
 
@@ -133,8 +132,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                 return true;
 
             case GlobalAction.Explorer:
-                releaseResources();
-                this.Push(new VideoScreen());
+                FileSelector.Show();
                 return true;
 
             case GlobalAction.ExtensionMenu:
@@ -153,28 +151,21 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         }
     }
 
-    /// <summary>
-    /// Releases resources in a way that does not affect the operation of the facility in question
-    /// </summary>
-    private void releaseResources()
-    {
-        videoContainer?.Dispose();
-    }
-
     public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
     {
     }
 
     public void UpdateVideo(string path)
     {
-        videoContainer = new VideoContainer(path);
+        Logger.Log($"Update from {GetType()}");
+        videoContainer ??= new VideoContainer(path);
 
         videoContainer.UpdateVideo(path);
-        InternalChild = toolsContainer = new WatchingToolsContainer
+        AddInternal(toolsContainer = new WatchingToolsContainer
         {
             RelativeSizeAxes = Axes.Both,
             Video = videoContainer,
-        };
+        });
     }
 
     public void UpdateVideo(TransferVideo video)

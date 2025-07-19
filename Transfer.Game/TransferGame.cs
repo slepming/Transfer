@@ -52,12 +52,14 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
     [BackgroundDependencyLoader]
     private void load()
     {
+#if DEBUG
         AddRange([
             assemblyInfoDialog = new AssemblyInfoDialog()
             {
                 Depth = DIALOGS_DEPTH
             },
         ]);
+#endif
     }
 
     protected override void LoadComplete()

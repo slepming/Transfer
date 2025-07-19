@@ -6,27 +6,17 @@ using osuTK;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class TransferScrollContainer : TransferScrollContainer<Drawable>
-{
-    public TransferScrollContainer(Direction direction = Direction.Vertical)
-        : base(direction)
-    {
-    }
-}
+public partial class TransferScrollContainer(Direction direction = Direction.Vertical) : TransferScrollContainer<Drawable>(direction);
 
-public partial class TransferScrollContainer<T> : ScrollContainer<T> where T : Drawable
+public partial class TransferScrollContainer<T>(Direction direction) : ScrollContainer<T>(direction)
+    where T : Drawable
 {
-    public TransferScrollContainer(Direction direction)
-        : base(direction)
-    {
-    }
-
     protected override ScrollbarContainer CreateScrollbar(Direction direction) => new ScrollBar(direction);
 
     protected partial class ScrollBar : ScrollbarContainer
     {
         private const float dim_size = 0;
-        private Box scrollBox;
+        private readonly Box scrollBox;
 
         public ScrollBar(Direction direction)
             : base(direction)
