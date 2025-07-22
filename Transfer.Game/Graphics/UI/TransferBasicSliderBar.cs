@@ -1,11 +1,12 @@
 using System.Numerics;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osuTK.Graphics;
+using Vector2 = osuTK.Vector2;
 
 namespace Transfer.Game.Graphics.UI;
 
@@ -42,7 +43,9 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
         get => focusBorderThickness;
         set
         {
+            // ReSharper disable once RedundantCheckBeforeAssignment
             if (value == focusBorderThickness) return;
+
             focusBorderThickness = value;
         }
     }
@@ -60,6 +63,8 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
 
     public TransferBasicSliderBar()
     {
+        Masking = true;
+        CornerRadius = 10;
         Children =
         [
             Box = new Box
@@ -79,16 +84,18 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
                     },
                     SelectionEndCircle = new Circle
                     {
-                        Width = 10,
-                        Height = 10,
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.Centre,
                     }
                 ]
             }
         ];
+    }
 
-        Masking = true;
+    [BackgroundDependencyLoader]
+    private void load()
+    {
+        SelectionEndCircle.Size = new Vector2(Height, Height);
     }
 
     protected override void OnFocus(FocusEvent e)
@@ -101,6 +108,15 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
     {
         updateFocus();
         base.OnFocusLost(e);
+    }
+
+    protected override void Update()
+    {
+        if (SelectionEndCircle.Height != Height)
+        {
+            var circleSize = Height - 1;
+            SelectionEndCircle.ResizeTo(new Vector2(circleSize), 200, Easing.OutBack);
+        }
     }
 
     private void updateFocus()
@@ -118,11 +134,10 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
 
     protected override void UpdateValue(float value)
     {
-        SelectionContainer.TransformTo(nameof(Width), value, 300 , Easing.OutQuint);
+        SelectionContainer.TransformTo(nameof(Width), value, 300, Easing.OutQuint);
     }
 
     protected override void OnUserChange(T value)
     {
-        this.FlashColour(ColourInfo.GradientVertical(Color4.Pink, Color4.HotPink), 200, Easing.In);
     }
 }
