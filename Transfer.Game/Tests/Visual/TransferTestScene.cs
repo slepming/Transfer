@@ -42,7 +42,6 @@ namespace Transfer.Game.Tests.Visual
 
         protected override void LoadComplete()
         {
-            base.LoadComplete();
             ChangeBackgroundColour(ColourInfo.GradientVertical(Color4.Black, Color4.DarkGray));
         }
 
@@ -52,7 +51,6 @@ namespace Transfer.Game.Tests.Visual
 
             protected override void LoadAsyncComplete()
             {
-                base.LoadAsyncComplete();
                 Add(runner = new TestSceneTestRunner.TestRunner());
             }
 

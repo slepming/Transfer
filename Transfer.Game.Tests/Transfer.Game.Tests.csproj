@@ -14,4 +14,7 @@
     <PackageReference Include="ppy.osu.framework" Version="2025.704.0" />
     <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2025.511.0-nativelibs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Visual\" />
+  </ItemGroup>
 </Project>

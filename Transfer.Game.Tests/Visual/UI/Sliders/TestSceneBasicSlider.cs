@@ -1,11 +1,11 @@
 using NUnit.Framework;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Graphics.UI;
-using Transfer.Game.Tests.Visual;
 
-namespace Transfer.Game.Tests.UI.Sliders;
+namespace Transfer.Game.Tests.Visual.UI.Sliders;
 
 public partial class TestSceneBasicSlider : TransferTestScene
 {
@@ -15,10 +15,9 @@ public partial class TestSceneBasicSlider : TransferTestScene
     {
     }
 
-    [Test]
-    public void TestInit()
-    {
-        AddStep("Initialize", () => Add(slider = new TransferBasicSliderBar<double>()
+    [SetUp]
+    public void TestInit() =>
+        Schedule(() => Child = slider = new TransferBasicSliderBar<double>()
         {
             Width = 400,
             Height = 200,
@@ -30,13 +29,21 @@ public partial class TestSceneBasicSlider : TransferTestScene
                 MaxValue = 1,
                 Default = 0.5,
             }
-        }));
-    }
+        });
 
     [Test]
     public void TestSizes()
     {
-        AddAssert("Slider is not null", () => slider != null);
-        AddStep("Resize", () => slider.ResizeTo(new Vector2(150, 25), 300, Easing.Out));
+        AddStep("Add Resize sliders", () =>
+        {
+            AddSliderStep("Resize W", 0, 500, 500, v =>
+            {
+                slider.ResizeTo(new Vector2(v, slider.Height), 200, Easing.OutBack);
+            });
+            AddSliderStep("Resize H", 0, 500, 100, v =>
+            {
+                slider.ResizeTo(new Vector2(slider.Width, v), 200, Easing.OutBack);
+            });
+        });
     }
 }
