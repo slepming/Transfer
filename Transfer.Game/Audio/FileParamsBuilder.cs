@@ -39,7 +39,7 @@ public class FileParamsBuilder : IFileParamsBuilder
 
     public IFileParamsBuilder SetFileName(string fileName)
     {
-        fileParams.AudioFileName = Hash.GetHashString(fileName).ToLower();
+        fileParams.AudioFileName = fileName.GetHashString().ToLower();
         return this;
     }
 

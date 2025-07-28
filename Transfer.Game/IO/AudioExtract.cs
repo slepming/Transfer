@@ -124,7 +124,7 @@ public class AudioExtract<T> : IAudioExtract<T>
 
     private string getHashName(string path, string extension)
     {
-        return $"{Hash.GetHashString(Path.GetFileNameWithoutExtension(path)).ToLower()}.{extension}";
+        return $"{Path.GetFileNameWithoutExtension(path).GetHashString().ToLower()}.{extension}";
     }
 
     private T getTrackFromStorage(AudioManager audioManager, IResourceStore<byte[]> resourceStore, string audioName)
