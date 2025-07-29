@@ -27,7 +27,10 @@ public partial class FileSelectorDialog(ICanUpdateVideo screen) : TransferDialog
         fileSelector.CurrentFile.BindValueChanged(f =>
         {
             if (f.NewValue.Exists)
+            {
+                Hide();
                 updateVideo.UpdateVideo(f.NewValue.FullName);
+            }
         });
     }
 }

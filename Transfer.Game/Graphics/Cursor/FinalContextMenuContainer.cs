@@ -7,6 +7,5 @@ namespace Transfer.Game.Graphics.Cursor
     public partial class FinalContextMenuContainer : ContextMenuContainer
     {
         protected override Menu CreateMenu() => new FinalMenu(osu.Framework.Graphics.Direction.Vertical);
-
     }
 }

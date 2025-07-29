@@ -10,6 +10,5 @@ namespace Transfer.Game.IO
         /// <param name="paths">Path to file in explorer</param>
         /// <returns></returns>
         Task Import(params string[] paths);
-
     }
 }

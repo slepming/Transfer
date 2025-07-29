@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using Transfer.Game.Configuration;
@@ -18,26 +16,12 @@ public class PlaylistStorage : WrappedStorage
         createConfig(underlyingStorage);
     }
 
-    private async Task saveDataFromPath(string path)
-    {
-        using (FileStream fileStream = new FileStream(path, FileMode.Open))
-        {
-            using (var storageStream = UnderlyingStorage.GetStream(path, FileAccess.Write, FileMode.OpenOrCreate))
-            {
-                await fileStream.CopyToAsync(storageStream);
-            }
-        }
-    }
-
     private void createConfig(Storage storage)
     {
         configuration = new PlaylistConfigManager(storage);
         configuration.SetValue(PlaylistConfiguration.Path, storage.GetFullPath(""));
         configuration.SetValue(PlaylistConfiguration.Name, Path.GetDirectoryName(storage.GetFullPath("")));
     }
-
-    [Obsolete("In this case, it will cause a lot of latency, so I strongly suggest using references rather than moving objects around completely")]
-    public async Task SaveDataFromPathAsync(string path) => await saveDataFromPath(path);
 
     private void saveDataFromPathToLink(string path)
     {

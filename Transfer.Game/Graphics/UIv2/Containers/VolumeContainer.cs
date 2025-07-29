@@ -1,6 +1,7 @@
+using Transfer.Game.Graphics.UI.Containers;
+
 namespace Transfer.Game.Graphics.UIv2.Containers;
 
-public class VolumeContainer
+public partial class VolumeContainer : TransferContainer
 {
-    
 }

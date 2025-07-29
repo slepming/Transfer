@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Graphics.UI;
 
