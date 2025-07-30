@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using osuTK.Graphics;
 using Transfer.Game.Configuration;
+using Transfer.Game.Graphics.UIv2.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers.Overlays;
 

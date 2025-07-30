@@ -10,6 +10,11 @@ using Vector2 = osuTK.Vector2;
 
 namespace Transfer.Game.Graphics.UI;
 
+/// <summary>
+/// Set basic for Transfer slider bar.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <remarks>I don't know how I can set Size for Relative Axes Size. Because of this set please width and height manually</remarks>
 public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, INumber<T>, IMinMaxValue<T>
 {
     public Color4 BackgroundColour
@@ -50,6 +55,9 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
         }
     }
 
+    /// <summary>
+    /// Color for circle in the end selection.
+    /// </summary>
     public Color4 SelectionCircleColour
     {
         get => SelectionEndCircle.Colour;
@@ -95,6 +103,7 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
     [BackgroundDependencyLoader]
     private void load()
     {
+        // I don't know how I can set size for relative axes size. Because of this use only width and height manually.
         SelectionEndCircle.Size = new Vector2(Height, Height);
     }
 
