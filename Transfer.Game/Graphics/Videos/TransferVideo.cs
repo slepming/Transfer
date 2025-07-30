@@ -1,10 +1,12 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
+using osu.Framework.Configuration;
 using osu.Framework.Graphics.Video;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
@@ -30,19 +32,24 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     public bool IsPaused { get; private set; }
 
     [Resolved]
+    private TransferConfigManager transferConfigManager { get; set; }
+
+    [Resolved]
+    private FrameworkConfigManager frameworkConfigManager { get; set; }
+
+    [Resolved]
+    private AudioManager audioManager { get; set; }
+
+    [Resolved]
     private TempStorage tempStorage { get; set; }
 
     [NotNull]
     private AudioExtract<Track> audioExtract;
 
-    private AudioManager audioManager;
-
     private readonly BindableFloat bindableRate = new BindableFloat()
     {
         Value = 1.0f
     };
-
-    private TransferConfigManager transferConfigManager;
 
     [CanBeNull]
     protected Track Audio;
@@ -50,12 +57,10 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     public Action<bool> AudioLoading;
 
     [BackgroundDependencyLoader]
-    private void load(TransferConfigManager transferConfigManager, AudioManager audioManager)
+    private void load()
     {
         Logger.Log($"\ud83d\udcc2 Open output folder {tempStorage.GetFullPath("")}", level: LogLevel.Debug);
-        this.audioManager = audioManager;
         audioExtract = new AudioExtract<Track>(transferConfigManager);
-        this.transferConfigManager = transferConfigManager;
         bindableRate.Value = (float)transferConfigManager.Get<double>(TransferOptions.Rate);
     }
 
@@ -81,9 +86,12 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
             if (Audio != null)
             {
                 Logger.Log("Get from config value for Volume");
+                Audio.Volume.Value = frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic);
+                Logger.Log(frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic).ToString(CultureInfo.CurrentCulture), level: LogLevel.Debug);
                 Audio.Volume.ValueChanged += value =>
                 {
-                    transferConfigManager.GetBindable<double>(TransferOptions.Volume).Value = value.NewValue;
+                    frameworkConfigManager.SetValue(FrameworkSetting.VolumeMusic, value.NewValue);
+                    frameworkConfigManager.Save();
                 };
             }
 

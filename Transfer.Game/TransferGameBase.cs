@@ -158,7 +158,6 @@ public partial class TransferGameBase : osu.Framework.Game
         config.GetBindable<FrameSync>(FrameworkSetting.FrameSync).Value = FrameSync.VSync;
         config.GetBindable<WindowMode>(FrameworkSetting.WindowMode).Value = WindowMode.Windowed;
         config.GetBindable<RendererType>(FrameworkSetting.Renderer).Value = RendererType.Automatic;
-        config.GetBindable<double>(FrameworkSetting.VolumeMusic).Value = 1d;
         config.Save();
     }
 

@@ -27,7 +27,6 @@ public class TransferConfigManager(Storage storage, IDictionary<TransferOptions,
         SetDefault(TransferOptions.Rate, 1.0, 0.5, 10.0);
         SetDefault(TransferOptions.AudioCodec, AudioCodecs.libmp3lame);
         SetDefault(TransferOptions.VideoCodec, VideoCodecs.libx265);
-        SetDefault(TransferOptions.Volume, 0.0, 0.0, 1.0);
         SetDefault(TransferOptions.SeekValue, 5000);
         SetDefault(TransferOptions.OutputPath, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
         SetDefault(TransferOptions.Preset, Presets.faster);
@@ -45,7 +44,6 @@ public enum TransferOptions
     AudioBitrate,
     Rate,
     AudioCodec,
-    Volume,
     SeekValue,
     OutputPath,
     VideoCodec,
