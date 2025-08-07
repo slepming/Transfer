@@ -46,18 +46,7 @@ public partial class TestScenePlaylist : TransferTestScene
     [Test]
     public void TestPlaylistWriting()
     {
-        AddStep("Write to playlist storage", () =>
-        {
-            try
-            {
-                saveData();
-            }
-            catch (DirectoryNotFoundException)
-            {
-                PlaylistStorage.GetFullPath("./", true);
-                saveData();
-            }
-        });
+        AddStep("Write to playlist storage", saveData);
         AddStep("Delete all playlist files", () =>
         {
             PlaylistStorage.DeleteAll();

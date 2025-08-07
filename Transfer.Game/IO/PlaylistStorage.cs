@@ -28,7 +28,7 @@ public class PlaylistStorage : WrappedStorage
         if (UnderlyingStorage.Exists(Path.GetFileName(path)))
             UnderlyingStorage.Delete(Path.GetFileName(path));
 
-        string targetLinkPath = Path.Combine(UnderlyingStorage.GetFullPath(""), Path.GetFileName(Path.GetFullPath(path)));
+        string targetLinkPath = Path.Combine(GetFullPath(string.Empty), Path.GetFileName(Path.GetFullPath(path)));
         string fileForLinkPath = Path.GetFullPath(path);
 
         Logger.Log($"Create symbolic link from {fileForLinkPath} to {targetLinkPath}", level: LogLevel.Debug);

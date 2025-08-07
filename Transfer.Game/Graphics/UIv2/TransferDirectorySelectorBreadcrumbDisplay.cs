@@ -33,7 +33,7 @@ public partial class TransferDirectorySelectorBreadcrumbDisplay : DirectorySelec
 
     protected override DirectorySelectorDirectory CreateRootDirectoryItem() => new BreadcrumbDisplayComputer();
 
-    protected partial class BreadcrumbDisplayComputer() : BreadcrumbDisplayDirectory(null, "Root")
+    protected partial class BreadcrumbDisplayComputer() : BreadcrumbDisplayDirectory(null, "System")
     {
         protected override IconUsage? Icon => null;
 

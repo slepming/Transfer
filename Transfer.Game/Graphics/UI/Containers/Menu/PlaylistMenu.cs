@@ -78,22 +78,19 @@ public partial class PlaylistMenu : TransferDialog
     [BackgroundDependencyLoader]
     private void load(TextureStore textureStore)
     {
-        if (Screen == null)
-            loadStorage(PlaylistStorage, textureStore);
-        else
-            loadStorage(PlaylistStorage, Screen);
+        loadStorage(PlaylistStorage, Screen);
     }
 
-    private void loadStorage(PlaylistStorage storage, ICanUpdateVideo screen)
+    private void loadStorage(PlaylistStorage storage, [CanBeNull] ICanUpdateVideo screen)
     {
         WindowContent.Clear();
-        WindowContent.Add(fileSelector = new TransferFileSelector(storage.GetFullPath(""))
+        WindowContent.Add(fileSelector = new PlaylistFileSelector(storage.GetFullPath(""))
         {
             RelativeSizeAxes = Axes.Both
         });
         fileSelector.CurrentFile.BindValueChanged(f =>
         {
-            if (f.NewValue.Exists)
+            if (f.NewValue.Exists && screen != null)
                 screen.UpdateVideo(File.ResolveLinkTarget(f.NewValue.FullName, true)?.FullName);
         });
     }
