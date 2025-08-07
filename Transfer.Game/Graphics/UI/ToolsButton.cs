@@ -1,8 +1,7 @@
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Localisation;
-using Transfer.Game.Graphics.UI;
 
-namespace Transfer.Game.Graphics;
+namespace Transfer.Game.Graphics.UI;
 
 public partial class ToolsButton : IconButton
 {

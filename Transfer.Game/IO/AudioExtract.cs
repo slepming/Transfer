@@ -40,7 +40,7 @@ public class AudioExtract<T> : IAudioExtract<T>
             throw new Exception($"{path} does not exist - conversion canceled");
         }
 
-        if (!AudioExtractCoreExtension.ItContainsAudio(path))
+        if (!path.ItContainsAudio())
             return null;
 
         if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
@@ -49,7 +49,7 @@ public class AudioExtract<T> : IAudioExtract<T>
         Logger.Log($"The final output file name '{outputName}'", level: LogLevel.Debug);
         var resourceStore = new StorageBackedResourceStore(storage);
 
-        if (storage.Exists(outputName) && AudioExtractCoreExtension.Analyse(storage.GetFullPath(outputName)).Duration == AudioExtractCoreExtension.Analyse(path).Duration)
+        if (storage.Exists(outputName) && storage.GetFullPath(outputName).Analyse().Duration == path.Analyse().Duration)
         {
             Logger.Log("File existed in local storage, move to getTrackFromStorage", level: LogLevel.Debug);
             return getTrackFromStorage(audioManager, resourceStore, outputName);
@@ -68,16 +68,7 @@ public class AudioExtract<T> : IAudioExtract<T>
             await saveFileToStorageAsync(pathToFile, storage, outputName);
             File.Delete(pathToFile);
 
-            /*if (!storage.Exists(outputPath))
-            {
-                throw new FileNotFoundException("Audio not found");
-            }*/
-
             return getTrackFromStorage(audioManager, resourceStore, outputName) ?? throw new Exception("Failed to get track");
-        }
-        catch (FFMpegException)
-        {
-            throw;
         }
         catch (Exception ex)
         {
