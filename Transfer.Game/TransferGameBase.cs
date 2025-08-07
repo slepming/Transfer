@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
@@ -40,7 +39,6 @@ public partial class TransferGameBase : osu.Framework.Game
 
     protected Storage Storage;
     private TempStorage tempStorage;
-    private PlaylistStorage historyPlaylistsStorage;
 
     protected SafeAreaContainer SafeAreaContainer;
 
@@ -77,11 +75,6 @@ public partial class TransferGameBase : osu.Framework.Game
 
         transferConfigManager = new TransferConfigManager(Host.Storage);
         dependencies.Cache(transferConfigManager);
-        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.CachePlaylistStoragePath);
-        if (!Path.Exists(pathToPlaylist))
-            Directory.CreateDirectory(pathToPlaylist);
-        historyPlaylistsStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
-        dependencies.Cache(historyPlaylistsStorage);
 
         IResourceStore<byte[]> tempResourceStore = new StorageBackedResourceStore(tempStorage);
         dependencies.Cache(tempResourceStore);

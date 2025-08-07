@@ -62,7 +62,7 @@ public class PlaylistStorage : WrappedStorage
 
         foreach (string file in files)
         {
-            base.Delete(file);
+            deleteData(file);
         }
     }
 

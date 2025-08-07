@@ -10,18 +10,15 @@ namespace Transfer.Game.Tests.IO;
 [TestFixture]
 public partial class TestScenePlaylist : TransferTestScene
 {
-    [Resolved]
-    private PlaylistStorage playlist { get; set; }
-
     private PlaylistMenu playlistMenu;
 
     private string currentFileName;
-    private readonly string standartPath = Path.Combine(Path.GetTempPath(), "TestVideo");
+    private readonly string classicPath = Path.Combine(Path.GetTempPath(), "TestVideo");
 
     [BackgroundDependencyLoader]
     private void load()
     {
-        playlistMenu = new PlaylistMenu(playlist)
+        playlistMenu = new PlaylistMenu(PlaylistStorage)
         {
             Title = "TestPlaylist",
         };
@@ -36,21 +33,34 @@ public partial class TestScenePlaylist : TransferTestScene
         });
     }
 
+    private void saveData()
+    {
+        if (!Directory.Exists(classicPath)) Directory.CreateDirectory(classicPath);
+        currentFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".mp4";
+        File.Create(Path.Combine(classicPath, currentFileName)).Dispose();
+        if (PlaylistStorage.Exists(Path.GetFileName(Path.Combine(classicPath, currentFileName))))
+            PlaylistStorage.Delete(Path.GetFileName(Path.Combine(classicPath, currentFileName)));
+        PlaylistStorage.SaveDataFromPathToLink(Path.Combine(classicPath, currentFileName));
+    }
+
     [Test]
     public void TestPlaylistWriting()
     {
         AddStep("Write to playlist storage", () =>
         {
-            if (!Directory.Exists(standartPath)) Directory.CreateDirectory(standartPath);
-            currentFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".mp4";
-            File.Create(Path.Combine(standartPath, currentFileName)).Dispose();
-            if (playlist.Exists(Path.GetFileName(Path.Combine(standartPath, currentFileName))))
-                playlist.Delete(Path.GetFileName(Path.Combine(standartPath, currentFileName)));
-            playlist.SaveDataFromPathToLink(Path.Combine(standartPath, currentFileName));
+            try
+            {
+                saveData();
+            }
+            catch (DirectoryNotFoundException)
+            {
+                PlaylistStorage.GetFullPath("./", true);
+                saveData();
+            }
         });
         AddStep("Delete all playlist files", () =>
         {
-            playlist.DeleteAll();
+            PlaylistStorage.DeleteAll();
         });
     }
 

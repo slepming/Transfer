@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -39,7 +38,6 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
     private TransferConfigManager transferConfigManager;
     private AssemblyInfoDialog assemblyInfoDialog;
 
-    [Resolved]
     private PlaylistStorage historyPlaylistsStorage { get; set; }
 
     public TransferGame(string[] args)
@@ -59,6 +57,13 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
                 Depth = DIALOGS_DEPTH
             },
         ]);
+        dependencies.TryGet(out transferConfigManager);
+
+        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.CachePlaylistStoragePath);
+        if (!Path.Exists(pathToPlaylist))
+            Directory.CreateDirectory(pathToPlaylist);
+        historyPlaylistsStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
+        dependencies.Cache(historyPlaylistsStorage);
 #endif
     }
 
@@ -67,7 +72,6 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
         base.LoadComplete();
 
         dependencies.TryGet(out screenStack);
-        dependencies.TryGet(out transferConfigManager);
         audioExtract = new AudioExtract<Track>(transferConfigManager);
 
         try
@@ -100,7 +104,7 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
                     allowedPaths.Clear();
                     Scheduler.AddDelayed(async void () =>
                     {
-                        if (await audioManager.GetTrackStore(tempResourceStore).GetAsync($"{Path.GetFileNameWithoutExtension(args[0]).GetHashString()}.mp3") is Track audio)
+                        if (await audioManager.GetTrackStore(tempResourceStore).GetAsync($"{Path.GetFileNameWithoutExtension(args[0]).GetHashString()}.mp3") is { } audio)
                             screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
                         else
                             screenStack.Push(transferScreen = new VideoScreen(pathToVideo: args[0], audio: null));
