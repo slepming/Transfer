@@ -1,3 +1,5 @@
+Releases not working. I don't know why. He-he-he. I think it's not working bec i am silly.. 
+
 # Greeting
 Welcome to the README of my application called Transfer. This is a multimedia application for viewing videos with the ability to edit or convert them into different formats, change the speed, and some other features.
 
@@ -25,3 +27,4 @@ Maybe this project will continue to exist and evolve until I find something I ca
 With my fear of people, I can’t properly attend interviews, and I’m afraid to even make a commit — *scared I’ll mess something up.* But I doubt anyone will ever even see this project.
 
 Maybe that's exactly why I made it public after being private for so long.  
+
