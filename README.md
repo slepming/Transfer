@@ -9,3 +9,19 @@ I am slepming, greetings to everyone who has read this README. I live and study 
 
 ### Building
 You can compile the application using `dotnet build -c Release` in the folder with Transfer, or for testing, you can go to Transfer.Game.Tests and run `dotnet watch`. osu-framework works well with Hot reload, so you can edit lines of code in real-time and see the changes.
+
+---
+### Just because I can
+*This project is not really intended for end users.* Its main purpose is to represent me as a programmer/developer. It won’t be presented as some major project work or anything like that. It simply proves to myself that I can make *"bread from wood and water"* as a programmer.
+
+Why? Because nobody really combines game engines built for a single game and turns them into a media control application. Not because it’s too hard, but because... *no one needs it.*
+
+I’m interested in participating — even if it’s just my own — in something that’s small for the world but huge for me.
+
+Yes, some parts or implementations are taken from other projects. But that’s probably what learning is about, right? When I first started learning app development, I followed books and lectures. *But where do I go from there? I don’t know.*
+
+Maybe this project will continue to exist and evolve until I find something I can contribute to and grow within.
+
+With my fear of people, I can’t properly attend interviews, and I’m afraid to even make a commit — *scared I’ll mess something up.* But I doubt anyone will ever even see this project.
+
+Maybe that's exactly why I made it public after being private for so long.  
