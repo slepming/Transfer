@@ -39,7 +39,8 @@ public partial class TestScenePlaylist : TransferTestScene
         currentFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + ".mp4";
         File.Create(Path.Combine(classicPath, currentFileName)).Dispose();
         if (PlaylistStorage.Exists(Path.GetFileName(Path.Combine(classicPath, currentFileName))))
-            PlaylistStorage.Delete(Path.GetFileName(Path.Combine(classicPath, currentFileName)));
+            return;
+
         PlaylistStorage.SaveDataFromPathToLink(Path.Combine(classicPath, currentFileName));
     }
 
@@ -65,5 +66,6 @@ public partial class TestScenePlaylist : TransferTestScene
         });
         AddStep("Open playlist list window", () => playlistMenu.Show());
         AddStep("Close playlist list window", () => playlistMenu.Hide());
+        AddStep("Update playlist", () => playlistMenu.UpdatePath());
     }
 }

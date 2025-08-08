@@ -68,6 +68,6 @@ public class PlaylistStorage : WrappedStorage
 
     public void DeleteAll(string path = "", string pattern = "*")
     {
-        deleteAllData(path, pattern);
+        deleteAllData(MutatePath(path), pattern);
     }
 }

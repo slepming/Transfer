@@ -12,4 +12,11 @@ public partial class PlaylistFileSelector(string initialPath = null) : TransferF
     protected override DirectorySelectorBreadcrumbDisplay CreateBreadcrumb() => null;
 
     protected override DirectorySelectorDirectory CreateParentDirectoryItem(DirectoryInfo directory) => new PlaylistDirectorySelectorParentDirectory(directory);
+
+    public void UpdateFiles()
+    {
+        DirectoryInfo current = CurrentPath.Value;
+        CurrentPath.Value = current.Parent;
+        CurrentPath.Value = current;
+    }
 }

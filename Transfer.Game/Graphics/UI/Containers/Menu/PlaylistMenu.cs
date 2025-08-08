@@ -25,7 +25,7 @@ public partial class PlaylistMenu : TransferDialog
 {
     private TransparentButton close;
     private readonly FillFlowContainer mainContainer;
-    private TransferFileSelector fileSelector;
+    private PlaylistFileSelector fileSelector;
 
     public LocalisableString Title
     {
@@ -120,4 +120,6 @@ public partial class PlaylistMenu : TransferDialog
         Logger.Log($"User selected file {path}", level: LogLevel.Debug);
         SelectedFileAction?.Invoke(path);
     }
+
+    public void UpdatePath() => fileSelector.UpdateFiles();
 }
