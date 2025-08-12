@@ -1,7 +1,5 @@
 using System;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Localisation;
-using osuTK.Platform.Windows;
 
 namespace Transfer.Game.Graphics.UI;
 

@@ -95,26 +95,6 @@ public partial class PlaylistMenu : TransferDialog
         });
     }
 
-    [Obsolete]
-    private void loadStorage(PlaylistStorage storage, TextureStore textureStore = null)
-    {
-        mainContainer.Clear();
-        var files = storage.GetFiles("");
-
-        foreach (var file in files)
-        {
-            if (!TransferGameBase.VIDEO_EXTENSIONS.Contains(Path.GetExtension(file))) continue;
-
-            mainContainer.Add(new PlaylistButton()
-            {
-                Height = 25,
-                RelativeSizeAxes = Axes.X,
-                Current = file,
-                Action = onActionExplorerButton
-            });
-        }
-    }
-
     private void onActionExplorerButton(string path)
     {
         Logger.Log($"User selected file {path}", level: LogLevel.Debug);
