@@ -138,8 +138,9 @@ public partial class WatchingToolsContainer : Container
                                             },
                                         ],
                                     },
-                                    repeatButton = new ToolsButton(FontAwesome.Regular.Circle, "Repeat")
+                                    repeatButton = new ToolsButton(FontAwesome.Regular.Circle)
                                     {
+                                        Text = "Repeat",
                                         Size = new Vector2(50, 50),
                                     },
                                 ]

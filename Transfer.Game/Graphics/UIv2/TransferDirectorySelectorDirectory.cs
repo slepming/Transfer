@@ -1,7 +1,10 @@
 using System.IO;
+using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using Transfer.Game.Extensions;
+using Transfer.Game.Graphics.UI;
 
 namespace Transfer.Game.Graphics.UIv2;
 

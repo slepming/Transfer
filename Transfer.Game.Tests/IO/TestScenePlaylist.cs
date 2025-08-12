@@ -2,7 +2,6 @@ using System.IO;
 using NUnit.Framework;
 using osu.Framework.Allocation;
 using Transfer.Game.Graphics.UI.Containers.Menu;
-using Transfer.Game.IO;
 using Transfer.Game.Tests.Visual;
 
 namespace Transfer.Game.Tests.IO;
@@ -18,19 +17,18 @@ public partial class TestScenePlaylist : TransferTestScene
     [BackgroundDependencyLoader]
     private void load()
     {
-        playlistMenu = new PlaylistMenu(PlaylistStorage)
-        {
-            Title = "TestPlaylist",
-        };
     }
 
-    [Test]
+    [SetUp]
     public void CreateTestVideo()
     {
-        AddStep("Initialization window", () =>
-        {
-            Add(playlistMenu);
-        });
+        Clear();
+        Add(
+            playlistMenu = new PlaylistMenu(PlaylistStorage)
+            {
+                Title = "TestPlaylist",
+            });
+        playlistMenu.Show();
     }
 
     private void saveData()
@@ -64,7 +62,6 @@ public partial class TestScenePlaylist : TransferTestScene
             else
                 playlistMenu.Show();
         });
-        AddStep("Open playlist list window", () => playlistMenu.Show());
         AddStep("Close playlist list window", () => playlistMenu.Hide());
         AddStep("Update playlist", () => playlistMenu.UpdatePath());
     }
