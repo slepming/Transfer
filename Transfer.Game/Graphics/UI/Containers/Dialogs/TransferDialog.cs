@@ -1,8 +1,8 @@
+using System;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.UserInterface;
-using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
@@ -10,10 +10,12 @@ using Transfer.Game.Graphics.UI.Containers.Overlays;
 namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 /// <summary>
-/// This class creates a window according to the developer's requirements.
+/// This class creates app window
 /// </summary>
 public abstract partial class TransferDialog : TransferFocusedOverlayContainer
 {
+    public Action<Exception> OnHandledException;
+
     private Box background;
 
     private TransparentButton closeButton;
@@ -79,18 +81,13 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
         base.Hide();
     }
 
-    protected override void OnDrag(DragEvent e)
-    {
-        Position = e.ScreenSpaceMousePosition;
-    }
-
     protected override void PopIn()
     {
-        this.ScaleTo(1, 200, Easing.Out);
+        this.FadeIn(120, Easing.InOutQuad);
     }
 
     protected override void PopOut()
     {
-        this.ScaleTo(0, 300, Easing.In);
+        this.FadeOut(160, Easing.OutCirc);
     }
 }

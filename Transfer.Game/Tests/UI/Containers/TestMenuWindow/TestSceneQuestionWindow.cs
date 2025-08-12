@@ -1,4 +1,5 @@
 using osu.Framework.Allocation;
+using osu.Framework.Graphics.Containers;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Tests.Visual;
 
@@ -26,7 +27,7 @@ public partial class TestSceneQuestionWindow : TransferTestScene
     {
         AddStep("Change visible menu", () =>
         {
-            if (testQuestionDialog.Visible)
+            if (testQuestionDialog.State.Value == Visibility.Visible)
                 testQuestionDialog.Hide();
             else
                 testQuestionDialog.Show();

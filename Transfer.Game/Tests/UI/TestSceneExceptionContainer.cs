@@ -1,4 +1,5 @@
 using osu.Framework.Allocation;
+using osu.Framework.Graphics.Containers;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Tests.Visual;
 
@@ -26,7 +27,7 @@ public partial class TestSceneExceptionContainer : TransferTestScene
         AddStep("Add container", () => Add(errorContainer));
         AddStep("Change Visible", () =>
         {
-            if (errorContainer.Visible)
+            if (errorContainer.State.Value == Visibility.Visible)
                 errorContainer.Hide();
             else
                 errorContainer.Show();

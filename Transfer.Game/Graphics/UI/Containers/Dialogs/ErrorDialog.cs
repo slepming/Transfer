@@ -11,7 +11,8 @@ public partial class ErrorDialog : TransferDialog
     {
         set
         {
-            if (HeaderName == value) return;
+            if (HeaderName.Equals(value)) return;
+
             HeaderName = value;
         }
     }
@@ -21,15 +22,20 @@ public partial class ErrorDialog : TransferDialog
         get => message;
         set
         {
-            if (message == value) return;
+            if (message.Equals(value)) return;
+
             message = value;
         }
     }
 
     private LocalisableString message;
 
+    protected override bool StartHidden => false;
+
     public ErrorDialog()
     {
+        // I don't know why, but framework set visible to hidden
+        State.Value = Visibility.Visible;
         BorderColour = Colour4.Red;
     }
 
@@ -44,5 +50,10 @@ public partial class ErrorDialog : TransferDialog
                 RelativeSizeAxes = Axes.Both,
             }
         ]);
+    }
+
+    protected override void PopOut()
+    {
+        base.PopOut();
     }
 }

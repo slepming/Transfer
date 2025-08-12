@@ -1,3 +1,4 @@
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Testing;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Tests.Visual;
@@ -22,7 +23,7 @@ public partial class TestSceneOpenPlaylistWindow : TransferTestScene
         });
         AddStep("Change visible", () =>
         {
-            if (openPlaylistMenu.Visible)
+            if (openPlaylistMenu.State.Value == Visibility.Visible)
                 openPlaylistMenu.Hide();
             else
                 openPlaylistMenu.Show();

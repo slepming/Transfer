@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -91,7 +90,16 @@ public partial class PlaylistMenu : TransferDialog
         fileSelector.CurrentFile.BindValueChanged(f =>
         {
             if (f.NewValue.Exists && screen != null)
-                screen.UpdateVideo(File.ResolveLinkTarget(f.NewValue.FullName, true)?.FullName);
+            {
+                try
+                {
+                    screen.UpdateVideo(File.ResolveLinkTarget(f.NewValue.FullName, true)?.FullName);
+                }
+                catch (FileNotFoundException fnfe)
+                {
+                    OnHandledException.Invoke(fnfe);
+                }
+            }
         });
     }
 

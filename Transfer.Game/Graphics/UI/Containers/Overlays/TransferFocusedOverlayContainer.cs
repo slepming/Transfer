@@ -6,16 +6,6 @@ namespace Transfer.Game.Graphics.UI.Containers.Overlays;
 
 public abstract partial class TransferFocusedOverlayContainer : FocusedOverlayContainer
 {
-    public bool Visible
-    {
-        get
-        {
-            if (State.Value == Visibility.Hidden) return false;
-
-            return true;
-        }
-    }
-
     protected override bool OnKeyDown(KeyDownEvent e)
     {
         if (e.Repeat)
@@ -24,7 +14,7 @@ public abstract partial class TransferFocusedOverlayContainer : FocusedOverlayCo
         switch (e.Key)
         {
             case Key.Escape:
-                this.Hide();
+                Hide();
                 return true;
         }
 
