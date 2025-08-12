@@ -1,3 +1,4 @@
+using osu.Framework.Graphics.Containers;
 using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.Tests.Visual;
 
@@ -26,7 +27,7 @@ public partial class TestSceneExtensionMenu : TransferTestScene
         AddStep("Adding object on screen", () => Add(extensionMenu));
         AddStep("Change extension menu visible", () =>
         {
-            if (extensionMenu.Visible) extensionMenu.Hide();
+            if (extensionMenu.State.Value == Visibility.Visible) extensionMenu.Hide();
             else extensionMenu.Show();
         });
     }

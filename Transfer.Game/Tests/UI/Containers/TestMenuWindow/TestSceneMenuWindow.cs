@@ -21,14 +21,14 @@ public partial class TestSceneMenuWindow : TransferTestScene
     {
         AddStep("Change visible menu", () =>
         {
-            if (testTransferDialog.Visible)
+            if (testTransferDialog.State.Value == Visibility.Visible)
                 testTransferDialog.Hide();
             else
                 testTransferDialog.Show();
         });
     }
 
-    internal partial class TestTransferDialog : TransferDialog
+    private partial class TestTransferDialog : TransferDialog
     {
         public TestTransferDialog()
         {

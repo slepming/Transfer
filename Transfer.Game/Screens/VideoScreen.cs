@@ -5,6 +5,7 @@ using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
@@ -79,6 +80,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         cachePlaylist = new PlaylistMenu(playlistStorage, this)
         {
             Title = "Cache Playlist",
+            OnHandledException = Exception,
         };
         AddRangeInternal([FileSelector ??= new FileSelectorDialog(this), extensionMenu, cachePlaylist]);
     }
@@ -136,7 +138,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                 return true;
 
             case GlobalAction.ExtensionMenu:
-                if (extensionMenu.Visible)
+                if (extensionMenu.State.Value == Visibility.Visible)
                     extensionMenu.Show();
                 else
                     extensionMenu.Hide();

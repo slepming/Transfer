@@ -1,6 +1,7 @@
 using System.IO;
 using NUnit.Framework;
 using osu.Framework.Allocation;
+using osu.Framework.Graphics.Containers;
 using Transfer.Game.Graphics.UI.Containers.Menu;
 using Transfer.Game.Tests.Visual;
 
@@ -57,7 +58,7 @@ public partial class TestScenePlaylist : TransferTestScene
     {
         AddStep("Open or close playlist list window (auto)", () =>
         {
-            if (playlistMenu.Visible)
+            if (playlistMenu.State.Value == Visibility.Visible)
                 playlistMenu.Hide();
             else
                 playlistMenu.Show();
