@@ -30,6 +30,8 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     public bool VideoIsPaused => video.IsPaused;
 
+    public bool VideoLooping { get; private set; }
+
     public VideoContainer(TransferVideo transferVideo) => video = transferVideo;
 
     public VideoContainer(string filename)
@@ -45,6 +47,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
         RelativeSizeAxes = Axes.Both;
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
+        VideoLooping = tcm.Get<bool>(TransferOptions.LoopVideo);
         if (video == null) Logger.Log("Constructor Video equal null. Assigning the values given to me", level: LogLevel.Debug);
         video ??= new TransferVideo(filename)
         {
@@ -52,7 +55,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             RelativeSizeAxes = Axes.Both,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
-            Loop = false,
+            Loop = VideoLooping,
         };
         if (filename != null)
             SaveFileToPlaylist(filename);
@@ -95,7 +98,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             return;
         }
 
-        InternalChild = video;
+        Child = video;
     }
 
     protected override bool OnKeyDown(KeyDownEvent e)
@@ -232,9 +235,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     {
         if (string.IsNullOrEmpty(path)) throw new NullReferenceException("Path to video is null.");
 
-        video?.RemoveAudio();
-
-        video = new TransferVideo(path)
+        var newVideo = new TransferVideo(path)
         {
             FillMode = FillMode.Fit,
             RelativeSizeAxes = Axes.Both,
@@ -242,13 +243,14 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             Origin = Anchor.Centre,
             Loop = false,
         };
+        Child = newVideo;
+        video = newVideo;
         SaveFileToPlaylist(path);
         Logger.Log("\u2705 Video update confirm");
     }
 
     public void UpdateVideo(TransferVideo video = null)
     {
-        this.video?.RemoveAudio();
         this.video = video;
     }
 }
