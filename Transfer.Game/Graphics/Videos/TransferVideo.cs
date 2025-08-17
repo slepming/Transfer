@@ -75,7 +75,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
         try
         {
-            if (AudioExtractCoreExtension.ItContainsAudio(path))
+            if (path.ItContainsAudio())
             {
                 Logger.Log("\ud83c\udfa7 Video have audio", level: LogLevel.Debug);
                 Audio = await getAudio(tempStorage);

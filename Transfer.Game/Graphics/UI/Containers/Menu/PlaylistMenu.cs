@@ -97,6 +97,7 @@ public partial class PlaylistMenu : TransferDialog
                 }
                 catch (FileNotFoundException fnfe)
                 {
+                    Logger.Error(fnfe, "Playlist menu error");
                     OnHandledException.Invoke(fnfe);
                 }
             }

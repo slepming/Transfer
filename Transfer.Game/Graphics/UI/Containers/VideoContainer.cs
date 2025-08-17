@@ -48,19 +48,6 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
         VideoLooping = tcm.Get<bool>(TransferOptions.LoopVideo);
-        if (video == null) Logger.Log("Constructor Video equal null. Assigning the values given to me", level: LogLevel.Debug);
-        video ??= new TransferVideo(filename)
-        {
-            FillMode = FillMode.Fit,
-            RelativeSizeAxes = Axes.Both,
-            Anchor = Anchor.Centre,
-            Origin = Anchor.Centre,
-            Loop = VideoLooping,
-        };
-        if (filename != null)
-            SaveFileToPlaylist(filename);
-        video.AudioLoading += audioLoading;
-        video.SeekOccurs += onSeek;
     }
 
     private void audioLoading(bool obj)
@@ -235,16 +222,15 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     {
         if (string.IsNullOrEmpty(path)) throw new NullReferenceException("Path to video is null.");
 
-        var newVideo = new TransferVideo(path)
+        video = new TransferVideo(path)
         {
             FillMode = FillMode.Fit,
             RelativeSizeAxes = Axes.Both,
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
-            Loop = false,
+            Loop = VideoLooping,
         };
-        Child = newVideo;
-        video = newVideo;
+        video.SeekOccurs += onSeek;
         SaveFileToPlaylist(path);
         Logger.Log("\u2705 Video update confirm");
     }

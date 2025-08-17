@@ -186,16 +186,6 @@ public partial class EditScreen : TransferScreen, ICanUpdateVideo
         if (timeCode != null && videoContainer != null) timeCode.Text = videoContainer.GetTimecode();
     }
 
-    protected override void OnNotifyError(string text)
-    {
-        this.FlashColour(Colour4.Red, 1000);
-    }
-
-    protected override void LoadComplete()
-    {
-        base.LoadComplete();
-    }
-
     private async void confirmVideoEditingButtonAction()
     {
         string arguments = string.Join(" ", ffmpegFunctions.Values) ?? null;

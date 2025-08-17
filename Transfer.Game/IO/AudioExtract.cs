@@ -113,7 +113,14 @@ public class AudioExtract<T> : IAudioExtract<T>
         }
     }
 
-    private string getHashName(string path, string extension)
+    /// <summary>
+    /// For hash name
+    /// </summary>
+    /// <param name="path">Full path to file</param>
+    /// <param name="extension">File extension</param>
+    /// <param name="metadata">These metadata are used to ensure the uniqueness of the name</param>
+    /// <returns></returns>
+    private string getHashName(string path, string extension, string metadata = null)
     {
         return $"{Path.GetFileNameWithoutExtension(path).GetHashString().ToLower()}.{extension}";
     }
