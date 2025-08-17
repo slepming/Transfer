@@ -4,9 +4,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
-using osuTK;
 using Transfer.Game.Configuration;
-using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
@@ -15,29 +13,20 @@ using Transfer.Game.Playlists;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class VideoContainer : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
+public partial class VideoContainer(string filename) : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
 {
-    private TransferVideo video;
+    private IVideoController videoController;
 
     private readonly LoadingOverlay loadingOverlay = new LoadingOverlay();
-
-    private readonly string filename;
 
     [Resolved]
     private PlaylistStorage playlistStorage { get; set; }
 
     public double DefaultRate { get; private set; }
 
-    public bool VideoIsPaused => video.IsPaused;
+    public bool VideoIsPaused => videoController.IsPaused;
 
     public bool VideoLooping { get; private set; }
-
-    public VideoContainer(TransferVideo transferVideo) => video = transferVideo;
-
-    public VideoContainer(string filename)
-    {
-        this.filename = filename;
-    }
 
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager tcm)
@@ -64,76 +53,54 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
         }
     }
 
-    public double GetDuration() => video.Duration;
-
-    public string GetTimecode() => video == null ? null : $"{DateTimeOffset.FromUnixTimeMilliseconds((long)video.PlaybackPosition).DateTime:HH:mm:ss}/{DateTimeOffset.FromUnixTimeMilliseconds((long)video.Duration).DateTime:HH:mm:ss}";
-
-    public Vector2 GetVideoSize() => new Vector2(video.Width, video.Height);
-
-    protected override void LoadComplete()
-    {
-        base.LoadComplete();
-
-        if (video.IsFaulted)
-        {
-            AddInternal(new ErrorDialog()
-            {
-                Title = "Error",
-                Message = "Decoder error",
-                RelativeSizeAxes = Axes.Both,
-            });
-            return;
-        }
-
-        Child = video;
-    }
+    public double GetDuration() => videoController.Duration;
 
     protected override bool OnKeyDown(KeyDownEvent e)
     {
         switch (e.Key)
         {
             case osuTK.Input.Key.Right:
-                allSeek(video.PlaybackPosition + seekSpace);
+                allSeek(videoController.PlaybackPosition + seekSpace);
                 break;
 
             case osuTK.Input.Key.Left:
-                allSeek(video.PlaybackPosition - seekSpace);
+                allSeek(videoController.PlaybackPosition - seekSpace);
                 break;
 
             case osuTK.Input.Key.Number1:
-                allSeek(video.GetMaxLengthVideo() * 0.1);
+                allSeek(videoController.GetMaxLengthVideo() * 0.1);
                 break;
 
             case osuTK.Input.Key.Number2:
-                allSeek(video.GetMaxLengthVideo() * 0.2);
+                allSeek(videoController.GetMaxLengthVideo() * 0.2);
                 break;
 
             case osuTK.Input.Key.Number3:
-                allSeek(video.GetMaxLengthVideo() * 0.3);
+                allSeek(videoController.GetMaxLengthVideo() * 0.3);
                 break;
 
             case osuTK.Input.Key.Number4:
-                allSeek(video.GetMaxLengthVideo() * 0.4);
+                allSeek(videoController.GetMaxLengthVideo() * 0.4);
                 break;
 
             case osuTK.Input.Key.Number5:
-                allSeek(video.GetMaxLengthVideo() * 0.5);
+                allSeek(videoController.GetMaxLengthVideo() * 0.5);
                 break;
 
             case osuTK.Input.Key.Number6:
-                allSeek(video.GetMaxLengthVideo() * 0.6);
+                allSeek(videoController.GetMaxLengthVideo() * 0.6);
                 break;
 
             case osuTK.Input.Key.Number7:
-                allSeek(video.GetMaxLengthVideo() * 0.7);
+                allSeek(videoController.GetMaxLengthVideo() * 0.7);
                 break;
 
             case osuTK.Input.Key.Number8:
-                allSeek(video.GetMaxLengthVideo() * 0.8);
+                allSeek(videoController.GetMaxLengthVideo() * 0.8);
                 break;
 
             case osuTK.Input.Key.Number9:
-                allSeek(video.GetMaxLengthVideo() * 0.9);
+                allSeek(videoController.GetMaxLengthVideo() * 0.9);
                 break;
         }
 
@@ -155,7 +122,7 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     private void allSeek(double time)
     {
-        video?.Seek(time);
+        videoController?.Seek(time);
     }
 
     private void onSeek(double obj)
@@ -166,20 +133,20 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
     /// Seek video(in ms)
     /// </summary>
     /// <param name="time">ms for seeking</param>
-    public void Seek(double time) => video.Seek(time);
+    public void Seek(double time) => videoController.Seek(time);
 
-    public void SetVideoLoop(bool loop) => video.Loop = loop;
+    public void SetVideoLoop(bool loop) => videoController.Loop = loop;
 
     public void Rate(float rate)
     {
         if (rate < 0.5f) throw new ArgumentException(nameof(rate) + " Can't be less than 0.5");
 
-        video.Rate(rate);
+        videoController.Rate(rate);
     }
 
     public bool Pause()
     {
-        return video.Pause();
+        return videoController.Pause();
     }
 
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
@@ -196,12 +163,12 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
             case GlobalAction.WatchingVideoOnCurrentPlaybackRestart:
             {
-                return video.RestartAudio();
+                return videoController.RestartAudio();
             }
 
             case GlobalAction.WatchingVideoReset:
             {
-                return video.Reset();
+                return videoController.Reset();
             }
 
             default:
@@ -220,9 +187,15 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     public void UpdateVideo(string path)
     {
-        if (string.IsNullOrEmpty(path)) throw new NullReferenceException("Path to video is null.");
+        if (string.IsNullOrEmpty(path))
+        {
+            if (string.IsNullOrEmpty(filename))
+                throw new NullReferenceException("Path to video is null.");
 
-        video = new TransferVideo(path)
+            path = filename;
+        }
+
+        var video = new TransferVideo(path)
         {
             FillMode = FillMode.Fit,
             RelativeSizeAxes = Axes.Both,
@@ -230,13 +203,15 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             Origin = Anchor.Centre,
             Loop = VideoLooping,
         };
+        InternalChild = video;
         video.SeekOccurs += onSeek;
+        videoController = video;
         SaveFileToPlaylist(path);
         Logger.Log("\u2705 Video update confirm");
     }
 
     public void UpdateVideo(TransferVideo video = null)
     {
-        this.video = video;
+        this.videoController = video;
     }
 }

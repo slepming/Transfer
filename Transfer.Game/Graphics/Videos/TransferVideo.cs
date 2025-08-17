@@ -20,7 +20,7 @@ namespace Transfer.Game.Graphics.Videos;
 public partial class TransferVideo(string path, bool enableRate = false, bool startAtCurrentTime = true) : Video(path, startAtCurrentTime), IVideoController
 {
     /// <summary>
-    /// You can do animations when it occurs
+    /// Event when it occurs
     /// </summary>
     public Action<double> SeekOccurs;
 
