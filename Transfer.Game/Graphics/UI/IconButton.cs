@@ -8,7 +8,7 @@ using osuTK;
 
 namespace Transfer.Game.Graphics.UI;
 
-public abstract partial class IconButton(Action<SpriteText> spriteText) : ClickableContainer
+public abstract partial class IconButton(Action<SpriteText> defaultCreationParameters) : ClickableContainer
 {
     protected const float FONT_SIZE = 24;
     protected abstract IconUsage? Icon { get; }
@@ -28,7 +28,12 @@ public abstract partial class IconButton(Action<SpriteText> spriteText) : Clicka
 
     private LocalisableString text;
 
-    protected virtual SpriteText CreateSpriteText() => new SpriteText();
+    protected virtual SpriteText CreateSpriteText()
+    {
+        var spriteText = new SpriteText();
+        defaultCreationParameters?.Invoke(spriteText);
+        return spriteText;
+    }
 
     [BackgroundDependencyLoader]
     private void load()
@@ -59,7 +64,6 @@ public abstract partial class IconButton(Action<SpriteText> spriteText) : Clicka
             st.Anchor = Anchor.CentreLeft;
             st.Origin = Anchor.CentreLeft;
             st.Text = text;
-            spriteText.Invoke(st);
         }));
     }
 }

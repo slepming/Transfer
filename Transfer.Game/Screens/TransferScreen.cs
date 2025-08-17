@@ -13,25 +13,11 @@ namespace Transfer.Game.Screens
         protected Loading LoadingComponent;
         public virtual string Title => GetType().Name;
         public string Description => Title;
-        protected bool CursorVisible = true;
-
-        protected Bindable<string> NotifyError = new Bindable<string>();
 
         // ReSharper disable once PublicConstructorInAbstractClass
         public TransferScreen()
         {
             Logger.Log($"Initialization {Description}");
-            NotifyError.ValueChanged += onNotifyError;
-        }
-
-        private void onNotifyError(ValueChangedEvent<string> e)
-        {
-            OnNotifyError(e.NewValue);
-        }
-
-        public virtual void CursorHide()
-        {
-            CursorVisible = !CursorVisible;
         }
 
         protected virtual void OnExit() => this.Exit();
@@ -44,11 +30,11 @@ namespace Transfer.Game.Screens
 
         public override bool OnExiting(ScreenExitEvent e)
         {
-            this.FadeIn(1000, Easing.InOutQuad).ScaleTo(0.1f,2000,Easing.In);
+            this.FadeIn(1000, Easing.InOutQuad).ScaleTo(0.1f, 2000, Easing.In);
             return base.OnExiting(e);
         }
 
-        protected void Exception(Exception transferException) // WHY I DON't USE IT?????!!!
+        protected void Exception(Exception transferException)
         {
             AddInternal(new ErrorDialog()
             {
@@ -56,10 +42,6 @@ namespace Transfer.Game.Screens
                 Message = transferException.Message,
                 Depth = 1000
             });
-        }
-
-        protected virtual void OnNotifyError(string text)
-        {
         }
     }
 }
