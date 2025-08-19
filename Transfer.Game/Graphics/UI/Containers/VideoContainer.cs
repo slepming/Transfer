@@ -13,7 +13,7 @@ using Transfer.Game.Playlists;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class VideoContainer(string filename) : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
+public partial class VideoContainer : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
 {
     private IVideoController videoController;
 
@@ -28,10 +28,14 @@ public partial class VideoContainer(string filename) : TransferContainer, IKeyBi
 
     public bool VideoLooping { get; private set; }
 
+    public VideoContainer(string filename)
+    {
+        UpdateVideo(filename);
+    }
+
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager tcm)
     {
-        if (string.IsNullOrWhiteSpace(filename)) Logger.Log("File path is null or file don't find");
         Logger.Log("\u21ba Video initialization", level: LogLevel.Debug);
         RelativeSizeAxes = Axes.Both;
 
@@ -188,12 +192,7 @@ public partial class VideoContainer(string filename) : TransferContainer, IKeyBi
     public void UpdateVideo(string path)
     {
         if (string.IsNullOrEmpty(path))
-        {
-            if (string.IsNullOrEmpty(filename))
-                throw new NullReferenceException("Path to video is null.");
-
-            path = filename;
-        }
+            throw new NullReferenceException("Path to video is null.");
 
         var video = new TransferVideo(path)
         {

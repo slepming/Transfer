@@ -17,7 +17,8 @@ public partial class HeaderContainer : TransferContainer
         get => headerText;
         set
         {
-            if (headerText == value) return;
+            if (headerText.Equals(value)) return;
+
             headerText = value;
         }
     }
@@ -29,8 +30,6 @@ public partial class HeaderContainer : TransferContainer
         RelativeSizeAxes = Axes.X;
         Height = 40;
         Masking = true;
-        BorderColour = Colour4.White;
-        BorderThickness = 2;
     }
 
     [BackgroundDependencyLoader]
@@ -41,7 +40,7 @@ public partial class HeaderContainer : TransferContainer
             new Box
             {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.Gray.Opacity(0.3f),
+                Colour = Colour4.White.Opacity(0.05f),
             },
             new SpriteText
             {
@@ -53,7 +52,7 @@ public partial class HeaderContainer : TransferContainer
             closeButton = new TransparentButton() // Idk, this button can't change position with Origin
             {
                 Anchor = Anchor.CentreRight,
-                Origin = Anchor.Centre,
+                Origin = Anchor.CentreRight,
                 Text = "Close",
             },
         ];
