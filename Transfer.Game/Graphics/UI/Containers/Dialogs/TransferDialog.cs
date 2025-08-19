@@ -42,9 +42,9 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
         RelativeSizeAxes = Axes.Both;
         Size = new Vector2(1 / 1.2f, 1 / 1.5f);
         Masking = true;
-        MaskingSmoothness = 5;
-        BorderColour = Colour4.White;
-        BorderThickness = 3;
+        MaskingSmoothness = 3;
+        CornerRadius = 5;
+        CornerExponent = 6;
         Anchor = Anchor.Centre;
         Origin = Anchor.Centre;
     }
@@ -56,8 +56,7 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
         [
             background = new Box
             {
-                Alpha = 0.3f,
-                Colour = Colour4.Gray,
+                Colour = Colour4.FromHex("#2d2d2d").Opacity(0.8f),
                 RelativeSizeAxes = Axes.Both
             },
             PrefixBox ??= new()
