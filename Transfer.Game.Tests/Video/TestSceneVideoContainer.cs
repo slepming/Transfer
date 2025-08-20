@@ -38,29 +38,12 @@ public partial class TestSceneVideoContainer : TransferTestScene
     [Test]
     public void Initialize()
     {
-        AddAssert("Video", () => videoTestBytes != null, "Video store added");
-        AddStep("Check bytes", () =>
-        {
-            if (videoTestBytes == null)
-                Logger.Log("Resources is not initialized", level: LogLevel.Error);
-            else
-                Logger.Log("Resources is initialized", level: LogLevel.Verbose);
-        });
-
-        AddStep("View Videos content", () =>
+        AddStep("Load", () =>
         {
             targetVideo = videoTestBytes.Data;
-        });
-
-        AddAssert("Check target video is null or not", () => targetVideo is not null);
-        AddStep("Writing video bytes to a file", () =>
-        {
             var videoInByteArray = targetVideo;
             tempFilePath = Path.Combine(Path.GetTempPath(), "test_video.mp4");
             File.WriteAllBytes(tempFilePath, videoInByteArray);
-        });
-        AddStep("Create", () =>
-        {
             Clear();
             videoContainer = new VideoContainer(tempFilePath)
             {
