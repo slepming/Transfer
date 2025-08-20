@@ -45,11 +45,11 @@ public class AudioExtract<T> : IAudioExtract<T>
 
         if (audioManager == null) throw new ArgumentNullException(nameof(audioManager));
 
-        outputName ??= getHashName(path, "mp3");
+        outputName ??= getHashByteName(path, "mp3");
         Logger.Log($"The final output file name '{outputName}'", level: LogLevel.Debug);
         var resourceStore = new StorageBackedResourceStore(storage);
 
-        if (storage.Exists(outputName) && storage.GetFullPath(outputName).Analyse().Duration == path.Analyse().Duration)
+        if (storage.Exists(outputName))
         {
             Logger.Log("File existed in local storage, move to getTrackFromStorage", level: LogLevel.Debug);
             return getTrackFromStorage(audioManager, resourceStore, outputName);
@@ -63,7 +63,7 @@ public class AudioExtract<T> : IAudioExtract<T>
 
         try
         {
-            string pathToFile = await convertFileAsync(path);
+            string pathToFile = await convertFileAsync(path, outputName);
             Logger.Log($"Path to file: {pathToFile}\n Output path: {storage.GetFullPath("")}");
             await saveFileToStorageAsync(pathToFile, storage, outputName);
             File.Delete(pathToFile);
@@ -96,7 +96,7 @@ public class AudioExtract<T> : IAudioExtract<T>
 
         try
         {
-            string pathToAudio = await convertFileAsync(Path.GetFileNameWithoutExtension(path));
+            string pathToAudio = await convertFileAsync(Path.GetFileNameWithoutExtension(path), audioName);
             await saveFileToStorageAsync(pathToAudio, storage, audioName);
             await saveFileToStorageAsync(pathToAudio, storage, videoName);
             File.Delete(pathToAudio);
@@ -118,11 +118,34 @@ public class AudioExtract<T> : IAudioExtract<T>
     /// </summary>
     /// <param name="path">Full path to file</param>
     /// <param name="extension">File extension</param>
-    /// <param name="metadata">These metadata are used to ensure the uniqueness of the name</param>
-    /// <returns></returns>
-    private string getHashName(string path, string extension, string metadata = null)
+    /// <returns>File name</returns>
+    private string getHashName(string path, string extension)
     {
         return $"{Path.GetFileNameWithoutExtension(path).GetHashString().ToLower()}.{extension}";
+    }
+
+    /// <summary>
+    /// Hash name with N start bytes from video
+    /// </summary>
+    /// <param name="path">Path to video</param>
+    /// <param name="extension">File extension</param>
+    /// <param name="n">Read count</param>
+    /// <returns>File name</returns>
+    private string getHashByteName(string path, string extension, int n = 1024 * 1024)
+    {
+        byte[] buffer = new byte[n];
+
+        string result;
+
+        using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+        {
+            int read = fs.Read(buffer, 0, n);
+            if (read != n)
+                Logger.Log($"Failed to read audio bytes from file. Byte read: {read}/{n}");
+            result = $"{Path.GetFileNameWithoutExtension(path)}{BitConverter.ToString(buffer, 0, read)}.{extension}";
+        }
+
+        return result.GetHashString().ToLower();
     }
 
     private T getTrackFromStorage(AudioManager audioManager, IResourceStore<byte[]> resourceStore, string audioName)
@@ -130,7 +153,7 @@ public class AudioExtract<T> : IAudioExtract<T>
         return audioManager.GetTrackStore(resourceStore).Get(audioName) as T;
     }
 
-    private async Task<string> convertFileAsync(string path, string outputPath = null, string arguments = null)
+    private async Task<string> convertFileAsync(string path, string outputFileName, string outputPath = null, string arguments = null)
     {
         outputPath ??= tempFolder;
 
@@ -140,7 +163,7 @@ public class AudioExtract<T> : IAudioExtract<T>
                 .SetPath(outputPath)
                 .SetBitrate(transferConfigManager.Get<int>(TransferOptions.AudioBitrate))
                 .SetAudioCodec(transferConfigManager.Get<AudioCodecs>(TransferOptions.AudioCodec))
-                .SetFileName(Path.GetFileNameWithoutExtension(path)), arguments);
+                .SetFileName(Path.GetFileNameWithoutExtension(outputFileName)), arguments);
 
         return pathToFile;
     }

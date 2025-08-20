@@ -17,11 +17,6 @@ public interface IFileParamsBuilder
 
     IFileParamsBuilder SetAudioCodec(AudioCodecs audioCodec);
 
-    /// <summary>
-    /// Function hashed you name and return in ffmpeg
-    /// </summary>
-    /// <param name="fileName">Not hash file name</param>
-    /// <returns></returns>
     IFileParamsBuilder SetFileName(string fileName);
 
     FileParams Build();
