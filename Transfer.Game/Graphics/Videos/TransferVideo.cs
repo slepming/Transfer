@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
@@ -69,7 +68,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         if (Audio != null) Audio.Tempo.Value = obj.NewValue;
     }
 
-    protected override async void LoadComplete()
+    protected override void LoadComplete()
     {
         base.LoadComplete();
 
@@ -78,8 +77,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
             if (path.ItContainsAudio())
             {
                 Logger.Log("\ud83c\udfa7 Video have audio", level: LogLevel.Debug);
-                Audio = await getAudio(tempStorage);
-                if (Audio == null) throw new Exception("Audio extraction failed");
+                Audio = getAudio(tempStorage);
             }
             else Logger.Log("\ud83d\udd07 Video have not audio");
 
@@ -209,11 +207,11 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
     public void SetAudio(Track track) => Audio = track;
 
-    private async Task<Track> getAudio(Storage audioStorage)
+    private Track getAudio(Storage audioStorage)
     {
         Logger.Log($"Preparing the conversion. Storage params {{ Path for storage file '{audioStorage.GetFullPath("")}' }} "
                    + $"{{ Path to temp file: '{path}' }}", LoggingTarget.Runtime, LogLevel.Debug);
-        return await audioExtract.CreateaAndGetTrackAsync(path,
+        return audioExtract.CreateAndGetTrack(path,
             audioStorage,
             audioManager,
             arguments: "-c copy"
