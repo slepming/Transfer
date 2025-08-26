@@ -13,7 +13,13 @@ public partial class TransferGame
             Logger.Log($"Handling of {dropFiles.Count} files");
             string[] paths = dropFiles.ToArray();
             dropFiles.Clear();
-            Task.Factory.StartNew(() => Import(dropFiles.ToArray()), TaskCreationOptions.LongRunning);
+            Task.Factory.StartNew(() =>
+            {
+                lock (dropFiles)
+                {
+                    Import(dropFiles.ToArray());
+                }
+            }, TaskCreationOptions.LongRunning);
         }
     }
 
@@ -24,7 +30,7 @@ public partial class TransferGame
             if (paths.Length == 0) return Task.CompletedTask;
 
             if (paths.Length == 1)
-                audioExtract.CreateTrackInStorageAsync(System.IO.Path.GetFullPath(paths[0]), tempStorage);
+                audioExtract.CreateTrackInStorage(System.IO.Path.GetFullPath(paths[0]), tempStorage);
 
             foreach (string path in paths)
             {
@@ -37,7 +43,7 @@ public partial class TransferGame
                 }
 
                 Logger.Log(@$"""{Path.GetFileName(path)}"" been importing");
-                audioExtract.CreateTrackInStorageAsync(Path.GetFullPath(path), tempStorage);
+                audioExtract.CreateTrackInStorage(Path.GetFullPath(path), tempStorage);
             }
 
             return Task.CompletedTask;

@@ -14,7 +14,7 @@ internal static class ConversionBase
     /// <param name="fileParams"></param>
     /// <param name="customArguments">Custom arguments for ffmpeg handling</param>
     /// <returns>Path to video</returns>
-    public static Task<string> Conversion<T>(string video, TransferConfigManager transferConfig, IFileParamsBuilder fileParams = null, params string[] customArguments) where T : IConversionModel, new()
+    public static string Conversion<T>(string video, TransferConfigManager transferConfig, IFileParamsBuilder fileParams = null, params string[] customArguments) where T : IConversionModel, new()
     {
         IConversionModel model = new T();
         return model.HandleConversion(video, transferConfig, fileParams, customArguments: customArguments);

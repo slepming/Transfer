@@ -102,9 +102,9 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
                         Import(allowedPaths.ToArray());
 
                     allowedPaths.Clear();
-                    Scheduler.AddDelayed(async void () =>
+                    Scheduler.AddDelayed(() =>
                     {
-                        if (await audioManager.GetTrackStore(tempResourceStore).GetAsync($"{Path.GetFileNameWithoutExtension(args[0]).GetHashString()}.mp3") is { } audio)
+                        if (audioManager.GetTrackStore(tempResourceStore).Get($"{Path.GetFileNameWithoutExtension(args[0]).GetHashString()}.mp3") is { } audio)
                             screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
                         else
                             screenStack.Push(transferScreen = new VideoScreen(pathToVideo: args[0], audio: null));

@@ -22,7 +22,7 @@ public abstract class TransferFFmpegCore
     /// <param name="fileParams">Substitute arguments.</param>
     /// <param name="customArguments">Custom arguments for editing with FFmpeg</param>
     /// <returns>Path to audio</returns>
-    protected internal async Task<string> Conversion(string video, TransferConfigManager transferConfig, [NotNull] FileParams fileParams, params string[] customArguments)
+    protected internal string Conversion(string video, TransferConfigManager transferConfig, [NotNull] FileParams fileParams, params string[] customArguments)
     {
         string outputPath = fileParams?.OutputPath ?? Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(video));
         outputPath = Path.Combine(outputPath, fileParams.AudioFileName);
@@ -46,19 +46,19 @@ public abstract class TransferFFmpegCore
         {
             CONVERSION_STATUS.Value = $"Conversion started at {outputPath}";
             DateTime startTime = DateTime.Now;
-            await FFMpegArguments
-                  .FromFileInput(video)
-                  .OutputToFile(outputPath, false, options => options
-                                                              .WithAudioBitrate(fileParams.Bitrate)
-                                                              .WithAudioCodec(FFMpeg.GetCodec(fileParams?.AudioCodec.ToString()))
-                                                              .WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
-                                                              .WithCustomArgument(
-                                                                  $"-threads {transferConfig.Get<int>(TransferOptions.Threads)} " +
-                                                                  "-max_muxing_queue_size 4196 " +
-                                                                  $"{FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, fileParams?.Rate)}")
-                                                              .WithCustomArgument(arguments)
-                                                              .WithFastStart())
-                  .ProcessAsynchronously();
+            FFMpegArguments
+                .FromFileInput(video)
+                .OutputToFile(outputPath, false, options => options
+                                                            .WithAudioBitrate(fileParams.Bitrate)
+                                                            .WithAudioCodec(FFMpeg.GetCodec(fileParams?.AudioCodec.ToString()))
+                                                            .WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
+                                                            .WithCustomArgument(
+                                                                $"-threads {transferConfig.Get<int>(TransferOptions.Threads)} " +
+                                                                "-max_muxing_queue_size 4196 " +
+                                                                $"{FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, fileParams?.Rate)}")
+                                                            .WithCustomArgument(arguments)
+                                                            .WithFastStart())
+                .ProcessSynchronously();
             DateTime endTime = DateTime.Now;
             CONVERSION_STATUS.Value = "Conversion completed";
             var fileSize = new FileInfo(outputPath).Length;
