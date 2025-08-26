@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Transfer.Game.Configuration;
 
 namespace Transfer.Game.Audio.ConversionModels

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using FFMpegCore.Exceptions;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;

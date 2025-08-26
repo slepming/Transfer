@@ -1,5 +1,4 @@
 using Transfer.Game.Configuration;
-using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Audio;
 

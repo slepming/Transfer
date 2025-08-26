@@ -1,6 +1,5 @@
 using System.IO;
 using NUnit.Framework;
-using osu.Framework.Logging;
 using osu.Framework.Screens;
 using Transfer.Game.Screens;
 using Transfer.Game.Tests.Visual;

@@ -1,10 +1,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Logging;
-using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Tests.Visual;

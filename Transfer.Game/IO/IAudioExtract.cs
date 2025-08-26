@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Platform;

@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;

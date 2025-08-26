@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using FFMpegCore;
 using FFMpegCore.Exceptions;
 using JetBrains.Annotations;
