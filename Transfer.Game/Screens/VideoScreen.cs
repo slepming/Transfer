@@ -14,7 +14,6 @@ using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Graphics.UI.Containers.Menu;
-using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;

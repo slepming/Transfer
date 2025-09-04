@@ -8,7 +8,6 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
-using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.IO;
 
 namespace Transfer.Game.Graphics.UI.Containers.Menu;

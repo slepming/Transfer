@@ -3,7 +3,6 @@ using System.IO;
 using NUnit.Framework;
 using osu.Framework.Graphics;
 using Transfer.Game.Graphics.UI.Containers;
-using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Tests.Visual;
 
 namespace Transfer.Game.Tests.Video;

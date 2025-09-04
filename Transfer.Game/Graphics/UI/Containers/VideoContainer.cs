@@ -5,7 +5,6 @@ using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using Transfer.Game.Configuration;
-using Transfer.Game.Graphics.UI.Containers.Overlays;
 using Transfer.Game.Graphics.Videos;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;

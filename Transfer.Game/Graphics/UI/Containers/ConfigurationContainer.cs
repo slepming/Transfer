@@ -6,7 +6,6 @@ using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Extensions;
-using Transfer.Game.Graphics.UI.Containers.Overlays;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 

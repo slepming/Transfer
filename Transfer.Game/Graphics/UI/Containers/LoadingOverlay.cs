@@ -4,7 +4,7 @@ using osu.Framework.Graphics.Sprites;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UIv2;
 
-namespace Transfer.Game.Graphics.UI.Containers.Overlays;
+namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class LoadingOverlay : OverlayContainer
 {

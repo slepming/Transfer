@@ -2,7 +2,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
 using osuTK.Input;
 
-namespace Transfer.Game.Graphics.UI.Containers.Overlays;
+namespace Transfer.Game.Graphics.UI.Containers;
 
 public abstract partial class TransferFocusedOverlayContainer : FocusedOverlayContainer
 {

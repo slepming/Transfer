@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackageReference Include="FFmpeg.AutoGen" Version="4.3.0.1" />
     <PackageReference Include="FFMpegCore" Version="5.1.0" />
-    <PackageReference Include="ppy.osu.Framework" Version="2025.704.0" />
-    <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2025.511.0-nativelibs" />
+    <PackageReference Include="ppy.osu.Framework" Version="2025.826.0" />
+    <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2025.806.0-nativelibs" />
     <PackageReference Include="xFFmpeg.NET" Version="7.2.0" />
   </ItemGroup>
 </Project>

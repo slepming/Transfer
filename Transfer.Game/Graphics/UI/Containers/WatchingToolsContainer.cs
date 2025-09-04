@@ -9,7 +9,7 @@ using osuTK.Graphics;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UIv2.Containers;
 
-namespace Transfer.Game.Graphics.UI.Containers.Overlays;
+namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class WatchingToolsContainer : Container
 {
@@ -32,8 +32,6 @@ public partial class WatchingToolsContainer : Container
     private TransferConfigManager configManager { get; set; }
 
     public VideoContainer Video;
-
-    private string timecode = string.Empty;
 
     /// <summary>
     /// This seek space is needed to indicate the gap between transitions from one point in the video timeline to another, as requested by the user. This functionality already exists in VideoContainer; they are the same thing. I just don't want to rewrite the hotkeys for this container
