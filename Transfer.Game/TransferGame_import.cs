@@ -30,7 +30,10 @@ public partial class TransferGame
             if (paths.Length == 0) return Task.CompletedTask;
 
             if (paths.Length == 1)
+            {
                 audioExtract.CreateTrackInStorage(System.IO.Path.GetFullPath(paths[0]), tempStorage);
+                return Task.CompletedTask;
+            }
 
             foreach (string path in paths)
             {

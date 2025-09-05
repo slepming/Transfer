@@ -47,77 +47,45 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
 
     public TransferGame() { }
 
-    [BackgroundDependencyLoader]
-    private void load()
-    {
-#if DEBUG
-        AddRange([
-            assemblyInfoDialog = new AssemblyInfoDialog()
-            {
-                Depth = DIALOGS_DEPTH
-            },
-        ]);
-        dependencies.TryGet(out transferConfigManager);
-
-        string pathToPlaylist = transferConfigManager.Get<string>(TransferOptions.CachePlaylistStoragePath);
-        if (!Path.Exists(pathToPlaylist))
-            Directory.CreateDirectory(pathToPlaylist);
-        historyPlaylistsStorage = new PlaylistStorage(new NativeStorage(pathToPlaylist));
-        dependencies.Cache(historyPlaylistsStorage);
-#endif
-    }
-
     protected override void LoadComplete()
     {
         base.LoadComplete();
 
         dependencies.TryGet(out screenStack);
+        dependencies.TryGet(out transferConfigManager);
         audioExtract = new AudioExtract<Track>(transferConfigManager);
 
-        try
+        if (args.Length > 0)
         {
-            if (args.Length > 0)
+            dependencies.TryGet(out tempResourceStore);
+            dependencies.TryGet(out tempStorage);
+
+            if (dependencies.TryGet(out AudioManager audioManager))
             {
-                dependencies.TryGet(out tempResourceStore);
-                dependencies.TryGet(out tempStorage);
+                List<string> allowedPaths = new List<string>();
 
-                if (dependencies.TryGet(out AudioManager audioManager))
+                foreach (string path in args)
                 {
-                    List<string> allowedPaths = new List<string>();
+                    string fileName = Path.GetFileName(path);
 
-                    foreach (string path in args)
-                    {
-                        if (!File.Exists(path))
-                            continue;
+                    if (!tempStorage.Exists(fileName) && !VIDEO_EXTENSIONS.Contains(Path.GetExtension(path)))
+                        continue;
 
-                        string fileName = Path.GetFileName(path);
-
-                        if (!tempStorage.Exists(fileName) && !VIDEO_EXTENSIONS.Contains(Path.GetExtension(path)))
-                            continue;
-
-                        allowedPaths.Add(path);
-                    }
-
-                    lock (allowedPaths)
-                        Import(allowedPaths.ToArray());
-
-                    allowedPaths.Clear();
-                    Scheduler.AddDelayed(() =>
-                    {
-                        if (audioManager.GetTrackStore(tempResourceStore).Get($"{Path.GetFileNameWithoutExtension(args[0]).GetHashString()}.mp3") is { } audio)
-                            screenStack.Push(transferScreen = new VideoScreen(audio, pathToVideo: args[0]));
-                        else
-                            screenStack.Push(transferScreen = new VideoScreen(pathToVideo: args[0], audio: null));
-                    }, 500);
+                    allowedPaths.Add(path);
                 }
+
+                lock (allowedPaths)
+                    Import(allowedPaths.ToArray());
+
+                allowedPaths.Clear();
+                Scheduler.AddDelayed(() =>
+                {
+                    screenStack.Push(transferScreen = new VideoScreen(args[0]));
+                }, 500);
             }
-            else
-                screenStack.Push(transferScreen = new VideoScreen());
         }
-        catch
-        {
-            throw;
-        }
+        else
+            screenStack.Push(transferScreen = new VideoScreen());
     }
 
     private readonly List<string> dropFiles = new List<string>();

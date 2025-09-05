@@ -63,11 +63,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     public VideoScreen() { }
     public VideoScreen(string pathToVideo) => VideoPath = pathToVideo;
 
-    public VideoScreen(Track audio, string pathToVideo)
-    {
-        VideoPath = pathToVideo;
-    }
-
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager)
     {
