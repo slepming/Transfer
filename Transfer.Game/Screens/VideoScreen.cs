@@ -45,8 +45,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     private PlaylistMenu cachePlaylist { get; set; }
 
-    protected IAudioExtract<Track> AudioExtract { get; set; }
-
     private int seek;
 
     private string videoPath { get; set; }
@@ -73,7 +71,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager transferConfigManager)
     {
-        AudioExtract = new AudioExtract<Track>(transferConfigManager);
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
         cachePlaylist = new PlaylistMenu(playlistStorage, this)
         {
@@ -97,20 +94,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
         try
         {
-            videoContainer = new VideoContainer(videoPath)
-            {
-                RelativeSizeAxes = Axes.Both,
-                SeekSpace = seek
-            };
-            InternalChildren =
-            [
-                videoContainer,
-                toolsContainer = new WatchingToolsContainer
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Video = videoContainer,
-                }
-            ];
+            UpdateVideo(videoPath);
         }
         catch (Exception ex)
         {
@@ -161,7 +145,10 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     public void UpdateVideo(string path)
     {
         Logger.Log($"Update from {GetType()}");
-        videoContainer ??= new VideoContainer(path);
+        videoContainer ??= new VideoContainer(path)
+        {
+            SeekSpace = seek
+        };
 
         videoContainer.UpdateVideo(path);
 
@@ -169,12 +156,12 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         {
             AddRangeInternal(
                 [
+                    videoContainer,
                     toolsContainer = new WatchingToolsContainer
                     {
                         RelativeSizeAxes = Axes.Both,
                         Video = videoContainer,
                     },
-                    videoContainer
                 ]
             );
         }
