@@ -1,10 +1,12 @@
 using System;
 using System.IO;
 using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.IO.Stores;
 using osu.Framework.Platform;
 using osu.Framework.Testing;
+using osuTK;
 using osuTK.Graphics;
 using Transfer.Game.IO;
 
@@ -51,7 +53,7 @@ public abstract partial class TransferTestScene : TestScene
 
     protected override void LoadComplete()
     {
-        ChangeBackgroundColour(ColourInfo.GradientVertical(Color4.Black, Color4.DarkGray));
+        ChangeBackgroundColour(Colour4.FromHex("#010221"));
     }
 
     private partial class TransferTestSceneTestRunner : TransferGameBase, ITestSceneTestRunner

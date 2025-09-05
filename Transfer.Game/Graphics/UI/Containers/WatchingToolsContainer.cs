@@ -1,9 +1,11 @@
 using System;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
 using Transfer.Game.Configuration;
@@ -16,13 +18,6 @@ public partial class WatchingToolsContainer : Container
     public VolumeContainer VolumeContainer;
     public VideoPlaybackContainer PlaybackContainer;
 
-    public Color4 BackgroundColour
-    {
-        set => background.Colour = value;
-    }
-
-    private Box background;
-    private Container videoBox;
     private Container toolsBox;
 
     private ToolsButton negativeSpeed, doubleSpeed, nextSeekButton, backSeekButton, stopButton;
@@ -31,6 +26,7 @@ public partial class WatchingToolsContainer : Container
     [Resolved]
     private TransferConfigManager configManager { get; set; }
 
+    [CanBeNull]
     public VideoContainer Video;
 
     /// <summary>
@@ -51,23 +47,10 @@ public partial class WatchingToolsContainer : Container
 
         InternalChildren =
         [
-            background = new Box
-            {
-                Colour = Colour4.FromHex("#010216"),
-                RelativeSizeAxes = Axes.Both,
-                Depth = 3
-            },
-            videoBox = new Container
-            {
-                RelativeSizeAxes = Axes.Both,
-                Child = Video,
-                Depth = 2,
-            },
             toolsBox = new Container
             {
                 RelativeSizeAxes = Axes.Both,
                 Size = new Vector2(Size.X, Size.Y / 10),
-                Depth = 1,
                 Anchor = Anchor.BottomCentre,
                 Origin = Anchor.BottomCentre,
                 Masking = true,
@@ -75,7 +58,7 @@ public partial class WatchingToolsContainer : Container
                 BorderThickness = 3,
                 Children =
                 [
-                    new Box // background
+                    new Box
                     {
                         Colour = Colour4.Black,
                         Alpha = 0.5f,
@@ -86,15 +69,15 @@ public partial class WatchingToolsContainer : Container
                         RelativeSizeAxes = Axes.X,
                         Size = new Vector2(Size.X, 3),
                         Anchor = Anchor.TopCentre,
-                        Origin = Anchor.TopCentre,
+                        Origin = Anchor.TopCentre
                     },
-                    new TransferContainer()
+                    new TransferContainer
                     {
                         RelativeSizeAxes = Axes.Both,
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Child =
-                            new FillFlowContainer()
+                            new FillFlowContainer
                             {
                                 AutoSizeAxes = Axes.Both,
                                 Anchor = Anchor.Centre,
@@ -105,9 +88,9 @@ public partial class WatchingToolsContainer : Container
                                 [
                                     settingsButton = new ToolsButton(FontAwesome.Solid.Spinner)
                                     {
-                                        Size = new Vector2(25, 25),
+                                        Size = new Vector2(25, 25)
                                     },
-                                    new FillFlowContainer()
+                                    new FillFlowContainer
                                     {
                                         AutoSizeAxes = Axes.Both,
                                         Direction = FillDirection.Horizontal,
@@ -133,14 +116,14 @@ public partial class WatchingToolsContainer : Container
                                             doubleSpeed = new ToolsButton(FontAwesome.Solid.LongArrowAltRight)
                                             {
                                                 Size = new Vector2(50, 50)
-                                            },
-                                        ],
+                                            }
+                                        ]
                                     },
                                     repeatButton = new ToolsButton(FontAwesome.Regular.Circle)
                                     {
                                         Text = "Repeat",
-                                        Size = new Vector2(50, 50),
-                                    },
+                                        Size = new Vector2(50, 50)
+                                    }
                                 ]
                             }
                     }
@@ -156,47 +139,37 @@ public partial class WatchingToolsContainer : Container
 
         // settingsButton.Action += onOpenSettings;
         repeatButton.Action += onActivateRepeat;
-
-        SetMaxPlaybackValue(Video.GetDuration());
     }
 
     private void negativeSeek()
     {
-        Video.Seek(-seekSpace);
+        Video?.Seek(-seekSpace);
     }
 
     private void positiveSeek()
     {
-        Video.Seek(seekSpace);
+        Video?.Seek(seekSpace);
     }
 
     private void onNegativeSpeedClick()
     {
-        Video.Rate(0.5f);
+        Video?.Rate(0.5f);
     }
 
     private void onDoubleSpeedClick()
     {
-        Video.Rate(2);
+        Video?.Rate(2);
     }
 
     private void onActivateRepeat()
     {
         bool videoLoopFromConfig = configManager.Get<bool>(TransferOptions.LoopVideo);
         configManager.SetValue(TransferOptions.LoopVideo, !videoLoopFromConfig);
-        Video.SetVideoLoop(videoLoopFromConfig);
+        Video?.SetVideoLoop(videoLoopFromConfig);
     }
 
     private void onClickPlayButton()
     {
-        Video.Pause();
-    }
-
-    private long duration;
-
-    public void SetMaxPlaybackValue(double value)
-    {
-        PlaybackContainer.SetMaxSliderValue(value);
-        duration = (long)value;
+        Video?.Pause();
     }
 }

@@ -3,6 +3,7 @@ using osu.Framework.Screens;
 using osu.Framework.Graphics;
 using osu.Framework.Logging;
 using osu.Framework.Bindables;
+using osu.Framework.Graphics.Shapes;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 
@@ -14,10 +15,13 @@ namespace Transfer.Game.Screens
         public virtual string Title => GetType().Name;
         public string Description => Title;
 
+        private readonly Box backgroundFill;
+
         // ReSharper disable once PublicConstructorInAbstractClass
-        public TransferScreen()
+        protected TransferScreen()
         {
             Logger.Log($"Initialization {Description}");
+            AddInternal(backgroundFill = CreateBackground().With(b => b.RelativeSizeAxes = Axes.Both));
         }
 
         protected virtual void OnExit() => this.Exit();
@@ -33,6 +37,13 @@ namespace Transfer.Game.Screens
             this.FadeIn(1000, Easing.InOutQuad).ScaleTo(0.1f, 2000, Easing.In);
             return base.OnExiting(e);
         }
+
+        protected virtual Box CreateBackground() => new Box()
+        {
+            RelativeSizeAxes = Axes.Both,
+            Depth = float.MaxValue,
+            Colour = Colour4.Transparent
+        };
 
         protected void Exception(Exception transferException)
         {

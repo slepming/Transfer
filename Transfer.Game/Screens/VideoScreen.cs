@@ -6,6 +6,7 @@ using osu.Framework.Audio.Track;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
@@ -46,8 +47,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
     protected IAudioExtract<Track> AudioExtract { get; set; }
 
-    private LoadingOverlay loadingOverlay = new() { Header = "Loading..." };
-
     private int seek;
 
     private string videoPath { get; set; }
@@ -79,7 +78,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         cachePlaylist = new PlaylistMenu(playlistStorage, this)
         {
             Title = "Cache Playlist",
-            OnHandledException = Exception,
+            OnHandledException = Exception
         };
         AddRangeInternal([FileSelector ??= new FileSelectorDialog(this), extensionMenu, cachePlaylist]);
     }
@@ -103,24 +102,27 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                 RelativeSizeAxes = Axes.Both,
                 SeekSpace = seek
             };
-            //frameworkConfigManager?.SetValue(FrameworkSetting.WindowedSize, videoContainer is not null ? new Size((int)videoContainer.Video.Size.X, (int)videoContainer.Video.Size.Y) : new Size(1280, 720));
-            InternalChild = toolsContainer = new WatchingToolsContainer
-            {
-                RelativeSizeAxes = Axes.Both,
-                Video = videoContainer,
-            };
+            InternalChildren =
+            [
+                videoContainer,
+                toolsContainer = new WatchingToolsContainer
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Video = videoContainer,
+                }
+            ];
         }
         catch (Exception ex)
         {
             Logger.Error(ex, "Unhandled exception: ");
-            AddInternal(new ExceptionContainer
-            {
-                HeaderText = "Error",
-                Text = ex.Message,
-                RelativeSizeAxes = Axes.Both,
-            });
+            Exception(ex);
         }
     }
+
+    protected override Box CreateBackground() => new()
+    {
+        Colour = Colour4.FromHex("#010221")
+    };
 
     public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
     {
@@ -165,11 +167,16 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
 
         if (toolsContainer == null)
         {
-            AddInternal(toolsContainer = new WatchingToolsContainer
-            {
-                RelativeSizeAxes = Axes.Both,
-                Video = videoContainer,
-            });
+            AddRangeInternal(
+                [
+                    toolsContainer = new WatchingToolsContainer
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Video = videoContainer,
+                    },
+                    videoContainer
+                ]
+            );
         }
     }
 
