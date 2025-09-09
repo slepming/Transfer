@@ -15,12 +15,10 @@ namespace Transfer.Game.Graphics.UIv2;
 
 public partial class TransferFileSelector(string initialPath = null, string[] validFileExtensions = null) : FileSelector(initialPath, validFileExtensions)
 {
-    protected override Drawable CreateHiddenToggleButton() => new TransparentButton()
+    protected override Drawable CreateHiddenToggleButton() => new TransferCheckbox(s => s.Font = new FontUsage(TransferFonts.Oswald))
     {
-        Size = new Vector2(200, 25),
-        Text = "Toggle hidden items",
-        Action = ShowHiddenItems.Toggle,
-    };
+        LabelText = "Toggle hidden items",
+    }.With(b => b.Current.BindValueChanged(_ => ShowHiddenItems.Toggle()));
 
     protected override ScrollContainer<Drawable> CreateScrollContainer() => new TransferScrollContainer();
 
