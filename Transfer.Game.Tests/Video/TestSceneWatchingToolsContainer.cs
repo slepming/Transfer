@@ -42,7 +42,6 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
             };
             Add(new WatchingToolsContainer()
             {
-                RelativeSizeAxes = Axes.Both,
                 Video = videoContainer
             });
         });

@@ -34,6 +34,14 @@ public partial class WatchingToolsContainer : Container
     /// </summary>
     private int seekSpace;
 
+    public WatchingToolsContainer()
+    {
+        RelativeSizeAxes = Axes.X;
+        AutoSizeAxes = Axes.Y;
+        Anchor = Anchor.BottomCentre;
+        Origin = Anchor.BottomCentre;
+    }
+
     [BackgroundDependencyLoader]
     private void load()
     {
@@ -49,8 +57,8 @@ public partial class WatchingToolsContainer : Container
         [
             toolsBox = new Container
             {
-                RelativeSizeAxes = Axes.Both,
-                Size = new Vector2(Size.X, Size.Y / 10),
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y,
                 Anchor = Anchor.BottomCentre,
                 Origin = Anchor.BottomCentre,
                 Masking = true,
@@ -67,15 +75,17 @@ public partial class WatchingToolsContainer : Container
                     PlaybackContainer = new VideoPlaybackContainer
                     {
                         RelativeSizeAxes = Axes.X,
-                        Size = new Vector2(Size.X, 3),
+                        Size = new Vector2(Size.X, 5),
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre
                     },
                     new TransferContainer
                     {
-                        RelativeSizeAxes = Axes.Both,
+                        RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
+                        Padding = new MarginPadding(25),
                         Child =
                             new FillFlowContainer
                             {
