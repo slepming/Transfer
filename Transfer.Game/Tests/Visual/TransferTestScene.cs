@@ -2,12 +2,9 @@ using System;
 using System.IO;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.IO.Stores;
 using osu.Framework.Platform;
 using osu.Framework.Testing;
-using osuTK;
-using osuTK.Graphics;
 using Transfer.Game.IO;
 
 namespace Transfer.Game.Tests.Visual;

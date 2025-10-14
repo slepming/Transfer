@@ -1,4 +1,5 @@
 using System.Reflection;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 
@@ -6,11 +7,12 @@ namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 public partial class AssemblyInfoDialog : TransferDialog
 {
-    private Assembly assembly = Assembly.GetExecutingAssembly();
-    private TextFlowContainer textFlowContainer;
+    private readonly Assembly assembly = Assembly.GetExecutingAssembly();
 
-    public AssemblyInfoDialog()
+    [BackgroundDependencyLoader]
+    private void load()
     {
+        TextFlowContainer textFlowContainer;
         HeaderName = "Assembly Info";
         WindowContent.AddRange([
             textFlowContainer = new TextFlowContainer()

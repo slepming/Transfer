@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
@@ -12,7 +13,7 @@ using Transfer.Game.Playlists;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class VideoContainer : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
+public partial class VideoContainer([NotNull] string filename) : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
 {
     private IVideoController videoController;
 
@@ -27,11 +28,6 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     public bool VideoLooping { get; private set; }
 
-    public VideoContainer(string filename)
-    {
-        UpdateVideo(filename);
-    }
-
     [BackgroundDependencyLoader]
     private void load(TransferConfigManager tcm)
     {
@@ -40,6 +36,8 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
         VideoLooping = tcm.Get<bool>(TransferOptions.LoopVideo);
+
+        UpdateVideo(filename);
     }
 
     private void audioLoading(bool obj)
@@ -128,12 +126,8 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
         videoController?.Seek(time);
     }
 
-    private void onSeek(double obj)
-    {
-    }
-
     /// <summary>
-    /// Seek video(in ms)
+    /// Seek video
     /// </summary>
     /// <param name="time">ms for seeking</param>
     public void Seek(double time) => videoController.Seek(time);
@@ -142,7 +136,11 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     public void Rate(float rate)
     {
-        if (rate < 0.5f) throw new ArgumentException(nameof(rate) + " Can't be less than 0.5");
+        if (rate < 0.5f)
+        {
+            Logger.Log($"{nameof(rate)} Can't be less than 0.5", level: LogLevel.Debug);
+            rate = 1f;
+        }
 
         videoController.Rate(rate);
     }
@@ -201,8 +199,9 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
             Origin = Anchor.Centre,
             Loop = VideoLooping,
         };
+
         InternalChild = video;
-        video.SeekOccurs += onSeek;
+
         videoController = video;
         SaveFileToPlaylist(path);
         Logger.Log("\u2705 Video update confirm");
@@ -210,6 +209,6 @@ public partial class VideoContainer : TransferContainer, IKeyBindingHandler<Glob
 
     public void UpdateVideo(TransferVideo video = null)
     {
-        this.videoController = video;
+        videoController = video;
     }
 }

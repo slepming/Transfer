@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
@@ -12,7 +13,6 @@ using osu.Framework.Platform;
 using osu.Framework.Screens;
 using osu.Framework.Threading;
 using Transfer.Game.Configuration;
-using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI.Containers.Dialogs;
 using Transfer.Game.Input.Bindings;
 using Transfer.Game.IO;
@@ -25,9 +25,10 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
     public const int DIALOGS_DEPTH = -1;
     private Screen transferScreen;
 
-    private readonly string[] args = [];
+    [CanBeNull]
+    private readonly string[] args = null;
 
-    private TempStorage tempStorage = null;
+    private TempStorage tempStorage;
 
     private StorageBackedResourceStore tempResourceStore = null;
 
@@ -36,16 +37,14 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
     private IAudioExtract<Track> audioExtract;
     private DependencyContainer dependencies;
     private TransferConfigManager transferConfigManager;
-    private AssemblyInfoDialog assemblyInfoDialog;
+    private readonly AssemblyInfoDialog assemblyInfoDialog = new AssemblyInfoDialog();
 
     private PlaylistStorage historyPlaylistsStorage { get; set; }
 
-    public TransferGame(string[] args)
+    public TransferGame(string[] args = null)
     {
         this.args = args;
     }
-
-    public TransferGame() { }
 
     protected override void LoadComplete()
     {
@@ -55,7 +54,7 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
         dependencies.TryGet(out transferConfigManager);
         audioExtract = new AudioExtract<Track>(transferConfigManager);
 
-        if (args.Length > 0)
+        if (args is { Length: > 0 })
         {
             dependencies.TryGet(out tempResourceStore);
             dependencies.TryGet(out tempStorage);
