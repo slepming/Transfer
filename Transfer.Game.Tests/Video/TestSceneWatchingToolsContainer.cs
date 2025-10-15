@@ -40,9 +40,9 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
             {
                 RelativeSizeAxes = Axes.Both,
             };
-            Add(new WatchingToolsContainer()
+            Add(new WatchingToolsContainer
             {
-                Video = videoContainer
+                Video = videoContainer.GetVideoController()
             });
         });
     }

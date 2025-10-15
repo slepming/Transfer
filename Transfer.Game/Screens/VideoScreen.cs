@@ -153,7 +153,7 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
                     videoContainer,
                     toolsContainer = new WatchingToolsContainer
                     {
-                        Video = videoContainer,
+                        Video = videoContainer.GetVideoController(),
                     },
                 ]
             );

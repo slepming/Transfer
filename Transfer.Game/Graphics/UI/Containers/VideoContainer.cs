@@ -17,14 +17,10 @@ public partial class VideoContainer([NotNull] string filename) : TransferContain
 {
     private IVideoController videoController;
 
-    private readonly LoadingOverlay loadingOverlay = new LoadingOverlay();
-
     [Resolved]
     private PlaylistStorage playlistStorage { get; set; }
 
     public double DefaultRate { get; private set; }
-
-    public bool VideoIsPaused => videoController.IsPaused;
 
     public bool VideoLooping { get; private set; }
 
@@ -39,22 +35,6 @@ public partial class VideoContainer([NotNull] string filename) : TransferContain
 
         UpdateVideo(filename);
     }
-
-    private void audioLoading(bool obj)
-    {
-        if (obj)
-        {
-            loadingOverlay.Show();
-            Logger.Log("Start loading", level: LogLevel.Debug);
-        }
-        else
-        {
-            loadingOverlay.Hide();
-            Logger.Log("Stop loading", level: LogLevel.Debug);
-        }
-    }
-
-    public double GetDuration() => videoController.Duration;
 
     protected override bool OnKeyDown(KeyDownEvent e)
     {
@@ -132,19 +112,6 @@ public partial class VideoContainer([NotNull] string filename) : TransferContain
     /// <param name="time">ms for seeking</param>
     public void Seek(double time) => videoController.Seek(time);
 
-    public void SetVideoLoop(bool loop) => videoController.Loop = loop;
-
-    public void Rate(float rate)
-    {
-        if (rate < 0.5f)
-        {
-            Logger.Log($"{nameof(rate)} Can't be less than 0.5", level: LogLevel.Debug);
-            rate = 1f;
-        }
-
-        videoController.Rate(rate);
-    }
-
     public bool Pause()
     {
         return videoController.Pause();
@@ -185,6 +152,8 @@ public partial class VideoContainer([NotNull] string filename) : TransferContain
     {
         playlistStorage?.SaveDataFromPathToLink(pathToFile);
     }
+
+    public IVideoController GetVideoController() => videoController;
 
     public void UpdateVideo(string path)
     {

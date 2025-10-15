@@ -27,7 +27,6 @@ public partial class PlaylistMenu : TransferDialog
 
     public LocalisableString Title
     {
-        get => HeaderName;
         set
         {
             if (HeaderName.Equals(value)) return;

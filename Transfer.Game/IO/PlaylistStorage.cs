@@ -32,7 +32,7 @@ public class PlaylistStorage : WrappedStorage
         string fileForLinkPath = Path.GetFullPath(path);
 
         Logger.Log($"Create symbolic link from {fileForLinkPath} to {targetLinkPath}", level: LogLevel.Debug);
-        var info = File.CreateSymbolicLink(targetLinkPath, fileForLinkPath);
+        File.CreateSymbolicLink(targetLinkPath, fileForLinkPath);
     }
 
     public void SaveDataFromPathToLink(string path) => saveDataFromPathToLink(path);
