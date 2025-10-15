@@ -22,7 +22,6 @@ namespace Transfer.Game.Graphics.UI.Containers.Menu;
 /// </remarks>
 public partial class PlaylistMenu : TransferDialog
 {
-    private TransparentButton close;
     private readonly FillFlowContainer mainContainer;
     private PlaylistFileSelector fileSelector;
 
@@ -53,7 +52,7 @@ public partial class PlaylistMenu : TransferDialog
 
         Screen = screen;
 
-        this.PlaylistStorage = playlistStorage;
+        PlaylistStorage = playlistStorage;
         WindowContent.AddRange(
         [
             new TransferScrollContainer()

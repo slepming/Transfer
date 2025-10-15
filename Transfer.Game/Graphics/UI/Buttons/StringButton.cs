@@ -9,12 +9,12 @@ using osu.Framework.Localisation;
 using osuTK.Graphics;
 using Transfer.Game.Extensions;
 
-namespace Transfer.Game.Graphics.UI;
+namespace Transfer.Game.Graphics.UI.Buttons;
 
 public partial class StringButton : ClickableContainer, IHasTooltip
 {
-    private Box background;
-    private SpriteText spriteText;
+    private readonly Box background;
+    private readonly SpriteText spriteText;
 
     private LocalisableString text;
 
@@ -23,7 +23,8 @@ public partial class StringButton : ClickableContainer, IHasTooltip
         get => text;
         set
         {
-            if(text == value) return;
+            if (text.Equals(value)) return;
+
             text = value;
         }
     }

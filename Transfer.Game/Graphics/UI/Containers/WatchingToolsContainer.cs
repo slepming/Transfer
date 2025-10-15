@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 using Transfer.Game.Configuration;
+using Transfer.Game.Graphics.UI.Buttons;
 using Transfer.Game.Graphics.UIv2.Containers;
 
 namespace Transfer.Game.Graphics.UI.Containers;

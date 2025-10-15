@@ -4,7 +4,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using Transfer.Game.Extensions;
-using Transfer.Game.Graphics.UI;
+using Transfer.Game.Graphics.UI.Buttons;
 using Transfer.Game.Graphics.UIv2.Buttons;
 
 namespace Transfer.Game.Graphics.UIv2;

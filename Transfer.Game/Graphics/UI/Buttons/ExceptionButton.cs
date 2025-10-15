@@ -7,7 +7,7 @@ using osu.Framework.Input.Events;
 using osuTK.Graphics;
 using Transfer.Game.Extensions;
 
-namespace Transfer.Game.Graphics.UI;
+namespace Transfer.Game.Graphics.UI.Buttons;
 
 public partial class ExceptionButton : ClickableContainer
 {

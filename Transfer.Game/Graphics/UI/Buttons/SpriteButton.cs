@@ -7,7 +7,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Logging;
 
-namespace Transfer.Game.Graphics.UI;
+namespace Transfer.Game.Graphics.UI.Buttons;
 
 public partial class SpriteButton : ClickableContainer
 {

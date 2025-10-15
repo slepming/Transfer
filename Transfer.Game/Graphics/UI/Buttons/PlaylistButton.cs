@@ -7,7 +7,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using Transfer.Game.Extensions;
 
-namespace Transfer.Game.Graphics.UI;
+namespace Transfer.Game.Graphics.UI.Buttons;
 
 public partial class PlaylistButton : ClickableContainer
 {

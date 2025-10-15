@@ -8,7 +8,7 @@ using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Extensions;
 
-namespace Transfer.Game.Graphics.UI;
+namespace Transfer.Game.Graphics.UI.Buttons;
 
 /// <summary>
 /// This button have <see href='Sprite'>prefix</see>

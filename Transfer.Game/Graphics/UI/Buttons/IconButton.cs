@@ -6,7 +6,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Localisation;
 using osuTK;
 
-namespace Transfer.Game.Graphics.UI;
+namespace Transfer.Game.Graphics.UI.Buttons;
 
 public abstract partial class IconButton(Action<SpriteText> defaultCreationParameters) : ClickableContainer
 {

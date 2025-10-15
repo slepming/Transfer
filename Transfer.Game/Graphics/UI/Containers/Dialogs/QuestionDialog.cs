@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Localisation;
 using osu.Framework.Logging;
 using osuTK;
+using Transfer.Game.Graphics.UI.Buttons;
 
 namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 

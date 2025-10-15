@@ -1,7 +1,7 @@
 using System;
 using osu.Framework.Graphics.Sprites;
 
-namespace Transfer.Game.Graphics.UI;
+namespace Transfer.Game.Graphics.UI.Buttons;
 
 public partial class ToolsButton(IconUsage icon, Action<SpriteText> text = null) : IconButton(text)
 {

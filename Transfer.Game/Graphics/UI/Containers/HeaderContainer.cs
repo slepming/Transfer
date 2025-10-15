@@ -4,13 +4,14 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Localisation;
 using Transfer.Game.Extensions;
+using Transfer.Game.Graphics.UI.Buttons;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
 public partial class HeaderContainer : TransferContainer
 {
     private LocalisableString headerText;
-    private TransparentButton closeButton;
+    private StringButton closeButton;
 
     public LocalisableString HeaderText
     {
@@ -49,11 +50,12 @@ public partial class HeaderContainer : TransferContainer
                 Font = new FontUsage(size: 25, family: TransferFonts.FiraCodeNerdFontLight),
                 Text = headerText
             },
-            closeButton = new TransparentButton() // Idk, this button can't change position with Origin
+            closeButton = new StringButton
             {
                 Anchor = Anchor.CentreRight,
                 Origin = Anchor.CentreRight,
                 Text = "Close",
+                BackgroundColour = Colour4.Transparent
             },
         ];
     }

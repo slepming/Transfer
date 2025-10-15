@@ -17,8 +17,6 @@ public abstract partial class TransferDialog : TransferFocusedOverlayContainer
 
     private Box background;
 
-    private TransparentButton closeButton;
-
     /// <summary>
     /// Content is used to add the insides of the window, while keeping the parts created by MenuWindow intact.
     /// </summary>
