@@ -6,8 +6,6 @@ namespace Transfer.Game.Graphics.UI.Containers.Dialogs;
 
 public partial class FileSelectorDialog(ICanUpdateVideo screen) : TransferDialog
 {
-    private readonly ICanUpdateVideo updateVideo = screen;
-
     private TransferFileSelector fileSelector;
 
     [BackgroundDependencyLoader]
@@ -29,7 +27,7 @@ public partial class FileSelectorDialog(ICanUpdateVideo screen) : TransferDialog
             if (f.NewValue.Exists)
             {
                 Hide();
-                updateVideo.UpdateVideo(f.NewValue.FullName);
+                screen.UpdateVideo(f.NewValue.FullName);
             }
         });
     }

@@ -5,6 +5,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Buttons;
@@ -67,13 +68,14 @@ public partial class WatchingToolsContainer : Container
                     new Box
                     {
                         Colour = Colour4.FromHSL(0, 0, 0.09f),
-                        Alpha = 0.5f,
+                        Alpha = 0.7f,
                         RelativeSizeAxes = Axes.Both
                     },
                     PlaybackContainer = new VideoPlaybackContainer
                     {
                         RelativeSizeAxes = Axes.X,
                         Size = new Vector2(Size.X, 5),
+                        MaxValue = Video.Duration,
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre
                     },
@@ -147,6 +149,12 @@ public partial class WatchingToolsContainer : Container
 
         // settingsButton.Action += onOpenSettings;
         repeatButton.Action += onActivateRepeat;
+
+        Scheduler.AddDelayed(() =>
+        {
+            Logger.Log($"P position: {Video.PlaybackPosition}", level: LogLevel.Debug);
+            PlaybackContainer.SetSliderBarValue(Video.PlaybackPosition);
+        }, 1000, true);
     }
 
     private void negativeSeek()

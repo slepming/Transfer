@@ -14,7 +14,7 @@ namespace Transfer.Game.Graphics.UI;
 /// Set basic for Transfer slider bar.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-/// <remarks>I don't know how I can set Size for Relative Axes Size. Because of this set please width and height manually</remarks>
+/// <remarks>I don't know how I can set Size for Relative Axes. Because of this set please width and height manually</remarks>
 public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, INumber<T>, IMinMaxValue<T>
 {
     public Color4 BackgroundColour
@@ -144,9 +144,5 @@ public partial class TransferBasicSliderBar<T> : SliderBar<T> where T : struct, 
     protected override void UpdateValue(float value)
     {
         SelectionContainer.TransformTo(nameof(Width), value, 300, Easing.OutQuint);
-    }
-
-    protected override void OnUserChange(T value)
-    {
     }
 }

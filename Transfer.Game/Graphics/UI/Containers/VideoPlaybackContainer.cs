@@ -1,4 +1,6 @@
-﻿using osu.Framework.Bindables;
+﻿using System;
+using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -12,17 +14,17 @@ namespace Transfer.Game.Graphics.UI.Containers;
 public partial class VideoPlaybackContainer : Container
 {
     private TransferBasicSliderBar<double> sliderBar;
-    private BindableDouble playbackValue;
 
-    private double maxValue = 0;
-    private double minValue = 0;
+    public double MaxValue = 0;
+    public double MinValue = 0;
 
-    public VideoPlaybackContainer()
+    [BackgroundDependencyLoader]
+    private void load()
     {
-        playbackValue = new BindableDouble()
+        var playbackValue = new BindableDouble()
         {
-            MinValue = minValue,
-            MaxValue = maxValue,
+            MinValue = MinValue,
+            MaxValue = MaxValue,
             Default = 0
         };
 
@@ -44,16 +46,8 @@ public partial class VideoPlaybackContainer : Container
         sliderBar.Current = playbackValue;
     }
 
-    public Bindable<double> SubscribeOnValueChange() => sliderBar.Current;
-
     public void SetSliderBarValue(double value)
     {
         sliderBar.Current.Value = value;
-    }
-
-    public void SetMaxSliderValue(double value)
-    {
-        playbackValue.MaxValue = value;
-        sliderBar.Current = playbackValue;
     }
 }
