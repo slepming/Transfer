@@ -36,14 +36,17 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
             var videoInByteArray = targetVideo;
             tempFilePath = Path.Combine(Path.GetTempPath(), "test_video.mp4");
             File.WriteAllBytes(tempFilePath, videoInByteArray);
-            videoContainer = new VideoContainer(tempFilePath)
+            videoContainer = new VideoContainer(null)
             {
                 RelativeSizeAxes = Axes.Both,
             };
-            Add(new WatchingToolsContainer
-            {
-                Video = videoContainer.GetVideoController()
-            });
+            videoContainer.UpdateVideo(tempFilePath);
+            AddRange([
+                videoContainer, new WatchingToolsContainer
+                {
+                    Video = videoContainer.GetVideoController()
+                }
+            ]);
         });
     }
 }

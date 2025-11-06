@@ -5,7 +5,6 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using Transfer.Game.Extensions;
-using Vortice.Mathematics;
 using Box = osu.Framework.Graphics.Shapes.Box;
 
 namespace Transfer.Game.Graphics.UIv2;

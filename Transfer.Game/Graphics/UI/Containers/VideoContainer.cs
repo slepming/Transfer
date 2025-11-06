@@ -13,7 +13,7 @@ using Transfer.Game.Playlists;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
-public partial class VideoContainer([NotNull] string filename) : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
+public partial class VideoContainer([CanBeNull] string filename) : TransferContainer, IKeyBindingHandler<GlobalAction>, ICanUpdateVideo, ICanSaveFileToPlaylist
 {
     private IVideoController videoController;
 
@@ -33,7 +33,8 @@ public partial class VideoContainer([NotNull] string filename) : TransferContain
         DefaultRate = tcm.Get<double>(TransferOptions.Rate);
         VideoLooping = tcm.Get<bool>(TransferOptions.LoopVideo);
 
-        UpdateVideo(filename);
+        if (!string.IsNullOrWhiteSpace(filename))
+            UpdateVideo(filename);
     }
 
     protected override bool OnKeyDown(KeyDownEvent e)
