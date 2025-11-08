@@ -150,14 +150,11 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
         {
             AddInternal(videoContainer);
             AddInternal(
-                toolsContainer = new WatchingToolsContainer
-                {
-                    Video = videoContainer.GetVideoController(),
-                }
+                toolsContainer = new()
             );
         }
 
-        toolsContainer.Video = videoContainer.GetVideoController();
+        toolsContainer.SetVideoController(videoContainer.GetVideoController());
     }
 
     public void UpdateVideo(TransferVideo video)

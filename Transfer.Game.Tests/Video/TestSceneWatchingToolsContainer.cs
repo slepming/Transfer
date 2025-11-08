@@ -28,6 +28,7 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
     [Test]
     public void Initialize()
     {
+        WatchingToolsContainer watchingToolsContainer;
         AddStep("Load", () =>
         {
             if (videoTestBytes == null) throw new ArgumentNullException();
@@ -42,11 +43,9 @@ public partial class TestSceneWatchingToolsContainer : TransferTestScene
             };
             videoContainer.UpdateVideo(tempFilePath);
             AddRange([
-                videoContainer, new WatchingToolsContainer
-                {
-                    Video = videoContainer.GetVideoController()
-                }
+                videoContainer, watchingToolsContainer = new()
             ]);
+            watchingToolsContainer.SetVideoController(videoContainer.GetVideoController());
         });
     }
 }

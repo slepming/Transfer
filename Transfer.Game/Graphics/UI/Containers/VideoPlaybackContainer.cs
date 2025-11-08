@@ -1,5 +1,4 @@
-﻿using System;
-using osu.Framework.Allocation;
+﻿using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
@@ -15,16 +14,17 @@ public partial class VideoPlaybackContainer : Container
 {
     private TransferBasicSliderBar<double> sliderBar;
 
-    public double MaxValue = 0;
+    public double Duration = 0;
     public double MinValue = 0;
+    public BindableDouble Playback { get; private set; }
 
     [BackgroundDependencyLoader]
     private void load()
     {
-        var playbackValue = new BindableDouble()
+        Playback = new BindableDouble()
         {
             MinValue = MinValue,
-            MaxValue = MaxValue,
+            MaxValue = Duration,
             Default = 0
         };
 
@@ -43,7 +43,7 @@ public partial class VideoPlaybackContainer : Container
                 FocusBorderThickness = 0f,
             },
         ];
-        sliderBar.Current = playbackValue;
+        sliderBar.Current = Playback;
     }
 
     public void SetSliderBarValue(double value)

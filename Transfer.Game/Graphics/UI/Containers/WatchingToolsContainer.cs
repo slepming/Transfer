@@ -28,7 +28,7 @@ public partial class WatchingToolsContainer : Container
     private TransferConfigManager configManager { get; set; }
 
     [CanBeNull]
-    public IVideoController Video;
+    private IVideoController videoController;
 
     /// <summary>
     /// This seek space is needed to indicate the gap between transitions from one point in the video timeline to another, as requested by the user. This functionality already exists in VideoContainer; they are the same thing. I just don't want to rewrite the hotkeys for this container
@@ -52,7 +52,7 @@ public partial class WatchingToolsContainer : Container
     protected override void LoadComplete()
     {
         base.LoadComplete();
-        if (Video is null) throw new Exception("Video is null");
+        if (videoController is null) throw new Exception("Video is null");
 
         InternalChildren =
         [
@@ -75,7 +75,7 @@ public partial class WatchingToolsContainer : Container
                     {
                         RelativeSizeAxes = Axes.X,
                         Size = new Vector2(Size.X, 5),
-                        MaxValue = Video.Duration,
+                        Duration = videoController.Duration,
                         Anchor = Anchor.TopCentre,
                         Origin = Anchor.TopCentre
                     },
@@ -152,40 +152,51 @@ public partial class WatchingToolsContainer : Container
 
         Scheduler.AddDelayed(() =>
         {
-            Logger.Log($"P position: {Video.PlaybackPosition}", level: LogLevel.Debug);
-            PlaybackContainer.SetSliderBarValue(Video.PlaybackPosition);
+            Logger.Log($"P position: {videoController.PlaybackPosition}. Max value slider: {PlaybackContainer.Duration}", level: LogLevel.Debug);
+            PlaybackContainer.SetSliderBarValue(videoController.PlaybackPosition);
         }, 1000, true);
+    }
+
+    /// <summary>
+    /// Update playback slider duration value and set VideoController
+    /// </summary>
+    /// <param name="videoController">Video Controller</param>
+    public void SetVideoController(IVideoController videoController)
+    {
+        this.videoController = videoController;
+        if (PlaybackContainer != null)
+            PlaybackContainer.Playback.MaxValue = videoController.Duration;
     }
 
     private void negativeSeek()
     {
-        Video?.Seek(-seekSpace);
+        videoController?.Seek(-seekSpace);
     }
 
     private void positiveSeek()
     {
-        Video?.Seek(seekSpace);
+        videoController?.Seek(seekSpace);
     }
 
     private void onNegativeSpeedClick()
     {
-        Video?.Rate(0.5f);
+        videoController?.Rate(0.5f);
     }
 
     private void onDoubleSpeedClick()
     {
-        Video?.Rate(2);
+        videoController?.Rate(2);
     }
 
     private void onActivateRepeat()
     {
         bool videoLoopFromConfig = configManager.Get<bool>(TransferOptions.LoopVideo);
         configManager.SetValue(TransferOptions.LoopVideo, !videoLoopFromConfig);
-        if (Video != null) Video.Loop = videoLoopFromConfig;
+        if (videoController != null) videoController.Loop = videoLoopFromConfig;
     }
 
     private void onClickPlayButton()
     {
-        Video?.Pause();
+        videoController?.Pause();
     }
 }
