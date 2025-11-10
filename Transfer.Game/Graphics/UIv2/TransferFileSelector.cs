@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Events;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;
@@ -33,16 +34,20 @@ public partial class TransferFileSelector(string initialPath = null, string[] va
     {
         protected override IconUsage? Icon => FontAwesome.Regular.FileVideo;
 
+        private Box background;
+
         [BackgroundDependencyLoader]
         private void load()
         {
             Flow.AutoSizeAxes = Axes.X;
             Flow.Height = 16;
+            Masking = true;
+            CornerRadius = 5;
 
-            AddInternal(new Box
+            AddInternal(background = new Box
             {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.Black.Opacity(.1f),
+                Colour = Colour4.FromHSL(0, 0, .6f, .1f),
             });
         }
 
@@ -50,5 +55,17 @@ public partial class TransferFileSelector(string initialPath = null, string[] va
         {
             Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont, size: FONT_SIZE)
         };
+
+        protected override bool OnHover(HoverEvent e)
+        {
+            background.FadeColour(Colour4.FromHSL(0, 0, .6f, .3f), 200, Easing.OutQuint);
+            return base.OnHover(e);
+        }
+
+        protected override void OnHoverLost(HoverLostEvent e)
+        {
+            background.FadeColour(Colour4.FromHSL(0, 0, .6f, .1f), 200, Easing.OutQuint);
+            base.OnHoverLost(e);
+        }
     }
 }

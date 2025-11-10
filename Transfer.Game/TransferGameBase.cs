@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
+using osu.Framework.Audio.Sample;
 using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics;
@@ -36,6 +37,7 @@ public partial class TransferGameBase : osu.Framework.Game
     protected override Container<Drawable> Content { get; }
 
     private FontStore fontStore;
+    protected ISampleStore SampleStore { get; private set; }
 
     protected Storage Storage;
     private TempStorage tempStorage;
@@ -68,6 +70,10 @@ public partial class TransferGameBase : osu.Framework.Game
         {
             Host.Window.Title = HOST_NAME;
         }
+
+        SampleStore = Audio.GetSampleStore();
+
+        dependencies.Cache(SampleStore);
 
         tempStorage = new TempStorage(Storage.GetStorageForDirectory(@"./Temp/"));
         dependencies.CacheAs(tempStorage);

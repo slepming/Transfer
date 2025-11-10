@@ -1,4 +1,6 @@
-﻿using osu.Framework.Extensions.Color4Extensions;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Audio.Sample;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
@@ -35,6 +37,9 @@ public partial class TransferTextBox : TextBox, IHasTooltip
 
     public override bool RequestsFocus { get; }
 
+    [Resolved]
+    private ISampleStore sampleStore { get; set; }
+
     /// <summary>
     /// Restricted chars
     /// </summary>
@@ -57,6 +62,12 @@ public partial class TransferTextBox : TextBox, IHasTooltip
             Depth = 1,
             Colour = backgroundColour
         });
+    }
+
+    protected override void OnUserTextAdded(string added)
+    {
+        sampleStore.Get("UI/Keyboard/TextEnter")?.Play();
+        base.OnUserTextAdded(added);
     }
 
     protected override Caret CreateCaret() => new TransferCaret
@@ -97,7 +108,7 @@ public partial class TransferTextBox : TextBox, IHasTooltip
         public override void Show()
         {
             var col = (Color4)Colour;
-            this.ScaleTo(1.5f, caret_move_time, Easing.Out).FadeColour(col.Opacity(0)).FadeColour(col, caret_move_time * 2, Easing.Out);;
+            this.ScaleTo(1.5f, caret_move_time, Easing.Out).FadeColour(col.Opacity(0)).FadeColour(col, caret_move_time * 2, Easing.Out);
         }
 
         public override void Hide()
