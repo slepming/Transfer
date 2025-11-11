@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Cursor;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Tests.Visual;
 
@@ -13,6 +14,10 @@ public partial class TestSceneTransferTextBox : TransferTestScene
     private void setUp()
     {
         Clear();
-        Add(box = new TransferTextBox(true) { Width = 300, Height = 120, Anchor = Anchor.Centre, Origin = Anchor.Centre });
+        Add(new TooltipContainer()
+        {
+            RelativeSizeAxes = Axes.Both,
+            Child = box = new TransferTextBox(true) { Width = 300, Height = 60, Anchor = Anchor.Centre, Origin = Anchor.Centre }
+        });
     }
 }

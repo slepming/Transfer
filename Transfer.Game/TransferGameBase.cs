@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using osu.Framework.Allocation;
@@ -8,6 +10,7 @@ using osu.Framework.Configuration;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Rendering;
+using osu.Framework.Input.Bindings;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -41,8 +44,6 @@ public partial class TransferGameBase : osu.Framework.Game
 
     protected Storage Storage;
     private TempStorage tempStorage;
-
-    protected SafeAreaContainer SafeAreaContainer;
 
     protected GlobalActionContainer GlobalBindings;
 
@@ -89,12 +90,12 @@ public partial class TransferGameBase : osu.Framework.Game
         Fonts.AddStore(fontStore);
         Resources.Get("Fonts/");
 
-        InitialiseFonts();
-        InitialiseConfig(config);
+        InitializeFonts();
+        InitializeConfig(config);
 
         if (Host.Window != null) Host.Window.CursorState = CursorState.Hidden;
 
-        base.Content.Add(SafeAreaContainer = new SafeAreaContainer
+        base.Content.Add(new SafeAreaContainer
         {
             RelativeSizeAxes = Axes.Both,
             SafeAreaOverrideEdges = Edges.None,
@@ -143,7 +144,7 @@ public partial class TransferGameBase : osu.Framework.Game
         return true;
     }
 
-    protected virtual void InitialiseFonts()
+    protected void InitializeFonts()
     {
         AddFont(Resources, @"Fonts/FiraCode/FiraCodeNerdFont");
         AddFont(Resources, @"Fonts/FiraCode/FiraCodeNerdFont-Light");
@@ -152,7 +153,7 @@ public partial class TransferGameBase : osu.Framework.Game
         AddFont(Resources, @"Fonts/Oswald/Oswald");
     }
 
-    protected virtual void InitialiseConfig(FrameworkConfigManager config)
+    protected void InitializeConfig(FrameworkConfigManager config)
     {
         config.GetBindable<FrameSync>(FrameworkSetting.FrameSync).Value = FrameSync.VSync;
         config.GetBindable<WindowMode>(FrameworkSetting.WindowMode).Value = WindowMode.Windowed;

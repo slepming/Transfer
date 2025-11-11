@@ -8,16 +8,18 @@ using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Events;
 using osu.Framework.Localisation;
 using osuTK;
 using osuTK.Graphics;
+using osuTK.Input;
 using Transfer.Game.Extensions;
 
 namespace Transfer.Game.Graphics.UI;
 
 public partial class TransferTextBox : TextBox, IHasTooltip
 {
-    public LocalisableString Tooltip { get; set; }
+    public LocalisableString Tooltip { get; set; } = "You can delete backward words with Ctrl + D";
     public LocalisableString TooltipText => Tooltip;
     private const float caret_move_time = 200f;
 
@@ -101,6 +103,21 @@ public partial class TransferTextBox : TextBox, IHasTooltip
         if (OnlyNumbers) return char.IsDigit(character) || character == '.';
 
         return true;
+    }
+
+    protected override bool OnKeyDown(KeyDownEvent e)
+    {
+        switch (e.Key)
+        {
+            case Key.D:
+            {
+                if (e.ControlPressed)
+                    DeleteBy(GetBackwardWordAmount());
+                return true;
+            }
+        }
+
+        return base.OnKeyDown(e);
     }
 
     private partial class ZoomableContainer : Container
