@@ -37,6 +37,8 @@ public partial class TransferCheckbox : Checkbox
     /// </remarks>
     public int FadeDuration { get; set; } = 50;
 
+    public Easing FadeEasing { get; set; } = Easing.Out;
+
     /// <summary>
     /// The text in the label.
     /// </summary>
@@ -61,6 +63,19 @@ public partial class TransferCheckbox : Checkbox
         set => fillFlowContainer.SetLayoutPosition(labelSpriteText, value ? -1 : 1);
     }
 
+    public Vector2 CheckboxSize
+    {
+        get => checkboxContainer.Size;
+        set
+        {
+            if (checkboxContainer.Size.Equals(value)) return;
+
+            checkboxContainer.Size = value;
+        }
+    }
+
+    private readonly Container checkboxContainer;
+
     private readonly SpriteText labelSpriteText;
     private readonly FillFlowContainer fillFlowContainer;
 
@@ -78,11 +93,10 @@ public partial class TransferCheckbox : Checkbox
             Spacing = new Vector2(5, 0),
             Children =
             [
-                new Container
+                checkboxContainer = new Container
                 {
                     Masking = true,
                     CornerRadius = 3,
-                    Size = new Vector2(30),
                     Child =
                         box = new Box
                         {
@@ -100,6 +114,6 @@ public partial class TransferCheckbox : Checkbox
         };
         basic?.Invoke(labelSpriteText);
 
-        Current.BindValueChanged(e => box.FadeColour(e.NewValue ? CheckedColor : UncheckedColor, FadeDuration), true);
+        Current.BindValueChanged(e => box.FadeColour(e.NewValue ? CheckedColor : UncheckedColor, FadeDuration, FadeEasing), true);
     }
 }

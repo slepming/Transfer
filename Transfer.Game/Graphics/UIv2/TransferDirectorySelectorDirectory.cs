@@ -3,6 +3,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Events;
 using Transfer.Game.Extensions;
 using Box = osu.Framework.Graphics.Shapes.Box;
 
@@ -35,4 +36,16 @@ public partial class TransferDirectorySelectorDirectory : DirectorySelectorDirec
     {
         Font = new FontUsage(family: TransferFonts.FiraCodeNerdFont)
     };
+
+    protected override bool OnHover(HoverEvent e)
+    {
+        Background.FadeColour(Colour4.White.Opacity(.2f), 200, Easing.OutQuint);
+        return base.OnHover(e);
+    }
+
+    protected override void OnHoverLost(HoverLostEvent e)
+    {
+        Background.FadeColour(Colour4.White.Opacity(0), 200, Easing.OutQuint);
+        base.OnHoverLost(e);
+    }
 }

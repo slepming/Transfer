@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
+using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI;
 using Transfer.Game.Graphics.UI.Containers;
@@ -15,9 +16,12 @@ namespace Transfer.Game.Graphics.UIv2;
 
 public partial class TransferFileSelector(string initialPath = null, string[] validFileExtensions = null) : FileSelector(initialPath, validFileExtensions)
 {
-    protected override Drawable CreateHiddenToggleButton() => new TransferCheckbox(s => s.Font = new FontUsage(TransferFonts.Oswald))
+    protected override Drawable CreateHiddenToggleButton() => new TransferCheckbox(s => s.Font = new FontUsage(family: TransferFonts.Oswald, size: 20f))
     {
         LabelText = "Toggle hidden items",
+        FadeDuration = 200,
+        FadeEasing = Easing.OutQuint,
+        CheckboxSize = new Vector2(25)
     }.With(b => b.Current.BindValueChanged(_ => ShowHiddenItems.Toggle()));
 
     protected override ScrollContainer<Drawable> CreateScrollContainer() => new TransferScrollContainer();

@@ -1,9 +1,11 @@
 using System.IO;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Events;
 using osuTK;
 
 namespace Transfer.Game.Graphics.UIv2;
@@ -37,9 +39,9 @@ public partial class TransferDirectorySelectorBreadcrumbDisplay : DirectorySelec
     {
         protected override IconUsage? Icon => null;
 
-        protected override Box CreateBackground() => new Box
+        protected override Box CreateBackground() => new()
         {
-            Colour = Colour4.FromHex("#F2F2F2").Opacity(.2f),
+            Colour = Colour4.FromHSL(0, 0, 0.4f),
             Depth = 1,
         };
     }
@@ -50,14 +52,14 @@ public partial class TransferDirectorySelectorBreadcrumbDisplay : DirectorySelec
             : base(directory, displayName)
         {
             Masking = true;
-            CornerRadius = 3;
+            CornerRadius = 5;
+            BorderColour = Colour4.FromHSL(0, 0, 0.4f);
             BorderThickness = 2;
-            BorderColour = Colour4.Transparent;
         }
 
-        protected override Box CreateBackground() => new Box()
+        protected override Box CreateBackground() => new()
         {
-            Colour = Colour4.FromHex("#555555").Opacity(0.8f),
+            Colour = Colour4.FromHSL(0, 0, 0.3f, 0.8f),
             Depth = 1,
             RelativeSizeAxes = Axes.Both,
         };
@@ -76,6 +78,17 @@ public partial class TransferDirectorySelectorBreadcrumbDisplay : DirectorySelec
                 Icon = FontAwesome.Solid.ChevronRight,
                 Size = new Vector2(FONT_SIZE / 2)
             });
+        }
+
+        protected override bool OnHover(HoverEvent e)
+        {
+            this.RotateTo(3, 150, Easing.OutQuad);
+            return Handle(e);
+        }
+
+        protected override void OnHoverLost(HoverLostEvent e)
+        {
+            this.RotateTo(0, 50, Easing.OutQuad);
         }
     }
 }
