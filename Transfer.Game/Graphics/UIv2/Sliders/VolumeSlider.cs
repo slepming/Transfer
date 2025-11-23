@@ -13,7 +13,7 @@ public partial class VolumeSlider : VolumeSlider<double>
     [Resolved]
     private FrameworkConfigManager config { get; set; }
 
-    private BindableDouble current = new BindableDouble()
+    private readonly BindableDouble current = new()
     {
         MinValue = 0,
         MaxValue = 1,
