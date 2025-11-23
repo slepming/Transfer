@@ -4,6 +4,7 @@ using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK.Graphics;
+using Transfer.Game.Graphics.UIv2.Sliders;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -12,16 +13,24 @@ namespace Transfer.Game.Graphics.UI.Containers;
 /// </summary>
 public partial class VideoPlaybackContainer : Container
 {
-    private TransferBasicSliderBar<double> sliderBar;
+    public VideoPlaybackSlider SliderBar { get; private set; }
 
+    /// <summary>
+    /// Max value for slider
+    /// </summary>
     public double Duration = 0;
+
+    /// <summary>
+    /// Min value for slide
+    /// </summary>
     public double MinValue = 0;
-    public BindableDouble Playback { get; private set; }
+
+    private BindableDouble playback;
 
     [BackgroundDependencyLoader]
     private void load()
     {
-        Playback = new BindableDouble()
+        playback = new BindableDouble()
         {
             MinValue = MinValue,
             MaxValue = Duration,
@@ -30,7 +39,7 @@ public partial class VideoPlaybackContainer : Container
 
         InternalChildren =
         [
-            sliderBar = new TransferBasicSliderBar<double>
+            SliderBar = new()
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
@@ -43,11 +52,11 @@ public partial class VideoPlaybackContainer : Container
                 FocusBorderThickness = 0f,
             },
         ];
-        sliderBar.Current = Playback;
+        SliderBar.Current = playback;
     }
 
     public void SetSliderBarValue(double value)
     {
-        sliderBar.Current.Value = value;
+        SliderBar.Current.Value = value;
     }
 }

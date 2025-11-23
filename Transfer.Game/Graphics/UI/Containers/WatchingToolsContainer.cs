@@ -1,6 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -149,10 +150,12 @@ public partial class WatchingToolsContainer : Container
 
         // settingsButton.Action += onOpenSettings;
         repeatButton.Action += onActivateRepeat;
+        PlaybackContainer.SliderBar.UserCommit.ValueChanged += flexSeek;
 
         Scheduler.AddDelayed(() =>
         {
-            Logger.Log($"P position: {videoController.PlaybackPosition}. Max value slider: {PlaybackContainer.Duration}", level: LogLevel.Debug);
+            if (PlaybackContainer.SliderBar.Current.Value != videoController.PlaybackPosition)
+                Logger.Log($"P position: {videoController.PlaybackPosition}. Max value slider: {PlaybackContainer.Duration}", level: LogLevel.Debug);
             PlaybackContainer.SetSliderBarValue(videoController.PlaybackPosition);
         }, 1000, true);
     }
@@ -165,28 +168,23 @@ public partial class WatchingToolsContainer : Container
     {
         this.videoController = videoController;
         if (PlaybackContainer != null)
-            PlaybackContainer.Playback.MaxValue = videoController.Duration;
+            PlaybackContainer.Duration = videoController.Duration;
     }
 
-    private void negativeSeek()
-    {
+    private void negativeSeek() =>
         videoController?.Seek(-seekSpace);
-    }
 
-    private void positiveSeek()
-    {
+    private void positiveSeek() =>
         videoController?.Seek(seekSpace);
-    }
 
-    private void onNegativeSpeedClick()
-    {
+    private void onNegativeSpeedClick() =>
         videoController?.Rate(0.5f);
-    }
 
-    private void onDoubleSpeedClick()
-    {
+    private void onDoubleSpeedClick() =>
         videoController?.Rate(2);
-    }
+
+    private void flexSeek(ValueChangedEvent<double> seek) =>
+        videoController?.Seek(seek.NewValue);
 
     private void onActivateRepeat()
     {

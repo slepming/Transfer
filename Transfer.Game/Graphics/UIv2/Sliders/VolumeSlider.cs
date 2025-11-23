@@ -6,14 +6,14 @@ using osu.Framework.Graphics;
 using osuTK.Graphics;
 using Transfer.Game.Graphics.UI;
 
-namespace Transfer.Game.Graphics.UIv2;
+namespace Transfer.Game.Graphics.UIv2.Sliders;
 
 public partial class VolumeSlider : VolumeSlider<double>
 {
     [Resolved]
     private FrameworkConfigManager config { get; set; }
 
-    private BindableDouble current = new BindableDouble()
+    private readonly BindableDouble current = new()
     {
         MinValue = 0,
         MaxValue = 1,
