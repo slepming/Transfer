@@ -6,7 +6,7 @@ namespace Transfer.Game.Graphics.UIv2.Containers;
 
 public partial class VolumeContainer : TransferContainer
 {
-    private VolumeSlider slider;
+    public VolumeSlider Slider { get; private set; }
 
     public VolumeContainer()
     {
@@ -18,7 +18,7 @@ public partial class VolumeContainer : TransferContainer
     [BackgroundDependencyLoader]
     private void load()
     {
-        slider = new VolumeSlider()
+        Slider = new()
         {
         };
     }

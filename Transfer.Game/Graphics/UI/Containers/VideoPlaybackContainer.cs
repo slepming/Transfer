@@ -4,6 +4,7 @@ using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK.Graphics;
+using Transfer.Game.Graphics.UIv2;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 
@@ -12,7 +13,7 @@ namespace Transfer.Game.Graphics.UI.Containers;
 /// </summary>
 public partial class VideoPlaybackContainer : Container
 {
-    private TransferBasicSliderBar<double> sliderBar;
+    public VideoPlaybackSlider SliderBar { get; private set; }
 
     public double Duration = 0;
     public double MinValue = 0;
@@ -30,7 +31,7 @@ public partial class VideoPlaybackContainer : Container
 
         InternalChildren =
         [
-            sliderBar = new TransferBasicSliderBar<double>
+            SliderBar = new()
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
@@ -43,11 +44,11 @@ public partial class VideoPlaybackContainer : Container
                 FocusBorderThickness = 0f,
             },
         ];
-        sliderBar.Current = Playback;
+        SliderBar.Current = Playback;
     }
 
     public void SetSliderBarValue(double value)
     {
-        sliderBar.Current.Value = value;
+        SliderBar.Current.Value = value;
     }
 }
