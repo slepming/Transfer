@@ -1,6 +1,7 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using Transfer.Game.Graphics.UI.Containers;
+using Transfer.Game.Graphics.UIv2.Sliders;
 
 namespace Transfer.Game.Graphics.UIv2.Containers;
 

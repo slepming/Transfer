@@ -5,6 +5,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK.Graphics;
 using Transfer.Game.Graphics.UIv2;
+using Transfer.Game.Graphics.UIv2.Sliders;
 
 namespace Transfer.Game.Graphics.UI.Containers;
 

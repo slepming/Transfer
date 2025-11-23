@@ -3,6 +3,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osuTK;
 using Transfer.Game.Graphics.UIv2;
+using Transfer.Game.Graphics.UIv2.Sliders;
 
 namespace Transfer.Game.Tests.Visual.UI.Sliders;
 
