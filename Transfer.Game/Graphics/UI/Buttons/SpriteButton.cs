@@ -24,8 +24,8 @@ public partial class SpriteButton : ClickableContainer
             {
                 Depth = 2,
                 RelativeSizeAxes = Axes.Both,
-                Origin = (Anchor)18,
-                Anchor = (Anchor)18,
+                Origin = Anchor.Centre,
+                Anchor = Anchor.Centre,
                 Colour = Colour4.White,
                 Alpha = 0,
             },
