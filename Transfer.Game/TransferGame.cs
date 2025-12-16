@@ -46,47 +46,6 @@ public partial class TransferGame : TransferGameBase, IKeyBindingHandler<GlobalA
         this.args = args;
     }
 
-    protected override void LoadComplete()
-    {
-        base.LoadComplete();
-
-        dependencies.TryGet(out screenStack);
-        dependencies.TryGet(out transferConfigManager);
-        audioExtract = new AudioExtract<Track>(transferConfigManager);
-
-        if (args is { Length: > 0 })
-        {
-            dependencies.TryGet(out tempResourceStore);
-            dependencies.TryGet(out tempStorage);
-
-            if (dependencies.TryGet(out AudioManager audioManager))
-            {
-                List<string> allowedPaths = new List<string>();
-
-                foreach (string path in args)
-                {
-                    string fileName = Path.GetFileName(path);
-
-                    if (!tempStorage.Exists(fileName) && !VIDEO_EXTENSIONS.Contains(Path.GetExtension(path)))
-                        continue;
-
-                    allowedPaths.Add(path);
-                }
-
-                lock (allowedPaths)
-                    Import(allowedPaths.ToArray());
-
-                allowedPaths.Clear();
-                Scheduler.AddDelayed(() =>
-                {
-                    screenStack.Push(transferScreen = new VideoScreen(args[0]));
-                }, 500);
-            }
-        }
-        else
-            screenStack.Push(transferScreen = new VideoScreen());
-    }
-
     private readonly List<string> dropFiles = new List<string>();
     private ScheduledDelegate dropScheduledDelegate;
 
