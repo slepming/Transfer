@@ -1,11 +1,59 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using osu.Framework.Allocation;
+using osu.Framework.Audio;
+using osu.Framework.Audio.Track;
 using osu.Framework.Logging;
+using Transfer.Game.IO;
+using Transfer.Game.Screens;
 
 namespace Transfer.Game;
 
 public partial class TransferGame
 {
+    protected override void LoadComplete()
+    {
+        base.LoadComplete();
+
+        dependencies.TryGet(out screenStack);
+        dependencies.TryGet(out transferConfigManager);
+        audioExtract = new AudioExtract<Track>(transferConfigManager);
+
+        if (args is { Length: > 0 })
+        {
+            dependencies.TryGet(out tempResourceStore);
+            dependencies.TryGet(out tempStorage);
+
+            if (dependencies.TryGet(out AudioManager audioManager))
+            {
+                List<string> allowedPaths = new List<string>();
+
+                foreach (string path in args)
+                {
+                    string fileName = Path.GetFileName(path);
+
+                    if (!tempStorage.Exists(fileName) && !VIDEO_EXTENSIONS.Contains(Path.GetExtension(path)))
+                        continue;
+
+                    allowedPaths.Add(path);
+                }
+
+                lock (allowedPaths)
+                    Import(allowedPaths.ToArray());
+
+                allowedPaths.Clear();
+                Scheduler.AddDelayed(() =>
+                {
+                    screenStack.Push(transferScreen = new VideoScreen(args[0]));
+                }, 500);
+            }
+        }
+        else
+            screenStack.Push(transferScreen = new VideoScreen());
+    }
+
     private void handleImportFromDrop()
     {
         lock (dropFiles)
