@@ -10,8 +10,7 @@ namespace Transfer.Game.Audio.ConversionModels
         {
             if (string.IsNullOrEmpty(video))
                 throw new ArgumentNullException(nameof(video));
-
-            string pathWithoutExtension = Path.GetFileNameWithoutExtension(video);
+            _ = Path.GetFileNameWithoutExtension(video);
             return Conversion(video, transferConfig, fileParams?.Build(), customArguments: customArugments);
         }
     }

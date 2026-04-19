@@ -60,7 +60,7 @@ public partial class QuestionDialog : TransferDialog
         Logger.Log("User click on 'OK'", level: LogLevel.Debug);
         Answer?.Invoke(true);
         Hide();
-        this.Expire();
+        Expire();
     }
 
     private void cancelAnswer()
@@ -68,6 +68,6 @@ public partial class QuestionDialog : TransferDialog
         Logger.Log("User click on 'Cancel'", level: LogLevel.Debug);
         Answer?.Invoke(false);
         Hide();
-        this.Expire();
+        Expire();
     }
 }

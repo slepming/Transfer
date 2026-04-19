@@ -14,10 +14,12 @@ public partial class ExceptionButton : ClickableContainer
     public Box Background;
 
     private Colour4 backgroundColour;
-    public Colour4 BackgroundColour {
+    public Colour4 BackgroundColour
+    {
         get => backgroundColour;
-        set{
-            if(backgroundColour == value) return;
+        set
+        {
+            if (backgroundColour == value) return;
             backgroundColour = value;
         }
     }
@@ -25,18 +27,22 @@ public partial class ExceptionButton : ClickableContainer
     public SpriteText SpriteText;
 
     private string text;
-    public string Text {
+    public string Text
+    {
         get => text;
-        set{
-            if(value == text) return;
+        set
+        {
+            if (value == text) return;
             text = value;
         }
     }
     private Colour4 textColour;
-    public Colour4 TextColour {
+    public Colour4 TextColour
+    {
         get => textColour;
-        set{
-            if(value == textColour) return;
+        set
+        {
+            if (value == textColour) return;
             textColour = value;
         }
     }
@@ -44,7 +50,7 @@ public partial class ExceptionButton : ClickableContainer
     public ExceptionButton()
     {
         Masking = true;
-        BorderColour = new Colour4(255,255,255,0.5f);
+        BorderColour = new Colour4(255, 255, 255, 0.5f);
         BorderThickness = 3;
         CornerRadius = 5;
         Colour = Colour4.White;
@@ -81,14 +87,14 @@ public partial class ExceptionButton : ClickableContainer
     protected override bool OnHover(HoverEvent e)
     {
         this.TransformTo(nameof(BorderColour),
-            ColourInfo.GradientHorizontal(new Color4(255,255,255,0.4f),
-            new Color4(255,255,255, 1f)), 700, Easing.InOutCubic);
+            ColourInfo.GradientHorizontal(new Color4(255, 255, 255, 0.4f),
+            new Color4(255, 255, 255, 1f)), 700, Easing.InOutCubic);
         return base.OnHover(e);
     }
     protected override void OnHoverLost(HoverLostEvent e)
     {
-        this.TransformTo(nameof(BorderColour), ColourInfo.GradientHorizontal(new Color4(255,255,255,1f),
-            new Color4(255,255,255, 0.7f)), 700, Easing.InOutCubic);
+        this.TransformTo(nameof(BorderColour), ColourInfo.GradientHorizontal(new Color4(255, 255, 255, 1f),
+            new Color4(255, 255, 255, 0.7f)), 700, Easing.InOutCubic);
         base.OnHoverLost(e);
     }
 }

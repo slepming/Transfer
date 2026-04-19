@@ -60,7 +60,7 @@ public partial class OpenPlaylistMenu : TransferDialog
         {
             Playlist.Value = new PlaylistStorage(new NativeStorage(nameTextBox.Current.Value, null));
             Logger.Log($"Playlist storage exists: {Playlist.Value.GetFullPath("")}");
-            this.Hide();
+            Hide();
             return;
         }
 
@@ -68,6 +68,6 @@ public partial class OpenPlaylistMenu : TransferDialog
 
         Playlist.Value = new PlaylistStorage(new NativeStorage(pathToPlaylist, null));
         Logger.Log($"Playlist has been created at {pathToPlaylist}");
-        this.Hide();
+        Hide();
     }
 }

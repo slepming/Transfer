@@ -1,7 +1,6 @@
 using System.IO;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
@@ -71,6 +70,7 @@ public partial class TransferDirectorySelectorBreadcrumbDisplay : DirectorySelec
         [BackgroundDependencyLoader]
         private void load()
         {
+            AutoSizeAxes = Axes.None;
             Flow.Add(new SpriteIcon()
             {
                 Anchor = Anchor.CentreLeft,
@@ -80,15 +80,15 @@ public partial class TransferDirectorySelectorBreadcrumbDisplay : DirectorySelec
             });
         }
 
-        protected override bool OnHover(HoverEvent e)
+        protected override bool OnMouseDown(MouseDownEvent e)
         {
-            this.RotateTo(3, 150, Easing.OutQuad);
-            return Handle(e);
+            this.ResizeTo(0.8f, 300, Easing.OutQuad);
+            return base.OnMouseDown(e);
         }
 
-        protected override void OnHoverLost(HoverLostEvent e)
+        protected override void OnMouseUp(MouseUpEvent e)
         {
-            this.RotateTo(0, 50, Easing.OutQuad);
+            this.ResizeTo(1, 300, Easing.OutElastic);
         }
     }
 }

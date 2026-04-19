@@ -16,7 +16,7 @@ public abstract partial class TransferOverlayContainer : OverlayContainer
         switch (e.Key)
         {
             case Key.Escape:
-                this.Hide();
+                Hide();
                 return true;
         }
 

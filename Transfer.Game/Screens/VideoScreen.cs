@@ -66,12 +66,16 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     private void load(TransferConfigManager transferConfigManager)
     {
         seek = transferConfigManager.Get<int>(TransferOptions.SeekValue);
+
         cachePlaylist = new PlaylistMenu(playlistStorage, this)
         {
             Title = "Cache Playlist",
             OnHandledException = Exception
         };
-        AddRangeInternal([FileSelector ??= new FileSelectorDialog(this), extensionMenu, cachePlaylist]);
+
+        FileSelector ??= new FileSelectorDialog(this);
+
+        AddRangeInternal([FileSelector, extensionMenu, cachePlaylist]);
     }
 
     protected override void LoadComplete()

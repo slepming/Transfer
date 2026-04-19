@@ -19,13 +19,7 @@ public abstract partial class TransferTestScene : TestScene
 
     protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
     {
-        var host = parent.Get<GameHost>();
-
-        if (host == null)
-        {
-            throw new NullReferenceException("Host not found");
-        }
-
+        var host = parent.Get<GameHost>() ?? throw new NullReferenceException("Host not found");
         Resources = parent.Get<TransferGameBase>().Resources;
 
         if (Resources == null)

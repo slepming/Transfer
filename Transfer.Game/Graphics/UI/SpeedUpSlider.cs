@@ -22,7 +22,7 @@ namespace Transfer.Game.Graphics.UI
             Position = new Vector2(50, 0);
             Height = 10;
             RelativeSizeAxes = Axes.X;
-            Size = new Vector2(Size.X/2, Size.Y);
+            Size = new Vector2(Size.X / 2, Size.Y);
             Masking = true;
             CornerRadius = 5;
         }
@@ -30,7 +30,8 @@ namespace Transfer.Game.Graphics.UI
         [BackgroundDependencyLoader]
         private void load()
         {
-            speedValue = new BindableDouble{
+            speedValue = new BindableDouble
+            {
                 MaxValue = 10.0,
                 MinValue = 0.5,
                 Value = 1
@@ -45,7 +46,7 @@ namespace Transfer.Game.Graphics.UI
         protected override bool OnScroll(ScrollEvent e)
         {
             Current.Value += e.ScrollDelta.Y;
-            if (e.ScrollDelta.X != 0) Current.Value += e.ScrollDelta.X*2;
+            if (e.ScrollDelta.X != 0) Current.Value += e.ScrollDelta.X * 2;
             return base.OnScroll(e);
         }
 

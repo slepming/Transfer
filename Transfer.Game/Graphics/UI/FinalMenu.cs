@@ -16,7 +16,7 @@ namespace Transfer.Game.Graphics.UI
             BackgroundColour = Colour4.Gray.Opacity(100);
             Width = 600;
             Height = 300;
-            Size = new Vector2(0,0);
+            Size = new Vector2(0, 0);
         }
 
         protected override DrawableMenuItem CreateDrawableMenuItem(MenuItem item) => new FinalDrawableMenuItem(item);
@@ -66,7 +66,7 @@ namespace Transfer.Game.Graphics.UI
 
             protected override Drawable CreateContent() => new SpriteText
             {
-                Font = new FontUsage(TransferFonts.Oswald, size:30),
+                Font = new FontUsage(TransferFonts.Oswald, size: 30),
             };
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
@@ -9,8 +10,6 @@ using osu.Framework.Configuration;
 using osu.Framework.Graphics.Video;
 using osu.Framework.Input.Events;
 using osu.Framework.Logging;
-using osu.Framework.Platform;
-using Transfer.Game.Audio.Extensions;
 using Transfer.Game.Configuration;
 using Transfer.Game.IO;
 
@@ -22,6 +21,8 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     /// Event when it occurs
     /// </summary>
     public Action<double> SeekOccurs;
+
+    private Action<Track> onAudioExtract;
 
     private readonly string path = path;
 
@@ -61,6 +62,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         Logger.Log($"\ud83d\udcc2 Open output folder {tempStorage.GetFullPath("")}", level: LogLevel.Debug);
         audioExtract = new AudioExtract<Track>(transferConfigManager);
         bindableRate.Value = (float)transferConfigManager.Get<double>(TransferOptions.Rate);
+        onAudioExtract += preStart;
     }
 
     private void rateChanged(ValueChangedEvent<float> obj)
@@ -72,34 +74,35 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     {
         base.LoadComplete();
 
-        try
-        {
-            if (path.ItContainsAudio())
-            {
-                Logger.Log("\ud83c\udfa7 Video have audio", level: LogLevel.Debug);
-                Audio = getAudio(tempStorage);
-            }
-            else Logger.Log("\ud83d\udd07 Video have not audio");
+        Logger.Log($"Preparing the conversion. Storage params {{ Path for storage file '{tempStorage.GetFullPath("")}' }} "
+                   + $"{{ Path to temp file: '{path}' }}", LoggingTarget.Runtime, LogLevel.Debug);
 
-            if (Audio != null)
-            {
-                Logger.Log("Get from config value for Volume");
-                Audio.Volume.Value = frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic);
-                Logger.Log(frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic).ToString(CultureInfo.CurrentCulture), level: LogLevel.Debug);
-                Audio.Volume.ValueChanged += value =>
-                {
-                    frameworkConfigManager.SetValue(FrameworkSetting.VolumeMusic, value.NewValue);
-                    frameworkConfigManager.Save();
-                };
-            }
-
-            bindableRate.ValueChanged += rateChanged;
-        }
-        catch (Exception e)
+        Task.Run(() =>
         {
-            Logger.Error(e, "Audio extraction failed. Try-catch error");
-            throw;
-        }
+            var audio = audioExtract.CreateAndGetTrack(path,
+                tempStorage,
+                audioManager,
+                arguments: "-c copy"
+            );
+            Scheduler.Add(() =>
+            {
+                onAudioExtract?.Invoke(audio);
+            });
+        });
+    }
+
+    private void preStart(Track track)
+    {
+        Audio = track;
+        Audio.Volume.Value = frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic);
+        Logger.Log(frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic).ToString(CultureInfo.CurrentCulture), level: LogLevel.Debug);
+        Audio.Volume.ValueChanged += value =>
+        {
+            frameworkConfigManager.SetValue(FrameworkSetting.VolumeMusic, value.NewValue);
+            frameworkConfigManager.Save();
+        };
+
+        bindableRate.ValueChanged += rateChanged;
 
         Start();
     }
@@ -108,14 +111,6 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     {
         base.Update();
         if (Audio != null) SpySeek(Audio.CurrentTime); // May be optimized in the future
-    }
-
-    private void onVolumeChanged(ValueChangedEvent<double> e)
-    {
-        if (Audio != null)
-        {
-            Audio.Volume.Value = (float)e.NewValue;
-        }
     }
 
     public double GetMaxLengthVideo()
@@ -206,17 +201,6 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
     }
 
     public void SetAudio(Track track) => Audio = track;
-
-    private Track getAudio(Storage audioStorage)
-    {
-        Logger.Log($"Preparing the conversion. Storage params {{ Path for storage file '{audioStorage.GetFullPath("")}' }} "
-                   + $"{{ Path to temp file: '{path}' }}", LoggingTarget.Runtime, LogLevel.Debug);
-        return audioExtract.CreateAndGetTrack(path,
-            audioStorage,
-            audioManager,
-            arguments: "-c copy"
-        );
-    }
 
     #endregion
 

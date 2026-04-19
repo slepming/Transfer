@@ -86,11 +86,11 @@ public partial class Loading : CompositeDrawable
                                     .Then()
                                     .TransformTo(nameof(Colour), ColourInfo.SingleColour(Color4.Black), 400, Easing.InOutQuad));
         backgroundContainer.Loop(b => b.RotateTo(0).TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
-                                       {
-                                           Radius = 200,
-                                           Colour = Colour4.White,
-                                           Type = EdgeEffectType.Glow
-                                       })
+        {
+            Radius = 200,
+            Colour = Colour4.White,
+            Type = EdgeEffectType.Glow
+        })
                                        .RotateTo(-180, 1000, Easing.InOutCubic)
                                        .TransformTo(nameof(EdgeEffect), new EdgeEffectParameters()
                                        {

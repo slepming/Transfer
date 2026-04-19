@@ -33,8 +33,9 @@ public partial class ExceptionContainer : TransferFocusedOverlayContainer
     public string Text
     {
         get => text;
-        set {
-            if(value == text) return;
+        set
+        {
+            if (value == text) return;
             text = value;
         }
     }
@@ -46,7 +47,7 @@ public partial class ExceptionContainer : TransferFocusedOverlayContainer
         get => headerText;
         set
         {
-            if(value == headerText) return;
+            if (value == headerText) return;
             headerText = value;
         }
     }

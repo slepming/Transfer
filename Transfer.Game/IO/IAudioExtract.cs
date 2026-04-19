@@ -15,7 +15,7 @@ namespace Transfer.Game.IO
         /// <param name="outputName"></param>
         /// <param name="arguments">Arguments for video editing in FFMpeg</param>
         /// <returns>Track</returns>
-        public T CreateAndGetTrack(string path, Storage storage, AudioManager audioManager, string outputName = null, string arguments = null);
+        T CreateAndGetTrack(string path, Storage storage, AudioManager audioManager, string outputName = null, string arguments = null);
 
         /// <summary>
         /// Extract audio and puts it is in the temp directory
@@ -23,6 +23,6 @@ namespace Transfer.Game.IO
         /// <param name="path">path to video file</param>
         /// <param name="storage">Storage</param>
         /// <returns></returns>
-        public void CreateTrackInStorage(string path, Storage storage);
+        void CreateTrackInStorage(string path, Storage storage);
     }
 }

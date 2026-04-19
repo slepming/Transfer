@@ -50,13 +50,13 @@ public class AudioExtract<T> : IAudioExtract<T>
 
         if (storage.Exists(outputName))
         {
-            Logger.Log("File existed in local storage, move to getTrackFromStorage", level: LogLevel.Debug);
+            Logger.Log("File exists in local storage. Get track from storage.", level: LogLevel.Debug);
             return getTrackFromStorage(audioManager, resourceStore, outputName);
         }
 
         if (File.Exists(Path.Combine(tempFolder, outputName)))
         {
-            Logger.Log("File existed in temp files, move to getTrackFromStorage", level: LogLevel.Debug);
+            Logger.Log("File exists in temp storage. Get track from storage.", level: LogLevel.Debug);
             return getTrackFromStorage(audioManager, new StorageBackedResourceStore(tempStorage), outputName);
         }
 
