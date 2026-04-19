@@ -156,7 +156,6 @@ public partial class WatchingToolsContainer : Container
         {
             if (PlaybackContainer.SliderBar.Current.Value != videoController.PlaybackPosition)
             {
-                Logger.Log($"P position: {videoController.PlaybackPosition}. Max value slider: {PlaybackContainer.Duration}", level: LogLevel.Debug);
                 PlaybackContainer.SetSliderBarValue(videoController.PlaybackPosition);
             }
         }, 1000, true);

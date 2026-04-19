@@ -93,18 +93,28 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
 
     private void preStart(Track track)
     {
-        Audio = track;
-        Audio.Volume.Value = frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic);
-        Logger.Log(frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic).ToString(CultureInfo.CurrentCulture), level: LogLevel.Debug);
-        Audio.Volume.ValueChanged += value =>
+        try
         {
-            frameworkConfigManager.SetValue(FrameworkSetting.VolumeMusic, value.NewValue);
-            frameworkConfigManager.Save();
-        };
+            Audio = track;
+            Audio.Volume.Value = frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic);
+            Logger.Log(frameworkConfigManager.Get<double>(FrameworkSetting.VolumeMusic).ToString(CultureInfo.CurrentCulture), level: LogLevel.Debug);
+            Audio.Volume.ValueChanged += value =>
+            {
+                frameworkConfigManager.SetValue(FrameworkSetting.VolumeMusic, value.NewValue);
+                frameworkConfigManager.Save();
+            };
 
-        bindableRate.ValueChanged += rateChanged;
+            bindableRate.ValueChanged += rateChanged;
+        }
+        catch(Exception e)
+        {
+            Logger.Error(e, "audio volume error(maybe video haven't audio)");
+        }
+        finally
+        {
+            Start();
+        }
 
-        Start();
     }
 
     protected override void Update()
