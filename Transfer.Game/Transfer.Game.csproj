@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="FFmpeg.AutoGen" Version="4.3.0.1" />
     <PackageReference Include="FFMpegCore" Version="5.1.0" />
-    <PackageReference Include="ppy.osu.Framework" Version="2025.826.0" />
+    <PackageReference Include="ppy.osu.Framework" Version="2026.416.0" />
     <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2025.806.0-nativelibs" />
     <PackageReference Include="xFFmpeg.NET" Version="7.2.0" />
   </ItemGroup>

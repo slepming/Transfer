@@ -2,7 +2,7 @@
   <Import Project="../Transfer.TestProject.props" />
   <PropertyGroup Label="Project">
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup Label="Project References">
@@ -11,7 +11,7 @@
   <ItemGroup Label="Package References">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
-    <PackageReference Include="ppy.osu.framework" Version="2025.826.0" />
+    <PackageReference Include="ppy.osu.framework" Version="2026.416.0" />
     <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2025.806.0-nativelibs" />
   </ItemGroup>
   <ItemGroup>

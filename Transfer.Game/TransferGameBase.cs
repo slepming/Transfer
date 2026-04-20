@@ -64,10 +64,7 @@ public partial class TransferGameBase : osu.Framework.Game
     {
         TransferFFmpegCore.CONVERSION_STATUS.BindValueChanged(loggerFFmpeg);
 
-        if (Host.Window != null)
-        {
-            Host.Window.Title = HOST_NAME;
-        }
+        Host.Window?.Title = HOST_NAME;
 
         SampleStore = Audio.GetSampleStore();
 

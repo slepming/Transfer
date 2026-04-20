@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
     </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Fonts\**\*" />
@@ -12,7 +12,7 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework" Version="2025.826.0" />
+    <PackageReference Include="ppy.osu.Framework" Version="2026.416.0" />
     <PackageReference Include="ppy.osu.Framework.NativeLibs" Version="2025.806.0-nativelibs" />
   </ItemGroup>
 </Project>

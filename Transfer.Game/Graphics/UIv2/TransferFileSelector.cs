@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
+using osu.Framework.Localisation;
 using osuTK;
 using Transfer.Game.Extensions;
 using Transfer.Game.Graphics.UI;
@@ -28,7 +29,7 @@ public partial class TransferFileSelector(string initialPath = null, string[] va
 
     protected override DirectorySelectorBreadcrumbDisplay CreateBreadcrumb() => new TransferDirectorySelectorBreadcrumbDisplay();
 
-    protected override DirectorySelectorDirectory CreateDirectoryItem(DirectoryInfo directory, string displayName = null) => new TransferDirectorySelectorDirectory(directory, displayName);
+    protected override DirectorySelectorDirectory CreateDirectoryItem(DirectoryInfo directory, LocalisableString? displayName = null) => new TransferDirectorySelectorDirectory(directory, displayName.ToString());
 
     protected override DirectorySelectorDirectory CreateParentDirectoryItem(DirectoryInfo directory) => new TransferDirectorySelectorParentDirectory(directory);
 
