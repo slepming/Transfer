@@ -87,7 +87,7 @@ public partial class TransferGameBase : osu.Framework.Game
         InitializeFonts();
         InitializeConfig(config);
 
-        if (Host.Window != null) Host.Window.CursorState = CursorState.Hidden;
+        Host.Window?.CursorState = CursorState.Hidden;
 
         base.Content.Add(new SafeAreaContainer
         {

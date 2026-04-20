@@ -6,7 +6,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Logging;
 using osuTK;
 using Transfer.Game.Configuration;
 using Transfer.Game.Graphics.UI.Buttons;
@@ -22,7 +21,7 @@ public partial class WatchingToolsContainer : Container
 
     private Container toolsBox;
 
-    private ToolsButton negativeSpeed, doubleSpeed, nextSeekButton, backSeekButton, stopButton;
+    private DynamicToolButton negativeSpeed, doubleSpeed, nextSeekButton, backSeekButton, stopButton;
     private ToolsButton repeatButton, settingsButton;
 
     [Resolved]
@@ -97,10 +96,10 @@ public partial class WatchingToolsContainer : Container
                                 Spacing = new Vector2(435),
                                 Children =
                                 [
-                                    settingsButton = new ToolsButton(FontAwesome.Solid.Spinner)
-                                    {
-                                        Size = new Vector2(25, 25)
-                                    },
+                                    //settingsButton = new ToolsButton(FontAwesome.Solid.Spinner)
+                                    //{
+                                    //    Size = new Vector2(25, 25)
+                                    //},
                                     new FillFlowContainer
                                     {
                                         AutoSizeAxes = Axes.Both,
@@ -108,33 +107,38 @@ public partial class WatchingToolsContainer : Container
                                         Spacing = new Vector2(50),
                                         Children =
                                         [
-                                            negativeSpeed = new ToolsButton(FontAwesome.Solid.LongArrowAltLeft)
+                                            negativeSpeed = new DynamicToolButton()
                                             {
-                                                Size = new Vector2(50, 50)
+                                                Size = new Vector2(50, 50),
+                                                Icons = [FontAwesome.Solid.LongArrowAltLeft]
                                             },
-                                            backSeekButton = new ToolsButton(FontAwesome.Solid.ArrowLeft)
+                                            backSeekButton = new DynamicToolButton()
                                             {
-                                                Size = new Vector2(50, 50)
+                                                Size = new Vector2(50, 50),
+                                                Icons = [FontAwesome.Solid.ArrowLeft]
                                             },
-                                            stopButton = new ToolsButton(FontAwesome.Solid.Play)
+                                            stopButton = new DynamicToolButton()
                                             {
-                                                Size = new Vector2(50, 50)
+                                                Size = new Vector2(50, 50),
+                                                Icons = [FontAwesome.Solid.Stop, FontAwesome.Solid.Play]
                                             },
-                                            nextSeekButton = new ToolsButton(FontAwesome.Solid.ArrowRight)
+                                            nextSeekButton = new DynamicToolButton()
                                             {
-                                                Size = new Vector2(50, 50)
+                                                Size = new Vector2(50, 50),
+                                                Icons = [FontAwesome.Solid.ArrowRight]
                                             },
-                                            doubleSpeed = new ToolsButton(FontAwesome.Solid.LongArrowAltRight)
+                                            doubleSpeed = new DynamicToolButton()
                                             {
-                                                Size = new Vector2(50, 50)
+                                                Size = new Vector2(50, 50),
+                                                Icons = [FontAwesome.Solid.LongArrowAltRight]
                                             }
                                         ]
                                     },
-                                    repeatButton = new ToolsButton(FontAwesome.Regular.Circle)
-                                    {
-                                        Text = "Repeat",
-                                        Size = new Vector2(50, 50)
-                                    }
+                                    //repeatButton = new ToolsButton(FontAwesome.Regular.Circle)
+                                    //{
+                                    //    Text = "Repeat",
+                                    //    Size = new Vector2(50, 50)
+                                    //}
                                 ]
                             }
                     }
@@ -149,7 +153,7 @@ public partial class WatchingToolsContainer : Container
         backSeekButton.Action += negativeSeek;
 
         // settingsButton.Action += onOpenSettings;
-        repeatButton.Action += onActivateRepeat;
+        //repeatButton.Action += onActivateRepeat;
         PlaybackContainer.SliderBar.UserCommit.ValueChanged += flexSeek;
 
         Scheduler.AddDelayed(() =>

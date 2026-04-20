@@ -11,7 +11,7 @@ namespace Transfer.Game.Graphics.UI.Buttons;
 public abstract partial class IconButton(Action<SpriteText> defaultCreationParameters) : ClickableContainer
 {
     protected const float FONT_SIZE = 24;
-    protected abstract IconUsage? Icon { get; }
+    protected virtual IconUsage? Icon { get; }
 
     protected FillFlowContainer Flow;
 
