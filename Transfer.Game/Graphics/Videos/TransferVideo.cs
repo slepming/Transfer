@@ -123,17 +123,11 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         if (Audio != null) SpySeek(Audio.CurrentTime); // May be optimized in the future
     }
 
-    public double GetMaxLengthVideo()
-    {
-        return Duration;
-    }
+    public double GetMaxLengthVideo() => Duration;
 
     public void Rate(float rate) => bindableRate.Value = rate;
 
-    public void SpySeek(double time)
-    {
-        base.Seek(time);
-    }
+    public void SpySeek(double time) => base.Seek(time);
 
     public new void Seek(double time)
     {
