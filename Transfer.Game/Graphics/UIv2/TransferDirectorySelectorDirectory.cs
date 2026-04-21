@@ -4,8 +4,9 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
+using osu.Framework.Graphics.Shapes;
 using Transfer.Game.Extensions;
-using Box = osu.Framework.Graphics.Shapes.Box;
+using osu.Framework.Localisation;
 
 namespace Transfer.Game.Graphics.UIv2;
 
@@ -14,7 +15,7 @@ public partial class TransferDirectorySelectorDirectory : DirectorySelectorDirec
     protected override IconUsage? Icon => Directory.Name.Contains(Path.DirectorySeparatorChar) ? FontAwesome.Solid.Database : FontAwesome.Regular.Folder;
     protected Box Background { get; private set; }
 
-    public TransferDirectorySelectorDirectory(DirectoryInfo directory, string displayName = null)
+    public TransferDirectorySelectorDirectory(DirectoryInfo directory, LocalisableString? displayName = null)
         : base(directory, displayName)
     {
         Masking = true;

@@ -29,7 +29,7 @@ public partial class TransferFileSelector(string initialPath = null, string[] va
 
     protected override DirectorySelectorBreadcrumbDisplay CreateBreadcrumb() => new TransferDirectorySelectorBreadcrumbDisplay();
 
-    protected override DirectorySelectorDirectory CreateDirectoryItem(DirectoryInfo directory, LocalisableString? displayName = null) => new TransferDirectorySelectorDirectory(directory, displayName.ToString());
+    protected override DirectorySelectorDirectory CreateDirectoryItem(DirectoryInfo directory, LocalisableString? displayName = null) => new TransferDirectorySelectorDirectory(directory, displayName);
 
     protected override DirectorySelectorDirectory CreateParentDirectoryItem(DirectoryInfo directory) => new TransferDirectorySelectorParentDirectory(directory);
 
