@@ -65,10 +65,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
         onAudioExtract += preStart;
     }
 
-    private void rateChanged(ValueChangedEvent<float> obj)
-    {
-        if (Audio != null) Audio.Tempo.Value = obj.NewValue;
-    }
+    private void rateChanged(ValueChangedEvent<float> obj) => Audio?.Tempo.Value = obj.NewValue;
 
     protected override void LoadComplete()
     {
@@ -82,7 +79,7 @@ public partial class TransferVideo(string path, bool enableRate = false, bool st
             var audio = audioExtract.CreateAndGetTrack(path,
                 tempStorage,
                 audioManager,
-                arguments: "-c copy"
+                arguments: "-acodec copy -vn"
             );
             Scheduler.Add(() =>
             {

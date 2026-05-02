@@ -1,6 +1,10 @@
 using System.IO;
 using NUnit.Framework;
+using osu.Framework.Allocation;
+using osu.Framework.Extensions.IEnumerableExtensions;
+using osu.Framework.Logging;
 using osu.Framework.Screens;
+using Transfer.Game.IO;
 using Transfer.Game.Screens;
 using Transfer.Game.Tests.Visual;
 
@@ -14,21 +18,17 @@ namespace Transfer.Game.Tests.Video
 
         private byte[] targetVideo;
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
+        [Resolved]
+        private TempStorage storage { get; set; }
 
-            if (Resources != null)
-            {
-                videoTestBytes = new VideoTestingByte(Resources.Get(@"Videos/SampleVideoWithAudio.mp4"));
-            }
-        }
-
-        [Test]
+        [SetUp]
         public void Initialize()
         {
-            AddStep("Load", () =>
-            {
+            Logger.Log("Clear cache files", level: LogLevel.Important);
+            storage.GetFiles("").ForEach(storage.Delete);
+            Scheduler.Add(() => {
+                if (Resources != null)
+                    videoTestBytes = new VideoTestingByte(Resources.Get(@"Videos/SampleVideoWithAudio.mp4"));
                 targetVideo = videoTestBytes.Data;
 
                 var videoInByteArray = targetVideo;

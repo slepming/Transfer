@@ -60,6 +60,7 @@ public class AudioExtract<T> : IAudioExtract<T>
             return getTrackFromStorage(audioManager, new StorageBackedResourceStore(tempStorage), outputName);
         }
 
+        // TODO: delete temp directory usage
         string pathToFile = convertFileAsync(path, outputName);
         Logger.Log($"Path to file: {pathToFile}\n Output path: {storage.GetFullPath("")}");
         saveFileToStorageAsync(pathToFile, storage, outputName);

@@ -30,16 +30,12 @@ public abstract class TransferFFmpegCore
         string arguments = customArguments?.Length > 0 ? string.Join(" ", customArguments) : "";
 
         if (string.IsNullOrEmpty(outputPath))
-        {
             throw new ArgumentNullException(nameof(outputPath));
-        }
 
         CONVERSION_STATUS.Value = "Argument validation";
 
         if (!File.Exists(video))
-        {
             throw new FileNotFoundException("Input video file not found.", video);
-        }
 
         try
         {
@@ -49,14 +45,15 @@ public abstract class TransferFFmpegCore
                 .FromFileInput(video)
                 .OutputToFile(outputPath, false, options => options
                                                             .WithAudioBitrate(fileParams.Bitrate)
-                                                            .WithAudioCodec(FFMpeg.GetCodec(fileParams?.AudioCodec.ToString()))
-                                                            .WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
+                                                            //.WithAudioCodec(FFMpeg.GetCodec(fileParams?.AudioCodec.ToString()))
+                                                            //.WithVideoCodec(FFMpeg.GetCodec(transferConfig.Get<VideoCodecs>(TransferOptions.VideoCodec).ToString()))
                                                             .WithCustomArgument(
                                                                 $"-threads {transferConfig.Get<int>(TransferOptions.Threads)} " +
                                                                 "-max_muxing_queue_size 4196 " +
                                                                 $"{FFmpegArgument.GetVideoEditingArgument(VideoEditingFunction.VideoSpeedUp, fileParams?.Rate)}")
                                                             .WithCustomArgument(arguments)
-                                                            .WithFastStart())
+                                                            //.WithFastStart()
+                                                        )
                 .ProcessSynchronously();
             DateTime endTime = DateTime.Now;
             CONVERSION_STATUS.Value = "Conversion completed";
@@ -64,9 +61,7 @@ public abstract class TransferFFmpegCore
             Logger.Log($"Conversion completed successfully. Output: {outputPath}, Time for creating: {endTime - startTime}; File size: {fileSize}");
 
             if (!File.Exists(outputPath) || fileSize == 0)
-            {
-                throw new Exception("FFmpeg conversion resulted in empty file");
-            }
+                throw new FileNotFoundException("FFmpeg conversion resulted in empty file");
 
             return outputPath;
         }

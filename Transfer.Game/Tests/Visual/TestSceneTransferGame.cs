@@ -1,6 +1,9 @@
 using NUnit.Framework;
 using osu.Framework.Allocation;
+using osu.Framework.Extensions.IEnumerableExtensions;
+using osu.Framework.Logging;
 using osu.Framework.Platform;
+using Transfer.Game.IO;
 
 namespace Transfer.Game.Tests.Visual
 {
@@ -12,6 +15,9 @@ namespace Transfer.Game.Tests.Visual
 
         private TransferGame game;
 
+        [Resolved]
+        private TempStorage storage { get; set; }
+
         [BackgroundDependencyLoader]
         private void load(GameHost host)
         {
@@ -19,6 +25,15 @@ namespace Transfer.Game.Tests.Visual
             game.SetHost(host);
 
             AddGame(game);
+        }
+
+        [Test]
+        public void Cache()
+        {
+            AddStep("Clear cache", () => {
+                Logger.Log("Clear cache files", level: LogLevel.Important);
+                storage.GetFiles("").ForEach(storage.Delete);
+            });
         }
     }
 }

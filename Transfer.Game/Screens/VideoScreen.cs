@@ -31,15 +31,6 @@ public partial class VideoScreen : TransferScreen, IKeyBindingHandler<GlobalActi
     private readonly ExtensionMenu extensionMenu = new();
 
     [Resolved]
-    private AudioManager audioManager { get; set; }
-
-    [Resolved]
-    private FrameworkConfigManager frameworkConfigManager { get; set; }
-
-    [Resolved]
-    private TempStorage tempStorage { get; set; }
-
-    [Resolved]
     private PlaylistStorage playlistStorage { get; set; }
 
     private PlaylistMenu cachePlaylist { get; set; }
